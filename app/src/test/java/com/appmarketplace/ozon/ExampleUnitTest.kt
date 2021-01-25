@@ -1,4 +1,4 @@
-package com.bridjenymanry.projectozon
+package com.appmarketplace.ozon
 
 import org.junit.Test
 

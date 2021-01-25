@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ProjectOzon</string>
+    <string name="get_started">Get started</string>
+
+
+    <!-- ContentDescription-->
+    <string name="descriptionMainImageView">Main Image Icon</string>
+    <string name="descriptionNextBoard">Next</string>
+    <string name="skip">Skip</string>
+
 </resources>

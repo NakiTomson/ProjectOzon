@@ -1,15 +1,16 @@
-package com.bridjenymanry.projectozon.presenter
+package com.appmarketplace.ozon.presentation.activityes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bridjenymanry.projectozon.R
+import com.appmarketplace.ozon.R
 
 class MainActivity : AppCompatActivity() {
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
+
 }
