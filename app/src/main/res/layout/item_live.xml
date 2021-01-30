@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="16dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/imageOnboarding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_live_example"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </ImageView>
+
+        <TextView
+            android:id="@+id/statusLive"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:padding="7dp"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="В ЭФИРЕ"
+            android:alpha="0.7"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@color/red"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/countUserLive"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:padding="7dp"
+            android:text="222"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@color/gray"
+            app:layout_constraintStart_toEndOf="@+id/statusLive"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:adjustViewBounds="true"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@+id/countUserLive"
+            app:layout_constraintStart_toEndOf="@+id/countUserLive"
+            app:layout_constraintTop_toTopOf="@+id/countUserLive"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/sream_eyes" />
+
+        <TextView
+            android:id="@+id/textDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:gravity="start"
+            android:textColor="@color/black"
+            android:layout_marginStart="15dp"
+            android:text="Natures Miracle впервые в прямом эфире Ozon Live!"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageOnboarding"
+            app:layout_constraintTop_toBottomOf="@+id/imageOnboarding" />
+
+
+        <View
+            android:id="@+id/razdelitel"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_marginStart="10dp"
+            android:alpha="0.5"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/textDescription"
+            app:layout_constraintEnd_toEndOf="@+id/textDescription"
+            app:layout_constraintTop_toBottomOf="@+id/textDescription"
+
+            >
+
+        </View>
+
+        <ImageView
+            android:id="@+id/iconOfCompany"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="@+id/textDescription"
+            app:layout_constraintTop_toBottomOf="@+id/razdelitel"
+            app:srcCompat="@drawable/icon_app_ozon" />
+
+        <TextView
+            android:id="@+id/nameOfCompanyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="CityNature"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iconOfCompany"
+            app:layout_constraintStart_toEndOf="@+id/iconOfCompany"
+            app:layout_constraintTop_toTopOf="@+id/iconOfCompany" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

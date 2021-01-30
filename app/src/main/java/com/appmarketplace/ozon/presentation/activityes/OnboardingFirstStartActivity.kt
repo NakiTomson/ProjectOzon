@@ -11,14 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.adapters.OnBoardingItemAdapter
-import com.appmarketplace.ozon.presentation.utils.OnBoardingItem
+import com.appmarketplace.ozon.presentation.activityes.main_activity.MainActivity
+import com.appmarketplace.ozon.presentation.adapters.BoardingItemAdapter
+import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 import kotlinx.android.synthetic.main.activity_onboarding_first_start.*
-import java.text.FieldPosition
 
 class OnboardingFirstStartActivity : AppCompatActivity() {
 
-    private lateinit var onboardingAdapter:OnBoardingItemAdapter
+    private lateinit var onboardingAdapter:BoardingItemAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +28,9 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
         setCurrentIndicator(0)
     }
 
-    private fun navigateToHomeActivity(){
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
 
     private fun setonboardingItems(){
-        onboardingAdapter = OnBoardingItemAdapter(
+        onboardingAdapter = BoardingItemAdapter(
             listOf(
                 OnBoardingItem(
                     onBoardingImage = R.drawable.one_card_shopping,
@@ -51,17 +47,19 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
                     title = "Best Market Place",
                     description = "Best Market Place"
                 )
-
             )
         )
 
         onBoardingViewPager.adapter = onboardingAdapter
+
+
         onBoardingViewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
             }
         })
+
         (onBoardingViewPager.getChildAt(0) as RecyclerView).overScrollMode =
             RecyclerView.OVER_SCROLL_NEVER
 
@@ -119,6 +117,11 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    private fun navigateToHomeActivity(){
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
