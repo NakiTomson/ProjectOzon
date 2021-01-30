@@ -64,7 +64,6 @@
         android:id="@+id/viewCenterOfNext"
         android:layout_width="1dp"
         android:layout_height="1dp"
-
         app:layout_constraintBottom_toBottomOf="@+id/imageNext"
         app:layout_constraintEnd_toEndOf="@+id/imageNext"
         app:layout_constraintStart_toStartOf="@+id/imageNext"

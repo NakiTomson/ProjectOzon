@@ -1,6 +1,8 @@
 package com.appmarketplace.ozon.presentation.activityes
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
@@ -8,6 +10,7 @@ import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.activityes.main_activity.MainActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
 
@@ -17,11 +20,13 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        startMainAnimation()
+        val sharedPreferences = getSharedPreferences("OZON",Context.MODE_PRIVATE)
+        startMainAnimation(sharedPreferences)
         startGlobalService()
+
     }
 
-    private fun startMainAnimation(){
+    private fun startMainAnimation(sharedPreferences: SharedPreferences) {
         val animation: Animation = AnimationUtils.loadAnimation(
             applicationContext,
             R.anim.main_scale
@@ -31,7 +36,16 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationStart(animation: Animation) {}
             override fun onAnimationRepeat(animation: Animation) {}
             override fun onAnimationEnd(animation: Animation) {
-                startOnboardingActivity()
+                when {
+                    sharedPreferences.getBoolean("FirstOpen", true) -> {
+                        startOnboardingActivity()
+                        sharedPreferences.edit().putBoolean("FirstOpen", false).apply()
+                    }
+                    else -> {
+                        startMainActivity()
+                    }
+                }
+
             }
         })
         mainImageView.animation = animation
@@ -44,13 +58,13 @@ class SplashActivity : AppCompatActivity() {
 
 
     fun startMainActivity(){
-        val intent: Intent = Intent(this, MainActivity::class.java)
-       startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     fun startOnboardingActivity(){
-        val intent: Intent = Intent(this, OnboardingFirstStartActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, OnboardingFirstStartActivity::class.java))
+        finish()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

@@ -23,12 +23,15 @@ class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
         updateConnection()
 
         when{
+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
                 connectivityManager.registerDefaultNetworkCallback(connectivityManagerCallback())
             }
+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                 lollipopNetworkRequest()
             }
+
             else -> {
                 context.registerReceiver(
                     networkReceiver,
@@ -41,7 +44,8 @@ class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
     override fun onInactive() {
         super.onInactive()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            connectivityManager.unregisterNetworkCallback(connectivityManagerCallback())
+            //TODO NetworkCallback was not registered
+//            connectivityManager.unregisterNetworkCallback(connectivityManagerCallback())
         }else{
             context.unregisterReceiver(networkReceiver)
         }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/homeItem"
+        android:icon="@drawable/home_selecter"
+        android:title="Home"  />
+
+    <item
+        android:id="@+id/expressItem"
+        android:icon="@drawable/express_selecter"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/basketItem"
+        android:icon="@drawable/basket_selecter"
+        android:title="Basket" />
+
+<!--    <item-->
+<!--        android:id="@+id/expressItem3"-->
+<!--        android:icon="@drawable/home_selecter"-->
+<!--        android:title="Home" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/expressItem4"-->
+<!--        android:icon="@drawable/home_selecter"-->
+<!--        android:title="Home" />-->
+</menu>

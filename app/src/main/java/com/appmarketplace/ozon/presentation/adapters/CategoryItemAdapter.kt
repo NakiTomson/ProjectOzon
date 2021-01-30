@@ -7,18 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.utils.OnBoardingItem
-import kotlinx.android.synthetic.main.onboarding_item_container.view.*
+import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 
 
-class OnBoardingItemAdapter(private val onboardingItems:List<OnBoardingItem>):
-RecyclerView.Adapter<OnBoardingItemAdapter.OnBoardingItemViewHolder>(){
+class CategoryItemAdapter(private val onboardingItems:List<OnBoardingItem>): RecyclerView.Adapter<CategoryItemAdapter.OnBoardingItemViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
-        return OnBoardingItemViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.onboarding_item_container,parent,false))
+        return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_category_product,parent,false))
     }
+
+    
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
         holder.bind(onboardingItems[position])
@@ -36,9 +35,10 @@ RecyclerView.Adapter<OnBoardingItemAdapter.OnBoardingItemViewHolder>(){
 
         fun bind(onBoardingItem: OnBoardingItem){
             imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
-            textTitle.text = onBoardingItem.title
-            textDescription.text = onBoardingItem.description
+            textTitle?.text = onBoardingItem.title
+            textDescription?.text = onBoardingItem.description
         }
+
     }
 }
 

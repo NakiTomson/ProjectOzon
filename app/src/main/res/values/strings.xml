@@ -7,5 +7,7 @@
     <string name="descriptionMainImageView">Main Image Icon</string>
     <string name="descriptionNextBoard">Next</string>
     <string name="skip">Skip</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
