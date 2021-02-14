@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +9,24 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.squareup.picasso.Picasso
 
 
-class CategoryItemAdapter(private val onboardingItems:List<OnBoardingItem>): RecyclerView.Adapter<CategoryItemAdapter.OnBoardingItemViewHolder>(){
+class CategoryItemAdapter(): RecyclerView.Adapter<CategoryItemAdapter.OnBoardingItemViewHolder>(){
+
+
+    private val onboardingItems: MutableList<OnBoardingItem> = mutableListOf()
+
+    fun setData(items: MutableList<OnBoardingItem>) {
+        onboardingItems.clear()
+        onboardingItems.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun setItem(position: Int,items: OnBoardingItem) {
+        onboardingItems[position] = items
+        notifyItemChanged(position)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
@@ -34,9 +50,16 @@ class CategoryItemAdapter(private val onboardingItems:List<OnBoardingItem>): Rec
         private val textDescription = view.findViewById<TextView>(R.id.textDescription)
 
         fun bind(onBoardingItem: OnBoardingItem){
-            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
+//            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
             textTitle?.text = onBoardingItem.title
             textDescription?.text = onBoardingItem.description
+
+            Picasso.get()
+                .load(onBoardingItem.onBoardingImageUrl)
+                .fit()
+                .noFade()
+                .into(imageOnboarding)
+
         }
 
     }

@@ -3,15 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
+    android:layout_width="wrap_content"
     android:paddingBottom="10dp"
+    android:paddingEnd="2dp"
+    android:paddingStart="2dp"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/generalIconProductImageView"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/product_by_offer_exmplae"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -102,7 +106,7 @@
         android:id="@+id/buttonAddToBasket"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:background="@drawable/button_next"
         android:gravity="center"
         android:text="В корзину"
@@ -110,8 +114,7 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:backgroundTint="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceOlDTextView" />
-
+        app:layout_constraintStart_toStartOf="@+id/priceWithDiscountTextView"
+        app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

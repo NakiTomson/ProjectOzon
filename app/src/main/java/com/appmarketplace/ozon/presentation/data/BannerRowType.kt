@@ -1,6 +1,7 @@
 package com.appmarketplace.ozon.presentation.data
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -23,11 +24,14 @@ class BannerRowType(val onBoardingAdapter: BoardingItemAdapter) :RowType{
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val bunnerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
         bunnerViewHolder.bind(onBoardingAdapter)
-        setupIndicator(bunnerViewHolder.bannerIndicatorsContainer,onBoardingAdapter.itemCount,viewHolder.itemView.context)
+
+        setupIndicator(bunnerViewHolder.bannerIndicatorsContainer!!,onBoardingAdapter.itemCount,viewHolder.itemView.context)
+        setIndicatorsContainer(0, bunnerViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
+
         bunnerViewHolder.banneerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setIndicatorsContainer(position, bunnerViewHolder.bannerIndicatorsContainer, viewHolder.itemView.context)
+                setIndicatorsContainer(position, bunnerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
             }
         })
     }
@@ -35,8 +39,10 @@ class BannerRowType(val onBoardingAdapter: BoardingItemAdapter) :RowType{
 
 
     fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
+
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
+
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -60,6 +66,7 @@ class BannerRowType(val onBoardingAdapter: BoardingItemAdapter) :RowType{
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){
 
         val childCount  = indicatorsContainers.childCount
+
         for (i in 0 until  childCount){
             val imageView = indicatorsContainers.getChildAt(i) as ImageView
             if (i == position){

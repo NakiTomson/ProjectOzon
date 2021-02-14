@@ -9,13 +9,25 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
 import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
 
 
-class ContainerProductsAdapter(
-    val listOnProductsByOfferItems: List<OnOfferProductsItem>
-) :
+class ContainerProductsAdapter(val spain:Int) :
     RecyclerView.Adapter<ContainerProductsAdapter.OnProductsByOfferAdapterViewHolder>() {
+
+    val listOnProductsByOfferItems: MutableList<OnOfferProductsItem> = ArrayList()
+
+    fun setData(items:MutableList<OnOfferProductsItem>) {
+        listOnProductsByOfferItems.clear()
+        listOnProductsByOfferItems.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun setItem(position: Int,items: OnOfferProductsItem) {
+        listOnProductsByOfferItems[position] = items
+        notifyItemChanged(position)
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnProductsByOfferAdapterViewHolder {
@@ -57,7 +69,8 @@ class ContainerProductsAdapter(
                 bottonStringOffer.text = onProductsByOfferItem.bottonStringOffer
             }
 
-            prodctsRecyclerView.layoutManager = GridLayoutManager(itemView.context, 3)
+
+            prodctsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             prodctsRecyclerView.adapter = ProductItemAdapter(onProductsByOfferItem.list)
 
         }

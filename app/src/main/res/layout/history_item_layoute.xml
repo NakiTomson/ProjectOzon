@@ -13,11 +13,12 @@
         android:padding="10dp">
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/oneHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
+            android:src="@drawable/one_history"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/one_history"
             app:riv_corner_radius="8sp"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
@@ -35,11 +36,11 @@
 
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/twoHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/two_history"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
             app:riv_corner_radius="8sp">
@@ -55,11 +56,11 @@
 
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/threeHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/three_history"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
             app:riv_corner_radius="8sp">
@@ -76,11 +77,11 @@
         android:padding="10dp">
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/foureHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/one_history"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
             app:riv_corner_radius="8sp">
@@ -97,11 +98,11 @@
 
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/fiveHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/two_history"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
             app:riv_corner_radius="8sp">
@@ -117,11 +118,11 @@
 
 
         <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/sixHistoryItem"
             android:adjustViewBounds="true"
             android:layout_gravity="start"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:src="@drawable/three_history"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"
             app:riv_corner_radius="8sp">

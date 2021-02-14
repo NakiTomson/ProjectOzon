@@ -1,8 +1,10 @@
 package com.appmarketplace.ozon.presentation.pojo
 
 data class OnProductItem(
-    val generalIconProduct: Int,
-    val favoritelIconProduct: Int? = null,
+
+    val generalIconProduct: Int? = null,
+    val generalIconProductSting: String? = null,
+    val favoritelIconProduct: Boolean = false,
     val productDiscount:String? = null,
     val isBestseller :Boolean= false,
     val priceWithDiscount:String? = null,

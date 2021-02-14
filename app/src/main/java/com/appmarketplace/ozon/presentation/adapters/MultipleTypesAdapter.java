@@ -4,20 +4,38 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl;
 import com.appmarketplace.ozon.presentation.Interfaces.RowType;
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Qualifier;
 
 
 public class MultipleTypesAdapter extends RecyclerView.Adapter {
 
-    private List<RowType> dataSet;
+    private final List<RowType> dataSet = new ArrayList<>();
 
-    public MultipleTypesAdapter(List<RowType> dataSet) {
-        this.dataSet = dataSet;
+
+    public void setData(List<RowType> dataSets){
+
+        dataSet.clear();
+        dataSet.addAll(dataSets);
+        notifyDataSetChanged();
+    }
+    public void setData(RowType dataSets){
+        dataSet.add(dataSets);
+        notifyDataSetChanged();
+    }
+
+    public void setData(int index,RowType dataSets){
+        dataSet.add(index,dataSets);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -35,6 +53,16 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return dataSet.get(position).getItemViewType();
+    }
+
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
     }
 
     @Override

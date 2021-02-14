@@ -3,7 +3,7 @@
     android:shape="oval"
     >
 
-    <solid android:color="@color/custom_color_secondary_light"/>
+    <solid android:color="@color/black"/>
 
     <size
         android:height="8dp"

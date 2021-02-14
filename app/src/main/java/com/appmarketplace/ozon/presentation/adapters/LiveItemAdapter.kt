@@ -7,11 +7,33 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.pojo.ListResultLiveItems
 import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_live.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class LiveItemAdapter(private val onboardingItems:List<OnLiveItem>): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemViewHolder>(){
+class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemViewHolder>(){
 
+
+    val onboardingItems:MutableList<ListResultLiveItems> = ArrayList()
+
+    fun setData(items:OnLiveItem) {
+        val newList = items.resultLiveData
+        newList?.let {
+            onboardingItems.clear()
+            onboardingItems.addAll(newList)
+            notifyDataSetChanged()
+        }
+
+    }
+
+    fun setItem(position: Int,items:ListResultLiveItems) {
+        onboardingItems[position] = items
+        notifyItemChanged(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
         return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_live,parent,false))
@@ -29,20 +51,32 @@ class LiveItemAdapter(private val onboardingItems:List<OnLiveItem>): RecyclerVie
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
 
 
-        private val imageOnboarding = view.findViewById<ImageView>(R.id.imageOnboarding)
-        private val iconOfCompany = view.findViewById<ImageView>(R.id.iconOfCompany)
-        private val statusLive = view.findViewById<TextView>(R.id.statusLive)
-        private val countUserLive = view.findViewById<TextView>(R.id.countUserLive)
-        private val textDescription = view.findViewById<TextView>(R.id.textDescription)
-        private val nameOfCompanyTitle = view.findViewById<TextView>(R.id.nameOfCompanyTitle)
+        private val imageOnboarding = view.imageOnboarding
+        private val iconOfCompany = view.iconOfCompany
+        private val statusLive = view.statusLive
+        private val countUserLive = view.countUserLive
+        private val textDescription = view.textDescription
+        private val nameOfCompanyTitle = view.nameOfCompanyTitle
 
-        fun bind(onBoardingItem: OnLiveItem){
-            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
-            iconOfCompany.setImageResource(onBoardingItem.onIconCompany)
-            statusLive.text = onBoardingItem.statusLiveStream
-            countUserLive?.text = onBoardingItem.countUser
-            nameOfCompanyTitle?.text = onBoardingItem.nameOfCompany
-            textDescription?.text = onBoardingItem.description
+        fun bind(liveItem: ListResultLiveItems){
+
+            Picasso.get()
+                    .load(R.drawable.ic_live_example)
+                    .noFade()
+//                    .placeholder(R.drawable.ic_live_example)
+                    .into(imageOnboarding)
+
+
+            Picasso.get()
+                    .load(liveItem.onIconCompanyUrl)
+                    .noFade()
+                    .into(iconOfCompany)
+
+            statusLive.text = liveItem.statusLiveStream
+            countUserLive?.text = liveItem.countUser
+
+            nameOfCompanyTitle?.text = liveItem.nameOfCompany
+            textDescription?.text = liveItem.description
         }
 
     }

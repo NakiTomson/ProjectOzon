@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,28 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_boarding_container.view.*
+import java.util.*
 
 
-class BoardingItemAdapter(private val onboardingItems:List<OnBoardingItem>): RecyclerView.Adapter<BoardingItemAdapter.OnBoardingItemViewHolder>(){
+class BoardingItemAdapter(): RecyclerView.Adapter<BoardingItemAdapter.OnBoardingItemViewHolder>(){
 
+
+
+    val onboardingItems:MutableList<OnBoardingItem> = LinkedList()
+
+    fun setData(items:MutableList<OnBoardingItem>) {
+        onboardingItems.clear()
+        onboardingItems.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun setItem(position: Int,items: OnBoardingItem) {
+        onboardingItems[position] = items
+        notifyItemChanged(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
         return  OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_boarding_container,parent,false))
@@ -27,14 +46,29 @@ class BoardingItemAdapter(private val onboardingItems:List<OnBoardingItem>): Rec
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
 
-        private val imageOnboarding = view.findViewById<ImageView>(R.id.imageOnboarding)
-        private val textTitle = view.findViewById<TextView>(R.id.textTitle)
-        private val textDescription = view.findViewById<TextView>(R.id.textDescription)
+        private val imageOnboarding = view.imageOnboarding
+        private val textTitle = view.textTitle
+        private val textDescription = view.textDescription
 
         fun bind(onBoardingItem: OnBoardingItem){
-            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
-            textTitle?.text = onBoardingItem.title
-            textDescription?.text = onBoardingItem.description
+
+            Picasso.get()
+                    .load(onBoardingItem.onBoardingImageUrl)
+                    .noFade()
+                    .into(imageOnboarding)
+
+//            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
+
+            onBoardingItem.title?.let{
+                textTitle.visibility = View.VISIBLE
+                textTitle?.text = it
+            }
+
+            onBoardingItem.description?.let {
+                textDescription.visibility = View.VISIBLE
+                textDescription?.text = it
+            }
+
         }
 
     }

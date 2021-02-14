@@ -7,8 +7,30 @@
 
     <fragment
         android:id="@+id/generalInnerFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.inner_home_fragments.HomeListProductsFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.product_home_fragments.ListProductsHomeFragment"
         android:label="general_inner_fragment"
-        tools:layout="@layout/general_inner_fragment" />
+        tools:layout="@layout/general_inner_fragment" >
+
+        <action
+            android:id="@+id/action_generalInnerFragment_to_detailProductFragementHomeFragment"
+            app:destination="@id/detailProductFragementHomeFragment"
+            app:popUpTo="@id/generalInnerFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_generalInnerFragment_to_searchListProductHomeFragment"
+            app:destination="@id/searchListProductHomeFragment"
+            app:popUpTo="@id/generalInnerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailProductFragementHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.detail_home_product.DetailProductFragementHomeFragment"
+        android:label="detail_product_fragement_home_fragment"
+        tools:layout="@layout/detail_product_fragement_home_fragment" />
+    <fragment
+        android:id="@+id/searchListProductHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.search_list_home_product.SearchListProductHomeFragment"
+        android:label="search_list_product_home_fragment"
+        tools:layout="@layout/search_list_product_home_fragment" />
 
 </navigation>

@@ -23,7 +23,6 @@ class SplashActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("OZON",Context.MODE_PRIVATE)
         startMainAnimation(sharedPreferences)
         startGlobalService()
-
     }
 
     private fun startMainAnimation(sharedPreferences: SharedPreferences) {
