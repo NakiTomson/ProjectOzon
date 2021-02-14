@@ -1,21 +1,28 @@
 package com.appmarketplace.ozon.presentation.activityes.main_activity
 
 
-import android.os.Bundle
+import android.os.*
 import android.util.Log
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.basket_fragment.BasketFragment
 import com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.express_fragment.ExpressFragment
 import com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.HomeFragment
 import com.appmarketplace.ozon.presentation.utils.NetworkConnection
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity() {
-
 
 
     private val homeFragment = HomeFragment()
@@ -36,17 +43,19 @@ class MainActivity : AppCompatActivity() {
         }.commit()
 
         initListeners()
-        setOtherSetting()
+
+
     }
 
 
-    private fun setOtherSetting(){
-        bottomNavigationView.itemIconTintList = null
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            this.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-//            this.window.statusBarColor = Color.WHITE
-//        }
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.main, menu)
+//        return true
+//    }
+//
+//    override fun onSupportNavigateUp(): Boolean {
+//        return navController.navigateUp(appBarConfiguration)
+//    }
 
     private fun initListeners() {
         activeFragment = homeFragment

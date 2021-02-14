@@ -30,8 +30,13 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
 
 
     private fun setonboardingItems(){
-        onboardingAdapter = BoardingItemAdapter(
-            listOf(
+        onboardingAdapter = BoardingItemAdapter()
+
+
+
+        onboardingAdapter.setData(
+
+            mutableListOf(
                 OnBoardingItem(
                     onBoardingImage = R.drawable.one_card_shopping,
                     title = "Best Market Place",
@@ -49,6 +54,7 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
                 )
             )
         )
+
 
         onBoardingViewPager.adapter = onboardingAdapter
 

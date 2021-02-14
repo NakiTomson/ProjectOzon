@@ -1,13 +1,19 @@
 package com.appmarketplace.ozon.presentation.factory
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
+import com.appmarketplace.ozon.presentation.pojo.ResultHistoryData
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.history_item_layoute.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_history.view.*
 import kotlinx.android.synthetic.main.row_type_live.view.*
@@ -22,10 +28,15 @@ object ViewHolderFactory {
     class BannerViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
         val banneerViewPager = itemView.onAdsViewPager
-        val bannerIndicatorsContainer = itemView.indicatorsContainerAds
+        var bannerIndicatorsContainer:LinearLayout?  = null
+
+        var childCount:Int?=null
 
 
         fun bind(onBoardingAdapter: BoardingItemAdapter){
+
+            bannerIndicatorsContainer = itemView.indicatorsContainerAds
+            childCount = bannerIndicatorsContainer?.childCount!!
             banneerViewPager.adapter  = onBoardingAdapter
         }
     }
@@ -36,8 +47,8 @@ object ViewHolderFactory {
         val bannerIndicatorsContainer = itemView.indicatorsContainerAds
 
 
-        fun bind(onBoardingAdapter: CombinationProductsAdapter){
-            banneerViewPager.adapter  = onBoardingAdapter
+        fun bind(combinationProductsAdapter: CombinationProductsAdapter){
+            banneerViewPager.adapter  = combinationProductsAdapter
         }
     }
 
@@ -47,7 +58,23 @@ object ViewHolderFactory {
         val financeButton = itemView.hostoryItemFinancle
 
 
-        fun bind(){
+        val listofImage = listOf<ImageView>(
+                itemView.oneHistoryItem,
+                itemView.twoHistoryItem,
+                itemView.threeHistoryItem,
+                itemView.foureHistoryItem,
+                itemView.fiveHistoryItem,
+                itemView.sixHistoryItem
+        )
+
+        fun bind(listOf: List<ResultHistoryData>) {
+
+            for ((index,item) in (listOf).withIndex()){
+                Picasso.get()
+                        .load(item.historyUrl)
+                        .noFade()
+                        .into(listofImage[index])
+            }
 
         }
     }

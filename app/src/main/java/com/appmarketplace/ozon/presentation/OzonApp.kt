@@ -1,17 +1,23 @@
 package com.appmarketplace.ozon.presentation
 
 import android.app.Application
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import com.appmarketplace.ozon.presentation.utils.NetworkConnection
+import com.appmarketplace.ozon.presentation.di.*
 
 class OzonApp:Application() {
 
-    override fun onCreate() {
-        super.onCreate()
 
+    companion object{
+        lateinit var appComponent: AppComponent
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        appComponent = DaggerAppComponent.builder().appModule(AppModule(app = this@OzonApp)).build()
+    }
+
+
+    fun fixedRequestProblem(){
+
+    }
 
 }

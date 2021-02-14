@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/searchCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/custom_color_background_night"
+    android:background="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_antivirus"
+        android:contentDescription="@string/app_name">
+    </ImageView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="10dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="7dp"
+                android:src="@drawable/ic_search"
+                android:background="@color/white"
+                android:contentDescription="@string/app_name"
+                app:tint="@color/black">
+            </ImageView>
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:padding="7dp"
+                android:background="@color/white"
+                android:hint="Поиск на озон"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:gravity="start"
+                >
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

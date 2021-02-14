@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     android:layout_width="wrap_content"
     android:layout_gravity="center_horizontal"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <ImageView
-            android:id="@+id/imageOnboarding"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/app_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_app_ozon" />
+    <ImageView
+        android:id="@+id/imageOnboarding"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_app_ozon" />
 
-        <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="Товары в рассрочку"
-            android:textColor="@color/black"
-            android:textSize="11sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageOnboarding"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Товары в рассрочку"
+        android:textColor="@color/black"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageOnboarding" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
