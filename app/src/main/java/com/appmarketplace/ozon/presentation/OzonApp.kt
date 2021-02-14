@@ -16,4 +16,8 @@ class OzonApp:Application() {
     }
 
 
+    fun fixedRequestProblem(){
+
+    }
+
 }
