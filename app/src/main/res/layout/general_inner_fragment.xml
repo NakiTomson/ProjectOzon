@@ -6,6 +6,29 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <FrameLayout
+        android:id="@+id/loadingFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="500dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </ProgressBar>
+
+    </FrameLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView

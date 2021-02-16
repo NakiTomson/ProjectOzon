@@ -1,12 +1,14 @@
 package com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.product_home_fragments
 
-import androidx.lifecycle.*
-
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
-import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.*
+import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
+import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -49,6 +51,15 @@ class ListProductsHomeViewModel : BaseProductsHomeViewModel() {
 
 
 
+    fun startLoading(){
+
+        when  {
+            bannerListStart.value?.data == null ->  startLoadingData()
+            else -> {
+                Log.v("HERE","Have Data")
+            }
+        }
+    }
 
     fun startLoadingData(){
 
@@ -90,8 +101,6 @@ class ListProductsHomeViewModel : BaseProductsHomeViewModel() {
                 )
 
             }
-
-
         }
     }
 
@@ -119,15 +128,5 @@ class ListProductsHomeViewModel : BaseProductsHomeViewModel() {
         listPoductsLiveData4.value = productFourth
     }
 
-    var mainItemsSave: MutableList<RowType> = ArrayList()
-        set(value) {
-            var lists:List<RowType>? = mutableListOf(value).flatten()
-            field.clear()
-            lists?.let { field.addAll(it) }
-            lists = null
-        }
-        get() {
-            return field
-        }
 
 }

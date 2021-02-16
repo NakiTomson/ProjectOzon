@@ -6,6 +6,7 @@ import com.appmarketplace.ozon.data.db.Gonfigs.CELL_PHONES
 import com.appmarketplace.ozon.data.db.Gonfigs.HOME_AUDIO
 import com.appmarketplace.ozon.data.db.Gonfigs.LAPTOPS
 import com.appmarketplace.ozon.data.db.Gonfigs.TVS
+import com.appmarketplace.ozon.data.remote.models.ProductsModel
 import com.appmarketplace.ozon.data.remote.services.ServerApi
 import com.appmarketplace.ozon.domain.converters.GeneralCategoryConverter
 import com.appmarketplace.ozon.presentation.data.Resource
@@ -20,6 +21,19 @@ class HomeRepositoryImpl(
     val converter: GeneralCategoryConverter
 ) : BaseRepository<HomeRepositoryImpl.Params, HomeRepositoryImpl.Results>(), HomeRepository {
 
+
+
+    suspend fun testLoading(keyWord:String): Results.ResultProduct {
+
+        try {
+            val products = marketPlaceApi.getSearchProductsKey1(keyword = keyWord,pageSize = "100",page = "1").await()
+            return Results.ResultProduct(
+                converter.fromListProductToUiListProducts(products = products.products, type = 2)
+            )
+        } catch (e: Exception) {
+           return Results.ResultProduct(  Resource(status = Resource.Status.ERROR, data = null, exception = e))
+        }
+    }
 
     suspend fun getBannerStart(): Results.ResultBanner {
         return try {
@@ -74,6 +88,7 @@ class HomeRepositoryImpl(
         } catch (e: Exception) {
             Results.ResultProduct( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
+
     }
 
 

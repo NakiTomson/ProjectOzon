@@ -14,17 +14,31 @@
         android:layout_height="match_parent">
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/searchToolBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:background="@color/custom_color_background_night"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+                <include layout="@layout/toolbar_custom"/>
+
+            </androidx.appcompat.widget.Toolbar>
 
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/nav_host_fragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
+                android:layout_marginTop="?attr/actionBarSize"
                 android:layout_height="match_parent"
                 app:defaultNavHost="true"
                 android:tag="rt"

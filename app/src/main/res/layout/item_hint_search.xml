@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/exampleSearchHitns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/app_name"
+        android:drawableStart="@drawable/ic_search"
+        android:drawableEnd="@drawable/ic_right"
+        android:drawablePadding="20dp"
+        android:textColor="@color/black"
+        android:textSize="16sp">
+    </TextView>
+
+</FrameLayout>

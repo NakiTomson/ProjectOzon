@@ -19,6 +19,10 @@
         <action
             android:id="@+id/action_generalInnerFragment_to_searchListProductHomeFragment"
             app:destination="@id/searchListProductHomeFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_close_exit"
             app:popUpTo="@id/generalInnerFragment" />
     </fragment>
 
@@ -29,8 +33,17 @@
         tools:layout="@layout/detail_product_fragement_home_fragment" />
     <fragment
         android:id="@+id/searchListProductHomeFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.search_list_home_product.SearchListProductHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.hint_search_home_product.SearchHintProductHomeFragment"
         android:label="search_list_product_home_fragment"
-        tools:layout="@layout/search_list_product_home_fragment" />
+        tools:layout="@layout/search_list_product_home_fragment" >
+        <action
+            android:id="@+id/action_searchListProductHomeFragment_to_productSearchListHomeFragment"
+            app:destination="@id/productSearchListHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productSearchListHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.product_search_list_home.ProductSearchListHomeFragment"
+        android:label="product_search_list_home_fragment"
+        tools:layout="@layout/product_search_list_home_fragment" />
 
 </navigation>

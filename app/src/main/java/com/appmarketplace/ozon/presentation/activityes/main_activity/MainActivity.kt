@@ -48,14 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.main, menu)
-//        return true
-//    }
-//
-//    override fun onSupportNavigateUp(): Boolean {
-//        return navController.navigateUp(appBarConfiguration)
-//    }
+
 
     private fun initListeners() {
         activeFragment = homeFragment

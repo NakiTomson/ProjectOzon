@@ -43,6 +43,7 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
         val priceWithDiscountTextView = itemView.priceWithDiscountTextView
         val priceOlDTextView = itemView.priceOlDTextView
         val buttonAddToBasket = itemView.buttonAddToBasket
+        val productItemTextView = itemView.nameOfProduct
 
         fun bind(productsItem: OnProductItem) {
             val visible = View.VISIBLE
@@ -99,6 +100,11 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
 
             if (productsItem.goToBasket) {
                 buttonAddToBasket.visibility = View.VISIBLE
+            }
+
+            productsItem.nameOfProduct?.let {
+                productItemTextView.visibility = View.VISIBLE
+                productItemTextView.text = it
             }
         }
     }
