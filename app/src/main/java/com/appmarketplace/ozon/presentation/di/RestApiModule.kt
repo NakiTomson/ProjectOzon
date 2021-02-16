@@ -59,6 +59,7 @@ class RestApiModule {
     @Named("dropbox")
     @Singleton
     fun provideRetrofitDropBox(okHttpClient: OkHttpClient): Retrofit {
+
         return Retrofit
                 .Builder()
                 .baseUrl("https://www.dropbox.com")
@@ -72,6 +73,7 @@ class RestApiModule {
     @Named("dropbox")
     @Singleton
     fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): ServerApi.MarketPlaceService {
+
         return retrofit.create(ServerApi.MarketPlaceService::class.java)
     }
 

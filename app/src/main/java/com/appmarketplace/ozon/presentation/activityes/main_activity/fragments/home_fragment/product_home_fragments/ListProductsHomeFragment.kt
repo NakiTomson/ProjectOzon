@@ -39,13 +39,10 @@ class ListProductsHomeFragment : Fragment() {
 
     private var adapterMultiple:MultipleTypesAdapter = MultipleTypesAdapter()
 
-    private var mainItems: MutableList<RowType> = ArrayList()
+    private lateinit var mainItems: MutableList<RowType>
 
-    var isPopOutLogic = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        isPopOutLogic = true
-        viewModel = ViewModelProvider(this).get(ListProductsHomeViewModel::class.java)
         super.onCreate(savedInstanceState)
     }
 
@@ -56,20 +53,14 @@ class ListProductsHomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        if (isPopOutLogic){
-            mainItems = ArrayList()
-            viewModel.startLoadingData()
-            loadData()
-        }else{
-            mainItems = viewModel.mainItemsSave
-            adapterMultiple.setData(mainItems)
-            setupAdapter()
-        }
+        viewModel = ViewModelProvider(this).get(ListProductsHomeViewModel::class.java)
+        viewModel.startLoading()
+        mainItems = ArrayList()
+        loadData()
+        setupAdapter()
     }
 
     fun loadData(){
-        adapterMultiple.setHasStableIds(true)
         setupAdapter()
         startBannerGettingData()
         categoryGettingData()
@@ -84,9 +75,15 @@ class ListProductsHomeFragment : Fragment() {
     }
 
     fun setupAdapter(){
+        try {
+            adapterMultiple.setHasStableIds(true)
+        } catch (e: Exception) {
+
+        }
         mutipleHomeRecyclerView.layoutManager = LinearLayoutManager(context)
         mutipleHomeRecyclerView.adapter = adapterMultiple
     }
+
     fun<T> gettingErrors(resource: Resource<T>): Boolean {
         return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)
     }
@@ -239,8 +236,6 @@ class ListProductsHomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        isPopOutLogic = false
-        viewModel.mainItemsSave = mainItems
         super.onDestroyView()
     }
 

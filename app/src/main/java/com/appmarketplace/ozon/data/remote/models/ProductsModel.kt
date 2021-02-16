@@ -102,9 +102,9 @@ data class Product(
 //        @Expose
 //        var productId: Any? = null,
 //
-//        @SerializedName("name")
-//        @Expose
-//        var name: String? = null,
+        @SerializedName("name")
+        @Expose
+        var name: String? = null,
 //
 //        @SerializedName("source")
 //        @Expose

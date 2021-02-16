@@ -9,26 +9,6 @@
 
 
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/searchToolBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:background="@color/custom_color_background_night"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            >
-            <include layout="@layout/toolbar_custom"/>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,6 +9,7 @@ data class OnProductItem(
     val isBestseller :Boolean= false,
     val priceWithDiscount:String? = null,
     val priceOlD:String? = null,
-    val goToBasket:Boolean = false
+    val goToBasket:Boolean = false,
+    val nameOfProduct:String? = null
 
 )

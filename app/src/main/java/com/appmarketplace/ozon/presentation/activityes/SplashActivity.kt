@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.activityes.main_activity.MainActivity
 import kotlinx.android.synthetic.main.activity_splash.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 
 class SplashActivity : AppCompatActivity() {
@@ -23,6 +27,7 @@ class SplashActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("OZON",Context.MODE_PRIVATE)
         startMainAnimation(sharedPreferences)
         startGlobalService()
+//        private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
     }
 
     private fun startMainAnimation(sharedPreferences: SharedPreferences) {

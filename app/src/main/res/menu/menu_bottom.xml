@@ -10,7 +10,7 @@
     <item
         android:id="@+id/expressItem"
         android:icon="@drawable/express_selecter"
-        android:title="Home" />
+        android:title="Express" />
 
     <item
         android:id="@+id/basketItem"

@@ -11,26 +11,22 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
+const val APIKEY1 ="J5PZw9hRmFZUuWcKcicijGgO"
+const val APIKEY2 ="C812pr94o55WF8fLrAsiT1ID"
+
 interface ServerApi{
-
-
-
-    val APIKEY1: String
-        get() = "xWMAMjSScGQTUyXIprjox2DT"
-    val APIKEY2: String
-        get() = "KbxPb2DroozcbNWGWaaGCknk"
 
 
     interface MarketPlaceService  {
 
-        @GET("/v1/categories?format=json&show=name,id&apiKey=xWMAMjSScGQTUyXIprjox2DT")
+        @GET("/v1/categories?format=json&show=name,id&apiKey=$APIKEY1")
         fun getCategoryProducts(
             @Query("pageSize") pageSize: String,
             @Query("page") page: String,
         ): Deferred<GeneralCategory?>
 
 
-        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=xWMAMjSScGQTUyXIprjox2DT")
+        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=$APIKEY1")
         fun getThreeProductsByCategoryKey1(
                 @Path("PathId") pathId:String,
                 @Query("pageSize") pageSize: String,
@@ -38,13 +34,25 @@ interface ServerApi{
         ): Deferred<ProductsModel>
 
 
-        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=KbxPb2DroozcbNWGWaaGCknk ")
+        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=$APIKEY2 ")
         fun getThreeProductsByCategoryKey2(
             @Path("PathId") pathId:String,
             @Query("pageSize") pageSize: String,
             @Query("page") page: String
         ): Deferred<ProductsModel>
 
+
+        @GET("/v1/products((search={keyword}))?format=json&apiKey=$APIKEY2")
+        fun getSearchProductsKey1(
+            @Path("keyword") keyword:String,
+            @Query("pageSize") pageSize: String,
+            @Query("page") page: String
+        ): Deferred<ProductsModel>
+
+
+//        https://api.bestbuy.com/v1/products((search=OnePlus&search=8t))?apiKey=xWMAMjSScGQTUyXIprjox2DT&pageSize=100&format=json
+
+//        https://api.bestbuy.com/v1/products((search=oOnePlus&search=8t))?format=json&apiKey=KbxPb2DroozcbNWGWaaGCknk&pageSize=100&page=1
 
 //        -----------------------------------------------------
 

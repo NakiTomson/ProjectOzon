@@ -97,6 +97,9 @@ class GeneralCategoryConverter{
             1 -> {
                 getTypeTwo(products)
             }
+            2 -> {
+                getTypeThree(products)
+            }
             else -> throw Exception("Non Type")
         }
     }
@@ -137,6 +140,27 @@ class GeneralCategoryConverter{
         return list
     }
 
+    fun getTypeThree(products: List<Product>?): List<OnProductItem> {
+
+        val list: MutableList<OnProductItem> = ArrayList()
+
+        products?.forEach {
+
+            list.add(
+                OnProductItem(
+                    generalIconProductSting = it.image,
+                    favoritelIconProduct = true,
+                    productDiscount = getDiscount(it.salePrice, it.regularPrice),
+                    priceWithDiscount = it.salePrice.toString() + " $",
+                    priceOlD = it.regularPrice.toString() + " $",
+                    goToBasket = true,
+                    nameOfProduct = it.name
+                )
+            )
+        }
+
+        return list
+    }
 
     fun getDiscount(salePrice: Double?, regular: Double?): String? {
         try {
