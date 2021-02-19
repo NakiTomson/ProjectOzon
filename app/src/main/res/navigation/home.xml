@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@id/homeFragment">
+
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_searchHintProductHomeFragment"
+            app:destination="@id/searchHintProductHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchHintProductHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductFragment"
+        android:label="search_list_product_home_fragment"
+        tools:layout="@layout/fragment_search_hint_history_product" />
+
+
+</navigation>

@@ -53,6 +53,7 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
                 val newurl = URL(productsItem.generalIconProductSting)
 
                 thread {
+                    //TODO  Failed to connect to pisces.bbystatic.com/2.18.76.22:443
                     val mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream())
                     GlobalScope.launch(Dispatchers.Main) {
                         generalIconProductImageView.setImageBitmap(mIcon_val)

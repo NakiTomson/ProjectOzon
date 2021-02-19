@@ -5,7 +5,7 @@ import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.LiveItemAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-class LiveRowType(val liveItemAdapter: LiveItemAdapter) :RowType {
+data class LiveRowType(val liveItemAdapter: LiveItemAdapter) :RowType {
 
 
     override fun getItemViewType(): Int {

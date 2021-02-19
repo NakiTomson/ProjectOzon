@@ -14,7 +14,7 @@ import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.CombinationProductsAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
+data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
 
 
     override fun getItemViewType(): Int {

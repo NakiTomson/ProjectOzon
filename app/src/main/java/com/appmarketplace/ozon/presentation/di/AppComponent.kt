@@ -1,7 +1,7 @@
 package com.appmarketplace.ozon.presentation.di
 
-import com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.hint_search_home_product.SearchHintProductHomeViewModel
-import com.appmarketplace.ozon.presentation.activityes.main_activity.fragments.home_fragment.product_home_fragments.ListProductsHomeViewModel
+import com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductViewModel
+import com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -11,7 +11,7 @@ import javax.inject.Singleton
 interface AppComponent {
 
 
-    fun inject(listProductsHome: ListProductsHomeViewModel)
-    fun inject(searchHintProductHomeViewModel: SearchHintProductHomeViewModel)
+    fun inject(listProductsHome: HomeViewModel)
+    fun inject(searchHintProductHomeViewModel: SearchHintHistoryProductViewModel)
 
 }

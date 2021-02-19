@@ -1,7 +1,6 @@
 package com.appmarketplace.ozon.presentation.data
 
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,11 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
-import com.appmarketplace.ozon.presentation.adapters.BoardingItemAdapter
-import com.appmarketplace.ozon.presentation.adapters.CategoryItemAdapter
+import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-class BannerRowType(val onBoardingAdapter: BoardingItemAdapter) :RowType{
+data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
 
     override fun getItemViewType(): Int {
@@ -35,7 +33,6 @@ class BannerRowType(val onBoardingAdapter: BoardingItemAdapter) :RowType{
             }
         })
     }
-
 
 
     fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {

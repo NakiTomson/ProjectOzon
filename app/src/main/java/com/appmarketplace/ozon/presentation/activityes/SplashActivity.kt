@@ -10,12 +10,7 @@ import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.activityes.main_activity.MainActivity
 import kotlinx.android.synthetic.main.activity_splash.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 
 class SplashActivity : AppCompatActivity() {

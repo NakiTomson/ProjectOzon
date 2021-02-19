@@ -1,6 +1,5 @@
 package com.appmarketplace.ozon.presentation.factory
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,8 @@ import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
 import com.appmarketplace.ozon.presentation.pojo.ResultHistoryData
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.history_item_layoute.view.*
+import kotlinx.android.synthetic.main.item_boarding_container.view.*
+import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_history.view.*
 import kotlinx.android.synthetic.main.row_type_live.view.*
@@ -33,7 +33,7 @@ object ViewHolderFactory {
         var childCount:Int?=null
 
 
-        fun bind(onBoardingAdapter: BoardingItemAdapter){
+        fun bind(onBoardingAdapter: BannerAdapter){
 
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
             childCount = bannerIndicatorsContainer?.childCount!!
@@ -71,9 +71,10 @@ object ViewHolderFactory {
 
             for ((index,item) in (listOf).withIndex()){
                 Picasso.get()
-                        .load(item.historyUrl)
-                        .noFade()
-                        .into(listofImage[index])
+                    .load(item.historyUrl)
+                    .noFade()
+                    .placeholder(R.drawable.one_history)
+                    .into(listofImage[index])
             }
 
         }

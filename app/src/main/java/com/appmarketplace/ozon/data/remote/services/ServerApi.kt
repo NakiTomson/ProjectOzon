@@ -11,8 +11,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-const val APIKEY1 ="J5PZw9hRmFZUuWcKcicijGgO"
-const val APIKEY2 ="C812pr94o55WF8fLrAsiT1ID"
+const val APIKEY1 ="YHWpCOGVtCSD3EwvzEk8TgGn"
+const val APIKEY2 ="4YlWG5yMWRt7yx9TfKc3vnbS"
+const val APIKEY3 ="4RTGGVkV872qNqc7ETQ5vgXS"
+const val APIKEY4 ="DKBSXAEXex63XOsLfQmFciDu"
 
 interface ServerApi{
 
@@ -26,24 +28,19 @@ interface ServerApi{
         ): Deferred<GeneralCategory?>
 
 
-        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=$APIKEY1")
-        fun getThreeProductsByCategoryKey1(
+        @GET("/v1/products((categoryPath.id={PathId}))?format=json")
+        fun getThreeProductsByCategoryKey(
                 @Path("PathId") pathId:String,
                 @Query("pageSize") pageSize: String,
-                @Query("page") page: String
+                @Query("page") page: String,
+                @Query("apiKey") apykey: String
         ): Deferred<ProductsModel>
 
 
-        @GET("/v1/products((categoryPath.id={PathId}))?format=json&apiKey=$APIKEY2 ")
-        fun getThreeProductsByCategoryKey2(
-            @Path("PathId") pathId:String,
-            @Query("pageSize") pageSize: String,
-            @Query("page") page: String
-        ): Deferred<ProductsModel>
 
 
-        @GET("/v1/products((search={keyword}))?format=json&apiKey=$APIKEY2")
-        fun getSearchProductsKey1(
+        @GET("/v1/products((search={keyword}))?format=json&apiKey=$APIKEY1")
+        fun getSearchProductsKey(
             @Path("keyword") keyword:String,
             @Query("pageSize") pageSize: String,
             @Query("page") page: String

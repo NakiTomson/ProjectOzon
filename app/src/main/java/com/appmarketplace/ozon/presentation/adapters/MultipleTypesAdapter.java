@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.adapters;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,10 +24,10 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
     private final List<RowType> dataSet = new ArrayList<>();
 
 
-    public void setData(List<RowType> dataSets){
-
+    public void setData(Collection<RowType> dataSets){
         dataSet.clear();
         dataSet.addAll(dataSets);
+        Log.v("RCTYBUI","CRVYBUN");
         notifyDataSetChanged();
     }
     public void setData(RowType dataSets){
@@ -57,13 +59,9 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
 
     @Override
     public long getItemId(int position) {
-        return dataSet.get(position).getItemViewType();
+        return dataSet.get(position).hashCode();
     }
 
-    @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(hasStableIds);
-    }
 
     @Override
     public int getItemCount() {

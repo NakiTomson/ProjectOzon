@@ -40,9 +40,8 @@ class PreferencesDelegate<Value>(
         }
     }
 }
+
 class ExampleUsege(preferences: SharedPreferences){
-
-
 
 
     //TODO Переделать

@@ -7,7 +7,7 @@ import com.appmarketplace.ozon.data.db.Gonfigs.HOME_AUDIO
 import com.appmarketplace.ozon.data.db.Gonfigs.LAPTOPS
 import com.appmarketplace.ozon.data.db.Gonfigs.TVS
 import com.appmarketplace.ozon.data.remote.models.ProductsModel
-import com.appmarketplace.ozon.data.remote.services.ServerApi
+import com.appmarketplace.ozon.data.remote.services.*
 import com.appmarketplace.ozon.domain.converters.GeneralCategoryConverter
 import com.appmarketplace.ozon.presentation.data.Resource
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
@@ -26,7 +26,7 @@ class HomeRepositoryImpl(
     suspend fun testLoading(keyWord:String): Results.ResultProduct {
 
         try {
-            val products = marketPlaceApi.getSearchProductsKey1(keyword = keyWord,pageSize = "100",page = "1").await()
+            val products = marketPlaceApi.getSearchProductsKey(keyword = keyWord,pageSize = "100",page = "1").await()
             return Results.ResultProduct(
                 converter.fromListProductToUiListProducts(products = products.products, type = 2)
             )
@@ -80,8 +80,7 @@ class HomeRepositoryImpl(
 
     suspend fun getFirstProducts():Results.ResultProduct {
         return try {
-            Thread.sleep(5300)
-            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey1(HOME_AUDIO, "3", "1").await()
+            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(HOME_AUDIO, "3", "1", APIKEY2).await()
             Results.ResultProduct(
                 converter.fromListProductToUiListProducts(products = listProduts.products, type = 0)
             )
@@ -94,9 +93,11 @@ class HomeRepositoryImpl(
 
 
     suspend fun getSecondProducts():Results.ResultProduct {
-        Thread.sleep(0)
         return try {
-            val listProducts = marketPlaceApi.getThreeProductsByCategoryKey2(CELL_PHONES, "6", "54").await()
+            val listProducts =
+                marketPlaceApi.getThreeProductsByCategoryKey(CELL_PHONES, "6", "54",
+                APIKEY3).await()
+
             Results.ResultProduct(
                 converter.fromListProductToUiListProducts(
                     "Лучшие предложения!",
@@ -132,7 +133,8 @@ class HomeRepositoryImpl(
     suspend fun getThirdProducts():Results.ResultProduct {
         return try {
             Thread.sleep(10300)
-            val listProducts = marketPlaceApi.getThreeProductsByCategoryKey1(LAPTOPS, "3", "233").await()
+            val listProducts = marketPlaceApi.getThreeProductsByCategoryKey(LAPTOPS, "3", "233",
+                APIKEY4).await()
             Results.ResultProduct(
                 converter.fromListProductToUiListProducts(
                     topStringOffer = "Крутые Скидки! 90%",
@@ -161,8 +163,7 @@ class HomeRepositoryImpl(
 
     suspend fun getFourthProducts():Results.ResultProduct {
         return try {
-            Thread.sleep(11000)
-            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey2(TVS, "4", "23").await()
+            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(TVS, "4", "23", APIKEY1).await()
             Results.ResultProduct( converter.fromListProductToUiListProducts(
                 topStringOffer = "Товары с шок-кешбеком по Ozon.Card",
                 bottonStringOffer = "Больше товаров тут",

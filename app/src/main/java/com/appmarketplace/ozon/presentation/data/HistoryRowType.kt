@@ -8,7 +8,7 @@ import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
 
 
-class HistoryRowType(val historyListItems: OnHistoryItem) :RowType {
+data class HistoryRowType(val historyListItems: OnHistoryItem) :RowType {
 
     override fun getItemViewType(): Int {
         return RowType.HISTORY_ROW_TYPE

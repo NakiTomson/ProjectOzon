@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-class RegistrationRowType:RowType {
+data class RegistrationRowType(val reg: Int):RowType {
 
     override fun getItemViewType(): Int {
         return RowType.REGISTRATION_ROW_TYPE

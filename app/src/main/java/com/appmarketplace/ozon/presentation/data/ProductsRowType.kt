@@ -5,7 +5,7 @@ import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.ContainerProductsAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-class ProductsRowType(val adapterProducts: ContainerProductsAdapter) :RowType {
+data class ProductsRowType(val adapterProducts: ContainerProductsAdapter) :RowType {
 
     override fun getItemViewType(): Int {
         return RowType.PRODUCTS_ROW_TYPE
