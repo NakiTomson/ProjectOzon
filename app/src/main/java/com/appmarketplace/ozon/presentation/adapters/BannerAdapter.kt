@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.data.BannerRowType
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_boarding_container.view.*
@@ -14,6 +15,8 @@ import java.util.*
 class BannerAdapter(): RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
 
 
+
+    var bannerClickListener: BannerRowType.BannerListener? = null
 
     val onboardingItems:MutableList<OnBoardingItem> = LinkedList()
 
@@ -64,6 +67,11 @@ class BannerAdapter(): RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHold
             onBoardingItem.description?.let {
                 textDescription.visibility = View.VISIBLE
                 textDescription?.text = it
+            }
+
+            imageOnboarding.setOnClickListener {
+                imageOnboarding.transitionName = onBoardingItem.onBoardingImageUrl
+                bannerClickListener?.onClickBanner(onBoardingItem.onBoardingImageUrl,imageOnboarding)
             }
 
         }

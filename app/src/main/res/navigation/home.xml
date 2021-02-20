@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchHintProductHomeFragment"
             app:destination="@id/searchHintProductHomeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mockFragment"
+            app:destination="@id/mockFragment" />
     </fragment>
 
 
@@ -36,6 +39,38 @@
         tools:layout="@layout/fragment_products_list" >
 
     </fragment>
+    <fragment
+        android:id="@+id/mockFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.mock.MockFragment"
+        android:label="fragment_mock"
+        tools:layout="@layout/fragment_mock">
+
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+
+        <argument
+            android:name="videUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="arrayHistory"
+            app:argType="string[]"
+            app:nullable="true" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+
+
+    </fragment>
+
+
+
 
 
 </navigation>

@@ -39,11 +39,6 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
     }
 
 
-//    public void setData(int index,RowType dataSets){
-//        dataSet.add(index,dataSets);
-//        countPosition =+1;
-//        notifyItemChanged(countPosition);
-//    }
 
     @Override
     public int getItemViewType(int position) {

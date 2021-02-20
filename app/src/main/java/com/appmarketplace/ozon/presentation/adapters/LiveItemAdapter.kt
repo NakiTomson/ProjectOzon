@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.data.LiveRowType
 import com.appmarketplace.ozon.presentation.pojo.ListResultLiveItems
 import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
 import com.squareup.picasso.Picasso
@@ -19,6 +20,8 @@ class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemView
 
 
     val onboardingItems:MutableList<ListResultLiveItems> = ArrayList()
+
+    var liveClickListener: LiveRowType.LiveListener? = null
 
     fun setData(items:OnLiveItem) {
         val newList = items.resultLiveData
@@ -38,7 +41,6 @@ class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
         return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_live,parent,false))
     }
-
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
         holder.bind(onboardingItems[position])
@@ -77,6 +79,8 @@ class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemView
 
             nameOfCompanyTitle?.text = liveItem.nameOfCompany
             textDescription?.text = liveItem.description
+
+            imageOnboarding.setOnClickListener { liveClickListener?.onClickLive("8JLIJoIJpEU") }
         }
 
     }

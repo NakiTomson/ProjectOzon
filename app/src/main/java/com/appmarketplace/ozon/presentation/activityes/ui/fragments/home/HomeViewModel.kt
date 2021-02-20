@@ -32,25 +32,25 @@ class HomeViewModel : BaseViewModel() {
     lateinit var homeRepositoryImplDropBox: HomeRepositoryImpl
 
 
-    final val bannerListStart:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListStart:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    final val categoryProductliveData:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
+    val categoryProductliveData:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
 
-    final val historyItemsLiveData:MutableLiveData<Resource<OnHistoryItem>> = MutableLiveData()
+    val historyItemsLiveData:MutableLiveData<Resource<OnHistoryItem>> = MutableLiveData()
 
-    final val liveItemsLiveData:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
+    val liveItemsLiveData:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
 
-    final val listPoductsLiveData:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val listPoductsLiveData:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    final val listPoductsLiveData2:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val listPoductsLiveData2:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    final val bannerListCenter:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListCenter:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    final val listPoductsLiveData3:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val listPoductsLiveData3:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    final val bannerListDown:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListDown:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    final val listPoductsLiveData4:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val listPoductsLiveData4:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
     fun startLoading() {

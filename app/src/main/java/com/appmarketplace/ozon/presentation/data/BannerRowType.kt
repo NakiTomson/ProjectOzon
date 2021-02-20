@@ -11,9 +11,17 @@ import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
+import com.makeramen.roundedimageview.RoundedImageView
 
 data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
+
+
+    lateinit var bannerClickListener: BannerListener
+
+    interface BannerListener {
+        fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView)
+    }
 
     override fun getItemViewType(): Int {
         return RowType.BANNER_ROW_TYPE;
@@ -30,6 +38,15 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, bunnerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
+
+                viewHolder.bannerClickListener = object :BannerListener{
+                    override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
+                        bannerClickListener.onClickBanner(
+                            onBoardingAdapter.onboardingItems[position].onBoardingImageUrl,
+                            imageOnboarding
+                        )
+                    }
+                }
             }
         })
     }

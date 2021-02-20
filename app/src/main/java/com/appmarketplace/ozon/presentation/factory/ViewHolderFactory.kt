@@ -5,15 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
+import com.appmarketplace.ozon.presentation.data.BannerRowType
+import com.appmarketplace.ozon.presentation.data.HistoryRowType
+import com.appmarketplace.ozon.presentation.data.LiveRowType
 import com.appmarketplace.ozon.presentation.pojo.OnProductItem
 import com.appmarketplace.ozon.presentation.pojo.ResultHistoryData
+import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
@@ -31,12 +33,19 @@ object ViewHolderFactory {
 
     class BannerViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
+        var bannerClickListener: BannerRowType.BannerListener? = null
+
         val banneerViewPager = itemView.onAdsViewPager
         var bannerIndicatorsContainer:LinearLayout?  = null
 
 
         fun bind(onBoardingAdapter: BannerAdapter){
 
+            onBoardingAdapter.bannerClickListener = object : BannerRowType.BannerListener{
+                override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
+                    bannerClickListener?.onClickBanner(imageUrl, imageOnboarding)
+                }
+            }
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
             banneerViewPager.adapter  = onBoardingAdapter
         }
@@ -55,7 +64,7 @@ object ViewHolderFactory {
     }
 
     class HistoryViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
-
+        lateinit var historClickListener: HistoryRowType.HistoryListener
         val historyButton = itemView.hostoryItemButton
         val financeButton = itemView.hostoryItemFinancle
 
@@ -77,17 +86,32 @@ object ViewHolderFactory {
                     .noFade()
                     .placeholder(R.drawable.one_history)
                     .into(listofImage[index])
-            }
 
+                val itesm = listOf.map { it.historyUrl.toString() }
+
+                listofImage[index].setOnClickListener {
+                    listofImage[index].transitionName = itesm[index]
+                    historClickListener.onClickHistory(itesm,index,listofImage[index])
+                }
+            }
         }
     }
 
     class LiveViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
+        var liveClickListener: LiveRowType.LiveListener? = null
+
         val liveStreamPager = itemView.onLiveStreemViewPager
 
         fun bind(liveItemAdapter: LiveItemAdapter){
             liveStreamPager.adapter = liveItemAdapter
+
+            liveItemAdapter.liveClickListener = object : LiveRowType.LiveListener{
+                override fun onClickLive(liveUrl: String) {
+                    liveClickListener?.onClickLive(liveUrl)
+                }
+
+            }
         }
     }
 
@@ -104,7 +128,6 @@ object ViewHolderFactory {
     class TopSloganOfferProduct(itemView: View):RecyclerView.ViewHolder(itemView){
 
         private val topStringOffer = itemView.productsTopOffer
-
 
         fun bind(slogan:String?){
 
@@ -159,7 +182,7 @@ object ViewHolderFactory {
             }
             RowType.LIVE_ROW_TYPE->{
                 val liveTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_live,parent,false)
-                LiveViewHolder(liveTypeView)
+                LiveViewHolder(liveTypeView,)
             }
             RowType.REGISTRATION_ROW_TYPE->{
                 val registrationTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_registration,parent,false)

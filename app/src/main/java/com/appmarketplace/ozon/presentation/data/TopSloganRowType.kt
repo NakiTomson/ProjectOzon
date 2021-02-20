@@ -14,6 +14,7 @@ import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
 data class TopSloganRowType(val sloganOffer: String) :RowType{
 
+
     override fun getItemViewType(): Int {
         return RowType.PRODUCTS_SLOGAN_TOP_TYPE;
     }
@@ -21,6 +22,5 @@ data class TopSloganRowType(val sloganOffer: String) :RowType{
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val bunnerViewHolder: ViewHolderFactory.TopSloganOfferProduct = viewHolder as  ViewHolderFactory.TopSloganOfferProduct
         bunnerViewHolder.bind(sloganOffer)
-
     }
 }
