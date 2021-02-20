@@ -5,20 +5,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
+import com.appmarketplace.ozon.presentation.pojo.OnProductItem
 import com.appmarketplace.ozon.presentation.pojo.ResultHistoryData
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
+import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
 import kotlinx.android.synthetic.main.row_type_history.view.*
 import kotlinx.android.synthetic.main.row_type_live.view.*
 import kotlinx.android.synthetic.main.row_type_products.view.*
 import kotlinx.android.synthetic.main.row_type_registration.view.*
+import kotlinx.android.synthetic.main.row_type_top_slogan.view.*
 import java.util.*
 
 
@@ -30,13 +34,10 @@ object ViewHolderFactory {
         val banneerViewPager = itemView.onAdsViewPager
         var bannerIndicatorsContainer:LinearLayout?  = null
 
-        var childCount:Int?=null
-
 
         fun bind(onBoardingAdapter: BannerAdapter){
 
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
-            childCount = bannerIndicatorsContainer?.childCount!!
             banneerViewPager.adapter  = onBoardingAdapter
         }
     }
@@ -44,10 +45,11 @@ object ViewHolderFactory {
     class CategoryViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
         val banneerViewPager = itemView.onAdsViewPager
-        val bannerIndicatorsContainer = itemView.indicatorsContainerAds
+        var bannerIndicatorsContainer:LinearLayout?= null
 
 
         fun bind(combinationProductsAdapter: CombinationProductsAdapter){
+            bannerIndicatorsContainer = itemView.indicatorsContainerAds
             banneerViewPager.adapter  = combinationProductsAdapter
         }
     }
@@ -82,9 +84,7 @@ object ViewHolderFactory {
 
     class LiveViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
-        val textLive = itemView.textOzonLive
         val liveStreamPager = itemView.onLiveStreemViewPager
-
 
         fun bind(liveItemAdapter: LiveItemAdapter){
             liveStreamPager.adapter = liveItemAdapter
@@ -100,15 +100,47 @@ object ViewHolderFactory {
         }
     }
 
-    class ProductViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
-        val productsByOffer = itemView.productsByOfferItemRecyclerView
+    class TopSloganOfferProduct(itemView: View):RecyclerView.ViewHolder(itemView){
 
-        fun bind(adapterProducts: ContainerProductsAdapter){
-            productsByOffer.layoutManager = LinearLayoutManager(itemView.context)
-            productsByOffer.adapter = adapterProducts
+        private val topStringOffer = itemView.productsTopOffer
+
+
+        fun bind(slogan:String?){
+
+            slogan?.let {
+                topStringOffer.visibility = View.VISIBLE
+                topStringOffer.text = slogan
+            }
+
         }
     }
+
+    class BottomSloganOfferProduct(itemView: View):RecyclerView.ViewHolder(itemView){
+        private val bottomStringOffer  = itemView.textViewSloganOffer
+        private val imageNextAll  = itemView.imageNextAll
+        fun bind(slogan:String?){
+            slogan?.let {
+                bottomStringOffer.visibility = View.VISIBLE
+                imageNextAll.visibility = View.VISIBLE
+                bottomStringOffer.text = slogan
+            }
+        }
+    }
+
+
+    class ProductViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
+
+        val productsRecyclerView = itemView.productsByOfferItemRecyclerView
+
+        fun bind(listProducts: List<OnProductItem>,spain:Int){
+            productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
+            val productAdapter =ProductItemAdapter()
+            productAdapter.setData(listProducts)
+            productsRecyclerView.adapter = productAdapter
+        }
+    }
+
 
     @JvmStatic
     fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -133,11 +165,20 @@ object ViewHolderFactory {
                 val registrationTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_registration,parent,false)
                 RegistrationViewHolder(registrationTypeView)
             }
+
             RowType.PRODUCTS_ROW_TYPE->{
                 val productTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_products,parent,false)
                 ProductViewHolder(productTypeView)
             }
 
+            RowType.PRODUCTS_SLOGAN_TOP_TYPE->{
+                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_top_slogan,parent,false)
+                TopSloganOfferProduct(sloganViewType)
+            }
+            RowType.PRODUCTS_SLOGAN_BOTTOM_TYPE->{
+                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_bottom_slogan,parent,false)
+                BottomSloganOfferProduct(sloganViewType)
+            }
             else -> {
                 throw UnknownFormatFlagsException("Not Faund Row Type")
             }

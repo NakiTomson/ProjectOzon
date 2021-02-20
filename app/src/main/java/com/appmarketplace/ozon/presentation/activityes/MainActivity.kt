@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+
     }
 
 

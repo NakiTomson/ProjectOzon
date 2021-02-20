@@ -15,22 +15,31 @@ import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.net.URL
+import java.net.URLConnection
 import kotlin.concurrent.thread
 
 
-class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
 
+    var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
+
+    fun setData(list: List<OnProductItem>) {
+        listOnProductsByOfferItems?.clear()
+        listOnProductsByOfferItems?.addAll(list)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
         return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        holder.bind(listOnProductsByOfferItems[position])
+        listOnProductsByOfferItems?.get(position)?.let { holder.bind(it) }
     }
 
-    override fun getItemCount() = listOnProductsByOfferItems.size
+    override fun getItemCount() = listOnProductsByOfferItems?.size ?: 0
 
     inner class CategoryOfferItemProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -48,23 +57,26 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
         fun bind(productsItem: OnProductItem) {
             val visible = View.VISIBLE
 
+
             productsItem.generalIconProductSting?.let {
 
                 val newurl = URL(productsItem.generalIconProductSting)
 
                 thread {
-                    //TODO  Failed to connect to pisces.bbystatic.com/2.18.76.22:443
-                    val mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream())
+                    val connection: URLConnection = newurl.openConnection()
+                    val inputStream: InputStream = connection.getInputStream()
+                    val productIcon = BitmapFactory.decodeStream(inputStream)
+                    inputStream.close()
                     GlobalScope.launch(Dispatchers.Main) {
-                        generalIconProductImageView.setImageBitmap(mIcon_val)
+                        generalIconProductImageView.setImageBitmap(productIcon)
                     }
                 }
 
                 // Не работает 403 Forrible
-//                Picasso.get()
-//                        .load(productsItem.generalIconProductSting)
-//                        .noFade()
-//                        .into(generalIconProductImageView)
+                Picasso.get()
+                    .load(productsItem.generalIconProductSting)
+                    .noFade()
+                    .into(generalIconProductImageView)
 
             } ?: run {
                 productsItem.generalIconProduct?.let { generalIconProductImageView.setImageResource(it) } ?:
@@ -91,7 +103,6 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
                     priceWithDiscountTextView.text = productsItem.priceWithDiscount
                     priceWithDiscountTextView.setTextColor(Color.GRAY)
                 }
-
             }
 
             if (productsItem.isBestseller) {
@@ -108,6 +119,10 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
                 productItemTextView.text = it
             }
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return listOnProductsByOfferItems?.get(position)?.hashCode()?.toLong() ?: 0
     }
 
 }

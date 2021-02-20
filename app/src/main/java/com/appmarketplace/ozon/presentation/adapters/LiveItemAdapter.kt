@@ -63,7 +63,7 @@ class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemView
             Picasso.get()
                     .load(R.drawable.ic_live_example)
                     .noFade()
-//                    .placeholder(R.drawable.ic_live_example)
+                    .placeholder(R.drawable.ic_live_example)
                     .into(imageOnboarding)
 
 

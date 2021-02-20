@@ -16,11 +16,26 @@
             android:id="@+id/action_homeFragment_to_searchHintProductHomeFragment"
             app:destination="@id/searchHintProductHomeFragment" />
     </fragment>
+
+
     <fragment
         android:id="@+id/searchHintProductHomeFragment"
         android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductFragment"
         android:label="search_list_product_home_fragment"
-        tools:layout="@layout/fragment_search_hint_history_product" />
+        tools:layout="@layout/fragment_search_hint_history_product" >
+        <argument
+            android:name="requestname"
+            app:argType="string"
+            android:defaultValue="iPhone 10" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productsListFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.products_list.ProductsListFragment"
+        android:label="fragment_products_list"
+        tools:layout="@layout/fragment_products_list" >
+
+    </fragment>
 
 
 </navigation>

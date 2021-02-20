@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductFragment">
+    tools:context=".presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductFragment"
+    android:orientation="vertical">
 
 
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/searchToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/custom_color_background_night"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <include layout="@layout/toolbar_custom" />
+
+    </androidx.appcompat.widget.Toolbar>
 
 
     <LinearLayout
@@ -97,4 +112,4 @@
     </LinearLayout>
 
 
-</FrameLayout>
+</LinearLayout>

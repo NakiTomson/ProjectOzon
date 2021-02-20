@@ -37,7 +37,7 @@ class RestApiModule {
         })
 
         val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+        logging.level = HttpLoggingInterceptor.Level.BASIC
         httpClient.addInterceptor(logging)
         return httpClient.build()
     }

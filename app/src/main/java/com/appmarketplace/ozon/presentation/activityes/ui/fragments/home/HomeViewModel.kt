@@ -10,7 +10,9 @@ import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
 import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
 import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
+import okhttp3.internal.waitMillis
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -38,32 +40,111 @@ class HomeViewModel : BaseViewModel() {
 
     final val liveItemsLiveData:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
 
-    final val listPoductsLiveData:MutableLiveData<Resource<MutableList<OnOfferProductsItem>>> = MutableLiveData()
+    final val listPoductsLiveData:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    final val listPoductsLiveData2:MutableLiveData<Resource<MutableList<OnOfferProductsItem>>> = MutableLiveData()
+    final val listPoductsLiveData2:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     final val bannerListCenter:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    final val listPoductsLiveData3:MutableLiveData<Resource<MutableList<OnOfferProductsItem>>> = MutableLiveData()
+    final val listPoductsLiveData3:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     final val bannerListDown:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    final val listPoductsLiveData4:MutableLiveData<Resource<MutableList<OnOfferProductsItem>>> = MutableLiveData()
+    final val listPoductsLiveData4:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
-
-    fun startLoading(){
-
-        when  {
-            bannerListStart.value?.data == null ->  {
-                Log.v("LOADING","No Have Data")
-                startLoadingData()}
-            else -> {
-                Log.v("LOADING","Have Data")
+    fun startLoading() {
+        launch(Dispatchers.IO) {
+            when {
+                bannerListStart.value?.data == null -> {
+                    loadingProductsFoure()
+                }
             }
         }
-
     }
+
+    suspend fun loadingBannerStart(){
+        val bannerStart:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
+        withContext(Dispatchers.Main){
+            bannerListStart.value = bannerStart.await().result
+        }
+    }
+
+    suspend fun loadingCategoryProduct(){
+        val categoryResult:Deferred<HomeRepositoryImpl.Results.ResultCategoryProduct> =  async { homeRepositoryImplBestBye.loadDataCategoryProduct(HomeRepositoryImpl.Params())}
+        loadingBannerStart()
+        withContext(Dispatchers.Main){
+            categoryProductliveData.value = categoryResult.await().result
+        }
+    }
+
+    suspend fun loadingHistoryData(){
+        val historyItems:Deferred<HomeRepositoryImpl.Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
+        loadingCategoryProduct()
+        withContext(Dispatchers.Main){
+            historyItemsLiveData.value = historyItems.await().result
+        }
+    }
+
+    suspend fun loadingLiveData(){
+        val liveItems:Deferred<HomeRepositoryImpl.Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
+        loadingHistoryData()
+        withContext(Dispatchers.Main){
+            liveItemsLiveData.value = liveItems.await().result
+        }
+    }
+
+    suspend fun loadingProductsOne(){
+        val products:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getFirstProducts()}
+        loadingLiveData()
+        withContext(Dispatchers.Main){
+            listPoductsLiveData.value = products.await().result
+        }
+    }
+
+
+    suspend fun loadingProductsTwo(){
+        val products2:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getSecondProducts() }
+        loadingProductsOne()
+        withContext(Dispatchers.Main){
+            listPoductsLiveData2.value = products2.await().result
+        }
+    }
+
+
+    suspend fun loadingBannerCenter(){
+        val bannerCenter:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
+        loadingProductsTwo()
+        withContext(Dispatchers.Main){
+            bannerListCenter.value = bannerCenter.await().result
+        }
+    }
+
+
+    suspend fun loadingProductsThree(){
+        val products3:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async{ homeRepositoryImplBestBye.getThirdProducts() }
+        loadingBannerCenter()
+        withContext(Dispatchers.Main){
+            listPoductsLiveData3.value = products3.await().result
+        }
+    }
+
+    suspend fun loadingBannerDown(){
+        val bannerDown:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
+        loadingProductsThree()
+        withContext(Dispatchers.Main){
+            bannerListDown.value = bannerDown.await().result
+        }
+    }
+
+    suspend fun loadingProductsFoure(){
+        val products4:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async { homeRepositoryImplBestBye.getFourthProducts() }
+        loadingBannerDown()
+        withContext(Dispatchers.Main){
+            listPoductsLiveData4.value = products4.await().result
+        }
+    }
+
 
     fun startLoadingData(){
 
@@ -113,12 +194,12 @@ class HomeViewModel : BaseViewModel() {
         categoryItems: Resource<MutableList<MutableList<OnBoardingItem>>>?,
         historyItems: Resource<OnHistoryItem>?,
         liveItems: Resource<OnLiveItem>?,
-        productFirst: Resource<MutableList<OnOfferProductsItem>>?,
-        productSecond: Resource<MutableList<OnOfferProductsItem>>?,
+        productFirst: Resource<OnOfferProductsItem>?,
+        productSecond: Resource<OnOfferProductsItem>?,
         centerBanner: Resource<MutableList<OnBoardingItem>>?,
-        productThird: Resource<MutableList<OnOfferProductsItem>>? = null,
+        productThird: Resource<OnOfferProductsItem>? = null,
         downBanner: Resource<MutableList<OnBoardingItem>>? = null,
-        productFourth: Resource<MutableList<OnOfferProductsItem>>? = null,
+        productFourth: Resource<OnOfferProductsItem>? = null,
     ) {
         bannerListStart.value = startBannerItems
         categoryProductliveData.value = categoryItems

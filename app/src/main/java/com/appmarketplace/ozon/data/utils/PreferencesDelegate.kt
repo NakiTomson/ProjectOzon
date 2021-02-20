@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.data.db
+package com.appmarketplace.ozon.data.utils
 
 import android.content.SharedPreferences
 import com.appmarketplace.ozon.domain.exception.NotFoundRealizationException
@@ -52,6 +52,7 @@ class ExampleUsege(preferences: SharedPreferences){
 
     companion object {
         private const val USER_NAME = "user_name"
+
         private const val USER_PHONE = "user_phone"
         private const val USER_LICENCE = "user_licence"
     }

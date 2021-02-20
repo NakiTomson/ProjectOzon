@@ -57,7 +57,6 @@ class ContainerProductsAdapter(val spain:Int) :
 
         fun bind(onProductsByOfferItem: OnOfferProductsItem) {
 
-
             onProductsByOfferItem.topStringOffer?.let {
                 topStringOffer.visibility = View.VISIBLE
                 topStringOffer.text = onProductsByOfferItem.topStringOffer
@@ -71,7 +70,9 @@ class ContainerProductsAdapter(val spain:Int) :
 
 
             prodctsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
-            prodctsRecyclerView.adapter = ProductItemAdapter(onProductsByOfferItem.list)
+            val productAdapter = ProductItemAdapter()
+            productAdapter.setData(onProductsByOfferItem.list)
+            prodctsRecyclerView.adapter = productAdapter
 
         }
     }

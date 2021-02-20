@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.data.db
+package com.appmarketplace.ozon.data.utils
 
 object Gonfigs {
 

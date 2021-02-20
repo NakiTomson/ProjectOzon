@@ -21,24 +21,29 @@ import javax.inject.Qualifier;
 
 public class MultipleTypesAdapter extends RecyclerView.Adapter {
 
-    private final List<RowType> dataSet = new ArrayList<>();
+    private final List<RowType> dataSet = new ArrayList<>(17);
 
+
+    private volatile int countPosition = -1;
 
     public void setData(Collection<RowType> dataSets){
         dataSet.clear();
         dataSet.addAll(dataSets);
-        Log.v("RCTYBUI","CRVYBUN");
-        notifyDataSetChanged();
-    }
-    public void setData(RowType dataSets){
-        dataSet.add(dataSets);
         notifyDataSetChanged();
     }
 
-    public void setData(int index,RowType dataSets){
-        dataSet.add(index,dataSets);
-        notifyDataSetChanged();
+    public void setData(RowType dataSets){
+        dataSet.add(dataSets);
+        ++countPosition;
+        notifyItemChanged(countPosition);
     }
+
+
+//    public void setData(int index,RowType dataSets){
+//        dataSet.add(index,dataSets);
+//        countPosition =+1;
+//        notifyItemChanged(countPosition);
+//    }
 
     @Override
     public int getItemViewType(int position) {

@@ -1,12 +1,10 @@
 package com.appmarketplace.ozon.domain.repositories
 
 
-import android.util.Log
-import com.appmarketplace.ozon.data.db.Gonfigs.CELL_PHONES
-import com.appmarketplace.ozon.data.db.Gonfigs.HOME_AUDIO
-import com.appmarketplace.ozon.data.db.Gonfigs.LAPTOPS
-import com.appmarketplace.ozon.data.db.Gonfigs.TVS
-import com.appmarketplace.ozon.data.remote.models.ProductsModel
+import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
+import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
+import com.appmarketplace.ozon.data.utils.Gonfigs.LAPTOPS
+import com.appmarketplace.ozon.data.utils.Gonfigs.TVS
 import com.appmarketplace.ozon.data.remote.services.*
 import com.appmarketplace.ozon.domain.converters.GeneralCategoryConverter
 import com.appmarketplace.ozon.presentation.data.Resource
@@ -14,14 +12,11 @@ import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
 import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
 import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
-import java.io.IOException
 
 class HomeRepositoryImpl(
     val marketPlaceApi: ServerApi.MarketPlaceService,
     val converter: GeneralCategoryConverter
 ) : BaseRepository<HomeRepositoryImpl.Params, HomeRepositoryImpl.Results>(), HomeRepository {
-
-
 
     suspend fun testLoading(keyWord:String): Results.ResultProduct {
 
@@ -33,6 +28,7 @@ class HomeRepositoryImpl(
         } catch (e: Exception) {
            return Results.ResultProduct(  Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
+
     }
 
     suspend fun getBannerStart(): Results.ResultBanner {
@@ -53,12 +49,14 @@ class HomeRepositoryImpl(
     }
 
     override suspend fun loadDataCategoryProduct(params: Params): Results.ResultCategoryProduct {
+
         return try {
             val listGeneralCategory = marketPlaceApi.getCategoryProducts("20", "1").await()
             Results.ResultCategoryProduct(converter.fromListOnCategoryToListUICategory(listGeneralCategory))
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
+
     }
 
     suspend fun getHistoryItems(): Results.ResultHistory {
@@ -81,13 +79,10 @@ class HomeRepositoryImpl(
     suspend fun getFirstProducts():Results.ResultProduct {
         return try {
             val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(HOME_AUDIO, "3", "1", APIKEY2).await()
-            Results.ResultProduct(
-                converter.fromListProductToUiListProducts(products = listProduts.products, type = 0)
-            )
+            Results.ResultProduct(converter.fromListProductToUiListProducts(products = listProduts.products, type = 0))
         } catch (e: Exception) {
             Results.ResultProduct( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
-
     }
 
 
@@ -132,7 +127,6 @@ class HomeRepositoryImpl(
 
     suspend fun getThirdProducts():Results.ResultProduct {
         return try {
-            Thread.sleep(10300)
             val listProducts = marketPlaceApi.getThreeProductsByCategoryKey(LAPTOPS, "3", "233",
                 APIKEY4).await()
             Results.ResultProduct(
@@ -163,7 +157,7 @@ class HomeRepositoryImpl(
 
     suspend fun getFourthProducts():Results.ResultProduct {
         return try {
-            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(TVS, "4", "23", APIKEY1).await()
+            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(TVS, "4", "23", APIKEY5).await()
             Results.ResultProduct( converter.fromListProductToUiListProducts(
                 topStringOffer = "Товары с шок-кешбеком по Ozon.Card",
                 bottonStringOffer = "Больше товаров тут",
@@ -182,6 +176,6 @@ class HomeRepositoryImpl(
         data class ResultBanner(val result : Resource<MutableList<OnBoardingItem>>):Results()
         data class ResultHistory(val result : Resource<OnHistoryItem>):Results()
         data class ResultLive(val result : Resource<OnLiveItem>):Results()
-        data class ResultProduct(val result : Resource<MutableList<OnOfferProductsItem>>):Results()
+        data class ResultProduct(val result : Resource<OnOfferProductsItem>):Results()
     }
 }

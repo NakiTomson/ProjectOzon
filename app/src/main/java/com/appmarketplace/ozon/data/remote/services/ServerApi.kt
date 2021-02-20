@@ -11,10 +11,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-const val APIKEY1 ="YHWpCOGVtCSD3EwvzEk8TgGn"
-const val APIKEY2 ="4YlWG5yMWRt7yx9TfKc3vnbS"
-const val APIKEY3 ="4RTGGVkV872qNqc7ETQ5vgXS"
-const val APIKEY4 ="DKBSXAEXex63XOsLfQmFciDu"
+const val APIKEY1 ="d4iN6AkD53RDasGanCbqDO0U"
+
+const val APIKEY2 ="wBuDrNSy1QpcZQGh1Hp7BOfp"
+const val APIKEY3 ="TcFNyzH0fkpgppZVvZEA9MY6"
+const val APIKEY4 ="ipabDM127uDkkdQ2U4EEJ2Bg"
+
+const val APIKEY5 ="LRa7FGrgdpYyviTjICLhVBdC"
 
 interface ServerApi{
 
@@ -47,11 +50,6 @@ interface ServerApi{
         ): Deferred<ProductsModel>
 
 
-//        https://api.bestbuy.com/v1/products((search=OnePlus&search=8t))?apiKey=xWMAMjSScGQTUyXIprjox2DT&pageSize=100&format=json
-
-//        https://api.bestbuy.com/v1/products((search=oOnePlus&search=8t))?format=json&apiKey=KbxPb2DroozcbNWGWaaGCknk&pageSize=100&page=1
-
-//        -----------------------------------------------------
 
         @GET("/s/0w71n1rc6v85s0r/historyData.json?dl=1")
         fun getHistorys(): Deferred<OnHistoryItem>

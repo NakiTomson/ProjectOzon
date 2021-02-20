@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="15dp"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -11,8 +11,6 @@
         android:id="@+id/productsByOfferItemRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="@color/white_Light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonGoRegistration"

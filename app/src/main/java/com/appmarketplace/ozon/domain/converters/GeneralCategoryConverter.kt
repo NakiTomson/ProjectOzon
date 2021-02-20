@@ -72,21 +72,19 @@ class GeneralCategoryConverter{
         topStringOffer: String? = null,
         bottonStringOffer: String? = null,
         products: List<Product>?,
-        type: Int
-    ):Resource<MutableList<OnOfferProductsItem>>{
+        type: Int,
+        requestName:String? = null
+    ):Resource<OnOfferProductsItem>{
 
         return Resource(
             status = Resource.Status.COMPLETED,
-            data =
-            mutableListOf(
-                OnOfferProductsItem(
-                    topStringOffer = topStringOffer,
-                    bottonStringOffer = bottonStringOffer,
-                    list = facToryType(type, products)
-                )
+            data = OnOfferProductsItem(
+                topStringOffer = topStringOffer,
+                bottonStringOffer = bottonStringOffer,
+                list = facToryType(type, products),
+                requestName = requestName
             )
         )
-
     }
 
     fun facToryType(type: Int, products: List<Product>?):List<OnProductItem>{
@@ -162,7 +160,9 @@ class GeneralCategoryConverter{
         return list
     }
 
+
     fun getDiscount(salePrice: Double?, regular: Double?): String? {
+
         try {
             return if (salePrice!! >= regular!!){
                 null
@@ -173,5 +173,8 @@ class GeneralCategoryConverter{
         } catch (e: Exception) {
             throw Exception("Price Exception")
         }
+
     }
+
+
 }

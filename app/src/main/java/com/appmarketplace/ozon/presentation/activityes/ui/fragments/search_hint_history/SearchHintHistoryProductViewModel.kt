@@ -2,6 +2,8 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.appmarketplace.ozon.data.db.OzonAppDataBase
+import com.appmarketplace.ozon.data.models.HintProductDB
 import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.data.Resource
@@ -14,9 +16,9 @@ import kotlin.coroutines.CoroutineContext
 
 class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
 
-    val liveDataHints:MutableLiveData<List<String>> = MutableLiveData()
+    val liveDataHints:MutableLiveData<List<HintProductDB>> = MutableLiveData()
 
-    val searchProductsResultList:MutableLiveData<Resource<MutableList<OnOfferProductsItem>>> = MutableLiveData()
+    val searchProductsResultList:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     init {
         OzonApp.appComponent.inject(searchHintProductHomeViewModel = this)
@@ -26,34 +28,35 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
     @field : Named("bestbuy")
     lateinit var homeRepositoryImplBestBye: HomeRepositoryImpl
 
+    @Inject
+    lateinit var productDb: OzonAppDataBase
 
-    fun getHintText() {
-        liveDataHints.value = listOf(
-            "Туш для ресниц",
-            "Iassie",
-            "Лего френдс",
-            "Перчатки одноразовые",
-            "Детските игрушки",
-            "Футбольный мяч",
-            "Телефон",
-            "Сумочка",
-        )
+    suspend fun getHintText() {
+        withContext(Dispatchers.Main){
+            liveDataHints.value = listOf(
+                HintProductDB("iPhone 12 Pro Max"),
+                HintProductDB("Samsung Tv's"),
+                HintProductDB("Printer",)
+            )
+        }
     }
 
-
-
-    fun startSearchProduct(keyWordOne: String){
+    fun getHints(){
         launch(Dispatchers.IO) {
-            val data = async{
-                homeRepositoryImplBestBye.testLoading(keyWord = keyWordOne)
-            }
-
-            withContext(Dispatchers.Main){
-                searchProductsResultList.value = data?.await()?.result
+            val hintslist = productDb.productsDao()?.getAll()
+            if (hintslist == null || hintslist.isEmpty()){
+                getHintText()
+            }else{
+                liveDataHints.postValue(hintslist.reversed())
             }
         }
     }
 
+    fun setHint(hintProductDB: HintProductDB){
+        launch(Dispatchers.IO) {
+            productDb.productsDao()?.insert(hintProductDB)
+        }
+    }
 
     private val job: Job = Job()
 

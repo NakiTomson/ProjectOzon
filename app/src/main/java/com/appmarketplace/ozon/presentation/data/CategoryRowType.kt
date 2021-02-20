@@ -24,12 +24,14 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val categoryViewHolder = viewHolder as  ViewHolderFactory.CategoryViewHolder
         categoryViewHolder.bind(combinationProductsAdapter)
-        setupIndicator(categoryViewHolder.bannerIndicatorsContainer,combinationProductsAdapter.itemCount,viewHolder.itemView.context)
-        setIndicatorsContainer(0,categoryViewHolder.bannerIndicatorsContainer,viewHolder.itemView.context)
+
+        setupIndicator(categoryViewHolder.bannerIndicatorsContainer!!,combinationProductsAdapter.itemCount,viewHolder.itemView.context)
+        setIndicatorsContainer(0,categoryViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
+
         categoryViewHolder.banneerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer, viewHolder.itemView.context)
+                setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
             }
         })
     }
