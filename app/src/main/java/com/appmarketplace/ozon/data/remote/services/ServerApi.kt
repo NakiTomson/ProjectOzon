@@ -11,23 +11,24 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-const val APIKEY1 ="d4iN6AkD53RDasGanCbqDO0U"
+const val APIKEY1 ="fhwGURt5JB5QwJki0w2ntVbp"
+const val APIKEY2 ="ugv8FfkQcdokWJBI0JloWvu5"
+const val APIKEY3 ="GAnw0tKmAB5Gj4CZ8BBt4QXc"
 
-const val APIKEY2 ="wBuDrNSy1QpcZQGh1Hp7BOfp"
-const val APIKEY3 ="TcFNyzH0fkpgppZVvZEA9MY6"
-const val APIKEY4 ="ipabDM127uDkkdQ2U4EEJ2Bg"
+const val APIKEY4 ="gB2xw3bN5fnVAgKCzlBNBkfG"
 
-const val APIKEY5 ="LRa7FGrgdpYyviTjICLhVBdC"
+const val APIKEY5 ="hq3DQlQXqqNac7opIGAXzm3w"
 
 interface ServerApi{
 
 
     interface MarketPlaceService  {
 
-        @GET("/v1/categories?format=json&show=name,id&apiKey=$APIKEY1")
+        @GET("/v1/categories?format=json&show=name,id")
         fun getCategoryProducts(
             @Query("pageSize") pageSize: String,
             @Query("page") page: String,
+            @Query("apiKey") apykey: String
         ): Deferred<GeneralCategory?>
 
 
@@ -40,15 +41,14 @@ interface ServerApi{
         ): Deferred<ProductsModel>
 
 
-        @GET("/v1/products((search={keyword}))?format=json&apiKey=$APIKEY1")
 
-
+        @GET("/v1/products((search={keyword}))?format=json")
         fun getProductsBySearch(
             @Path("keyword") keyword:String,
             @Query("pageSize") pageSize: String,
-            @Query("page") page: String
+            @Query("page") page: String,
+            @Query("apiKey") apykey: String
         ): Deferred<ProductsModel>
-
 
 
         @GET("/s/0w71n1rc6v85s0r/historyData.json?dl=1")

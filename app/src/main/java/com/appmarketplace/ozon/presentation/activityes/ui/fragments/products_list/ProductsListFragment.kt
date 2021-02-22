@@ -48,11 +48,12 @@ class ProductsListFragment : Fragment() {
         val category = requireArguments().getString("category")
 
         searchWord?.let {
-            viewModel.startSearchProduct(it)
+            viewModel.loadProductsByWord(it)
             searchTextInput.setText(it.replace("&search="," "))
         }
+
         category?.let {
-            viewModel.loadProducts(it)
+            viewModel.getProductsByCategory(it)
         }
 
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, Observer { resource ->

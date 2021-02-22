@@ -152,10 +152,13 @@ object ViewHolderFactory {
         private val bottomStringOffer  = itemView.textViewSloganOffer
         private val imageNextAll  = itemView.imageNextAll
         fun bind(slogan:String?){
+
             slogan?.let {
-                bottomStringOffer.visibility = View.VISIBLE
-                imageNextAll.visibility = View.VISIBLE
-                bottomStringOffer.text = slogan
+                if (it.isNotEmpty()) {
+                    bottomStringOffer.visibility = View.VISIBLE
+                    imageNextAll.visibility = View.VISIBLE
+                    bottomStringOffer.text = slogan
+                }
             }
         }
     }

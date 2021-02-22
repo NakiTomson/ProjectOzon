@@ -8,9 +8,6 @@ import com.google.gson.annotations.SerializedName
 data class ProductsModel(
 
 
-
-
-
         @SerializedName("totalPages")
         @Expose
         val totalPages: Int? = null,

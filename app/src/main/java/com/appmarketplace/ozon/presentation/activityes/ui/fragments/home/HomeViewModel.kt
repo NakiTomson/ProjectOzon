@@ -2,14 +2,20 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.appmarketplace.ozon.data.remote.models.ProductsModel
+import com.appmarketplace.ozon.data.remote.services.*
+import com.appmarketplace.ozon.data.utils.Gonfigs
+import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
+import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
+import com.appmarketplace.ozon.data.utils.Gonfigs.LAPTOPS
+import com.appmarketplace.ozon.data.utils.Gonfigs.TVS
+import com.appmarketplace.ozon.domain.mappers.MapListCategoryToListData
+import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
 import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.BaseViewModel
 import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
-import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import com.appmarketplace.ozon.presentation.pojo.*
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
 import okhttp3.internal.waitMillis
@@ -70,8 +76,20 @@ class HomeViewModel : BaseViewModel() {
         }
     }
 
+
     suspend fun loadingCategoryProduct(){
-        val categoryResult:Deferred<HomeRepositoryImpl.Results.ResultCategoryProduct> =  async { homeRepositoryImplBestBye.loadDataCategoryProduct(HomeRepositoryImpl.Params())}
+
+        val categoryResult:Deferred<HomeRepositoryImpl.Results.ResultCategoryProduct<MutableList<MutableList<OnBoardingItem>>>> =  async {
+            homeRepositoryImplBestBye
+                .loadCategories(
+                    HomeRepositoryImpl.Params.CategoriesProductParam<MutableList<MutableList<OnBoardingItem>>, GeneralCategory>(
+                        mapper = MapListCategoryToListData(),
+                        pageSize = "20",
+                        apikey = APIKEY1,
+                        page = "1"
+                    )
+                )
+        }
         loadingBannerStart()
         withContext(Dispatchers.Main){
             categoryProductliveData.value = categoryResult.await().result
@@ -94,35 +112,76 @@ class HomeViewModel : BaseViewModel() {
         }
     }
 
-    suspend fun loadingProductsOne(){
-        val products:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getFirstProducts()}
+
+
+    suspend fun getThreeSimpleImageProducts(){
+
+        val products:Deferred<HomeRepositoryImpl.Results.ResultProduct<OnOfferProductsItem>> = async {
+            homeRepositoryImplBestBye
+                .loadProducts(
+                    HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
+                        mapper = MapProductsToListData(type = 0),
+                        pathId = HOME_AUDIO,
+                        pageSize = "3",
+                        apikey = APIKEY2,
+                        page = "1"
+                    )
+                )
+        }
         loadingLiveData()
         withContext(Dispatchers.Main){
             listPoductsLiveData.value = products.await().result
         }
     }
 
-
-    suspend fun loadingProductsTwo(){
-        val products2:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getSecondProducts() }
-        loadingProductsOne()
+    suspend fun getProductsPhone(){
+        val products:Deferred<HomeRepositoryImpl.Results.ResultProduct<OnOfferProductsItem>> = async {
+            homeRepositoryImplBestBye.loadProducts(
+                HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
+                    mapper = MapProductsToListData(
+                        type = 1,
+                        topOffer = "Лучшие предложения!",
+                        bottomOffer = "Скидки до  80 % здесь!",
+                    ),
+                    pathId = CELL_PHONES,
+                    pageSize = "6",
+                    apikey = APIKEY3,
+                    page = "53"
+                )
+            )
+        }
+        getThreeSimpleImageProducts()
         withContext(Dispatchers.Main){
-            listPoductsLiveData2.value = products2.await().result
+            listPoductsLiveData2.value = products.await().result
         }
     }
 
 
     suspend fun loadingBannerCenter(){
         val bannerCenter:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
-        loadingProductsTwo()
+        getProductsPhone()
         withContext(Dispatchers.Main){
             bannerListCenter.value = bannerCenter.await().result
         }
     }
 
 
-    suspend fun loadingProductsThree(){
-        val products3:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async{ homeRepositoryImplBestBye.getThirdProducts() }
+    suspend fun getProductsLaptops(){
+        val products3:Deferred<HomeRepositoryImpl.Results.ResultProduct<OnOfferProductsItem>> = async{
+            homeRepositoryImplBestBye.loadProducts(
+                HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
+                    mapper = MapProductsToListData(
+                        type = 1,
+                        topOffer = "Крутые скидки! 90%"
+                    ),
+                    pathId = LAPTOPS,
+                    pageSize = "3",
+                    apikey = APIKEY4,
+                    page = "233"
+                )
+            )
+        }
+
         loadingBannerCenter()
         withContext(Dispatchers.Main){
             listPoductsLiveData3.value = products3.await().result
@@ -131,14 +190,28 @@ class HomeViewModel : BaseViewModel() {
 
     suspend fun loadingBannerDown(){
         val bannerDown:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
-        loadingProductsThree()
+        getProductsLaptops()
         withContext(Dispatchers.Main){
             bannerListDown.value = bannerDown.await().result
         }
     }
 
     suspend fun loadingProductsFoure(){
-        val products4:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async { homeRepositoryImplBestBye.getFourthProducts() }
+        val products4:Deferred<HomeRepositoryImpl.Results.ResultProduct<OnOfferProductsItem>> = async {
+            homeRepositoryImplBestBye.loadProducts(
+                HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
+                    mapper = MapProductsToListData(
+                        type = 1,
+                        topOffer = "Товары с шок-кешбеком по Ozon.Card",
+                        bottomOffer = "Больше товаров тут"
+                    ),
+                    pathId = TVS,
+                    pageSize = "4",
+                    apikey = APIKEY5,
+                    page = "23"
+                )
+            )
+        }
         loadingBannerDown()
         withContext(Dispatchers.Main){
             listPoductsLiveData4.value = products4.await().result
@@ -146,48 +219,49 @@ class HomeViewModel : BaseViewModel() {
     }
 
 
-    fun startLoadingData(){
 
-        loadData(Dispatchers.IO) {
-
-            val bannerStart:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
-
-            val categoryResult:Deferred<HomeRepositoryImpl.Results.ResultCategoryProduct> =  async { homeRepositoryImplBestBye.loadDataCategoryProduct(HomeRepositoryImpl.Params())}
-
-            val historyItems:Deferred<HomeRepositoryImpl.Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
-
-            val liveItems:Deferred<HomeRepositoryImpl.Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
-
-            val products:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getFirstProducts()}
-
-            val products2:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getSecondProducts() }
-
-            val bannerCenter:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
-
-            val products3:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async{ homeRepositoryImplBestBye.getThirdProducts() }
-
-            val bannerDown:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
-
-            val products4:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async { homeRepositoryImplBestBye.getFourthProducts() }
-
-
-            withContext(Dispatchers.Main){
-                setupData(
-                    bannerStart.await().result,
-                    (categoryResult.await().result),
-                    (historyItems.await()).result,
-                    liveItems.await().result,
-                    products.await().result,
-                    products2.await().result,
-                    bannerCenter.await().result,
-                    products3.await().result,
-                    bannerDown.await().result,
-                    products4.await().result,
-                )
-
-            }
-        }
-    }
+//    fun startLoadingData(){
+//
+//        loadData(Dispatchers.IO) {
+//
+//            val bannerStart:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
+//
+//            val categoryResult:Deferred<HomeRepositoryImpl.Results.ResultCategoryProduct> =  async { homeRepositoryImplBestBye.loadDataCategoryProduct(HomeRepositoryImpl.Params())}
+//
+//            val historyItems:Deferred<HomeRepositoryImpl.Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
+//
+//            val liveItems:Deferred<HomeRepositoryImpl.Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
+//
+//            val products:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getFirstProducts()}
+//
+//            val products2:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async {  homeRepositoryImplBestBye.getSecondProducts() }
+//
+//            val bannerCenter:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
+//
+//            val products3:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async{ homeRepositoryImplBestBye.getThirdProducts() }
+//
+//            val bannerDown:Deferred<HomeRepositoryImpl.Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
+//
+//            val products4:Deferred<HomeRepositoryImpl.Results.ResultProduct> = async { homeRepositoryImplBestBye.getFourthProducts() }
+//
+//
+//            withContext(Dispatchers.Main){
+//                setupData(
+//                    bannerStart.await().result,
+//                    (categoryResult.await().result),
+//                    (historyItems.await()).result,
+//                    liveItems.await().result,
+//                    products.await().result,
+//                    products2.await().result,
+//                    bannerCenter.await().result,
+//                    products3.await().result,
+//                    bannerDown.await().result,
+//                    products4.await().result,
+//                )
+//
+//            }
+//        }
+//    }
 
     private fun setupData(
         startBannerItems: Resource<MutableList<OnBoardingItem>>?,

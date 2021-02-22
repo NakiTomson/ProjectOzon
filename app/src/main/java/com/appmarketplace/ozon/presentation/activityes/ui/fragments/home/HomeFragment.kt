@@ -138,15 +138,10 @@ class HomeFragment : Fragment() {
                     adapterMultiple.setData(banner)
 
                     banner.bannerClickListener = object : BannerRowType.BannerListener {
-                        override fun onClickBanner(
-                            imageUrl: String,
-                            imageOnboarding: RoundedImageView
-                        ) {
-
+                        override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
                             val extras = FragmentNavigatorExtras(
                                 imageOnboarding to imageUrl
                             )
-
                             navigateToMock(mockImage = imageUrl,extras = extras)
                         }
                     }
@@ -193,16 +188,10 @@ class HomeFragment : Fragment() {
                     val historyData = HistoryRowType(lists)
                     adapterMultiple.setData(historyData)
                     historyData.historClickListener = object : HistoryRowType.HistoryListener{
-                        override fun onClickHistory(
-                            listOf: List<String>,
-                            position: Int,
-                            imageView: ImageView
-                        ) {
-
+                        override fun onClickHistory(listOf: List<String>, position: Int, imageView: ImageView) {
                             val extras = FragmentNavigatorExtras(
                                 imageView to listOf[position]
                             )
-
                             navigateToMock(listOf = listOf,position = position,extras = extras)
                         }
                     }
