@@ -45,10 +45,14 @@ class ProductsListFragment : Fragment() {
         foundProductsRecyclerView.adapter =  productsAdapter
 
         val searchWord = requireArguments().getString("arg1")
+        val category = requireArguments().getString("category")
 
         searchWord?.let {
             viewModel.startSearchProduct(it)
             searchTextInput.setText(it.replace("&search="," "))
+        }
+        category?.let {
+            viewModel.loadProducts(it)
         }
 
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, Observer { resource ->
@@ -56,6 +60,18 @@ class ProductsListFragment : Fragment() {
                 resource.data?.let { lists ->
                     productsAdapter.setData(lists.list)
                     lists.requestName?.let { searchTextInput.setText(it) }
+                    stopLoadingsOneFrame()
+                }
+            } else {
+                errorhandling("ERROR BOARDING START", resource)
+            }
+        })
+
+
+        viewModel.productsResultList.observe(viewLifecycleOwner, Observer {resource->
+            if (gettingErrors(resource)) {
+                resource.data?.let { lists ->
+                    productsAdapter.setData(lists.list)
                     stopLoadingsOneFrame()
                 }
             } else {

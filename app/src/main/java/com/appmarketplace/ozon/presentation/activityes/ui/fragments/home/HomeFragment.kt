@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -164,7 +165,17 @@ class HomeFragment : Fragment() {
                 resource.data?.let { lists ->
                     Log.v("TAGTIME", "re2 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
                     combinationProductAdapterViewPager.setData(lists)
-                    adapterMultiple.setData(CategoryRowType(combinationProductAdapterViewPager))
+
+                    val categoryRowType = CategoryRowType(combinationProductAdapterViewPager)
+                    adapterMultiple.setData(categoryRowType)
+
+                    categoryRowType.clickOnCategoryItem = object :CategoryRowType.ClickCategoryListener{
+                        override fun onClickItem(data: String) {
+                            val bundle = Bundle()
+                            bundle.putString("category",data)
+                            findNavController().navigate(R.id.productsListFragment,bundle)
+                        }
+                    }
                 }
             } else {
                 errorhandling("ERROR CATEGORY", resource)

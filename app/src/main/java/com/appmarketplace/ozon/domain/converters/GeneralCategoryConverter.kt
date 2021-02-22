@@ -48,13 +48,15 @@ class GeneralCategoryConverter{
             mutableListOf(listGeneral?.categories?.take(10)!!.map {
                 OnBoardingItem(
                     title = it.name,
-                    onBoardingImageUrl = it.image
+                    onBoardingImageUrl = it.image,
+                    category = it.id
                 )
             }.toMutableList(),
                 listGeneral?.categories?.takeLast(10)!!.map {
                     OnBoardingItem(
                         title = it.name,
-                        onBoardingImageUrl = it.image
+                        onBoardingImageUrl = it.image,
+                        category = it.id
                     )
                 }.toMutableList()
             )

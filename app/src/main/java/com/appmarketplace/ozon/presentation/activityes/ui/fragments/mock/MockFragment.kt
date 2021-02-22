@@ -6,9 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.appmarketplace.ozon.R
@@ -18,7 +17,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_mock.*
-import kotlin.concurrent.thread
+import kotlinx.coroutines.*
 
 
 class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
@@ -33,6 +32,8 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
     val args: MockFragmentArgs by navArgs()
 
     private var youtubeplayer: YouTubePlayer? = null
+
+    var position = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,10 +55,11 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
         val videoUrl = args.videUrl
 
         val arrayHistoryList = args.arrayHistory
-        val postion = args.position
+        position = args.position
 
         arrayHistoryList?.let {
-           historyLoading(it,postion)
+            progressBar.visibility = View.VISIBLE
+            insertHistory(it, position)
         }
 
         imageUrl?.let {
@@ -79,53 +81,64 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
                 imageMock.visibility = View.GONE
                 frameMock.visibility = View.VISIBLE
                 urlStreem = videoUrl
-                youtube?.initialize(API_YOUTUBE_KEY, this)
+//                youtube?.initialize(API_YOUTUBE_KEY, this)
             }
         }
     }
 
-    fun historyLoading(strings: Array<String>, postion: Int) {
-        progressBar.visibility = View.VISIBLE
+    fun insertHistory(strings: Array<String>, positionm: Int) {
         imageMock.apply {
-            transitionName = strings[postion]
+            strings[positionm].also { transitionName = it }
             Picasso.get()
-                .load(strings[postion])
+                .load(strings[this@MockFragment.position])
                 .noFade()
                 .into(this)
         }
-        imageMock.scaleType = ImageView.ScaleType.CENTER_CROP
-        loadingProgress(strings,postion)
-    }
 
-    fun loadingProgress(strings: Array<String>, postion: Int) {
-        thread {
-            for (i in 0..100) {
-                Log.v("TAGAH", "SNU$i")
-                Thread.sleep(30)
-                activity?.runOnUiThread {
-                    progressBar?.progress = i
-                }
-            }
-            activity?.runOnUiThread {
-                progressBar?.let { nextHistory(strings,postion +1) }
-            }
+        loadingProgress(strings)
+
+        rightHistory.setOnClickListener {
+//            valueMove.postValue(true)
+//            nextHistory(strings,++position)
+        }
+        leftHistory.setOnClickListener {
+//            valueMove.postValue(true)
+//            nextHistory(strings,postion -1)
         }
     }
 
+    val valueProcess:MutableLiveData<Int> = MutableLiveData()
+
+
+
+    fun loadingProgress(strings: Array<String>) {
+
+        valueProcess.observe(viewLifecycleOwner, { progress ->
+            progressBar?.progress = progress
+            if (progress == 100 && progressBar != null) {
+                valueProcess.value = 0
+                nextHistory(strings, ++position)
+            }
+        })
+
+        val job = GlobalScope.launch(Dispatchers.IO) {
+            for (i in 0..100) {
+                Thread.sleep(30)
+                valueProcess.postValue(i)
+            }
+        }
+
+    }
+
     fun nextHistory(strings: Array<String>, postion: Int) {
-        if(strings.size > postion){
-            progressBar.progress = 0
-            historyLoading(strings,postion)
+        if(strings.size > postion && postion >= 0){
+            insertHistory(strings,postion)
         }else{
             findNavController().popBackStack()
         }
     }
 
-    override fun onInitializationSuccess(
-        p0: YouTubePlayer.Provider?,
-        p1: YouTubePlayer?,
-        p2: Boolean
-    ) {
+    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
         youtubeplayer = p1
         if (!p2) {
             p1?.cueVideo(urlStreem)

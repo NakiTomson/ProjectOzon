@@ -3,6 +3,8 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.products_li
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.appmarketplace.ozon.data.remote.services.APIKEY1
+import com.appmarketplace.ozon.data.remote.services.APIKEY2
 import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.data.Resource
@@ -21,6 +23,7 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
 
 
     val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
     init {
@@ -36,15 +39,27 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
         if (searchProductsResultList.value?.data == null){
             launch(Dispatchers.IO) {
                 val data = async{
-                    homeRepositoryImplBestBye.testLoading(keyWord = keyWordOne)
+                    homeRepositoryImplBestBye.getSearch(keyWord = keyWordOne)
                 }
-
                 withContext(Dispatchers.Main){
                     searchProductsResultList.value = data?.await()?.result
                 }
             }
         }
+    }
 
+    fun loadProducts(keyWordOne: String){
+        if (productsResultList.value?.data == null){
+            launch(Dispatchers.IO) {
+                val data = async{
+                    homeRepositoryImplBestBye.getFirstProducts(keyWordOne,"100", APIKEY1,2)
+                }
+
+                withContext(Dispatchers.Main){
+                    productsResultList.value = data?.await()?.result
+                }
+            }
+        }
     }
 
 }

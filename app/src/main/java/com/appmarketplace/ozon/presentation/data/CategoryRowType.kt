@@ -13,9 +13,16 @@ import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.CombinationProductsAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
+import com.makeramen.roundedimageview.RoundedImageView
 
 data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
 
+
+    var clickOnCategoryItem:ClickCategoryListener? = null
+
+    interface ClickCategoryListener{
+        fun onClickItem(data: String)
+    }
 
     override fun getItemViewType(): Int {
         return RowType.CATEGORY_ROW_TYPE;
@@ -32,6 +39,13 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
+
+
+                viewHolder.clickOnCategoryItem = object :ClickCategoryListener {
+                    override fun onClickItem(data: String) {
+                        clickOnCategoryItem?.onClickItem(data)
+                    }
+                }
             }
         })
     }

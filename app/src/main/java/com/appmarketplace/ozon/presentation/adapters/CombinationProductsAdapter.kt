@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.data.CategoryRowType
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 
 
-class CombinationProductsAdapter(
-) : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
+class CombinationProductsAdapter() : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
 
+    var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
     private val onboardingItems: MutableList<MutableList<OnBoardingItem>> = mutableListOf(mutableListOf())
 
     fun setData(items: MutableList<MutableList<OnBoardingItem>>) {
@@ -43,7 +44,6 @@ class CombinationProductsAdapter(
 
 
 
-
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val onCategoryProductsRecyclerView = view.findViewById<RecyclerView>(R.id.onCategoryProductsRecyclerView)
@@ -53,6 +53,12 @@ class CombinationProductsAdapter(
             categroyItemAdapter.setData(onBoardingItem.toMutableList())
             onCategoryProductsRecyclerView.adapter = categroyItemAdapter
             onCategoryProductsRecyclerView.layoutManager = GridLayoutManager(itemView.context,5)
+
+            categroyItemAdapter.clickOnCategoryItem = object : CategoryRowType.ClickCategoryListener{
+                override fun onClickItem(data: String) {
+                    clickOnCategoryItem?.onClickItem(data)
+                }
+            }
         }
     }
 }

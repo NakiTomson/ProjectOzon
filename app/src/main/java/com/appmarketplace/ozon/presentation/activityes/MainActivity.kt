@@ -3,6 +3,7 @@ package com.appmarketplace.ozon.presentation.activityes
 
 import android.os.*
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.activityes.ui.setupWithNavController
 import com.appmarketplace.ozon.presentation.utils.NetworkConnection
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,12 +49,8 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-//        controller.observe(this, Observer { navController ->
-//            setupActionBarWithNavController(navController)
-//        })
-
-
         currentNavController = controller
+        cheakInternetConnection()
     }
 
 
@@ -63,11 +61,11 @@ class MainActivity : AppCompatActivity() {
 
     fun cheakInternetConnection() {
         val networkConnection = NetworkConnection(applicationContext)
-        networkConnection.observe(this, Observer { isConnected ->
+        networkConnection.observe(this, { isConnected ->
             if (isConnected) {
-                Log.v("TAGIS", "IS $isConnected")
+                connectionFrame.visibility = View.GONE
             } else {
-                Log.v("TAGIS", "IS $isConnected")
+                connectionFrame.visibility = View.VISIBLE
             }
         })
     }

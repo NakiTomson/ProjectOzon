@@ -73,7 +73,6 @@ class RestApiModule {
     @Named("dropbox")
     @Singleton
     fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): ServerApi.MarketPlaceService {
-
         return retrofit.create(ServerApi.MarketPlaceService::class.java)
     }
 

@@ -28,6 +28,8 @@
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+
     </FrameLayout>
 
 
@@ -46,6 +48,28 @@
         android:adjustViewBounds="true"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <View
+        android:id="@+id/leftHistory"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    </View>
+
+    <View
+        android:id="@+id/rightHistory"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+    </View>
 
     <ProgressBar
         android:id="@+id/progressBar"

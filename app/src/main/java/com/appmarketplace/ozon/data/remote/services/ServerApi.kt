@@ -32,7 +32,7 @@ interface ServerApi{
 
 
         @GET("/v1/products((categoryPath.id={PathId}))?format=json")
-        fun getThreeProductsByCategoryKey(
+        fun getProductsByCategory(
                 @Path("PathId") pathId:String,
                 @Query("pageSize") pageSize: String,
                 @Query("page") page: String,
@@ -40,10 +40,10 @@ interface ServerApi{
         ): Deferred<ProductsModel>
 
 
-
-
         @GET("/v1/products((search={keyword}))?format=json&apiKey=$APIKEY1")
-        fun getSearchProductsKey(
+
+
+        fun getProductsBySearch(
             @Path("keyword") keyword:String,
             @Query("pageSize") pageSize: String,
             @Query("page") page: String

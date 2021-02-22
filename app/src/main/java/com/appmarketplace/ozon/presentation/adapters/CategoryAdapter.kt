@@ -4,15 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.data.CategoryRowType
 import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
 import com.squareup.picasso.Picasso
 
 
 class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>(){
-
+    var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
 
     private val onboardingItems: MutableList<OnBoardingItem> = mutableListOf()
 
@@ -47,6 +49,7 @@ class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.OnBoardingItemView
         private val imageOnboarding = view.findViewById<ImageView>(R.id.imageOnboarding)
         private val textTitle = view.findViewById<TextView>(R.id.textTitle)
         private val textDescription = view.findViewById<TextView>(R.id.textDescription)
+        private val categoryItem = view.findViewById<LinearLayout>(R.id.categoryItem)
 
         fun bind(onBoardingItem: OnBoardingItem){
 //            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
@@ -58,6 +61,10 @@ class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.OnBoardingItemView
                 .fit()
                 .placeholder(R.drawable.icon_app_ozon)
                 .into(imageOnboarding)
+
+            categoryItem.setOnClickListener {
+                onBoardingItem.category?.let { clickOnCategoryItem?.onClickItem(it)}
+            }
 
         }
 

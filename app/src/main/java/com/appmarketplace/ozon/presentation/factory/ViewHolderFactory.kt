@@ -11,6 +11,7 @@ import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
 import com.appmarketplace.ozon.presentation.data.BannerRowType
+import com.appmarketplace.ozon.presentation.data.CategoryRowType
 import com.appmarketplace.ozon.presentation.data.HistoryRowType
 import com.appmarketplace.ozon.presentation.data.LiveRowType
 import com.appmarketplace.ozon.presentation.pojo.OnProductItem
@@ -53,6 +54,8 @@ object ViewHolderFactory {
 
     class CategoryViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
+        var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
+
         val banneerViewPager = itemView.onAdsViewPager
         var bannerIndicatorsContainer:LinearLayout?= null
 
@@ -60,6 +63,12 @@ object ViewHolderFactory {
         fun bind(combinationProductsAdapter: CombinationProductsAdapter){
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
             banneerViewPager.adapter  = combinationProductsAdapter
+
+            combinationProductsAdapter.clickOnCategoryItem =object : CategoryRowType.ClickCategoryListener{
+                override fun onClickItem(data: String) {
+                    clickOnCategoryItem?.onClickItem(data)
+                }
+            }
         }
     }
 

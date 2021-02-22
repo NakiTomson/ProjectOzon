@@ -18,18 +18,20 @@ class HomeRepositoryImpl(
     val converter: GeneralCategoryConverter
 ) : BaseRepository<HomeRepositoryImpl.Params, HomeRepositoryImpl.Results>(), HomeRepository {
 
-    suspend fun testLoading(keyWord:String): Results.ResultProduct {
 
-        try {
-            val products = marketPlaceApi.getSearchProductsKey(keyword = keyWord,pageSize = "100",page = "1").await()
-            return Results.ResultProduct(
+
+
+    suspend fun getSearch(keyWord:String): Results.ResultProduct {
+        return try {
+            val products = marketPlaceApi.getProductsBySearch(keyword = keyWord,pageSize = "100",page = "1").await()
+            Results.ResultProduct(
                 converter.fromListProductToUiListProducts(products = products.products, type = 2)
             )
         } catch (e: Exception) {
-           return Results.ResultProduct(  Resource(status = Resource.Status.ERROR, data = null, exception = e))
+            Results.ResultProduct(  Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
-
     }
+
 
     suspend fun getBannerStart(): Results.ResultBanner {
         return try {
@@ -49,14 +51,12 @@ class HomeRepositoryImpl(
     }
 
     override suspend fun loadDataCategoryProduct(params: Params): Results.ResultCategoryProduct {
-
         return try {
             val listGeneralCategory = marketPlaceApi.getCategoryProducts("20", "1").await()
             Results.ResultCategoryProduct(converter.fromListOnCategoryToListUICategory(listGeneralCategory))
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
-
     }
 
     suspend fun getHistoryItems(): Results.ResultHistory {
@@ -76,10 +76,10 @@ class HomeRepositoryImpl(
     }
 
 
-    suspend fun getFirstProducts():Results.ResultProduct {
+    suspend fun getFirstProducts(pathId: String = HOME_AUDIO,pageSize :String = "3",apikey:String = APIKEY2,type:Int = 0):Results.ResultProduct {
         return try {
-            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(HOME_AUDIO, "3", "1", APIKEY2).await()
-            Results.ResultProduct(converter.fromListProductToUiListProducts(products = listProduts.products, type = 0))
+            val listProduts = marketPlaceApi.getProductsByCategory(pathId, pageSize, "1", apikey).await()
+            Results.ResultProduct(converter.fromListProductToUiListProducts(products = listProduts.products, type = type))
         } catch (e: Exception) {
             Results.ResultProduct( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
@@ -90,7 +90,7 @@ class HomeRepositoryImpl(
     suspend fun getSecondProducts():Results.ResultProduct {
         return try {
             val listProducts =
-                marketPlaceApi.getThreeProductsByCategoryKey(CELL_PHONES, "6", "54",
+                marketPlaceApi.getProductsByCategory(CELL_PHONES, "6", "54",
                 APIKEY3).await()
 
             Results.ResultProduct(
@@ -127,7 +127,7 @@ class HomeRepositoryImpl(
 
     suspend fun getThirdProducts():Results.ResultProduct {
         return try {
-            val listProducts = marketPlaceApi.getThreeProductsByCategoryKey(LAPTOPS, "3", "233",
+            val listProducts = marketPlaceApi.getProductsByCategory(LAPTOPS, "3", "233",
                 APIKEY4).await()
             Results.ResultProduct(
                 converter.fromListProductToUiListProducts(
@@ -157,11 +157,11 @@ class HomeRepositoryImpl(
 
     suspend fun getFourthProducts():Results.ResultProduct {
         return try {
-            val listProduts = marketPlaceApi.getThreeProductsByCategoryKey(TVS, "4", "23", APIKEY5).await()
+            val listProduts = marketPlaceApi.getProductsByCategory(TVS, "4", "23", APIKEY5).await()
             Results.ResultProduct( converter.fromListProductToUiListProducts(
                 topStringOffer = "Товары с шок-кешбеком по Ozon.Card",
                 bottonStringOffer = "Больше товаров тут",
-                products = listProduts?.products,
+                products = listProduts.products,
                 type = 1
             ))
         } catch (e: Exception) {
@@ -169,7 +169,10 @@ class HomeRepositoryImpl(
         }
     }
 
-    class Params
+
+    class Params{
+
+    }
 
     sealed class Results {
         data class ResultCategoryProduct(val result: Resource<MutableList<MutableList<OnBoardingItem>>>):Results()
