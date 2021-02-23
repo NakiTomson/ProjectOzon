@@ -1,8 +1,8 @@
 package com.appmarketplace.ozon.domain.mappers
 
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.GeneralCategory
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.GeneralCategory
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 
 class MapListCategoryToListData<T,M>() : MapperUI<T,M> {
 

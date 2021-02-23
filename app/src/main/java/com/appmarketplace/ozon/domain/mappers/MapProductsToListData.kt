@@ -1,11 +1,11 @@
 package com.appmarketplace.ozon.domain.mappers
 
-import com.appmarketplace.ozon.data.remote.models.Product
-import com.appmarketplace.ozon.data.remote.models.ProductsModel
+import com.appmarketplace.ozon.data.remote.modelsAPI.Product
+import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
 import com.appmarketplace.ozon.domain.exception.NotFoundRealizationException
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
-import com.appmarketplace.ozon.presentation.pojo.OnProductItem
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import java.text.DecimalFormat
 
 class MapProductsToListData<T,M>(

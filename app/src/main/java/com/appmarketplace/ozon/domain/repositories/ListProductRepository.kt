@@ -1,10 +1,10 @@
 package com.appmarketplace.ozon.domain.repositories
 
 import com.appmarketplace.ozon.data.remote.services.ServerApi
-import com.appmarketplace.ozon.presentation.data.Resource
+import com.appmarketplace.ozon.presentation.rowType.Resource
 
-class ListProductRepositoryImpl(val marketPlaceApi: ServerApi.MarketPlaceService)
-    :AppRepository<HomeRepositoryImpl, HomeRepositoryImpl>{
+class ListProductRepository(val marketPlaceApi: ServerApi.MarketPlaceService)
+    :AppRepository<Params, Results>{
 
 
     suspend fun<T,M> loadSearchProducts(params: Params.ProductsParam<T,M>): Results.ResultProduct<T> {
@@ -35,8 +35,5 @@ class ListProductRepositoryImpl(val marketPlaceApi: ServerApi.MarketPlaceService
         }
     }
 
-    override suspend fun <T, M> loadCategories(params: Params.CategoriesProductParam<T, M>): Results.ResultCategoryProduct<T>? {
-        return  null
-    }
 
 }

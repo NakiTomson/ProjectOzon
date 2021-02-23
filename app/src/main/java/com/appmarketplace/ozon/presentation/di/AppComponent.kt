@@ -1,8 +1,8 @@
 package com.appmarketplace.ozon.presentation.di
 
-import com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history.SearchHintHistoryProductViewModel
+import com.appmarketplace.ozon.presentation.activityes.ui.fragments.searchHintHistory.SearchHintHistoryProductViewModel
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeViewModel
-import com.appmarketplace.ozon.presentation.activityes.ui.fragments.products_list.ProductsListViewModel
+import com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList.ProductsListViewModel
 import dagger.Component
 import javax.inject.Singleton
 

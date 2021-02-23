@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.data
+package com.appmarketplace.ozon.presentation.rowType
 
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView

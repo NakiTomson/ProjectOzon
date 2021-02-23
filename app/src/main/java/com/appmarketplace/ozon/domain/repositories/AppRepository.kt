@@ -4,17 +4,19 @@ import com.appmarketplace.ozon.data.remote.services.APIKEY1
 import com.appmarketplace.ozon.data.remote.services.APIKEY2
 import com.appmarketplace.ozon.data.utils.Gonfigs
 import com.appmarketplace.ozon.domain.mappers.MapperUI
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
-import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
-import com.appmarketplace.ozon.domain.repositories.Params.CategoriesProductParam
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
+import com.appmarketplace.ozon.domain.modelsUI.OnHistoryItem
+import com.appmarketplace.ozon.domain.modelsUI.OnLiveItem
 import com.appmarketplace.ozon.domain.repositories.Params.ProductsParam
 
 interface AppRepository<Params,Result> {
 
-    suspend fun <T, M> loadCategories(params: CategoriesProductParam<T, M>): Results.ResultCategoryProduct<T>?
     suspend fun <T, M> loadProducts(params: ProductsParam<T,M>): Results.ResultProduct<T>
+
+
+//    TODO как должно быть
+//    suspend fun loadProducts(params: Params): Result
 }
 
 

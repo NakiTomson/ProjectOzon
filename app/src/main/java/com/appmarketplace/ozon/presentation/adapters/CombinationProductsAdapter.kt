@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.data.CategoryRowType
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.rowType.CategoryRowType
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 
 
 class CombinationProductsAdapter() : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {

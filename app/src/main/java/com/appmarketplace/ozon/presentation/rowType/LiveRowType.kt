@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.data
+package com.appmarketplace.ozon.presentation.rowType
 
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.presentation.Interfaces.RowType

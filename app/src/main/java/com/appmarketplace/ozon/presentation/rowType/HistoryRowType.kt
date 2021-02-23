@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.data
+package com.appmarketplace.ozon.presentation.rowType
 
 import android.widget.ImageView
 import android.widget.Toast
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
-import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
+import com.appmarketplace.ozon.domain.modelsUI.OnHistoryItem
 
 
 data class HistoryRowType(val historyListItems: OnHistoryItem) :RowType {

@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.data
+package com.appmarketplace.ozon.presentation.rowType
 
 data class Resource<T>(
     val status: Status = Status.LOADING,

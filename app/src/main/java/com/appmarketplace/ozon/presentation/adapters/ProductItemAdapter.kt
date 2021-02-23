@@ -2,14 +2,12 @@ package com.appmarketplace.ozon.presentation.adapters
 
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.pojo.OnProductItem
-import com.squareup.picasso.Callback
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers

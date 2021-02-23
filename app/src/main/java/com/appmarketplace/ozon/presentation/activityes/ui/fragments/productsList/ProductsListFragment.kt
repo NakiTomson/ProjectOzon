@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.activityes.ui.fragments.products_list
+package com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList
 
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.adapters.MultipleTypesAdapter
 import com.appmarketplace.ozon.presentation.adapters.ProductItemAdapter
-import com.appmarketplace.ozon.presentation.data.ProductsRowType
-import com.appmarketplace.ozon.presentation.data.Resource
+import com.appmarketplace.ozon.presentation.rowType.Resource
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 

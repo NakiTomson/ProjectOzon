@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.pojo
+package com.appmarketplace.ozon.domain.modelsUI
 
 data class OnProductItem(
 

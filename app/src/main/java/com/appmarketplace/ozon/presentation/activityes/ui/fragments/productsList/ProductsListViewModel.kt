@@ -1,19 +1,16 @@
-package com.appmarketplace.ozon.presentation.activityes.ui.fragments.products_list
+package com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.appmarketplace.ozon.data.remote.models.ProductsModel
+import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
 import com.appmarketplace.ozon.data.remote.services.APIKEY1
 import com.appmarketplace.ozon.data.remote.services.APIKEY2
-import com.appmarketplace.ozon.data.remote.services.APIKEY3
-import com.appmarketplace.ozon.data.utils.Gonfigs
 import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
-import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
-import com.appmarketplace.ozon.domain.repositories.ListProductRepositoryImpl
+import com.appmarketplace.ozon.domain.repositories.HomeRepository
+import com.appmarketplace.ozon.domain.repositories.ListProductRepository
 import com.appmarketplace.ozon.presentation.OzonApp
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -38,7 +35,7 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
 
     @Inject
     @field : Named("bestbuy")
-    lateinit var listProductRepositoryImpl: ListProductRepositoryImpl
+    lateinit var listProductRepositoryImpl: ListProductRepository
 
 
     fun loadProductsByWord(keyWordOne: String){
@@ -46,7 +43,7 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
             launch(Dispatchers.IO) {
                 val data = async{
                     listProductRepositoryImpl.loadSearchProducts(
-                        HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
+                        HomeRepository.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
                             mapper = MapProductsToListData(type = 2),
                             pathId = keyWordOne,
                             pageSize = "100",
@@ -65,10 +62,10 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
     fun getProductsByCategory(category:String){
 
         launch {
-            val products:Deferred<HomeRepositoryImpl.Results.ResultProduct<OnOfferProductsItem>> = async {
+            val products:Deferred<HomeRepository.Results.ResultProduct<OnOfferProductsItem>> = async {
                 listProductRepositoryImpl
                     .loadProducts(
-                        HomeRepositoryImpl.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
+                        HomeRepository.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
                             mapper = MapProductsToListData(type = 2),
                             pathId = category,
                             pageSize = "100",

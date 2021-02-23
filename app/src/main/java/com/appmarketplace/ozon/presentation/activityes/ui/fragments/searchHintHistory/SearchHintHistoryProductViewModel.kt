@@ -1,13 +1,13 @@
-package com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history
+package com.appmarketplace.ozon.presentation.activityes.ui.fragments.searchHintHistory
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.appmarketplace.ozon.data.db.OzonAppDataBase
-import com.appmarketplace.ozon.data.models.HintProductDB
-import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl
+import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
+import com.appmarketplace.ozon.domain.repositories.HomeRepository
 import com.appmarketplace.ozon.presentation.OzonApp
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -26,7 +26,7 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
 
     @Inject
     @field : Named("bestbuy")
-    lateinit var homeRepositoryImplBestBye: HomeRepositoryImpl
+    lateinit var homeRepositoryImplBestBye: HomeRepository
 
     @Inject
     lateinit var productDb: OzonAppDataBase

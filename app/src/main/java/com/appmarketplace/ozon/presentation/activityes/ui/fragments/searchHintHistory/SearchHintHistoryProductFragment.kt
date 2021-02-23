@@ -1,10 +1,9 @@
-package com.appmarketplace.ozon.presentation.activityes.ui.fragments.search_hint_history
+package com.appmarketplace.ozon.presentation.activityes.ui.fragments.searchHintHistory
 
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.data.models.HintProductDB
+import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
 import com.appmarketplace.ozon.presentation.adapters.HintSearchProductsAdapter
 import kotlinx.android.synthetic.main.fragment_search_hint_history_product.*
 import kotlinx.android.synthetic.main.toolbar_custom.*

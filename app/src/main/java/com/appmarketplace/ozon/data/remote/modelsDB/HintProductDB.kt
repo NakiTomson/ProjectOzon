@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.data.models
+package com.appmarketplace.ozon.data.remote.modelsDB
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

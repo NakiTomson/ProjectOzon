@@ -1,59 +1,62 @@
-package com.appmarketplace.ozon.presentation.data
+package com.appmarketplace.ozon.presentation.rowType
 
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
-import com.appmarketplace.ozon.presentation.adapters.CombinationProductsAdapter
+import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 import com.makeramen.roundedimageview.RoundedImageView
 
-data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
+data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
 
-    var clickOnCategoryItem:ClickCategoryListener? = null
 
-    interface ClickCategoryListener{
-        fun onClickItem(data: String)
+    lateinit var bannerClickListener: BannerListener
+
+    interface BannerListener {
+        fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView)
     }
 
     override fun getItemViewType(): Int {
-        return RowType.CATEGORY_ROW_TYPE;
+        return RowType.BANNER_ROW_TYPE;
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val categoryViewHolder = viewHolder as  ViewHolderFactory.CategoryViewHolder
-        categoryViewHolder.bind(combinationProductsAdapter)
+        val bunnerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
+        bunnerViewHolder.bind(onBoardingAdapter)
 
-        setupIndicator(categoryViewHolder.bannerIndicatorsContainer!!,combinationProductsAdapter.itemCount,viewHolder.itemView.context)
-        setIndicatorsContainer(0,categoryViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
+        setupIndicator(bunnerViewHolder.bannerIndicatorsContainer!!,onBoardingAdapter.itemCount,viewHolder.itemView.context)
+        setIndicatorsContainer(0, bunnerViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
 
-        categoryViewHolder.banneerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        bunnerViewHolder.banneerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
+                setIndicatorsContainer(position, bunnerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
 
-
-                viewHolder.clickOnCategoryItem = object :ClickCategoryListener {
-                    override fun onClickItem(data: String) {
-                        clickOnCategoryItem?.onClickItem(data)
+                viewHolder.bannerClickListener = object :BannerListener{
+                    override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
+                        bannerClickListener.onClickBanner(
+                            onBoardingAdapter.onboardingItems[position].onBoardingImageUrl,
+                            imageOnboarding
+                        )
                     }
                 }
             }
         })
     }
 
+
     fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
 
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
+
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
@@ -74,20 +77,19 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
             }
         }
     }
-
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){
+
         val childCount  = indicatorsContainers.childCount
+
         for (i in 0 until  childCount){
             val imageView = indicatorsContainers.getChildAt(i) as ImageView
-
             if (i == position){
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                        context.applicationContext,
-                        R.drawable.indicator_active_background
-                    )
+                    context.applicationContext,
+                    R.drawable.indicator_active_background
                 )
-
+                )
             }else{
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(

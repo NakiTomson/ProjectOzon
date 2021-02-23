@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.data.BannerRowType
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.rowType.BannerRowType
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import java.util.*

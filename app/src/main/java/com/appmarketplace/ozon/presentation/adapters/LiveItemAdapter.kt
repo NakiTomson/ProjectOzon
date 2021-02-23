@@ -3,16 +3,13 @@ package com.appmarketplace.ozon.presentation.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.data.LiveRowType
-import com.appmarketplace.ozon.presentation.pojo.ListResultLiveItems
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.appmarketplace.ozon.presentation.rowType.LiveRowType
+import com.appmarketplace.ozon.domain.modelsUI.ListResultLiveItems
+import com.appmarketplace.ozon.domain.modelsUI.OnLiveItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_live.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 

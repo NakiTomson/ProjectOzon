@@ -1,11 +1,9 @@
 package com.appmarketplace.ozon.presentation.adapters;
 
-import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.appmarketplace.ozon.domain.repositories.HomeRepositoryImpl;
 import com.appmarketplace.ozon.presentation.Interfaces.RowType;
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory;
 
@@ -13,10 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.inject.Qualifier;
 
 
 public class MultipleTypesAdapter extends RecyclerView.Adapter {

@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
 
 
 class ContainerProductsAdapter(val spain:Int) :

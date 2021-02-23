@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.data.remote.models
+package com.appmarketplace.ozon.data.remote.modelsAPI
 
 import com.google.gson.annotations.Expose
 

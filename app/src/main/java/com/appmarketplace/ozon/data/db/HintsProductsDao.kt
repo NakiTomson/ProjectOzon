@@ -2,7 +2,7 @@ package com.appmarketplace.ozon.data.db
 
 import androidx.room.*
 
-import com.appmarketplace.ozon.data.models.HintProductDB
+import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
 
 
 @Dao

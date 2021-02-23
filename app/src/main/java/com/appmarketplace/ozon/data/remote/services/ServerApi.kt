@@ -1,11 +1,10 @@
 package com.appmarketplace.ozon.data.remote.services
 
-import com.appmarketplace.ozon.data.remote.models.ProductsModel
-import com.appmarketplace.ozon.presentation.pojo.GeneralCategory
-import com.appmarketplace.ozon.presentation.pojo.OnHistoryItem
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
+import com.appmarketplace.ozon.domain.modelsUI.GeneralCategory
+import com.appmarketplace.ozon.domain.modelsUI.OnHistoryItem
+import com.appmarketplace.ozon.domain.modelsUI.OnLiveItem
 import kotlinx.coroutines.Deferred
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

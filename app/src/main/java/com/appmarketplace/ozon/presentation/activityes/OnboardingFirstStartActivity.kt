@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import kotlinx.android.synthetic.main.activity_onboarding_first_start.*
 
 class OnboardingFirstStartActivity : AppCompatActivity() {

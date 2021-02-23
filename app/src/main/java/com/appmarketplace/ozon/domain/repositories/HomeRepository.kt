@@ -1,14 +1,12 @@
 package com.appmarketplace.ozon.domain.repositories
 
 
-import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
 import com.appmarketplace.ozon.data.remote.services.*
-import com.appmarketplace.ozon.domain.mappers.MapperUI
-import com.appmarketplace.ozon.presentation.data.Resource
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.rowType.Resource
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 
-class HomeRepositoryImpl(val marketPlaceApi: ServerApi.MarketPlaceService)
-    : AppRepository<HomeRepositoryImpl, HomeRepositoryImpl> {
+class HomeRepository(val marketPlaceApi: ServerApi.MarketPlaceService)
+    : AppRepository<Params, Results> {
 
 
     suspend fun getBannerStart(): Results.ResultBanner {
@@ -30,7 +28,7 @@ class HomeRepositoryImpl(val marketPlaceApi: ServerApi.MarketPlaceService)
 
 
 
-    override suspend fun<T,M> loadCategories(params: Params.CategoriesProductParam<T,M>): Results.ResultCategoryProduct<T> {
+    suspend fun<T,M> loadCategories(params: Params.CategoriesProductParam<T,M>): Results.ResultCategoryProduct<T> {
         return try {
             val listGeneralCategory = marketPlaceApi
                 .getCategoryProducts(params.pageSize, params.page,params.apikey)
