@@ -7,7 +7,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 
-@Component(modules = [AppModule::class, RepositoryModule::class, RestApiModule::class, ConverterModule::class,DataBaseModule::class])
+@Component(modules = [AppModule::class, RepositoryModule::class, RestApiModule::class,DataBaseModule::class])
 @Singleton
 interface AppComponent {
 

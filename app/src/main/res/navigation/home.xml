@@ -66,11 +66,21 @@
             app:argType="integer"
             android:defaultValue="0" />
 
-
     </fragment>
 
+    <fragment
+        android:id="@+id/detailsProductFragement"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragement"
+        android:label="fragment_details_product"
+        tools:layout="@layout/fragment_details_product" >
+        <argument
+            android:name="product"
+            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 
-
+    <action android:id="@+id/action_global_detailsProductFragement" app:destination="@id/detailsProductFragement"/>
 
 
 </navigation>

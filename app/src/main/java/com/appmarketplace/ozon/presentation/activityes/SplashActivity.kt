@@ -37,7 +37,8 @@ class SplashActivity : AppCompatActivity() {
             override fun onAnimationEnd(animation: Animation) {
                 when {
                     sharedPreferences.getBoolean("FirstOpen", true) -> {
-                        startOnboardingActivity()
+//                        startOnboardingActivity()
+                        startMainActivity()
                         sharedPreferences.edit().putBoolean("FirstOpen", false).apply()
                     }
                     else -> {
@@ -61,10 +62,10 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 
-    fun startOnboardingActivity(){
-        startActivity(Intent(this, OnboardingFirstStartActivity::class.java))
-        finish()
-    }
+//    fun startOnboardingActivity(){
+//        startActivity(Intent(this, OnboardingFirstStartActivity::class.java))
+//        finish()
+//    }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)

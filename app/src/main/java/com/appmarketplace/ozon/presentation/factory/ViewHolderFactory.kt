@@ -1,26 +1,27 @@
 package com.appmarketplace.ozon.presentation.factory
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.adapters.*
-import com.appmarketplace.ozon.presentation.rowType.BannerRowType
-import com.appmarketplace.ozon.presentation.rowType.CategoryRowType
-import com.appmarketplace.ozon.presentation.rowType.HistoryRowType
-import com.appmarketplace.ozon.presentation.rowType.LiveRowType
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.domain.modelsUI.ResultHistoryData
+import com.appmarketplace.ozon.presentation.rowType.*
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
+import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.imageNextAll
+import kotlinx.android.synthetic.main.row_type_complex_slogan.view.*
 import kotlinx.android.synthetic.main.row_type_history.view.*
 import kotlinx.android.synthetic.main.row_type_live.view.*
 import kotlinx.android.synthetic.main.row_type_products.view.*
@@ -40,8 +41,12 @@ object ViewHolderFactory {
         var bannerIndicatorsContainer:LinearLayout?  = null
 
 
-        fun bind(onBoardingAdapter: BannerAdapter){
+        fun bind(onBoardingAdapter: BannerAdapter,layoutHeight:Int? = null){
 
+            layoutHeight?.let {
+                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, layoutHeight)
+                itemView.onAdsViewPager.layoutParams = params
+            }
             onBoardingAdapter.bannerClickListener = object : BannerRowType.BannerListener{
                 override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
                     bannerClickListener?.onClickBanner(imageUrl, imageOnboarding)
@@ -163,16 +168,77 @@ object ViewHolderFactory {
         }
     }
 
+    class ComplexSloganOfferProduct(itemView: View):RecyclerView.ViewHolder(itemView){
+
+        private val topText = itemView.topTextMaybeBestzeller
+        private val generalText = itemView.generalText
+        private val childTextView = itemView.childGeneralTextView
+        private val iconGeneral = itemView.iconGeneralText
+        private val imageNext = itemView.imageNext
+
+        fun bind(item: ComplexSloganRowType.Item){
+
+
+            when(item){
+                is ComplexSloganRowType.Item.setBestseller ->{
+                    topText.visibility = View.VISIBLE
+                    topText.text = "Бестселлер"
+                    generalText.text = item.company
+                    generalText.visibility = View.VISIBLE
+                }
+
+                is ComplexSloganRowType.Item.setPrice ->{
+                    generalText.text = item.actualPrice
+                    generalText.visibility = View.VISIBLE
+
+                    childTextView.text = item.oldPrice
+                    childTextView.visibility = View.VISIBLE
+
+                    imageNext.visibility = View.VISIBLE
+                    imageNext.setOnClickListener {
+                        Toast.makeText(itemView.context,"Next",Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is ComplexSloganRowType.Item.setSimpleOffer->{
+                    generalText.text = item.offer
+                    generalText.visibility = View.VISIBLE
+                    generalText.setPadding(0,0,0,20)
+                    generalText.textSize = 16f
+                    generalText.setTypeface(generalText.typeface, Typeface.NORMAL)
+                    imageNext.visibility = View.VISIBLE
+                    imageNext.setOnClickListener {
+                        Toast.makeText(itemView.context,"Next",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+
+
+
+//            iconGeneral.setImageResource(R.drawable.icon_app_ozon)
+//            iconGeneral.visibility = View.VISIBLE
+
+
+        }
+    }
 
     class ProductViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
         val productsRecyclerView = itemView.productsByOfferItemRecyclerView
 
+        var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+
         fun bind(listProducts: List<OnProductItem>,spain:Int){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
-            val productAdapter =ProductItemAdapter()
+            val productAdapter = ProductItemAdapter()
             productAdapter.setData(listProducts)
             productsRecyclerView.adapter = productAdapter
+
+            productAdapter.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
+                override fun clickProduct(product: OnProductItem) {
+                    setClickListenerProduct?.clickProduct(product)
+                }
+            }
         }
     }
 
@@ -213,6 +279,10 @@ object ViewHolderFactory {
             RowType.PRODUCTS_SLOGAN_BOTTOM_TYPE->{
                 val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_bottom_slogan,parent,false)
                 BottomSloganOfferProduct(sloganViewType)
+            }
+            RowType.PRODUCTS_SLOGAN_COMPLEX_TYPE->{
+                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_complex_slogan,parent,false)
+                ComplexSloganOfferProduct(sloganViewType)
             }
             else -> {
                 throw UnknownFormatFlagsException("Not Faund Row Type")

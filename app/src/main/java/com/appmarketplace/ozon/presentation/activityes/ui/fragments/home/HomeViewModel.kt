@@ -1,6 +1,10 @@
 package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
+import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
 import com.appmarketplace.ozon.data.remote.services.*
 import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
@@ -16,11 +20,12 @@ import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.BaseViewModel
 import com.appmarketplace.ozon.presentation.rowType.Resource
 import com.appmarketplace.ozon.domain.modelsUI.*
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem.Type
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
 
-class HomeViewModel : BaseViewModel() {
+class HomeViewModel() : BaseViewModel() {
 
 
     init {
@@ -57,8 +62,9 @@ class HomeViewModel : BaseViewModel() {
     val listPoductsLiveData4:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
+
     fun startLoading() {
-        launch(Dispatchers.IO) {
+        loadData(Dispatchers.IO) {
             when {
                 bannerListStart.value?.data == null -> {
                     loadingProductsFoure()
@@ -118,7 +124,7 @@ class HomeViewModel : BaseViewModel() {
             homeRepositoryImplBestBye
                 .loadProducts(
                     Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                        mapper = MapProductsToListData(type = 0),
+                        mapper = MapProductsToListData(type = Type.OnlyImage),
                         pathId = HOME_AUDIO,
                         pageSize = "3",
                         apikey = APIKEY2,
@@ -137,7 +143,7 @@ class HomeViewModel : BaseViewModel() {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = 1,
+                        type = Type.ProductNonName,
                         topOffer = "Лучшие предложения!",
                         bottomOffer = "Скидки до  80 % здесь!",
                     ),
@@ -169,7 +175,7 @@ class HomeViewModel : BaseViewModel() {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = 1,
+                        type = Type.ProductNonName,
                         topOffer = "Крутые скидки! 90%"
                     ),
                     pathId = LAPTOPS,
@@ -198,7 +204,7 @@ class HomeViewModel : BaseViewModel() {
         val products4:Deferred<Results.ResultProduct<OnOfferProductsItem>> = async {
             homeRepositoryImplBestBye.loadProducts(Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = 1,
+                        type = Type.ProductNonName,
                         topOffer = "Товары с шок-кешбеком по Ozon.Card",
                         bottomOffer = "Больше товаров тут"
                     ),
@@ -214,7 +220,6 @@ class HomeViewModel : BaseViewModel() {
             listPoductsLiveData4.value = products4.await().result
         }
     }
-
 
 
 //    fun startLoadingData(){

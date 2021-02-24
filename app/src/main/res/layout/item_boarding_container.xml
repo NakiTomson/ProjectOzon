@@ -10,9 +10,10 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageOnboarding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:src="@drawable/example_ads_banner"
         app:riv_corner_radius="8sp">
 

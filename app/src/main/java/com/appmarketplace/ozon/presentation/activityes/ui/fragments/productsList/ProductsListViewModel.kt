@@ -11,6 +11,9 @@ import com.appmarketplace.ozon.domain.repositories.ListProductRepository
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.rowType.Resource
 import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem.Type
+import com.appmarketplace.ozon.domain.repositories.Params
+import com.appmarketplace.ozon.domain.repositories.Results
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -39,12 +42,12 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
 
 
     fun loadProductsByWord(keyWordOne: String){
-        if (productsResultList.value?.data == null){
+        if (searchProductsResultList.value?.data == null){
             launch(Dispatchers.IO) {
                 val data = async{
                     listProductRepositoryImpl.loadSearchProducts(
-                        HomeRepository.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                            mapper = MapProductsToListData(type = 2),
+                        Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
+                            mapper = MapProductsToListData(type = Type.ProductWithName),
                             pathId = keyWordOne,
                             pageSize = "100",
                             apikey = APIKEY1,
@@ -60,22 +63,23 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
     }
 
     fun getProductsByCategory(category:String){
-
-        launch {
-            val products:Deferred<HomeRepository.Results.ResultProduct<OnOfferProductsItem>> = async {
-                listProductRepositoryImpl
-                    .loadProducts(
-                        HomeRepository.Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                            mapper = MapProductsToListData(type = 2),
-                            pathId = category,
-                            pageSize = "100",
-                            apikey = APIKEY2,
-                            page = "1"
+        if(productsResultList.value?.data == null){
+            launch {
+                val products= async {
+                    listProductRepositoryImpl
+                        .loadProducts(
+                            Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
+                                mapper = MapProductsToListData(type = Type.ProductWithName),
+                                pathId = category,
+                                pageSize = "100",
+                                apikey = APIKEY2,
+                                page = "1"
+                            )
                         )
-                    )
-            }
-            withContext(Dispatchers.Main){
-                productsResultList.value = products.await().result
+                }
+                withContext(Dispatchers.Main){
+                    productsResultList.value = products.await().result
+                }
             }
         }
     }

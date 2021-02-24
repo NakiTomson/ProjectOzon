@@ -15,15 +15,15 @@ data class ProductsModel(
         @SerializedName("products")
         @Expose val products: List<Product>? = null
 ) {}
-//data class CategoryPath(
-//        @SerializedName("id")
-//        @Expose
-//        var id: String? = null,
-//
-//        @SerializedName("name")
-//        @Expose
-//        var name: String? = null,
-//) {}
+data class CategoryPath(
+        @SerializedName("id")
+        @Expose
+        var id: String? = null,
+
+        @SerializedName("name")
+        @Expose
+        var name: String? = null,
+) {}
 //data class Image(
 //        @SerializedName("rel")
 //        @Expose
@@ -111,18 +111,18 @@ data class Product(
 //        @Expose
 //        var type: String? = null,
 //
-//        @SerializedName("startDate")
-//        @Expose
-//        var startDate: String? = null,
+        @SerializedName("startDate")
+        @Expose
+        var startDate: String? = null,
 //
-//        @SerializedName("new")
-//        @Expose
-//        var new: Boolean? = null,
-//
-//        @SerializedName("active")
-//        @Expose
-//        var active: Boolean? = null,
-//
+        @SerializedName("new")
+        @Expose
+        var new: Boolean? = null,
+
+        @SerializedName("active")
+        @Expose
+        var active: Boolean? = null,
+
 //        @SerializedName("lowPriceGuarantee")
 //        @Expose
 //        var lowPriceGuarantee: Boolean? = null,
@@ -327,13 +327,13 @@ data class Product(
 //        @Expose
 //        var upc: String? = null,
 //
-//        @SerializedName("productTemplate")
-//        @Expose
-//        var productTemplate: String? = null,
+        @SerializedName("productTemplate")
+        @Expose
+        var productTemplate: String? = null,
 
-//        @SerializedName("categoryPath")
-//        @Expose
-//        var categoryPath: List<CategoryPath>? = null,
+        @SerializedName("categoryPath")
+        @Expose
+        var categoryPath: List<CategoryPath>? = null,
 
 //        @SerializedName("alternateCategories")
 //        @Expose
@@ -415,9 +415,9 @@ data class Product(
 //        @Expose
 //        var specialOrder: Boolean? = null,
 //
-//        @SerializedName("shortDescription")
-//        @Expose
-//        var shortDescription: String? = null,
+        @SerializedName("shortDescription")
+        @Expose
+        var shortDescription: String? = null,
 //
 //        @SerializedName("class")
 //        @Expose
@@ -511,9 +511,9 @@ data class Product(
         @Expose
         var description: Any? = null,
 
-//        @SerializedName("manufacturer")
-//        @Expose
-//        var manufacturer: String? = null,
+        @SerializedName("manufacturer")
+        @Expose
+        var manufacturer: String? = null,
 
         @SerializedName("modelNumber")
         @Expose
@@ -527,9 +527,9 @@ data class Product(
         @Expose
         var image: String? = null,
 
-//        @SerializedName("largeFrontImage")
-//        @Expose
-//        var largeFrontImage: Any? = null,
+        @SerializedName("largeFrontImage")
+        @Expose
+        var largeFrontImage: Any? = null,
 //
 //        @SerializedName("mediumImage")
 //        @Expose
@@ -543,25 +543,25 @@ data class Product(
 //        @Expose
 //        var largeImage: String? = null,
 //
-//        @SerializedName("alternateViewsImage")
-//        @Expose
-//        var alternateViewsImage: Any? = null,
-//
-//        @SerializedName("angleImage")
-//        @Expose
-//        var angleImage: String? = null,
-//
-//        @SerializedName("backViewImage")
-//        @Expose
-//        var backViewImage: Any? = null,
-//
-//        @SerializedName("energyGuideImage")
-//        @Expose
-//        var energyGuideImage: Any? = null,
-//
-//        @SerializedName("leftViewImage")
-//        @Expose
-//        var leftViewImage: Any? = null,
+        @SerializedName("alternateViewsImage")
+        @Expose
+        var alternateViewsImage: Any? = null,
+
+        @SerializedName("angleImage")
+        @Expose
+        var angleImage: String? = null,
+
+        @SerializedName("backViewImage")
+        @Expose
+        var backViewImage: Any? = null,
+
+        @SerializedName("energyGuideImage")
+        @Expose
+        var energyGuideImage: Any? = null,
+
+        @SerializedName("leftViewImage")
+        @Expose
+        var leftViewImage: Any? = null,
 //
 //        @SerializedName("accessoriesImage")
 //        @Expose
@@ -723,9 +723,9 @@ data class Product(
 //        @Expose
 //        var esrbRating: Any? = null,
 //
-//        @SerializedName("longDescription")
-//        @Expose
-//        var longDescription: String? = null,
+        @SerializedName("longDescription")
+        @Expose
+        var longDescription: String? = null,
 
 //        @SerializedName("includedItemList")
 //        @Expose

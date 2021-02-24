@@ -13,6 +13,5 @@ data class BottomSloganRowType(val sloganOffer: String) :RowType{
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val bunnerViewHolder: ViewHolderFactory.BottomSloganOfferProduct = viewHolder as  ViewHolderFactory.BottomSloganOfferProduct
         bunnerViewHolder.bind(sloganOffer)
-
     }
 }

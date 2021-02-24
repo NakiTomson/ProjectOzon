@@ -2,6 +2,7 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.adapters.*
 import com.appmarketplace.ozon.presentation.rowType.*
 import com.makeramen.roundedimageview.RoundedImageView
@@ -29,11 +32,16 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
 
+    lateinit var navController:NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -55,6 +63,9 @@ class HomeFragment : Fragment() {
 
 
 
+        navController = findNavController()
+
+
         setupAdapter(adapterMultiple)
         startBannerGettingData(adapterMultiple, startBannerAdapterViewPager)
         categoryGettingData(adapterMultiple, combinationProductAdapterViewPager)
@@ -68,8 +79,6 @@ class HomeFragment : Fragment() {
         productFoureGettingData(adapterMultiple)
 
 
-
-        val navController = findNavController()
         val editText = searchTextInput
         editText?.setOnTouchListener { v, event ->
             if (navController.currentDestination?.id != R.id.searchHintProductHomeFragment){
@@ -78,8 +87,6 @@ class HomeFragment : Fragment() {
             v.performClick()
             v.onTouchEvent(event)
         }
-
-
 
     }
 
@@ -92,8 +99,8 @@ class HomeFragment : Fragment() {
     ){
 
         val bundle = Bundle()
-        bundle.putString("arg1",mockImage)
-        bundle.putString("arg2",liveStrem)
+        bundle.putString("arg1", mockImage)
+        bundle.putString("arg2", liveStrem)
 
 
         val action = HomeFragmentDirections.actionHomeFragmentToMockFragment(
@@ -103,14 +110,14 @@ class HomeFragment : Fragment() {
             position = position ?: 0
         )
 
-        val navController = findNavController()
-
-        navController.navigate(action,extras)
+        navController.navigate(action, extras)
     }
+
+
 
     fun setupAdapter(adapterMultiple: MultipleTypesAdapter) {
         adapterMultiple.setHasStableIds(true)
-        mutipleHomeRecyclerView.layoutManager = LinearLayoutManager(context)
+        mutipleHomeRecyclerView.layoutManager =  LinearLayoutManager(context)
         mutipleHomeRecyclerView.adapter = adapterMultiple
         mutipleHomeRecyclerView.setHasFixedSize(false)
     }
@@ -125,23 +132,32 @@ class HomeFragment : Fragment() {
         Log.v(name, "${resource.status}")
     }
 
-    fun startBannerGettingData(adapterMultiple: MultipleTypesAdapter, startBannerAdapterViewPager: BannerAdapter) {
+    fun startBannerGettingData(
+        adapterMultiple: MultipleTypesAdapter,
+        startBannerAdapterViewPager: BannerAdapter
+    ) {
 
         viewModel.bannerListStart.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re1 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re1 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
 
                     startBannerAdapterViewPager.setData(lists)
                     val banner = BannerRowType(startBannerAdapterViewPager)
                     adapterMultiple.setData(banner)
 
                     banner.bannerClickListener = object : BannerRowType.BannerListener {
-                        override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
+                        override fun onClickBanner(
+                            imageUrl: String,
+                            imageOnboarding: RoundedImageView
+                        ) {
                             val extras = FragmentNavigatorExtras(
                                 imageOnboarding to imageUrl
                             )
-                            navigateToMock(mockImage = imageUrl,extras = extras)
+                            navigateToMock(mockImage = imageUrl, extras = extras)
                         }
                     }
 
@@ -152,24 +168,31 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun categoryGettingData(adapterMultiple: MultipleTypesAdapter, combinationProductAdapterViewPager: CombinationProductsAdapter) {
+    fun categoryGettingData(
+        adapterMultiple: MultipleTypesAdapter,
+        combinationProductAdapterViewPager: CombinationProductsAdapter
+    ) {
 
         viewModel.categoryProductliveData.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re2 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re2 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     combinationProductAdapterViewPager.setData(lists)
 
                     val categoryRowType = CategoryRowType(combinationProductAdapterViewPager)
                     adapterMultiple.setData(categoryRowType)
 
-                    categoryRowType.clickOnCategoryItem = object :CategoryRowType.ClickCategoryListener{
-                        override fun onClickItem(data: String) {
-                            val bundle = Bundle()
-                            bundle.putString("category",data)
-                            findNavController().navigate(R.id.productsListFragment,bundle)
+                    categoryRowType.clickOnCategoryItem =
+                        object : CategoryRowType.ClickCategoryListener {
+                            override fun onClickItem(data: String) {
+                                val bundle = Bundle()
+                                bundle.putString("category", data)
+                                navController.navigate(R.id.productsListFragment, bundle)
+                            }
                         }
-                    }
                 }
             } else {
                 errorhandling("ERROR CATEGORY", resource)
@@ -182,16 +205,23 @@ class HomeFragment : Fragment() {
         viewModel.historyItemsLiveData.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re3 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re3 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
 
                     val historyData = HistoryRowType(lists)
                     adapterMultiple.setData(historyData)
-                    historyData.historClickListener = object : HistoryRowType.HistoryListener{
-                        override fun onClickHistory(listOf: List<String>, position: Int, imageView: ImageView) {
+                    historyData.historClickListener = object : HistoryRowType.HistoryListener {
+                        override fun onClickHistory(
+                            listOf: List<String>,
+                            position: Int,
+                            imageView: ImageView
+                        ) {
                             val extras = FragmentNavigatorExtras(
                                 imageView to listOf[position]
                             )
-                            navigateToMock(listOf = listOf,position = position,extras = extras)
+                            navigateToMock(listOf = listOf, position = position, extras = extras)
                         }
                     }
                 }
@@ -201,19 +231,25 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun liveGettingData(adapterMultiple: MultipleTypesAdapter, liveItemAdapterViewPager: LiveItemAdapter) {
+    fun liveGettingData(
+        adapterMultiple: MultipleTypesAdapter,
+        liveItemAdapterViewPager: LiveItemAdapter
+    ) {
 
         viewModel.liveItemsLiveData.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re4 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re4 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     liveItemAdapterViewPager.setData(lists)
                     adapterMultiple.setData(TopSloganRowType("Ozon Live - успей купить со скидкой!"))
 
                     val rowTypeLive = LiveRowType(liveItemAdapterViewPager)
                     adapterMultiple.setData(rowTypeLive)
 
-                    rowTypeLive.liveClickListener = object : LiveRowType.LiveListener{
+                    rowTypeLive.liveClickListener = object : LiveRowType.LiveListener {
 
                         override fun onClickLive(liveUrl: String) {
 //                            navigateToMock(liveStrem = liveUrl, extras = extras, extras1 = extras)
@@ -232,11 +268,28 @@ class HomeFragment : Fragment() {
         viewModel.listPoductsLiveData.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re5 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re5 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
-                    adapterMultiple.setData(ProductsRowType(lists.list, 3))
+
+                    val rowProduct = ProductsRowType(lists.list, 3)
+                    adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                        override fun clickProduct(product: OnProductItem) {
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product
+                            )
+                            navController.navigate(action)
+                        }
+                    }
+
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                     adapterMultiple.setData(RegistrationRowType(0))
+
+                    rowProduct
                 }
             } else {
                 errorhandling("ERROR PRODUCT 1", resource)
@@ -249,9 +302,24 @@ class HomeFragment : Fragment() {
         viewModel.listPoductsLiveData2.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re6 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re6 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
-                    adapterMultiple.setData(ProductsRowType(lists.list, 3))
+
+                    val rowProduct = ProductsRowType(lists.list, 3)
+                    adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+
+                        override fun clickProduct(product: OnProductItem) {
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product
+                            )
+                            navController.navigate(action)
+                        }
+                    }
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                 }
             } else {
@@ -260,12 +328,18 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun centerBannerGettingData(adapterMultiple: MultipleTypesAdapter, centerBannerAdapterViewPager: BannerAdapter) {
+    fun centerBannerGettingData(
+        adapterMultiple: MultipleTypesAdapter,
+        centerBannerAdapterViewPager: BannerAdapter
+    ) {
 
         viewModel.bannerListCenter.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re7 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re7 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     centerBannerAdapterViewPager.setData(lists)
 
                     val banner = BannerRowType(centerBannerAdapterViewPager)
@@ -281,7 +355,7 @@ class HomeFragment : Fragment() {
                                 imageOnboarding to imageUrlBest
                             )
 
-                            navigateToMock(mockImage = imageUrlBest,extras = extras)
+                            navigateToMock(mockImage = imageUrlBest, extras = extras)
                         }
                     }
                 }
@@ -296,9 +370,25 @@ class HomeFragment : Fragment() {
         viewModel.listPoductsLiveData3.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re8 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re8 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
-                    adapterMultiple.setData(ProductsRowType(lists.list, 3))
+
+                    val rowProduct = ProductsRowType(lists.list, 3)
+                    adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+
+                        override fun clickProduct(product: OnProductItem) {
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product
+                            )
+                            navController.navigate(action)
+                        }
+                    }
+
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                 }
             } else {
@@ -307,12 +397,18 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun downBannerGettingData(adapterMultiple: MultipleTypesAdapter, downBannerAdapterViewPager: BannerAdapter) {
+    fun downBannerGettingData(
+        adapterMultiple: MultipleTypesAdapter,
+        downBannerAdapterViewPager: BannerAdapter
+    ) {
 
         viewModel.bannerListDown.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re9 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re9 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     downBannerAdapterViewPager.setData(lists)
 
                     val banner = BannerRowType(downBannerAdapterViewPager)
@@ -328,7 +424,7 @@ class HomeFragment : Fragment() {
                                 imageOnboarding to imageUrl
                             )
 
-                            navigateToMock(mockImage = imageUrl,extras = extras)
+                            navigateToMock(mockImage = imageUrl, extras = extras)
                         }
                     }
 
@@ -344,22 +440,36 @@ class HomeFragment : Fragment() {
         viewModel.listPoductsLiveData4.observe(viewLifecycleOwner, { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v("TAGTIME", "re10 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
+                    Log.v(
+                        "TAGTIME",
+                        "re10 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
+                    )
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
-                    adapterMultiple.setData(ProductsRowType(lists.list, 2))
+
+                    val rowProduct = ProductsRowType(lists.list, 2)
+                    adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                        override fun clickProduct(product: OnProductItem) {
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product
+                            )
+                            navController.navigate(action)
+                        }
+                    }
+
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                     stopLoadingsOneFrame()
                 }
             } else {
+                stopLoadingsOneFrame()
                 errorhandling("ERROR  Product 4", resource)
             }
         })
     }
 
     fun stopLoadingsOneFrame(){
-        Log.v("TAGVISNBILE","VSIS")
         loadingFrame.visibility = View.GONE
     }
-
 }
 

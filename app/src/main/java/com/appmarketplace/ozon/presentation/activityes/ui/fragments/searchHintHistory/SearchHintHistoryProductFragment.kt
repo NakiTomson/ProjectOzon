@@ -27,11 +27,7 @@ class SearchHintHistoryProductFragment : Fragment() {
 
     private lateinit var viewModel: SearchHintHistoryProductViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_search_hint_history_product, container, false)
     }
 
@@ -39,7 +35,7 @@ class SearchHintHistoryProductFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(SearchHintHistoryProductViewModel::class.java)
-        viewModel.getHints()
+        viewModel.getHintsDB()
 
 
         val navController = findNavController()
@@ -83,7 +79,7 @@ class SearchHintHistoryProductFragment : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                 if (event.action === KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (searchTextInput.text.length > 2) {
-                        viewModel.setHint(HintProductDB(searchTextInput.text.toString()))
+                        viewModel.setHintDB(HintProductDB(searchTextInput.text.toString()))
                         startSearchWordRequest(searchTextInput.text.toString(), navController)
                     } else {
                         Toast.makeText(activity, "Слишком короткий запрос", Toast.LENGTH_SHORT).show()

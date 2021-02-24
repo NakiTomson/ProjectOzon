@@ -16,9 +16,9 @@ import kotlin.coroutines.CoroutineContext
 
 class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
 
+
     val liveDataHints:MutableLiveData<List<HintProductDB>> = MutableLiveData()
 
-    val searchProductsResultList:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     init {
         OzonApp.appComponent.inject(searchHintProductHomeViewModel = this)
@@ -41,7 +41,7 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
         }
     }
 
-    fun getHints(){
+    fun getHintsDB(){
         launch(Dispatchers.IO) {
             val hintslist = productDb.productsDao()?.getAll()
             if (hintslist == null || hintslist.isEmpty()){
@@ -52,11 +52,12 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
         }
     }
 
-    fun setHint(hintProductDB: HintProductDB){
+    fun setHintDB(hintProductDB: HintProductDB){
         launch(Dispatchers.IO) {
             productDb.productsDao()?.insert(hintProductDB)
         }
     }
+
 
     private val job: Job = Job()
 
@@ -64,6 +65,10 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
         get() = Dispatchers.Main + job
 
 
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 
 
 }

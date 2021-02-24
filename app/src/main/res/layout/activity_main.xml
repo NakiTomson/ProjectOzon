@@ -17,6 +17,26 @@
        />
 
 
+    <Button
+        android:id="@+id/inBasketButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_next"
+        android:gravity="bottom|center"
+        android:padding="10dp"
+        android:text="В корзину           183 $"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_gravity="top"
+        app:backgroundTint="@null"
+        app:layout_anchor="@+id/bottomNavigationView"
+        app:layout_anchorGravity="top"
+        >
+    </Button>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -27,7 +47,8 @@
         app:labelVisibilityMode="labeled"
         android:layout_gravity="bottom"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:menu="@menu/menu_bottom" />
+        app:menu="@menu/menu_bottom"
+        />
 
 
 
