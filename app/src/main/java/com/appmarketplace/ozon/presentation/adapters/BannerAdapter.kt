@@ -32,6 +32,7 @@ class BannerAdapter(): RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHold
 
     val onboardingItems:MutableList<OnBoardingItem> = LinkedList()
 
+
     fun setData(items: MutableList<OnBoardingItem>) {
         onboardingItems.clear()
         onboardingItems.addAll(items)
@@ -62,6 +63,9 @@ class BannerAdapter(): RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHold
         return onboardingItems.size
     }
 
+
+
+
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
 
         private val imageOnboarding = view.imageOnboarding
@@ -72,29 +76,17 @@ class BannerAdapter(): RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHold
 
 
             if (onBoardingItem?.onBoardingImageUrl.contains("dropbox")){
-                Picasso.get()
+                Picasso.with(itemView.context)
                     .load(onBoardingItem.onBoardingImageUrl)
                     .placeholder(R.drawable.example_ads_banner)
                     .noFade()
                     .into(imageOnboarding)
             }else{
-                Log.v("TAGMAPPEER", "re url  ${onBoardingItem.onBoardingImageUrl}")
-                val newUrl = URL(onBoardingItem.onBoardingImageUrl)
-                GlobalScope.launch(Dispatchers.IO) {
-                    val connection: URLConnection = newUrl.openConnection()
-                    val inputStream: InputStream = connection.getInputStream()
-                    val productIcon = BitmapFactory.decodeStream(inputStream)
-
-                    val pairSize = mapperSize(productIcon.height,productIcon.width)
-                    val resizedBitmap =
-                        Bitmap.createScaledBitmap(productIcon, pairSize.second, pairSize.first, false)
-
-                    inputStream.close()
-
-                    withContext(Dispatchers.Main) {
-                        imageOnboarding.setImageBitmap(resizedBitmap)
-                    }
-                }
+                imageOnboarding.transitionName = onBoardingItem.onBoardingImageUrl
+                Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
+                    .resize(500,500)
+                    .centerInside()
+                    .into(imageOnboarding)
             }
 
             onBoardingItem.title?.let{

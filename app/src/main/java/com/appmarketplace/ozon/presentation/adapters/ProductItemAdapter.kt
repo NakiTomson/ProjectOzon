@@ -2,6 +2,7 @@ package com.appmarketplace.ozon.presentation.adapters
 
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.rowType.ProductsRowType
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,22 +77,16 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
             }
 
             product.setOnClickListener {
-                setClickListenerProduct?.clickProduct(productsItem)
+                generalIconProductImageView.transitionName = productsItem.images?.get(0)
+                setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
         }
 
         private fun setOnlyImage(productsItem: OnProductItem) {
             productsItem.generalIconProductSting?.let {
-                val newUrl = URL(productsItem.generalIconProductSting)
-                thread {
-                    val connection: URLConnection = newUrl.openConnection()
-                    val inputStream: InputStream = connection.getInputStream()
-                    val productIcon = BitmapFactory.decodeStream(inputStream)
-                    inputStream.close()
-                    GlobalScope.launch(Dispatchers.Main) {
-                        generalIconProductImageView.setImageBitmap(productIcon)
-                    }
-                }
+                Picasso.with(itemView.context)
+                    .load(productsItem.generalIconProductSting)
+                    .into(generalIconProductImageView)
             } ?: run {
                 productsItem.generalIconProduct?.let { generalIconProductImageView.setImageResource(it) } ?:
                 kotlin.run{generalIconProductImageView.setImageResource(R.drawable.product_by_offer_exmplae)}

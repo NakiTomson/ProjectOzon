@@ -59,17 +59,14 @@ class LiveItemAdapter(): RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemView
 
         fun bind(liveItem: ListResultLiveItems){
 
-            Picasso.get()
-                    .load(R.drawable.ic_live_example)
-                    .noFade()
-                    .placeholder(R.drawable.ic_live_example)
-                    .into(imageOnboarding)
-
-
-            Picasso.get()
+            Picasso.with(itemView.context)
                     .load(liveItem.onIconCompanyUrl)
-                    .noFade()
                     .into(iconOfCompany)
+
+            Picasso.with(itemView.context)
+                .load(liveItem.onIconCompanyUrl)
+                .into(iconOfCompany)
+
 
             statusLive.text = liveItem.statusLiveStream
             countUserLive?.text = liveItem.countUser

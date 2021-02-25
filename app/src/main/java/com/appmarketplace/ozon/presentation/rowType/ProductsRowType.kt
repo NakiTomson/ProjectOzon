@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.rowType
 
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
@@ -11,7 +12,7 @@ data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int)
     var setClickListenerProduct:OnClickProduct? = null
 
     interface OnClickProduct{
-        fun clickProduct(product: OnProductItem)
+        fun clickProduct(product: OnProductItem,imageView: ImageView)
     }
 
 
@@ -24,8 +25,9 @@ data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int)
         productionViewHolder.bind(listProducts,spain)
 
         productionViewHolder.setClickListenerProduct = object :OnClickProduct{
-            override fun clickProduct(product: OnProductItem) {
-                setClickListenerProduct?.clickProduct(product)
+
+            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                setClickListenerProduct?.clickProduct(product,imageView)
             }
 
         }

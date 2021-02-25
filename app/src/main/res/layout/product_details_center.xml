@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="20dp"
+    android:layout_marginStart="10dp"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/topTextViewCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Доставить Ozon"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </TextView>
+
+
+
+
+    <TextView
+        android:id="@+id/loacationCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_my_location"
+        android:drawablePadding="10dp"
+        android:text="Москва"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topTextViewCenter" />
+
+
+    <ImageButton
+        android:id="@+id/imageNextLocation"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_gravity="end"
+        android:alpha="0.4"
+        android:background="@drawable/button_next"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/app_name"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/loacationCity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/loacationCity"
+        app:srcCompat="@drawable/ic_right" />
+
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="30dp"
+        android:alpha="0.2"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loacationCity">
+
+    </View>
+
+
+    <TextView
+        android:id="@+id/pickUpService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_pick_up_service"
+        android:drawablePadding="10dp"
+        android:text="Самовывоз, завтра, 25 февраля бесплатно"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loacationCity" />
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="30dp"
+        android:alpha="0.2"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pickUpService">
+
+    </View>
+
+
+
+    <TextView
+        android:id="@+id/deliveryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_delivery"
+        android:drawablePadding="10dp"
+        android:text="Самовывоз, завтра, 25 февраля бесплатно"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pickUpService" />
+
+
+    <ImageView
+        android:id="@+id/detailBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/detail_banner"
+        app:layout_constraintTop_toBottomOf="@+id/deliveryTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="15sp"
+        android:layout_marginEnd="10dp"
+        >
+    </ImageView>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabsLayout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15sp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailBanner"
+        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="fixed"
+        >
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/descriptionTab"
+            android:layout_width="wrap_content"
+            android:text="Описание"
+            android:layout_height="wrap_content"
+
+            >
+
+        </com.google.android.material.tabs.TabItem>
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/specificationsTab"
+            android:layout_width="wrap_content"
+            android:text="Характеристики"
+            android:layout_height="wrap_content"
+            >
+
+        </com.google.android.material.tabs.TabItem>
+    </com.google.android.material.tabs.TabLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/frameDescriptionContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabsLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+    </FrameLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

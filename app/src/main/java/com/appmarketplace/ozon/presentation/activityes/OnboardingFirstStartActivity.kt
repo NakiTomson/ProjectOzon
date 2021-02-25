@@ -31,8 +31,6 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
     private fun setonboardingItems(){
         onboardingAdapter = BannerAdapter()
 
-
-
         onboardingAdapter.setData(
 
             mutableListOf(

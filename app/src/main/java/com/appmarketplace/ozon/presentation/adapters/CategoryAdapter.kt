@@ -52,11 +52,10 @@ class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.OnBoardingItemView
         private val categoryItem = view.findViewById<LinearLayout>(R.id.categoryItem)
 
         fun bind(onBoardingItem: OnBoardingItem){
-//            imageOnboarding.setImageResource(onBoardingItem.onBoardingImage)
             textTitle?.text = onBoardingItem.title
             textDescription?.text = onBoardingItem.description
 
-            Picasso.get()
+            Picasso.with(itemView.context)
                 .load(onBoardingItem.onBoardingImageUrl)
                 .fit()
                 .placeholder(R.drawable.icon_app_ozon)

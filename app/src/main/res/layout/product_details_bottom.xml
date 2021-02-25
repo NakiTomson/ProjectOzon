@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:paddingBottom="300dp"
+    android:layout_marginTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/productCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:fontFamily="@font/roboto_slab_bold"
+        android:text="Ищут по запросам"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageNextAllProducts"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:contentDescription="@string/app_name"
+        android:background="@drawable/button_white_next"
+        app:layout_constraintBottom_toBottomOf="@+id/productCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/productCategory"
+        app:srcCompat="@drawable/ic_next" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listProductsEquivalent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productCategory" />
+
+    <TextView
+        android:id="@+id/productCategorySimiliar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_slab_bold"
+        android:text="Похожие товары"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listProductsEquivalent" />
+
+    <ImageButton
+        android:id="@+id/imageNextAllSimilar"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:contentDescription="@string/app_name"
+        android:background="@drawable/button_white_next"
+        app:layout_constraintBottom_toBottomOf="@+id/productCategorySimiliar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/productCategorySimiliar"
+        app:srcCompat="@drawable/ic_next" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listProductsSimilar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageNextAllSimilar" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

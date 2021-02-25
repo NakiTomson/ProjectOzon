@@ -41,12 +41,8 @@ object ViewHolderFactory {
         var bannerIndicatorsContainer:LinearLayout?  = null
 
 
-        fun bind(onBoardingAdapter: BannerAdapter,layoutHeight:Int? = null){
+        fun bind(onBoardingAdapter: BannerAdapter){
 
-            layoutHeight?.let {
-                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, layoutHeight)
-                itemView.onAdsViewPager.layoutParams = params
-            }
             onBoardingAdapter.bannerClickListener = object : BannerRowType.BannerListener{
                 override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
                     bannerClickListener?.onClickBanner(imageUrl, imageOnboarding)
@@ -95,7 +91,7 @@ object ViewHolderFactory {
         fun bind(listOf: List<ResultHistoryData>) {
 
             for ((index,item) in (listOf).withIndex()){
-                Picasso.get()
+                Picasso.with(itemView.context)
                     .load(item.historyUrl)
                     .noFade()
                     .placeholder(R.drawable.one_history)
@@ -235,8 +231,10 @@ object ViewHolderFactory {
             productsRecyclerView.adapter = productAdapter
 
             productAdapter.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
-                override fun clickProduct(product: OnProductItem) {
-                    setClickListenerProduct?.clickProduct(product)
+
+
+                override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                    setClickListenerProduct?.clickProduct(product,imageView)
                 }
             }
         }

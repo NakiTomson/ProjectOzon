@@ -13,7 +13,7 @@ import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 import com.makeramen.roundedimageview.RoundedImageView
 
-data class BannerRowType(val onBoardingAdapter: BannerAdapter,val layoutHeight:Int? = null) :RowType{
+data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
 
 
@@ -29,7 +29,7 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter,val layoutHeight:I
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val bunnerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
-        bunnerViewHolder.bind(onBoardingAdapter,layoutHeight)
+        bunnerViewHolder.bind(onBoardingAdapter)
 
         setupIndicator(bunnerViewHolder.bannerIndicatorsContainer!!,onBoardingAdapter.itemCount,viewHolder.itemView.context)
         setIndicatorsContainer(0, bunnerViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)

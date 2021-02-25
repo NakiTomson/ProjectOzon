@@ -78,6 +78,11 @@
             app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="transitionName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="deftransition" />
     </fragment>
 
     <action android:id="@+id/action_global_detailsProductFragement" app:destination="@id/detailsProductFragement"/>

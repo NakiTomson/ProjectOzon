@@ -33,15 +33,9 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
 
     lateinit var navController:NavController
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -61,10 +55,7 @@ class HomeFragment : Fragment() {
 
         val adapterMultiple = MultipleTypesAdapter()
 
-
-
         navController = findNavController()
-
 
         setupAdapter(adapterMultiple)
         startBannerGettingData(adapterMultiple, startBannerAdapterViewPager)
@@ -274,15 +265,25 @@ class HomeFragment : Fragment() {
                     )
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
 
+
+
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
-                        override fun clickProduct(product: OnProductItem) {
-                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
-                                product = product
+
+                        override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                            Log.v("TARNSTIONEM","re1 ${product.company}")
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.images?.get(0)!!
                             )
-                            navController.navigate(action)
+
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product,
+                                transitionName = product.images.get(0)
+                            )
+                            navController.navigate(action,extras)
                         }
                     }
 
@@ -313,11 +314,16 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
-                        override fun clickProduct(product: OnProductItem) {
-                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
-                                product = product
+                        override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.nameOfProduct!!
                             )
-                            navController.navigate(action)
+
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product,
+                                transitionName = product.nameOfProduct
+                            )
+                            navController.navigate(action,extras)
                         }
                     }
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
@@ -381,11 +387,16 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
-                        override fun clickProduct(product: OnProductItem) {
-                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
-                                product = product
+                        override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.nameOfProduct!!
                             )
-                            navController.navigate(action)
+
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product,
+                                transitionName = product.nameOfProduct
+                            )
+                            navController.navigate(action,extras)
                         }
                     }
 
@@ -450,11 +461,17 @@ class HomeFragment : Fragment() {
                     adapterMultiple.setData(rowProduct)
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
-                        override fun clickProduct(product: OnProductItem) {
-                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
-                                product = product
+
+                        override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.nameOfProduct!!
                             )
-                            navController.navigate(action)
+
+                            val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
+                                product = product,
+                                transitionName = product.nameOfProduct
+                            )
+                            navController.navigate(action,extras)
                         }
                     }
 

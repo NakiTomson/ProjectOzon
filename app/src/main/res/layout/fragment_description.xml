@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.activityes.ui.fragments.description.DescriptionFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:text="Флагман от OnePlus с порядковым номер «8» в имени модели, вышедший на арену в середине весны 2020 года. Как подобает топовым мобильным устройствам, смартфон собран на металлической «раме» в виде стеклянного «бутерброда». Во главу его передней панели поставлен сочный экран Fluid AMOLED с разрешением 2400х1080 пикселей при диагонали 6.55 дюймов. Весомый аргумент «за» в его пользу — частота смены кадров 90 Гц. Фронтальная камера гаджета на 16 МП «откусила» немножко места в верхнем левом уголочке экрана, также непосредственно в дисплей встроен дактилоскопический сенсор для разблокировки устройства по рисунку отпечатка пальца владельца. По части «железа» перед нами предстаёт флагман без компромиссов — связка топового чипсета Snapdragon 865, графики Adreno 650 и 8/128 ГБ памяти уверенно ворочает..." />
+
+</FrameLayout>

@@ -69,7 +69,7 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 
                 imageMock.apply {
                     transitionName = imageUrl
-                    Picasso.get()
+                    Picasso.with(context)
                         .load(imageUrl)
                         .noFade()
                         .into(this)
@@ -89,7 +89,7 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
     fun insertHistory(strings: Array<String>, positionm: Int) {
         imageMock.apply {
             strings[positionm].also { transitionName = it }
-            Picasso.get()
+            Picasso.with(context)
                 .load(strings[this@MockFragment.position])
                 .noFade()
                 .into(this)

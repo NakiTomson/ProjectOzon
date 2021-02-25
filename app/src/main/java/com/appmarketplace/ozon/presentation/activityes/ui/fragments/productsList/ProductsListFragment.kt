@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -43,7 +44,8 @@ class ProductsListFragment : Fragment() {
 
 
         productsAdapter.setClickListenerProduct = object :ProductsRowType.OnClickProduct{
-            override fun clickProduct(product: OnProductItem) {
+
+            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                 val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
                     product = product
                 )

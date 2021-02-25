@@ -64,6 +64,7 @@ class MapProductsToListData<T,M>(
                     longDescription = it.longDescription,
                     images = getlistImages(it),
                     company = it.manufacturer,
+                    color = it.color,
                     categoryPath = it.categoryPath?.map { path->
                         CategoryPath(id = path.id, name = path.name)
                     }

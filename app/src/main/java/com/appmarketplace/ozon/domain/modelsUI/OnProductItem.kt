@@ -36,6 +36,8 @@ data class OnProductItem (
 
     val company:String? = null,
 
+    val color:String? = null,
+
     val categoryPath:List<CategoryPath>? = null,
 ):Serializable{
     sealed class Type():Serializable {
