@@ -2,11 +2,9 @@ package com.appmarketplace.ozon.presentation.activityes
 
 
 import android.os.*
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.presentation.activityes.ui.setupWithNavController
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigationBar() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        val navGraphIds = listOf(R.navigation.home, R.navigation.category, R.navigation.basket)
+        val navGraphIds = listOf(R.navigation.home, R.navigation.category, R.navigation.basket,R.navigation.favorite,R.navigation.account)
 
         val controller = bottomNavigationView.setupWithNavController(
             navGraphIds = navGraphIds,
@@ -51,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         currentNavController = controller
         cheakInternetConnection()
+
+        bottomNavigationView.callOnClick()
     }
 
 

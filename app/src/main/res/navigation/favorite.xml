@@ -7,7 +7,8 @@
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite.`Favorite Fragment`"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite.FavoriteFragment"
         android:label="favorite_fragment"
         tools:layout="@layout/fragment_favorite" />
+
 </navigation>

@@ -42,6 +42,9 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
     val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
+    var descriptions:MutableLiveData<String> = MutableLiveData()
+    var specifications:MutableLiveData<String> = MutableLiveData()
+
 
     fun getListEquivalentProducts(name: String?) {
         if (name == null) return
@@ -52,7 +55,7 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                         Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
                             mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName),
                             pathId = name.replace(" ","&search="),
-                            pageSize = "10",
+                            pageSize = "20",
                             apikey = APIKEY3,
                             page = "1"
                         )
@@ -74,8 +77,8 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                         .loadProducts(
                             Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
                                 mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName),
-                                pathId = category[category.size-1].id!!,
-                                pageSize = "10",
+                                pathId = category[category.size-1].id ?: "null",
+                                pageSize = "20",
                                 apikey = APIKEY4,
                                 page = "1"
                             )

@@ -3,13 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.activityes.ui.fragments.description.DescriptionFragment">
+    tools:context=".presentation.activityes.ui.fragments.personalAccount.PersonalAccount">
 
     <TextView
-        android:id="@+id/textDescription"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:padding="10dp"/>
+        android:text="Hello" />
 
 </FrameLayout>

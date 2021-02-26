@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -39,7 +40,11 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         return inflater.inflate(R.layout.fragment_mock, container, false)
     }
@@ -51,11 +56,11 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 
         activity?.bottomNavigationView?.visibility = View.GONE
 
-        val imageUrl =  args.imageUrl
-        val videoUrl = args.videUrl
+        val imageUrl =  args?.imageUrl
+        val videoUrl = args?.videUrl
 
-        val arrayHistoryList = args.arrayHistory
-        position = args.position
+        val arrayHistoryList = args?.arrayHistory
+        position = args?.position
 
         arrayHistoryList?.let {
             progressBar.visibility = View.VISIBLE
@@ -84,6 +89,20 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 //                youtube?.initialize(API_YOUTUBE_KEY, this)
             }
         }
+
+        val detailsGiftMockImageUrl = args.mockGiftImge
+        detailsGiftMockImageUrl?.let {
+            if (it.isNotEmpty()){
+                Picasso.with(context)
+                    .load(detailsGiftMockImageUrl)
+                    .into(imageGift)
+                giftLayoute.visibility = View.VISIBLE
+                buttonNextGift.setOnClickListener {
+                    Toast.makeText(context, "Подарок отправлен", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 
     fun insertHistory(strings: Array<String>, positionm: Int) {
@@ -105,6 +124,7 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 //            valueMove.postValue(true)
 //            nextHistory(strings,postion -1)
         }
+
     }
 
     val valueProcess:MutableLiveData<Int> = MutableLiveData()
@@ -132,13 +152,17 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 
     fun nextHistory(strings: Array<String>, postion: Int) {
         if(strings.size > postion && postion >= 0){
-            insertHistory(strings,postion)
+            insertHistory(strings, postion)
         }else{
             findNavController().popBackStack()
         }
     }
 
-    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
+    override fun onInitializationSuccess(
+        p0: YouTubePlayer.Provider?,
+        p1: YouTubePlayer?,
+        p2: Boolean
+    ) {
         youtubeplayer = p1
         if (!p2) {
             p1?.cueVideo(urlStreem)

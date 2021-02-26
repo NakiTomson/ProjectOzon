@@ -13,6 +13,12 @@ class SimpleDataAdapter() : RecyclerView.Adapter<SimpleDataAdapter.SimpleDataAda
     val listItems:MutableList<CategoryPath> = ArrayList()
 
 
+    var setOnClickCategoryListener:OnClickCategoryListener? = null
+
+    interface OnClickCategoryListener{
+        fun onClickCategory(path: String)
+    }
+
     fun setData(list: MutableList<CategoryPath>?){
         listItems.clear()
         list?.let { listItems.addAll(it) }
@@ -34,8 +40,12 @@ class SimpleDataAdapter() : RecyclerView.Adapter<SimpleDataAdapter.SimpleDataAda
     inner class SimpleDataAdapterViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
         val namePath =itemView.namePath
+        val rootSimpleItem =itemView.rootSimpleItem
         fun bind(path: CategoryPath){
             namePath.text = path.name
+            rootSimpleItem.setOnClickListener {
+                path.id?.let { it1 -> setOnClickCategoryListener?.onClickCategory(it1) }
+            }
         }
     }
 }

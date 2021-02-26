@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white_Light"
     tools:context=".presentation.activityes.ui.fragments.detail.DetailsProductFragement">
 
 
@@ -20,6 +21,7 @@
             android:id="@+id/imageDetailViewPager"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:background="@color/white"
             android:gravity="center"
             />
 
@@ -30,9 +32,11 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             >
         </LinearLayout>
+
 
         <include layout="@layout/product_details_top" />
 
@@ -44,7 +48,6 @@
             android:id="@+id/similarCategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white_Light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,6 +58,7 @@
 
 
         <include layout="@layout/product_details_bottom" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -1,4 +1,4 @@
-package com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite
+package com.appmarketplace.ozon.presentation.activityes.ui.fragments.personalAccount
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,22 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import com.appmarketplace.ozon.R
 
-class FavoriteFragment : Fragment() {
+class PersonalAccount : Fragment() {
 
+    companion object {
+        fun newInstance() = PersonalAccount()
+    }
 
-
-    private lateinit var viewModel: FavoriteViewModel
+    private lateinit var viewModel: PersonalAccountViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        return inflater.inflate(R.layout.fragment_personal_account, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PersonalAccountViewModel::class.java)
+        // TODO: Use the ViewModel
     }
 
 }

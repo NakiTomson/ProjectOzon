@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.activityes.ui.fragments.description.DescriptionFragment">
+    tools:context=".presentation.activityes.ui.fragments.makingOrder.MakingOrderFragment">
 
     <TextView
-        android:id="@+id/textDescription"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="16sp"
-        android:padding="10dp"/>
+        android:gravity="center"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="Here Make Order" />
 
 </FrameLayout>

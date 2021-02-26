@@ -60,12 +60,18 @@
         <argument
             android:name="arrayHistory"
             app:argType="string[]"
-            app:nullable="true" />
+            app:nullable="true"
+            />
         <argument
             android:name="position"
             app:argType="integer"
             android:defaultValue="0" />
 
+
+        <argument
+            android:name="mockGiftImge"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
 
     <fragment
@@ -83,9 +89,27 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="deftransition" />
+        <action
+            android:id="@+id/action_detailsProductFragement_to_mockFragment"
+            app:destination="@id/mockFragment" />
     </fragment>
 
     <action android:id="@+id/action_global_detailsProductFragement" app:destination="@id/detailsProductFragement"/>
+    <fragment
+        android:id="@+id/makingOrderFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.makingOrder.MakingOrderFragment"
+        android:label="fragment_making_order"
+        tools:layout="@layout/fragment_making_order" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
 
 
 </navigation>

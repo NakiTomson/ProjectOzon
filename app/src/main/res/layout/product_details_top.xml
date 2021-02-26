@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
     android:paddingBottom="20sp"
+    android:background="@color/white"
     android:layout_marginTop="10dp"
+    android:paddingStart="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -31,7 +32,7 @@
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:text="46 700 ₽"
-        android:textColor="@color/red"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center"
+        android:visibility="gone"
         android:text="58 700 ₽"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -79,13 +81,14 @@
 
     <TextView
         android:id="@+id/offerOne"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:text="Нашли Дешевле?"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageNext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView" />
 
@@ -274,6 +277,7 @@
         >
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewGray"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
@@ -300,6 +304,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewRed"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
@@ -327,6 +332,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewBlue"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
@@ -353,6 +359,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewBlack"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"

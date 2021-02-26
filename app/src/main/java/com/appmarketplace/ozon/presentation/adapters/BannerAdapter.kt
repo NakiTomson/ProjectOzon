@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import com.appmarketplace.ozon.presentation.rowType.BannerRowType
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import kotlinx.coroutines.Dispatchers

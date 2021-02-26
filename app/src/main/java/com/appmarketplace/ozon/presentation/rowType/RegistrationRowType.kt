@@ -5,8 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.presentation.Interfaces.RowType
 import com.appmarketplace.ozon.presentation.factory.ViewHolderFactory
 
-data class RegistrationRowType(val reg: Int):RowType {
+class RegistrationRowType :RowType {
 
+
+    var setClickAutorization:onClickAutorization? = null
+
+    interface onClickAutorization{
+        fun onClick()
+    }
     override fun getItemViewType(): Int {
         return RowType.REGISTRATION_ROW_TYPE
     }
@@ -15,7 +21,7 @@ data class RegistrationRowType(val reg: Int):RowType {
         val registrationViewHolder = viewHolder as ViewHolderFactory.RegistrationViewHolder
         registrationViewHolder.bind()
         registrationViewHolder.financeButton.setOnClickListener {
-            Toast.makeText(viewHolder.itemView.context,"Пошли в регистрацию", Toast.LENGTH_SHORT).show()
+            setClickAutorization?.onClick()
         }
     }
 }

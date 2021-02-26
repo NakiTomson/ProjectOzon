@@ -3,37 +3,39 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="20dp"
-    android:layout_marginStart="10dp"
+    android:background="@color/white"
     android:layout_height="match_parent">
 
 
     <TextView
         android:id="@+id/topTextViewCenter"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Доставить Ozon"
-        android:textSize="24sp"
+        android:paddingStart="10dp"
+        android:text="Доставит Ozon"
         android:textColor="@color/black"
+        android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
+
     </TextView>
-
-
 
 
     <TextView
         android:id="@+id/loacationCity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
+        android:paddingStart="10dp"
         android:drawableStart="@drawable/ic_my_location"
         android:drawablePadding="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="Москва"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageNextLocation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topTextViewCenter" />
 
@@ -41,7 +43,7 @@
     <ImageButton
         android:id="@+id/imageNextLocation"
         android:layout_width="70dp"
-        android:layout_height="35dp"
+        android:layout_height="0dp"
         android:layout_gravity="end"
         android:alpha="0.4"
         android:background="@drawable/button_next"
@@ -70,19 +72,19 @@
 
     <TextView
         android:id="@+id/pickUpService"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:drawableStart="@drawable/ic_pick_up_service"
         android:drawablePadding="10dp"
-        android:text="Самовывоз, завтра, 25 февраля бесплатно"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="10dp"
+        android:text="Самовывоз, завтра, 32 февраля бесплатно"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loacationCity" />
-
-
 
     <View
         android:layout_width="match_parent"
@@ -97,18 +99,19 @@
     </View>
 
 
-
     <TextView
         android:id="@+id/deliveryTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:drawableStart="@drawable/ic_delivery"
         android:drawablePadding="10dp"
-        android:text="Самовывоз, завтра, 25 февраля бесплатно"
+        android:paddingTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingBottom="10dp"
+        android:text="Самовывоз, завтра, 32 февраля бесплатно"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pickUpService" />
 
@@ -122,8 +125,7 @@
         app:layout_constraintTop_toBottomOf="@+id/deliveryTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="15sp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
         >
     </ImageView>
 
@@ -131,7 +133,7 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabsLayout"
         android:layout_width="match_parent"
-        android:layout_marginTop="15sp"
+        android:layout_marginTop="20sp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
