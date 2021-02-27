@@ -37,6 +37,11 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
         notifyDataSetChanged()
     }
 
+    fun deleteProduct(productsItem: OnProductItem) {
+        listOnProductsByOfferItems?.remove(productsItem)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
         return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
     }
@@ -87,10 +92,18 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
             favoritelIconProductImageView.setOnClickListener {
-                productsItem.favoritelIconProduct = true
-                favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
-                setClickHeartProduct?.onClickHeart(productsItem)
-                Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
+
+                if(!productsItem.favoritelIconProduct){
+                    productsItem.favoritelIconProduct = true
+                    favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
+                    setClickHeartProduct?.onClickHeart(productsItem)
+                    Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
+                }else{
+                    productsItem.favoritelIconProduct = false
+                    favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
+                    setClickHeartProduct?.onClickHeart(productsItem)
+                    Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -110,7 +123,7 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
             favoritelIconProductImageView.visibility = visible
 
             if (productsItem.favoritelIconProduct) {
-                favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
+                favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
             }
 
             productsItem.productDiscount?.let {
@@ -154,5 +167,7 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
     override fun getItemId(position: Int): Long {
         return listOnProductsByOfferItems?.get(position)?.hashCode()?.toLong() ?: 0
     }
+
+
 
 }

@@ -11,6 +11,7 @@ import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
 import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
 import com.appmarketplace.ozon.data.utils.Gonfigs.LAPTOPS
 import com.appmarketplace.ozon.data.utils.Gonfigs.TVS
+import com.appmarketplace.ozon.data.utils.Gonfigs.listIds
 import com.appmarketplace.ozon.domain.mappers.MapListCategoryToListData
 import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
 import com.appmarketplace.ozon.domain.repositories.HomeRepository
@@ -44,6 +45,7 @@ class HomeViewModel() : BaseViewModel() {
     lateinit var productDao: ProductDao
 
 
+
     val bannerListStart:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
     val categoryProductliveData:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
@@ -70,6 +72,9 @@ class HomeViewModel() : BaseViewModel() {
         loadData(Dispatchers.IO) {
             when {
                 bannerListStart.value?.data == null -> {
+                    val products = productDao.getAll()
+                    listIds = products?.map { it.id }
+
                     loadingProductsFoure()
                 }
             }
@@ -127,7 +132,7 @@ class HomeViewModel() : BaseViewModel() {
             homeRepositoryImplBestBye
                 .loadProducts(
                     Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                        mapper = MapProductsToListData(type = Type.OnlyImage()),
+                        mapper = MapProductsToListData(type = Type.OnlyImage(),listIds = listIds),
                         pathId = HOME_AUDIO,
                         pageSize = "3",
                         apikey = APIKEY2,
@@ -149,7 +154,8 @@ class HomeViewModel() : BaseViewModel() {
                         type = Type.ProductNonName(),
                         topOffer = "Лучшие предложения!",
                         bottomOffer = "Скидки до  80 % здесь!",
-                    ),
+                        listIds = listIds
+                        ),
                     pathId = CELL_PHONES,
                     pageSize = "6",
                     apikey = APIKEY3,
@@ -179,7 +185,8 @@ class HomeViewModel() : BaseViewModel() {
                 Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
                         type = Type.ProductNonName(),
-                        topOffer = "Крутые скидки! 90%"
+                        topOffer = "Крутые скидки! 90%",
+                        listIds = listIds
                     ),
                     pathId = LAPTOPS,
                     pageSize = "3",
@@ -209,7 +216,8 @@ class HomeViewModel() : BaseViewModel() {
                     mapper = MapProductsToListData(
                         type = Type.ProductNonName(),
                         topOffer = "Товары с шок-кешбеком по Ozon.Card",
-                        bottomOffer = "Больше товаров тут"
+                        bottomOffer = "Больше товаров тут",
+                        listIds = listIds
                     ),
                     pathId = TVS,
                     pageSize = "4",
@@ -224,31 +232,40 @@ class HomeViewModel() : BaseViewModel() {
         }
     }
 
-    fun insertFavoriteProduct(productsItem: OnProductItem) {
+
+    fun insertOrDeleteFavoriteProduct(productsItem: OnProductItem){
         launch(Dispatchers.IO) {
-            OzonApp.db.productsDao()?.insert(ProductDb(
-                type = productsItem.type.type,
-                nameOfProduct = productsItem.nameOfProduct,
-                iconProduct = productsItem.generalIconProductSting,
-                isFavorite = productsItem.favoritelIconProduct,
-                productDiscount = productsItem.productDiscount,
-                isBestseller = productsItem.isBestseller,
-                priceWithDiscount = productsItem.priceWithDiscount,
-                priceOlD = productsItem.priceOlD,
-                goToBasket = productsItem.goToBasket,
-                shortDescription = productsItem.shortDescription,
-                longDescription = productsItem.longDescription,
-                images = productsItem.images,
-                company = productsItem.company,
-                color = productsItem.color
-            ))
-
-
-            val data =OzonApp.db.productsDao().getAll()
-
-            Log.v("TGYHUJIKO","re $data")
+            if (productsItem.favoritelIconProduct){
+                productDao?.insert(
+                    ProductDb(
+                        type = productsItem.type.type,
+                        nameOfProduct = productsItem.nameOfProduct,
+                        iconProduct = productsItem.generalIconProductSting,
+                        isFavorite = productsItem.favoritelIconProduct,
+                        productDiscount = productsItem.productDiscount,
+                        isBestseller = productsItem.isBestseller,
+                        priceWithDiscount = productsItem.priceWithDiscount,
+                        priceOlD = productsItem.priceOlD,
+                        goToBasket = productsItem.goToBasket,
+                        shortDescription = productsItem.shortDescription,
+                        longDescription = productsItem.longDescription,
+                        images = productsItem.images,
+                        company = productsItem.company,
+                        color = productsItem.color,
+                        id = productsItem.skuId
+                    )
+                )
+            }else{
+                productDao.delete(
+                    ProductDb(
+                        id = productsItem.skuId
+                    )
+                )
+            }
         }
     }
+
+
 
 
 //    fun startLoadingData(){

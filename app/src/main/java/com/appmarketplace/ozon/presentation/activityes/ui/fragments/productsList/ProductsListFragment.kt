@@ -43,6 +43,12 @@ class ProductsListFragment : Fragment() {
         foundProductsRecyclerView.adapter =  productsAdapter
 
 
+
+        productsAdapter.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+            override fun onClickHeart(productsItem: OnProductItem) {
+                viewModel.insertOrDeleteFavoriteProduct(productsItem)
+            }
+        }
         productsAdapter.setClickListenerProduct = object :ProductsRowType.OnClickProduct{
 
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {

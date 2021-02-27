@@ -87,9 +87,9 @@ data class CategoryPath(
 //        var unitShippingPrice: Double? = null,
 //) {}
 data class Product(
-//        @SerializedName("sku")
-//        @Expose
-//        var sku: Int? = null,
+        @SerializedName("sku")
+        @Expose
+        var sku: Int? = null,
 //
 //        @SerializedName("score")
 //        @Expose

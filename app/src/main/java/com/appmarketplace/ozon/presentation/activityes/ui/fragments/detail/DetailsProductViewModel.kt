@@ -1,9 +1,12 @@
 package com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail
 
 import androidx.lifecycle.MutableLiveData
+import com.appmarketplace.ozon.data.db.ProductDao
 import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
+import com.appmarketplace.ozon.data.remote.modelsDB.ProductDb
 import com.appmarketplace.ozon.data.remote.services.APIKEY3
 import com.appmarketplace.ozon.data.remote.services.APIKEY4
+import com.appmarketplace.ozon.data.utils.Gonfigs.listIds
 import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
 import com.appmarketplace.ozon.domain.modelsUI.CategoryPath
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.BaseViewModel
@@ -38,6 +41,9 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
     @field : Named("bestbuy")
     lateinit var listProductRepository: ListProductRepository
 
+    @Inject
+    lateinit var productDao:ProductDao
+
     val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
     val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
@@ -53,7 +59,7 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                 val data = async {
                     listProductRepository.loadSearchProducts(
                         Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                            mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName()),
+                            mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName(),listIds = listIds),
                             pathId = name.replace(" ","&search="),
                             pageSize = "20",
                             apikey = APIKEY3,
@@ -76,7 +82,7 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                     listProductRepository
                         .loadProducts(
                             Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                                mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName()),
+                                mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName(),listIds = listIds),
                                 pathId = category[category.size-1].id ?: "null",
                                 pageSize = "20",
                                 apikey = APIKEY4,
@@ -87,6 +93,38 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                 withContext(Dispatchers.Main){
                     productsResultList.value = products.await().result
                 }
+            }
+        }
+    }
+
+    fun insertOrDeleteFavoriteProduct(productsItem: OnProductItem) {
+        launch(Dispatchers.IO) {
+            if (productsItem.favoritelIconProduct){
+                productDao?.insert(
+                    ProductDb(
+                        type = productsItem.type.type,
+                        nameOfProduct = productsItem.nameOfProduct,
+                        iconProduct = productsItem.generalIconProductSting,
+                        isFavorite = productsItem.favoritelIconProduct,
+                        productDiscount = productsItem.productDiscount,
+                        isBestseller = productsItem.isBestseller,
+                        priceWithDiscount = productsItem.priceWithDiscount,
+                        priceOlD = productsItem.priceOlD,
+                        goToBasket = productsItem.goToBasket,
+                        shortDescription = productsItem.shortDescription,
+                        longDescription = productsItem.longDescription,
+                        images = productsItem.images,
+                        company = productsItem.company,
+                        color = productsItem.color,
+                        id = productsItem.skuId
+                    )
+                )
+            }else{
+                productDao.delete(
+                    ProductDb(
+                        id = productsItem.skuId
+                    )
+                )
             }
         }
     }

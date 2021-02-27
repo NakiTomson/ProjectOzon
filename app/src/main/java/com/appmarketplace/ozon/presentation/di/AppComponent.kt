@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.di
 
+import com.appmarketplace.ozon.presentation.activityes.MainViewModel
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.AuthorizationViewModel
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.basket.BasketViewModel
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductViewModel
@@ -25,6 +26,7 @@ interface AppComponent {
     fun inject(personalAccountViewModel: PersonalAccountViewModel)
     fun inject(basketViewModel: BasketViewModel)
     fun inject(favoriteViewModel: FavoriteViewModel)
+    fun inject(mainViewModel: MainViewModel)
 
 
 }

@@ -21,6 +21,7 @@ class DataBaseModule {
         return Room.databaseBuilder(context, OzonAppDataBase::class.java, "ozon.db").build()
     }
 
+
     @Singleton
     @Provides
     fun provideUserDao(db: OzonAppDataBase): UserDao {

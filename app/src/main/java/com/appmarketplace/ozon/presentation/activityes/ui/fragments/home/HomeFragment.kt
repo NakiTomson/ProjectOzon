@@ -267,7 +267,7 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
                         override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertFavoriteProduct(productsItem)
+                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
@@ -317,7 +317,7 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
                         override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertFavoriteProduct(productsItem)
+                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
@@ -378,7 +378,7 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
                         override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertFavoriteProduct(productsItem)
+                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
@@ -442,7 +442,7 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
                         override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertFavoriteProduct(productsItem)
+                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 

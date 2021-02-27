@@ -2,15 +2,11 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.appmarketplace.ozon.data.db.OzonAppDataBase
 import com.appmarketplace.ozon.data.db.ProductDao
-import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
 import com.appmarketplace.ozon.data.remote.modelsDB.ProductDb
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.OzonApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -21,10 +17,6 @@ class FavoriteViewModel : ViewModel(), CoroutineScope {
     }
 
 
-    @Inject
-    lateinit var productDao: ProductDao
-
-
     val productsLive: MutableLiveData<List<ProductDb>> = MutableLiveData()
 
     private val job: Job = Job()
@@ -32,17 +24,31 @@ class FavoriteViewModel : ViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
+
+    @Inject
+    lateinit var productDao: ProductDao
+
+
     fun getFavoriteProducts() {
-        if (productsLive.value == null){
-            launch(Dispatchers.IO) {
-                val products = OzonApp.db.productsDao()?.getAll()
-                productsLive.postValue(products)
+        launch(Dispatchers.IO) {
+            val products = productDao?.getAll()
+            withContext(Dispatchers.Main){
+                productsLive.value = products
             }
         }
+
     }
+
+    fun deleteProduct(productsItem: OnProductItem) {
+        launch(Dispatchers.IO) {
+            productDao?.delete(ProductDb(id = productsItem.skuId))
+        }
+    }
+
 
     override fun onCleared() {
         job.cancel()
         super.onCleared()
     }
+
 }

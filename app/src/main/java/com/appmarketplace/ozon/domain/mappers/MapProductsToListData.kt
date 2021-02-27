@@ -14,7 +14,8 @@ class MapProductsToListData<T,M>(
     val type: Type =Type.OnlyImage(),
     val topOffer:String = "",
     val bottomOffer:String = "",
-    val requestName:String = ""
+    val requestName:String = "",
+    val listIds:List<Int>?,
 
 ) :MapperUI<T,M>{
 
@@ -22,7 +23,7 @@ class MapProductsToListData<T,M>(
 
         list as  ProductsModel
 
-        val data = list.products?.let { getProducts(it) }?.let {
+        val data = list.products?.let { getProducts(it,listIds) }?.let {
             OnOfferProductsItem(
                 topStringOffer = topOffer,
                 bottonStringOffer = bottomOffer,
@@ -38,24 +39,22 @@ class MapProductsToListData<T,M>(
         )
     }
 
-    private fun getProducts(products: List<Product>): List<OnProductItem>{
+    private fun getProducts(products: List<Product>, listIds: List<Int>?): List<OnProductItem>{
         val list: MutableList<OnProductItem> = ArrayList()
 
         products.forEach {
-
 
 
             list.add(
                 OnProductItem(
                     type = type,
                     generalIconProductSting = it.image,
-                    favoritelIconProduct = false,
+                    favoritelIconProduct = cheakFavorite(listIds,it.sku ?:0 ),
                     productDiscount = getDiscount(it.salePrice, it.regularPrice),
                     priceWithDiscount = it.salePrice.toString() + " $",
                     priceOlD = it.regularPrice.toString() + " $",
                     goToBasket = true,
                     nameOfProduct = it.name,
-
                     startData = it.startDate,
                     productNew = it.new,
                     activeForSale = it.active,
@@ -65,6 +64,7 @@ class MapProductsToListData<T,M>(
                     images = getlistImages(it),
                     company = it.manufacturer,
                     color = it.color,
+                    skuId = it.sku!!,
                     categoryPath = it.categoryPath?.map { path->
                         CategoryPath(id = path.id, name = path.name)
                     }
@@ -73,6 +73,16 @@ class MapProductsToListData<T,M>(
         }
 
         return list
+    }
+
+    fun cheakFavorite(listIds: List<Int>?, skuid:Int):Boolean{
+
+        listIds?.forEach {
+            if (it == skuid){
+                return true
+            }
+        }
+        return false
     }
 
     fun getlistImages(products: Product):List<String>{

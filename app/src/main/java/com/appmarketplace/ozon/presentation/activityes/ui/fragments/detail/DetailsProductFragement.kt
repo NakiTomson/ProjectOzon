@@ -218,8 +218,7 @@ class DetailsProductFragement : Fragment() {
         listProductsSimilar.adapter = adapterSimilar
         listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
-        setEquivalent(adapterEquivalent)
-        setSimilar(adapterSimilar)
+
 
         adapterSimilar.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
@@ -229,6 +228,22 @@ class DetailsProductFragement : Fragment() {
                 navController.navigate(action)
             }
         }
+
+        adapterEquivalent.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+            override fun onClickHeart(productsItem: OnProductItem) {
+                viewModel.insertOrDeleteFavoriteProduct(productsItem)
+            }
+        }
+
+        adapterSimilar.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+            override fun onClickHeart(productsItem: OnProductItem) {
+                viewModel.insertOrDeleteFavoriteProduct(productsItem)
+            }
+        }
+
+
+        setEquivalent(adapterEquivalent)
+        setSimilar(adapterSimilar)
     }
 
 

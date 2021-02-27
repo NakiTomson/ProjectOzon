@@ -4,7 +4,7 @@ import java.io.Serializable
 
 data class OnProductItem (
 
-    val skuId:Int  = 0,
+    val skuId:Int,
 
     var type:Type  = Type.OnlyImage(),
 
