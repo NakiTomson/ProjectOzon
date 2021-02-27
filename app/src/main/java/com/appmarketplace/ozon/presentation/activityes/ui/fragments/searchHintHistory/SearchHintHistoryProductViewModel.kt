@@ -43,7 +43,7 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
 
     fun getHintsDB(){
         launch(Dispatchers.IO) {
-            val hintslist = productDb.productsDao()?.getAll()
+            val hintslist = productDb.hintProductsDao()?.getAll()
             if (hintslist == null || hintslist.isEmpty()){
                 getHintText()
             }else{
@@ -54,7 +54,7 @@ class SearchHintHistoryProductViewModel : ViewModel(),CoroutineScope {
 
     fun setHintDB(hintProductDB: HintProductDB){
         launch(Dispatchers.IO) {
-            productDb.productsDao()?.insert(hintProductDB)
+            productDb.hintProductsDao()?.insert(hintProductDB)
         }
     }
 

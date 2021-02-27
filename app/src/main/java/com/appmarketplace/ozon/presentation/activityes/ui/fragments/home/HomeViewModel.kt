@@ -1,11 +1,11 @@
 package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
-import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.appmarketplace.ozon.data.db.OzonAppDataBase
+import com.appmarketplace.ozon.data.db.ProductDao
 import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
+import com.appmarketplace.ozon.data.remote.modelsDB.ProductDb
 import com.appmarketplace.ozon.data.remote.services.*
 import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
 import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
@@ -39,6 +39,9 @@ class HomeViewModel() : BaseViewModel() {
 
     @Inject @field : Named("dropbox")
     lateinit var homeRepositoryImplDropBox: HomeRepository
+
+    @Inject
+    lateinit var productDao: ProductDao
 
 
     val bannerListStart:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
@@ -124,7 +127,7 @@ class HomeViewModel() : BaseViewModel() {
             homeRepositoryImplBestBye
                 .loadProducts(
                     Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                        mapper = MapProductsToListData(type = Type.OnlyImage),
+                        mapper = MapProductsToListData(type = Type.OnlyImage()),
                         pathId = HOME_AUDIO,
                         pageSize = "3",
                         apikey = APIKEY2,
@@ -143,7 +146,7 @@ class HomeViewModel() : BaseViewModel() {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = Type.ProductNonName,
+                        type = Type.ProductNonName(),
                         topOffer = "Лучшие предложения!",
                         bottomOffer = "Скидки до  80 % здесь!",
                     ),
@@ -175,7 +178,7 @@ class HomeViewModel() : BaseViewModel() {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = Type.ProductNonName,
+                        type = Type.ProductNonName(),
                         topOffer = "Крутые скидки! 90%"
                     ),
                     pathId = LAPTOPS,
@@ -204,7 +207,7 @@ class HomeViewModel() : BaseViewModel() {
         val products4:Deferred<Results.ResultProduct<OnOfferProductsItem>> = async {
             homeRepositoryImplBestBye.loadProducts(Params.ProductsParam<OnOfferProductsItem,ProductsModel>(
                     mapper = MapProductsToListData(
-                        type = Type.ProductNonName,
+                        type = Type.ProductNonName(),
                         topOffer = "Товары с шок-кешбеком по Ozon.Card",
                         bottomOffer = "Больше товаров тут"
                     ),
@@ -218,6 +221,32 @@ class HomeViewModel() : BaseViewModel() {
         loadingBannerDown()
         withContext(Dispatchers.Main){
             listPoductsLiveData4.value = products4.await().result
+        }
+    }
+
+    fun insertFavoriteProduct(productsItem: OnProductItem) {
+        launch(Dispatchers.IO) {
+            OzonApp.db.productsDao()?.insert(ProductDb(
+                type = productsItem.type.type,
+                nameOfProduct = productsItem.nameOfProduct,
+                iconProduct = productsItem.generalIconProductSting,
+                isFavorite = productsItem.favoritelIconProduct,
+                productDiscount = productsItem.productDiscount,
+                isBestseller = productsItem.isBestseller,
+                priceWithDiscount = productsItem.priceWithDiscount,
+                priceOlD = productsItem.priceOlD,
+                goToBasket = productsItem.goToBasket,
+                shortDescription = productsItem.shortDescription,
+                longDescription = productsItem.longDescription,
+                images = productsItem.images,
+                company = productsItem.company,
+                color = productsItem.color
+            ))
+
+
+            val data =OzonApp.db.productsDao().getAll()
+
+            Log.v("TGYHUJIKO","re $data")
         }
     }
 

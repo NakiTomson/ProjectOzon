@@ -4,19 +4,19 @@ import java.io.Serializable
 
 data class OnProductItem (
 
-    var type:Type  = Type.OnlyImage,
+    val skuId:Int  = 0,
+
+    var type:Type  = Type.OnlyImage(),
 
     val generalIconProduct: Int? = null,
     val generalIconProductSting: String? = null,
-    val favoritelIconProduct: Boolean = false,
+    var favoritelIconProduct: Boolean = false,
     val productDiscount:String? = null,
-    val isBestseller :Boolean= false,
+    var isBestseller :Boolean= false,
     val priceWithDiscount:String? = null,
     val priceOlD:String? = null,
     val goToBasket:Boolean = false,
     val nameOfProduct:String? = null,
-
-
 
     //For Details
 
@@ -39,11 +39,23 @@ data class OnProductItem (
     val color:String? = null,
 
     val categoryPath:List<CategoryPath>? = null,
-):Serializable{
-    sealed class Type():Serializable {
-        object OnlyImage : Type(),Serializable
-        object ProductNonName : Type(),Serializable
-        object ProductWithName : Type(),Serializable
+
+    ):Serializable{
+
+    sealed class Type constructor(open val type:Int = 0):Serializable {
+        class OnlyImage(override val type: Int = 1) : Type(type), Serializable
+        class ProductNonName(override val type: Int = 2) : Type(type),Serializable
+        class ProductWithName(override val type: Int = 3) : Type(type),Serializable
+        class GetType(): Type() {
+            fun getType(type: Int?):Type{
+                return when (type) {
+                    1 -> OnlyImage()
+                    2 -> ProductNonName()
+                    3 -> ProductWithName()
+                    else -> OnlyImage()
+                }
+            }
+        }
     }
 }
 

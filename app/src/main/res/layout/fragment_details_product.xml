@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
 
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/imageDetailViewPager"
             android:layout_width="match_parent"

@@ -11,7 +11,7 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:paddingStart="30dp"
         android:text="Nice"
         android:padding="5dp"
@@ -118,16 +118,16 @@
         android:id="@+id/signUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:gravity="start"
         android:padding="20dp"
         android:text="Sign Up"
-        android:gravity="start"
         android:textColor="@color/custom_color_primary"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toStartOf="@+id/imageSignUp"
-        app:layout_constraintStart_toStartOf="@+id/signIn" />
+        app:layout_constraintStart_toStartOf="@+id/signIn"
+        app:layout_constraintTop_toBottomOf="@+id/signIn" />
 
 
     <ImageView

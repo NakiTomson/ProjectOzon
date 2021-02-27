@@ -11,7 +11,7 @@ import com.appmarketplace.ozon.domain.modelsUI.OnProductItem.Type
 import java.text.DecimalFormat
 
 class MapProductsToListData<T,M>(
-    val type: Type =Type.OnlyImage,
+    val type: Type =Type.OnlyImage(),
     val topOffer:String = "",
     val bottomOffer:String = "",
     val requestName:String = ""
@@ -49,7 +49,7 @@ class MapProductsToListData<T,M>(
                 OnProductItem(
                     type = type,
                     generalIconProductSting = it.image,
-                    favoritelIconProduct = true,
+                    favoritelIconProduct = false,
                     productDiscount = getDiscount(it.salePrice, it.regularPrice),
                     priceWithDiscount = it.salePrice.toString() + " $",
                     priceOlD = it.regularPrice.toString() + " $",

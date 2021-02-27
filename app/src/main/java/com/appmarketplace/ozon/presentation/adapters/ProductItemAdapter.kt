@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
@@ -26,6 +27,9 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
     var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
     var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+
+    var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+
 
     fun setData(list: List<OnProductItem>) {
         listOnProductsByOfferItems?.clear()
@@ -61,15 +65,17 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
 
         fun bind(productsItem: OnProductItem) {
 
-            when(productsItem.type){
-                OnProductItem.Type.OnlyImage ->{
+
+            when(productsItem.type.type){
+
+                OnProductItem.Type.OnlyImage().type ->{
                     setOnlyImage(productsItem)
                 }
-                OnProductItem.Type.ProductNonName ->{
+                OnProductItem.Type.ProductNonName().type ->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                 }
-                OnProductItem.Type.ProductWithName->{
+                OnProductItem.Type.ProductWithName().type->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                     setWithName(productsItem)
@@ -79,6 +85,12 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
             product.setOnClickListener {
                 generalIconProductImageView.transitionName = productsItem.images?.get(0)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
+            }
+            favoritelIconProductImageView.setOnClickListener {
+                productsItem.favoritelIconProduct = true
+                favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
+                setClickHeartProduct?.onClickHeart(productsItem)
+                Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -94,8 +106,10 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
         }
 
         private fun setNonName(productsItem: OnProductItem) {
+
+            favoritelIconProductImageView.visibility = visible
+
             if (productsItem.favoritelIconProduct) {
-                favoritelIconProductImageView.visibility = visible
                 favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
             }
 

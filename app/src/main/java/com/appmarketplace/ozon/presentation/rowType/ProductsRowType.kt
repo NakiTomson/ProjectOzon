@@ -11,10 +11,15 @@ data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int)
 
     var setClickListenerProduct:OnClickProduct? = null
 
+    var setClickHeartProduct: OnClickHeart? = null
+
     interface OnClickProduct{
         fun clickProduct(product: OnProductItem,imageView: ImageView)
     }
 
+    interface OnClickHeart{
+        fun onClickHeart(productsItem: OnProductItem)
+    }
 
     override fun getItemViewType(): Int {
         return RowType.PRODUCTS_ROW_TYPE
@@ -29,7 +34,11 @@ data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int)
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                 setClickListenerProduct?.clickProduct(product,imageView)
             }
-
+        }
+        productionViewHolder.setClickHeartProduct = object :OnClickHeart{
+            override fun onClickHeart(productsItem: OnProductItem) {
+                setClickHeartProduct?.onClickHeart(productsItem)
+            }
         }
     }
 }

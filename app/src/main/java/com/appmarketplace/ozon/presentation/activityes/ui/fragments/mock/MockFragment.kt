@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.appmarketplace.ozon.R
+import com.bumptech.glide.Glide
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -63,6 +64,7 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
         position = args?.position
 
         arrayHistoryList?.let {
+            imageMock.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
             insertHistory(it, position)
         }
@@ -71,7 +73,7 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 
             if (imageUrl.isNotEmpty()){
                 progressBar.visibility = View.VISIBLE
-
+                imageMock.visibility = View.VISIBLE
                 imageMock.apply {
                     transitionName = imageUrl
                     Picasso.with(context)

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
@@ -224,6 +225,8 @@ object ViewHolderFactory {
 
         var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
 
+        var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+
         fun bind(listProducts: List<OnProductItem>,spain:Int){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             val productAdapter = ProductItemAdapter()
@@ -232,10 +235,16 @@ object ViewHolderFactory {
 
             productAdapter.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
 
-
                 override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                     setClickListenerProduct?.clickProduct(product,imageView)
                 }
+            }
+
+            productAdapter.setClickHeartProduct = object:ProductsRowType.OnClickHeart{
+                override fun onClickHeart(productsItem: OnProductItem) {
+                    setClickHeartProduct?.onClickHeart(productsItem)
+                }
+
             }
         }
     }

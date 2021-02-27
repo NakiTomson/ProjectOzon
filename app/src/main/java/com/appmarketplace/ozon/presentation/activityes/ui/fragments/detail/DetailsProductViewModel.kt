@@ -53,7 +53,7 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                 val data = async {
                     listProductRepository.loadSearchProducts(
                         Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                            mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName),
+                            mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName()),
                             pathId = name.replace(" ","&search="),
                             pageSize = "20",
                             apikey = APIKEY3,
@@ -76,7 +76,7 @@ class DetailsProductViewModel() : BaseViewModel(), CoroutineScope {
                     listProductRepository
                         .loadProducts(
                             Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                                mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName),
+                                mapper = MapProductsToListData(type = OnProductItem.Type.ProductWithName()),
                                 pathId = category[category.size-1].id ?: "null",
                                 pageSize = "20",
                                 apikey = APIKEY4,

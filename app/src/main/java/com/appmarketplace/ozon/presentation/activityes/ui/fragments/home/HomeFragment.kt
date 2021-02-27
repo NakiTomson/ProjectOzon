@@ -2,13 +2,14 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -18,8 +19,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
+import com.appmarketplace.ozon.presentation.activityes.MainViewModel
 import com.appmarketplace.ozon.presentation.adapters.*
 import com.appmarketplace.ozon.presentation.rowType.*
+import com.google.firebase.auth.FirebaseAuth
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
@@ -31,6 +34,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
 
+    private lateinit var mainViewModel: MainViewModel
+
     lateinit var navController:NavController
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,6 +46,8 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
         viewModel.startLoading()
 
         val startBannerAdapterViewPager = BannerAdapter()
@@ -77,6 +84,13 @@ class HomeFragment : Fragment() {
             v.onTouchEvent(event)
         }
 
+
+        mainViewModel.liveNavigation.observeOnce(viewLifecycleOwner, Observer {fragment->
+            if (fragment != null){
+                navController.navigate(fragment)
+                mainViewModel.liveNavigation.value = null
+            }
+        })
     }
 
     fun navigateToMock(
@@ -250,6 +264,13 @@ class HomeFragment : Fragment() {
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertFavoriteProduct(productsItem)
+                        }
+                    }
+
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
@@ -267,12 +288,15 @@ class HomeFragment : Fragment() {
 
                     lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
 
-                    val regRowType = RegistrationRowType()
-                    adapterMultiple.setData(regRowType)
 
-                    regRowType.setClickAutorization = object : RegistrationRowType.onClickAutorization{
-                        override fun onClick() {
-                            navController.navigate(R.id.signInFragment)
+                    val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                    if (mAuth.currentUser == null){
+                        val regRowType = RegistrationRowType()
+                        adapterMultiple.setData(regRowType)
+                        regRowType.setClickAutorization = object : RegistrationRowType.onClickAutorization{
+                            override fun onClick() {
+                                navController.navigate(R.id.signInFragment)
+                            }
                         }
                     }
                 }
@@ -290,6 +314,13 @@ class HomeFragment : Fragment() {
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertFavoriteProduct(productsItem)
+                        }
+                    }
+
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
@@ -344,6 +375,13 @@ class HomeFragment : Fragment() {
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
+
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertFavoriteProduct(productsItem)
+                        }
+                    }
+
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
@@ -402,6 +440,12 @@ class HomeFragment : Fragment() {
                     val rowProduct = ProductsRowType(lists.list, 2)
                     adapterMultiple.setData(rowProduct)
 
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertFavoriteProduct(productsItem)
+                        }
+                    }
+
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
@@ -429,5 +473,14 @@ class HomeFragment : Fragment() {
     fun stopLoadingsOneFrame(){
         loadingFrame.visibility = View.GONE
     }
+}
+
+fun <T> MutableLiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    observe(lifecycleOwner, object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            removeObserver(this)
+        }
+    })
 }
 
