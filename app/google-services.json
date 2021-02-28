@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "66770773446",
+    "project_id": "ozon-app-bcad8",
+    "storage_bucket": "ozon-app-bcad8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:66770773446:android:397557dd8cf087efd67ec7",
+        "android_client_info": {
+          "package_name": "com.appmarketplace.ozon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "66770773446-ej7ng96hakfiq5hrgerkkpvmoj6o0vin.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appmarketplace.ozon",
+            "certificate_hash": "013e47c6f52fd33badaf7aa84da701fb21432308"
+          }
+        },
+        {
+          "client_id": "66770773446-0q317qq96mlgs2quv90qdgvp6js3ktjq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmihjLZ2_DP7b6lEm_qel6pKXp6cOOHGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "66770773446-0q317qq96mlgs2quv90qdgvp6js3ktjq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -37,7 +37,7 @@ class RestApiModule {
         })
 
         val logging = HttpLoggingInterceptor()
-        logging.level = HttpLoggingInterceptor.Level.BODY
+        logging.level = HttpLoggingInterceptor.Level.BASIC
         httpClient.addInterceptor(logging)
         return httpClient.build()
     }
@@ -73,7 +73,6 @@ class RestApiModule {
     @Named("dropbox")
     @Singleton
     fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): ServerApi.MarketPlaceService {
-
         return retrofit.create(ServerApi.MarketPlaceService::class.java)
     }
 

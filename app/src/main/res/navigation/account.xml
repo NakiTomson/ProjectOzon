@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account"
+    app:startDestination="@id/personalAccount">
+
+    <fragment
+        android:id="@+id/personalAccount"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.personalAccount.PersonalAccount"
+        android:label="fragment_personal_account"
+        tools:layout="@layout/fragment_personal_account" />
+</navigation>

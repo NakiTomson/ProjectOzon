@@ -1,27 +1,24 @@
 package com.appmarketplace.ozon.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
+import com.appmarketplace.ozon.presentation.rowType.CategoryRowType
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 
 
-class CombinationProductsAdapter(
-) : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
+class CombinationProductsAdapter() : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
 
-    val categroyItemAdapter = CategoryItemAdapter()
+    var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
     private val onboardingItems: MutableList<MutableList<OnBoardingItem>> = mutableListOf(mutableListOf())
 
     fun setData(items: MutableList<MutableList<OnBoardingItem>>) {
         onboardingItems.clear()
         onboardingItems.addAll(items)
         notifyDataSetChanged()
-        notifyInnerAdapter()
     }
 
     fun setItem(position: Int,items: MutableList<OnBoardingItem>) {
@@ -46,19 +43,22 @@ class CombinationProductsAdapter(
     }
 
 
-    fun notifyInnerAdapter(){
-        categroyItemAdapter.notifyDataSetChanged()
-    }
 
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val onCategoryProductsRecyclerView = view.findViewById<RecyclerView>(R.id.onCategoryProductsRecyclerView)
 
         fun bind(onBoardingItem: List<OnBoardingItem>) {
-
+            val categroyItemAdapter = CategoryAdapter()
             categroyItemAdapter.setData(onBoardingItem.toMutableList())
             onCategoryProductsRecyclerView.adapter = categroyItemAdapter
             onCategoryProductsRecyclerView.layoutManager = GridLayoutManager(itemView.context,5)
+
+            categroyItemAdapter.clickOnCategoryItem = object : CategoryRowType.ClickCategoryListener{
+                override fun onClickItem(data: String) {
+                    clickOnCategoryItem?.onClickItem(data)
+                }
+            }
         }
     }
 }

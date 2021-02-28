@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@id/homeFragment">
+
+
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_searchHintProductHomeFragment"
+            app:destination="@id/searchHintProductHomeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_mockFragment"
+            app:destination="@id/mockFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/searchHintProductHomeFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
+        android:label="search_list_product_home_fragment"
+        tools:layout="@layout/fragment_search_hint_history_product" >
+        <argument
+            android:name="requestname"
+            app:argType="string"
+            android:defaultValue="iPhone 10" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productsListFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList.ProductsListFragment"
+        android:label="fragment_products_list"
+        tools:layout="@layout/fragment_products_list" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/mockFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.mock.MockFragment"
+        android:label="fragment_mock"
+        tools:layout="@layout/fragment_mock">
+
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+
+        <argument
+            android:name="videUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="arrayHistory"
+            app:argType="string[]"
+            app:nullable="true"
+            />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+
+
+        <argument
+            android:name="mockGiftImge"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsProductFragement"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragement"
+        android:label="fragment_details_product"
+        tools:layout="@layout/fragment_details_product" >
+        <argument
+            android:name="product"
+            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="transitionName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="deftransition" />
+        <action
+            android:id="@+id/action_detailsProductFragement_to_mockFragment"
+            app:destination="@id/mockFragment" />
+    </fragment>
+
+    <action android:id="@+id/action_global_detailsProductFragement" app:destination="@id/detailsProductFragement"/>
+    <fragment
+        android:id="@+id/makingOrderFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.makingOrder.MakingOrderFragment"
+        android:label="fragment_making_order"
+        tools:layout="@layout/fragment_making_order" />
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" />
+
+
+</navigation>

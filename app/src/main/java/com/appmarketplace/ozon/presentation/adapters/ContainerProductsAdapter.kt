@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.pojo.OnLiveItem
-import com.appmarketplace.ozon.presentation.pojo.OnOfferProductsItem
+import com.appmarketplace.ozon.domain.modelsUI.OnOfferProductsItem
 
 
 class ContainerProductsAdapter(val spain:Int) :
@@ -57,7 +56,6 @@ class ContainerProductsAdapter(val spain:Int) :
 
         fun bind(onProductsByOfferItem: OnOfferProductsItem) {
 
-
             onProductsByOfferItem.topStringOffer?.let {
                 topStringOffer.visibility = View.VISIBLE
                 topStringOffer.text = onProductsByOfferItem.topStringOffer
@@ -71,7 +69,9 @@ class ContainerProductsAdapter(val spain:Int) :
 
 
             prodctsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
-            prodctsRecyclerView.adapter = ProductItemAdapter(onProductsByOfferItem.list)
+            val productAdapter = ProductItemAdapter()
+            productAdapter.setData(onProductsByOfferItem.list)
+            prodctsRecyclerView.adapter = productAdapter
 
         }
     }

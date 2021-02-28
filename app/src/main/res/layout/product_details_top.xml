@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="20sp"
+    android:background="@color/white"
+    android:layout_marginTop="10dp"
+    android:paddingStart="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/sellerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Apple"
+        android:textColor="@color/black_blue"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/priceWithDiscountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_slab_bold"
+        android:gravity="start"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="46 700 ₽"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sellerName">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/priceOlDTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="58 700 ₽"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/priceWithDiscountTextView"
+        app:layout_constraintStart_toEndOf="@+id/priceWithDiscountTextView"
+        app:layout_constraintTop_toBottomOf="@+id/sellerName">
+
+    </TextView>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/priceOlDTextView"
+        app:layout_constraintTop_toTopOf="@+id/priceOlDTextView"
+        app:layout_constraintBottom_toBottomOf="@+id/priceOlDTextView"
+        app:layout_constraintEnd_toEndOf="@+id/priceOlDTextView"
+        >
+
+    </View>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.2"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView">
+
+    </View>
+
+    <TextView
+        android:id="@+id/offerOne"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="Нашли Дешевле?"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageNext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView" />
+
+
+    <ImageButton
+        android:id="@+id/imageNext"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_gravity="end"
+        android:background="@drawable/button_next"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/app_name"
+        android:visibility="visible"
+        android:alpha="0.4"
+        app:layout_constraintBottom_toBottomOf="@+id/offerOne"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView"
+        app:srcCompat="@drawable/ic_right" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:alpha="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerOne"
+        >
+
+    </View>
+
+
+
+
+    <TextView
+        android:id="@+id/nameOfProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Смартфон OnePlus 8 pro /256GB, Синий"
+        android:textColor="@color/black_blue"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerOne">
+
+    </TextView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameOfProduct"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+
+            <RatingBar
+                android:id="@+id/ratingProduct"
+                android:layout_width="wrap_content"
+                android:rating="4"
+                android:paddingBottom="10dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_height="wrap_content"
+                android:stepSize="0.1"
+                android:numStars="5"
+                android:progressTint="@color/custom_color_secondary"
+                android:progressBackgroundTint="@color/custom_color_secondary"
+                android:secondaryProgressTint="@color/custom_color_secondary"
+                android:isIndicator="true"
+                >
+            </RatingBar>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="8 Отзывов"
+                android:padding="5dp"
+                android:textColor="@color/custom_color_primary"
+                >
+
+            </TextView>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardRating"
+        app:layout_constraintStart_toEndOf="@+id/cardRating"
+        app:layout_constraintTop_toBottomOf="@+id/nameOfProduct">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom"
+            android:padding="5dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/question"
+                android:padding="5dp"
+                android:text="  3"
+                android:textSize="15sp"
+                android:textColor="@color/black">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                android:text="3 вопроса"
+                android:textColor="@color/custom_color_primary">
+            </TextView>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/colorTextView"
+        android:text="Цвет:"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:alpha="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardRating"
+        >
+    </TextView>
+
+    <TextView
+        android:id="@+id/currentColor"
+        android:text="Синий"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:textSize="16sp"
+        android:alpha="0.5"
+        app:layout_constraintStart_toEndOf="@+id/colorTextView"
+        app:layout_constraintTop_toBottomOf="@+id/cardRating"
+        >
+    </TextView>
+
+
+    <LinearLayout
+        android:id="@+id/colorsContanier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/colorTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewGray"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="7dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/white"
+            app:rippleColor="@color/white_Light"
+            >
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@color/gray"
+                android:adjustViewBounds="true"
+                app:riv_oval="true"
+                app:riv_mutate_background="true"
+                app:riv_corner_radius="20sp"
+                >
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewRed"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="7dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/white"
+            app:rippleColor="@color/white_Light"
+            >
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@color/red"
+                android:adjustViewBounds="true"
+                app:riv_oval="true"
+                app:riv_corner_radius="20sp"
+                app:riv_mutate_background="true"
+                >
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewBlue"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="7dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/custom_color_primary_light"
+            app:rippleColor="@color/white_Light"
+            >
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@color/custom_color_primary"
+                android:adjustViewBounds="true"
+                app:riv_oval="true"
+                app:riv_corner_radius="20sp"
+                app:riv_mutate_background="true"
+                >
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/colorCardViewBlack"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="7dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/white"
+            app:rippleColor="@color/white_Light"
+            >
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@color/black"
+                android:adjustViewBounds="true"
+                app:riv_oval="true"
+                app:riv_corner_radius="20sp"
+                app:riv_mutate_background="true"
+                >
+
+            </com.makeramen.roundedimageview.RoundedImageView>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/notinfyMeAboutChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_notifications"
+        android:drawablePadding="10dp"
+        android:text="Узнать о снижении цены"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/colorsContanier" />
+
+    <TextView
+        android:id="@+id/inStoke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_check_mark"
+        android:drawablePadding="10dp"
+        android:text="В наличии"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notinfyMeAboutChange" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="30dp"
+        android:alpha="0.2"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inStoke"
+        >
+
+    </View>
+
+
+    <Button
+        android:id="@+id/addToGift"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Подарить"
+        android:background="@drawable/button_wight_light"
+        app:backgroundTint="@null"
+        android:textColor="@color/custom_color_primary"
+        android:textStyle="bold"
+        android:layout_marginEnd="10dp"
+        android:singleLine="true"
+        android:layout_marginTop="10dp"
+        android:drawablePadding="0dp"
+        android:gravity="center"
+
+        app:layout_constraintTop_toBottomOf="@+id/inStoke"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        >
+
+    </Button>
+
+    <Button
+        android:id="@+id/byeOneClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Купить в 1 клик"
+        android:background="@drawable/button_wight_light"
+        app:backgroundTint="@null"
+        android:singleLine="true"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/custom_color_primary"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/addToGift"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        >
+
+    </Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

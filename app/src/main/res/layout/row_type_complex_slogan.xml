@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp">
+
+    <TextView
+        android:id="@+id/topTextMaybeBestzeller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="@font/roboto_slab_bold"
+        android:text="Бестселлер"
+        android:textSize="20sp"
+        android:textColor="@color/custom_color_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/generalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:text="35 900"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/iconGeneralText"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller" />
+
+
+    <ImageButton
+        android:id="@+id/imageNext"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_gravity="end"
+        android:background="@drawable/button_next"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/app_name"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/generalText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:srcCompat="@drawable/ic_right" />
+
+    <TextView
+        android:id="@+id/childGeneralTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="16 442 $"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/generalText"
+        app:layout_constraintStart_toEndOf="@+id/generalText"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:layout_constraintVertical_bias="0.7" />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/red"
+        app:layout_constraintBottom_toBottomOf="@+id/childGeneralTextView"
+        app:layout_constraintEnd_toEndOf="@+id/childGeneralTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/childGeneralTextView"
+        app:layout_constraintTop_toTopOf="@+id/childGeneralTextView">
+    </View>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/generalText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generalText">
+
+    </View>
+
+    <ImageView
+        android:id="@+id/iconGeneralText"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/icon_app_ozon"
+        android:visibility="gone"
+        android:alpha="0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/generalText"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="10dp">
+
+    </ImageView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

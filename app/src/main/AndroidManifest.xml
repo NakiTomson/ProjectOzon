@@ -25,7 +25,7 @@
 
         </activity>
 
-        <activity android:name=".presentation.activityes.main_activity.MainActivity"
+        <activity android:name=".presentation.activityes.MainActivity"
             android:screenOrientation="portrait"
             >
 
@@ -35,8 +35,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
+            <nav-graph android:value="@navigation/home" />
 
         </activity>
+
 
         <meta-data
             android:name="preloaded_fonts"

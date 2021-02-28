@@ -6,36 +6,58 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.pojo.OnProductItem
-import com.squareup.picasso.Callback
+import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
+import com.appmarketplace.ozon.presentation.rowType.ProductsRowType
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.InputStream
 import java.net.URL
+import java.net.URLConnection
 import kotlin.concurrent.thread
 
 
-class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
 
+    var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
+
+    var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+
+    var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+
+    var setClickBasketProduct: ProductsRowType.OnClickHeart? = null
+
+
+    fun setData(list: List<OnProductItem>) {
+        listOnProductsByOfferItems?.clear()
+        listOnProductsByOfferItems?.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun deleteProduct(productsItem: OnProductItem) {
+        listOnProductsByOfferItems?.remove(productsItem)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
         return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        holder.bind(listOnProductsByOfferItems[position])
+        listOnProductsByOfferItems?.get(position)?.let { holder.bind(it) }
     }
 
-    override fun getItemCount() = listOnProductsByOfferItems.size
+    override fun getItemCount() = listOnProductsByOfferItems?.size ?: 0
 
     inner class CategoryOfferItemProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val generalIconProductImageView = itemView.generalIconProductImageView
 
+        val generalIconProductImageView = itemView.generalIconProductImageView
 
         val favoritelIconProductImageView = itemView.favoritelIconProductImageView
         val productDiscountTextViewProzent = itemView.productDiscountTextView
@@ -44,36 +66,90 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
         val priceOlDTextView = itemView.priceOlDTextView
         val buttonAddToBasket = itemView.buttonAddToBasket
         val productItemTextView = itemView.nameOfProduct
+        val product = itemView.product
+
+        val visible = View.VISIBLE
 
         fun bind(productsItem: OnProductItem) {
-            val visible = View.VISIBLE
 
-            productsItem.generalIconProductSting?.let {
 
-                val newurl = URL(productsItem.generalIconProductSting)
+            if (productsItem.productInBasket){
+                buttonAddToBasket.text = "В корзине"
+                buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
+            }
+            buttonAddToBasket.setOnClickListener {
 
-                thread {
-                    val mIcon_val = BitmapFactory.decodeStream(newurl.openConnection().getInputStream())
-                    GlobalScope.launch(Dispatchers.Main) {
-                        generalIconProductImageView.setImageBitmap(mIcon_val)
-                    }
+                if (!productsItem.productInBasket){
+                    Log.v("VTBYUNIM","Net")
+                    productsItem.productInBasket = true
+                    Toast.makeText(itemView.context,"Добавлено в корзину",Toast.LENGTH_SHORT).show()
+                    buttonAddToBasket.text = "В корзине"
+                    buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
+
+                    setClickBasketProduct?.onClickHeart(productsItem)
+                }else{
+                    Log.v("VTBYUNIM","Da")
+                    productsItem.productInBasket = false
+                    buttonAddToBasket.text = "В корзину"
+                    buttonAddToBasket.setBackgroundResource(R.drawable.button_next)
+                    Toast.makeText(itemView.context,"Удалено из корзины",Toast.LENGTH_SHORT).show()
+                    setClickBasketProduct?.onClickHeart(productsItem)
                 }
+            }
 
-                // Не работает 403 Forrible
-//                Picasso.get()
-//                        .load(productsItem.generalIconProductSting)
-//                        .noFade()
-//                        .into(generalIconProductImageView)
+            when(productsItem.type.type){
 
+                OnProductItem.Type.OnlyImage().type ->{
+                    setOnlyImage(productsItem)
+                }
+                OnProductItem.Type.ProductNonName().type ->{
+                    setOnlyImage(productsItem)
+                    setNonName(productsItem)
+                }
+                OnProductItem.Type.ProductWithName().type->{
+                    setOnlyImage(productsItem)
+                    setNonName(productsItem)
+                    setWithName(productsItem)
+                }
+            }
+
+            product.setOnClickListener {
+                generalIconProductImageView.transitionName = productsItem.images?.get(0)
+                setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
+            }
+            favoritelIconProductImageView.setOnClickListener {
+
+                if(!productsItem.favoritelIconProduct){
+                    productsItem.favoritelIconProduct = true
+                    favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
+                    setClickHeartProduct?.onClickHeart(productsItem)
+                    Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
+                }else{
+                    productsItem.favoritelIconProduct = false
+                    favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
+                    setClickHeartProduct?.onClickHeart(productsItem)
+                    Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        private fun setOnlyImage(productsItem: OnProductItem) {
+            productsItem.generalIconProductSting?.let {
+                Picasso.with(itemView.context)
+                    .load(productsItem.generalIconProductSting)
+                    .into(generalIconProductImageView)
             } ?: run {
                 productsItem.generalIconProduct?.let { generalIconProductImageView.setImageResource(it) } ?:
                 kotlin.run{generalIconProductImageView.setImageResource(R.drawable.product_by_offer_exmplae)}
             }
+        }
 
+        private fun setNonName(productsItem: OnProductItem) {
+
+            favoritelIconProductImageView.visibility = visible
 
             if (productsItem.favoritelIconProduct) {
-                favoritelIconProductImageView.visibility = visible
-                favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
+                favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
             }
 
             productsItem.productDiscount?.let {
@@ -90,7 +166,6 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
                     priceWithDiscountTextView.text = productsItem.priceWithDiscount
                     priceWithDiscountTextView.setTextColor(Color.GRAY)
                 }
-
             }
 
             if (productsItem.isBestseller) {
@@ -102,11 +177,23 @@ class ProductItemAdapter(val listOnProductsByOfferItems: List<OnProductItem>) : 
                 buttonAddToBasket.visibility = View.VISIBLE
             }
 
+        }
+
+        private fun setWithName(productsItem: OnProductItem) {
             productsItem.nameOfProduct?.let {
-                productItemTextView.visibility = View.VISIBLE
+                productItemTextView.visibility = visible
                 productItemTextView.text = it
             }
         }
+
     }
+
+
+
+    override fun getItemId(position: Int): Long {
+        return listOnProductsByOfferItems?.get(position)?.hashCode()?.toLong() ?: 0
+    }
+
+
 
 }

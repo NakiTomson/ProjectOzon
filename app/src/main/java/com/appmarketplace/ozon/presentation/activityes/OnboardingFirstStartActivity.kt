@@ -11,14 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.appmarketplace.ozon.R
-import com.appmarketplace.ozon.presentation.activityes.main_activity.MainActivity
-import com.appmarketplace.ozon.presentation.adapters.BoardingItemAdapter
-import com.appmarketplace.ozon.presentation.pojo.OnBoardingItem
+import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
+import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import kotlinx.android.synthetic.main.activity_onboarding_first_start.*
 
 class OnboardingFirstStartActivity : AppCompatActivity() {
 
-    private lateinit var onboardingAdapter:BoardingItemAdapter
+    private lateinit var onboardingAdapter:BannerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +29,7 @@ class OnboardingFirstStartActivity : AppCompatActivity() {
 
 
     private fun setonboardingItems(){
-        onboardingAdapter = BoardingItemAdapter()
-
-
+        onboardingAdapter = BannerAdapter()
 
         onboardingAdapter.setData(
 

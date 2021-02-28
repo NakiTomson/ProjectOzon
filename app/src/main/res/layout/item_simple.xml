@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="80dp"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@color/white"
+    android:id="@+id/rootSimpleItem"
+    android:layout_marginTop="5dp"
+    android:padding="10dp"
+  >
+
+    <ImageView
+        android:id="@+id/imageCatgeory"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_prhone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/namePath"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        android:text="Самртфоны OnePlus"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageCatgeory"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:text="Категория"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf= "@id/namePath"
+        app:layout_constraintTop_toBottomOf="@+id/namePath"
+        >
+
+    </TextView>
+
+    <ImageButton
+        android:id="@+id/imageNextLocation"
+        android:layout_width="70dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:alpha="0.4"
+        android:background="@drawable/button_next"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/ic_right"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

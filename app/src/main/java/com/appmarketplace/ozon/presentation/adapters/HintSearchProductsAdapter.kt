@@ -11,6 +11,11 @@ class HintSearchProductsAdapter (): RecyclerView.Adapter<HintSearchProductsAdapt
 
     var listHits:ArrayList<String> = ArrayList()
 
+    lateinit var hintProductsListener: HintProductsListener
+
+    interface HintProductsListener {
+        fun onHintSelected(hintProduct: String)
+    }
 
     fun setHints(hint: MutableList<String>){
         listHits.clear()
@@ -56,12 +61,25 @@ class HintSearchProductsAdapter (): RecyclerView.Adapter<HintSearchProductsAdapt
         super.setHasStableIds(hasStableIds)
     }
 
-    class ViewHolderHintSearchProducts(itemView: View):RecyclerView.ViewHolder(itemView){
+
+//    inline fun hintProductsListener(onHintSelected:() -> String) {
+//        onHintSelected.invoke()
+//    }
+
+    inline fun hintProductsListener(click: (String) -> Unit): String {
+        return click.invoke("hello").toString()
+    }
+
+    inner class ViewHolderHintSearchProducts(itemView: View):RecyclerView.ViewHolder(itemView){
 
         val texViewHint = itemView.exampleSearchHitns
 
         fun bind(hint: String){
             texViewHint.text = hint
+
+            texViewHint.setOnClickListener {
+                hintProductsListener.onHintSelected(texViewHint.text.toString())
+            }
         }
     }
 }

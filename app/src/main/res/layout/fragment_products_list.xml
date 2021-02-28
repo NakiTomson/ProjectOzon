@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.activityes.ui.fragments.productsList.ProductsListFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/searchToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/custom_color_background_night">
+        <include layout="@layout/toolbar_custom" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/loadingFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        >
+
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="500dp"
+            android:layout_gravity="center"
+            >
+
+        </ProgressBar>
+
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/foundProductsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_height="match_parent"
+       />
+
+
+</FrameLayout>
