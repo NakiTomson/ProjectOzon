@@ -2,9 +2,11 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.home
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.appmarketplace.ozon.data.db.BasketProductDao
 import com.appmarketplace.ozon.data.db.OzonAppDataBase
 import com.appmarketplace.ozon.data.db.ProductDao
 import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
+import com.appmarketplace.ozon.data.remote.modelsDB.BasketProductDb
 import com.appmarketplace.ozon.data.remote.modelsDB.ProductDb
 import com.appmarketplace.ozon.data.remote.services.*
 import com.appmarketplace.ozon.data.utils.Gonfigs.CELL_PHONES
@@ -12,6 +14,7 @@ import com.appmarketplace.ozon.data.utils.Gonfigs.HOME_AUDIO
 import com.appmarketplace.ozon.data.utils.Gonfigs.LAPTOPS
 import com.appmarketplace.ozon.data.utils.Gonfigs.TVS
 import com.appmarketplace.ozon.data.utils.Gonfigs.listIds
+import com.appmarketplace.ozon.data.utils.Gonfigs.listIdsInBusket
 import com.appmarketplace.ozon.domain.mappers.MapListCategoryToListData
 import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
 import com.appmarketplace.ozon.domain.repositories.HomeRepository
@@ -25,6 +28,7 @@ import com.appmarketplace.ozon.domain.modelsUI.OnProductItem.Type
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.math.log
 
 class HomeViewModel() : BaseViewModel() {
 
@@ -43,6 +47,9 @@ class HomeViewModel() : BaseViewModel() {
 
     @Inject
     lateinit var productDao: ProductDao
+
+    @Inject
+    lateinit var baskedDao: BasketProductDao
 
 
 
@@ -73,7 +80,9 @@ class HomeViewModel() : BaseViewModel() {
             when {
                 bannerListStart.value?.data == null -> {
                     val products = productDao.getAll()
+                    val products2 = baskedDao.getAll()
                     listIds = products?.map { it.id }
+                    listIdsInBusket = products2?.map { it.id }
 
                     loadingProductsFoure()
                 }
@@ -132,7 +141,7 @@ class HomeViewModel() : BaseViewModel() {
             homeRepositoryImplBestBye
                 .loadProducts(
                     Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                        mapper = MapProductsToListData(type = Type.OnlyImage(),listIds = listIds),
+                        mapper = MapProductsToListData(type = Type.OnlyImage(),listIds = listIds,listIdsBakset = listIdsInBusket),
                         pathId = HOME_AUDIO,
                         pageSize = "3",
                         apikey = APIKEY2,
@@ -154,7 +163,8 @@ class HomeViewModel() : BaseViewModel() {
                         type = Type.ProductNonName(),
                         topOffer = "Лучшие предложения!",
                         bottomOffer = "Скидки до  80 % здесь!",
-                        listIds = listIds
+                        listIds = listIds,
+                        listIdsBakset = listIdsInBusket
                         ),
                     pathId = CELL_PHONES,
                     pageSize = "6",
@@ -186,7 +196,8 @@ class HomeViewModel() : BaseViewModel() {
                     mapper = MapProductsToListData(
                         type = Type.ProductNonName(),
                         topOffer = "Крутые скидки! 90%",
-                        listIds = listIds
+                        listIds = listIds,
+                        listIdsBakset = listIdsInBusket
                     ),
                     pathId = LAPTOPS,
                     pageSize = "3",
@@ -217,7 +228,8 @@ class HomeViewModel() : BaseViewModel() {
                         type = Type.ProductNonName(),
                         topOffer = "Товары с шок-кешбеком по Ozon.Card",
                         bottomOffer = "Больше товаров тут",
-                        listIds = listIds
+                        listIds = listIds,
+                        listIdsBakset = listIdsInBusket
                     ),
                     pathId = TVS,
                     pageSize = "4",
@@ -265,7 +277,39 @@ class HomeViewModel() : BaseViewModel() {
         }
     }
 
-
+    fun insertOrDeleteBasket(productsItem: OnProductItem) {
+        launch(Dispatchers.IO) {
+            Log.v("TAGAGA","re insert1 ${productsItem.productInBasket}")
+            if (productsItem.productInBasket){
+                Log.v("TAGAGA","re insert ${productsItem.nameOfProduct}")
+                baskedDao.insert(
+                    BasketProductDb(
+                        type = productsItem.type.type,
+                        nameOfProduct = productsItem.nameOfProduct,
+                        iconProduct = productsItem.generalIconProductSting,
+                        isFavorite = productsItem.favoritelIconProduct,
+                        productDiscount = productsItem.productDiscount,
+                        isBestseller = productsItem.isBestseller,
+                        priceWithDiscount = productsItem.priceWithDiscount,
+                        priceOlD = productsItem.priceOlD,
+                        goToBasket = productsItem.goToBasket,
+                        shortDescription = productsItem.shortDescription,
+                        longDescription = productsItem.longDescription,
+                        images = productsItem.images,
+                        company = productsItem.company,
+                        color = productsItem.color,
+                        id = productsItem.skuId
+                    )
+                )
+            }else{
+                baskedDao.delete(
+                    BasketProductDb(
+                        id = productsItem.skuId
+                    )
+                )
+            }
+        }
+    }
 
 
 //    fun startLoadingData(){

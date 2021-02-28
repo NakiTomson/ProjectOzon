@@ -26,6 +26,86 @@ class MapListCategoryToListData<T,M>() : MapperUI<T,M> {
         "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
         "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
         "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
+        "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1",
+        "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=1",
+        "https://www.dropbox.com/s/3oh2dtpcais3pmm/two.png?dl=1",
+        "https://www.dropbox.com/s/s21jitjxbehsu6m/three.png?dl=1",
+        "https://www.dropbox.com/s/rp58pn5csppxveg/foure.png?dl=1",
+        "https://www.dropbox.com/s/dwsgfil13yaqfl6/five.png?dl=1",
+        "https://www.dropbox.com/s/tp5dn122l4fxisz/six.png?dl=1",
+        "https://www.dropbox.com/s/ral28ayfirfeq08/seven.png?dl=1",
+        "https://www.dropbox.com/s/iweu5xow84uzw0q/eight.png?dl=1",
+        "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
         "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1"
     )
 
@@ -38,23 +118,34 @@ class MapListCategoryToListData<T,M>() : MapperUI<T,M> {
             list.categories[i].image = listImagesByCategory[idex]
         }
 
-        val mapperedData = mutableListOf(
 
-            list.categories
-                .take(10)
-                .map {
-                    OnBoardingItem(title = it.name, onBoardingImageUrl = it.image, category = it.id)
-                }.toMutableList(),
+        fun getMapperdata(): MutableList<MutableList<OnBoardingItem>> {
+            if (list.categories.size <= 21){
+                return  mutableListOf(
 
-            list.categories
-                .takeLast(10)
-                .map {
-                    OnBoardingItem(title = it.name, onBoardingImageUrl = it.image, category = it.id)
-                }.toMutableList()
-        )
+                    list.categories
+                        .take(10)
+                        .map {
+                            OnBoardingItem(title = it.name, onBoardingImageUrl = it.image, category = it.id)
+                        }.toMutableList(),
 
+                    list.categories
+                        .takeLast(10)
+                        .map {
+                            OnBoardingItem(title = it.name, onBoardingImageUrl = it.image, category = it.id)
+                        }.toMutableList()
+                )
+            }else{
+                return mutableListOf(
+                    list.categories
+                        .map {
+                            OnBoardingItem(title = it.name, onBoardingImageUrl = it.image, category = it.id)
+                        }.toMutableList()
+                )
+            }
+        }
         val result =
-            Resource(status = Resource.Status.COMPLETED, data = mapperedData as T, exception = null)
+            Resource(status = Resource.Status.COMPLETED, data = getMapperdata() as T, exception = null)
         return result
     }
 

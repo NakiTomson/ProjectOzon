@@ -10,5 +10,60 @@
         android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite.FavoriteFragment"
         android:label="favorite_fragment"
         tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/detailsProductFragement2"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragement"
+        android:label="fragment_details_product"
+        tools:layout="@layout/fragment_details_product">
+
+        <argument
+            android:name="product"
+            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="transitionName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="deftransition" />
+        <action
+            android:id="@+id/action_detailsProductFragement2_to_mockFragment2"
+            app:destination="@id/mockFragment2" />
+    </fragment>
+
+    <action android:id="@+id/action_global_detailsProductFragement2" app:destination="@id/detailsProductFragement2" />
+    <fragment
+        android:id="@+id/mockFragment2"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.mock.MockFragment"
+        android:label="fragment_mock"
+        tools:layout="@layout/fragment_mock">
+
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+
+        <argument
+            android:name="videUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="arrayHistory"
+            app:argType="string[]"
+            app:nullable="true"
+            />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+
+
+        <argument
+            android:name="mockGiftImge"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
 </navigation>

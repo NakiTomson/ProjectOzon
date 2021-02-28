@@ -10,4 +10,10 @@
         android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.catalog.CatalogFragment"
         android:label="fragment_catalog"
         tools:layout="@layout/fragment_catalog" />
+    <fragment
+        android:id="@+id/productsListFragment2"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList.ProductsListFragment"
+        android:label="fragment_products_list"
+        tools:layout="@layout/fragment_products_list" />
+
 </navigation>

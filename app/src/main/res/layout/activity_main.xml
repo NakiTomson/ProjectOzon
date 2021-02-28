@@ -24,7 +24,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/button_next"
         android:gravity="bottom|center"
         android:padding="10dp"
         android:text="В корзину           183 $"

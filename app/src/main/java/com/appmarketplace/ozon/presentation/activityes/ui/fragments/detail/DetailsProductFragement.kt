@@ -1,5 +1,6 @@
 package com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -22,7 +24,6 @@ import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.description.DescriptionFragment
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.description.SpecificationsFragment
-import com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeFragmentDirections
 import com.appmarketplace.ozon.presentation.adapters.BannerAdapter
 import com.appmarketplace.ozon.presentation.adapters.ProductItemAdapter
 import com.appmarketplace.ozon.presentation.adapters.SimpleDataAdapter
@@ -31,8 +32,10 @@ import com.appmarketplace.ozon.presentation.rowType.Resource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.squareup.picasso.Picasso
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_details_product.*
+import kotlinx.android.synthetic.main.fragment_personal_account.*
 import kotlinx.android.synthetic.main.product_details_bottom.*
 import kotlinx.android.synthetic.main.product_details_center.*
 import kotlinx.android.synthetic.main.product_details_top.*
@@ -52,7 +55,11 @@ class DetailsProductFragement : Fragment() {
     val specifications = SpecificationsFragment(this)
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_details_product, container, false)
     }
 
@@ -134,6 +141,24 @@ class DetailsProductFragement : Fragment() {
 
 
 
+        if (detailProduct.productInBasket){
+            activity?.inBasketButton?.setBackgroundResource(R.drawable.button_added)
+        }else{
+            activity?.inBasketButton?.setBackgroundResource(R.drawable.button_next)
+        }
+
+        activity?.inBasketButton?.setOnClickListener {
+            if (detailProduct.productInBasket){
+                detailProduct.productInBasket = false
+                it.setBackgroundResource(R.drawable.button_next)
+            }else{
+                detailProduct.productInBasket = true
+                it.setBackgroundResource(R.drawable.button_added)
+            }
+
+            viewModel.insertOrDeleteBasketProduct(detailProduct)
+        }
+
         val navController =findNavController()
 
         offerOne.setOnClickListener {
@@ -150,19 +175,52 @@ class DetailsProductFragement : Fragment() {
         }
 
         notinfyMeAboutChange.setOnClickListener {
-            Toast.makeText(context,"Уведомление Включено",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Уведомление Включено", Toast.LENGTH_SHORT).show()
         }
 
         addToGift.setOnClickListener {
             val action = DetailsProductFragementDirections.actionDetailsProductFragementToMockFragment(
-                mockGiftImge = detailProduct.images?.get(0) ?:"",
+                mockGiftImge = detailProduct.images?.get(0) ?: "",
                 arrayHistory = null
             )
             navController.navigate(action)
         }
 
+        val mAuth = FirebaseAuth.getInstance()
         byeOneClick.setOnClickListener {
-            navController.navigate(R.id.makingOrderFragment)
+
+            if (mAuth.currentUser != null){
+                val bundle = Bundle()
+                bundle.putString("imageUrl0", detailProduct.generalIconProductSting)
+                bundle.putString("oldPrice", detailProduct.priceOlD)
+                bundle.putString(
+                    "discount", ((detailProduct.priceOlD?.replace("$", "")?.trim())?.toFloat()
+                        ?.minus(
+                            (detailProduct.priceWithDiscount?.replace("$", "")?.trim())!!.toFloat()
+                        )).toString()
+                )
+                bundle.putString("finalPrice", detailProduct.priceWithDiscount)
+
+                navController.navigate(R.id.makingOrderFragment, bundle)
+            }else {
+
+                val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+
+                builder.setTitle("Вы не зарегестрировались")
+
+                builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
+                    .setCancelable(false)
+                    .setPositiveButton("Да") { dialog, id ->
+                        navController.navigate(R.id.signInFragment)
+                    }
+                    .setNegativeButton("Нет") {
+                            dialog, id -> dialog.cancel()
+                    }
+
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.show()
+
+            }
         }
 
 
@@ -189,8 +247,8 @@ class DetailsProductFragement : Fragment() {
         simpleAdapter.setOnClickCategoryListener = object : SimpleDataAdapter.OnClickCategoryListener{
             override fun onClickCategory(path: String) {
                 val bundel:Bundle = Bundle()
-                bundel.putString("category",path)
-                navController.navigate(R.id.productsListFragment,bundel)
+                bundel.putString("category", path)
+                navController.navigate(R.id.productsListFragment, bundel)
             }
         }
 
@@ -201,7 +259,11 @@ class DetailsProductFragement : Fragment() {
 
         val adapterEquivalent  = ProductItemAdapter()
         listProductsEquivalent.adapter = adapterEquivalent
-        listProductsEquivalent.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listProductsEquivalent.layoutManager = LinearLayoutManager(
+            activity,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
 
 
         adapterEquivalent.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
@@ -216,7 +278,11 @@ class DetailsProductFragement : Fragment() {
 
         val adapterSimilar  = ProductItemAdapter()
         listProductsSimilar.adapter = adapterSimilar
-        listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        listProductsSimilar.layoutManager = LinearLayoutManager(
+            activity,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
 
 
 
@@ -260,26 +326,26 @@ class DetailsProductFragement : Fragment() {
 
 
     fun setEquivalent(adapterEquivalent: ProductItemAdapter){
-        viewModel.searchProductsResultList.observe(viewLifecycleOwner, Observer {resource->
-            if (gettingErrors(resource)){
+        viewModel.searchProductsResultList.observe(viewLifecycleOwner, Observer { resource ->
+            if (gettingErrors(resource)) {
                 resource.data?.list?.let { list ->
-                    if (list.isEmpty()) errorhandling("Empty List Equivalent Product",resource)
+                    if (list.isEmpty()) errorhandling("Empty List Equivalent Product", resource)
                     adapterEquivalent.setData(list)
                 }
-            }else{
+            } else {
                 errorhandling("ERROR PRODUCT 1", resource)
             }
         })
     }
 
     fun setSimilar(adapterSimilar: ProductItemAdapter){
-        viewModel.productsResultList.observe(viewLifecycleOwner, Observer {resource->
-            if (gettingErrors(resource)){
+        viewModel.productsResultList.observe(viewLifecycleOwner, Observer { resource ->
+            if (gettingErrors(resource)) {
                 resource.data?.list?.let { list ->
-                    if (list.isEmpty()) errorhandling("Empty List Similar Product",resource)
+                    if (list.isEmpty()) errorhandling("Empty List Similar Product", resource)
                     adapterSimilar.setData(list)
                 }
-            }else{
+            } else {
                 errorhandling("ERROR PRODUCT 1", resource)
             }
         })

@@ -11,6 +11,7 @@ data class OnProductItem (
     val generalIconProduct: Int? = null,
     val generalIconProductSting: String? = null,
     var favoritelIconProduct: Boolean = false,
+    var productInBasket: Boolean = false,
     val productDiscount:String? = null,
     var isBestseller :Boolean= false,
     val priceWithDiscount:String? = null,

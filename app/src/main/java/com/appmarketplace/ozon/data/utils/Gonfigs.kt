@@ -7,6 +7,9 @@ object Gonfigs {
     public final const val CELL_PHONES="pcmcat209400050001"
     public final const val LAPTOPS="abcat0502000"
     public final const val TVS="abcat0101000"
+    public final const val PLAYSTATION="pcmcat295700050012"
 
     var listIds:List<Int>? = listOf()
+    var listIdsInBusket:List<Int>? = listOf()
+
 }

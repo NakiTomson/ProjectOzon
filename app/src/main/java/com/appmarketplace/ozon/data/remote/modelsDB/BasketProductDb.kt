@@ -11,9 +11,9 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 
-@Entity(tableName = "products")
+@Entity(tableName = "basket")
 @TypeConverters(Converters::class)
-data class ProductDb(
+data class BasketProductDb(
 
     var type: Int? = null,
 
@@ -47,38 +47,3 @@ data class ProductDb(
 }
 
 
-
-public class Converters {
-
-    @TypeConverter
-    fun fromString(value: String?): List<String> {
-        val listType: Type? = object : TypeToken<List<String?>?>() {}.type
-        return Gson().fromJson(value, listType)
-    }
-
-    @TypeConverter
-    fun fromArrayList(list: List<String>?): String {
-        val gson = Gson()
-        return gson.toJson(list)
-    }
-
-//    @TypeConverter
-//    fun fromTimestamp(value: String): List<CategoryPath?> {
-//        val listType: Type? = object : TypeToken<List<String>>() {}.type
-//        return Gson().fromJson(value, listType)
-//    }
-//
-//    @TypeConverter
-//    fun dateToTimestamp(date: List<CategoryPath>?): String? {
-//        if (date== null || date.isEmpty()) {
-//            return (null);
-//        }
-//        val gson = Gson()
-//        val type: Type = object : TypeToken<List<CategoryPath>>() {}.type
-//        val json: String = gson.toJson(date, type)
-//
-//        return json
-//    }
-
-
-}

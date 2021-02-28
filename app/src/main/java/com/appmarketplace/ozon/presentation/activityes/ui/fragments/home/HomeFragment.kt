@@ -271,6 +271,13 @@ class HomeFragment : Fragment() {
                         }
                     }
 
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            Log.v("TAGLCICK","CKCUICL1")
+                            viewModel.insertOrDeleteBasket(productsItem)
+                        }
+                    }
+
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
@@ -320,6 +327,13 @@ class HomeFragment : Fragment() {
                             viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
+
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertOrDeleteBasket(productsItem)
+                        }
+                    }
+
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
@@ -381,6 +395,13 @@ class HomeFragment : Fragment() {
                             viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
+
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertOrDeleteBasket(productsItem)
+                        }
+                    }
+
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 
@@ -445,6 +466,12 @@ class HomeFragment : Fragment() {
                             viewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
+                        override fun onClickHeart(productsItem: OnProductItem) {
+                            viewModel.insertOrDeleteBasket(productsItem)
+                        }
+                    }
+
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
 

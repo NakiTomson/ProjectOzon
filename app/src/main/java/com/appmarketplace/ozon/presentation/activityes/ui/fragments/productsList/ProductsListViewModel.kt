@@ -7,6 +7,7 @@ import com.appmarketplace.ozon.data.remote.modelsAPI.ProductsModel
 import com.appmarketplace.ozon.data.remote.modelsDB.ProductDb
 import com.appmarketplace.ozon.data.remote.services.APIKEY1
 import com.appmarketplace.ozon.data.remote.services.APIKEY2
+import com.appmarketplace.ozon.data.utils.Gonfigs
 import com.appmarketplace.ozon.data.utils.Gonfigs.listIds
 import com.appmarketplace.ozon.domain.mappers.MapProductsToListData
 import com.appmarketplace.ozon.domain.repositories.HomeRepository
@@ -54,7 +55,7 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
                 val data = async{
                     listProductRepositoryImpl.loadSearchProducts(
                         Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                            mapper = MapProductsToListData(type = Type.ProductWithName(),listIds = listIds),
+                            mapper = MapProductsToListData(type = Type.ProductWithName(),listIds = listIds,listIdsBakset = Gonfigs.listIdsInBusket),
                             pathId = keyWordOne,
                             pageSize = "100",
                             apikey = APIKEY1,
@@ -76,7 +77,7 @@ class ProductsListViewModel:ViewModel(), CoroutineScope {
                     listProductRepositoryImpl
                         .loadProducts(
                             Params.ProductsParam<OnOfferProductsItem, ProductsModel>(
-                                mapper = MapProductsToListData(type = Type.ProductWithName(),listIds = listIds),
+                                mapper = MapProductsToListData(type = Type.ProductWithName(),listIds = listIds,listIdsBakset = Gonfigs.listIdsInBusket),
                                 pathId = category,
                                 pageSize = "100",
                                 apikey = APIKEY2,

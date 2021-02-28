@@ -12,17 +12,10 @@ import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.rowType.ProductsRowType
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_product.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.net.URL
-import java.net.URLConnection
-import kotlin.concurrent.thread
+import kotlinx.android.synthetic.main.item_horizontal_product.view.*
 
 
-class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductHorizontalItemAdapter() : RecyclerView.Adapter<ProductHorizontalItemAdapter.CategoryOfferItemProductViewHolder>() {
 
     var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
@@ -30,12 +23,17 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
 
     var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
 
-    var setClickBasketProduct: ProductsRowType.OnClickHeart? = null
+    var setOnBasketDelete: ProductsRowType.OnClickHeart? = null
 
 
     fun setData(list: List<OnProductItem>) {
         listOnProductsByOfferItems?.clear()
         listOnProductsByOfferItems?.addAll(list)
+        notifyDataSetChanged()
+    }
+
+    fun setData(item: OnProductItem) {
+        listOnProductsByOfferItems?.add(item)
         notifyDataSetChanged()
     }
 
@@ -45,7 +43,7 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
-        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
+        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_horizontal_product, parent, false))
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
@@ -60,42 +58,18 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
         val generalIconProductImageView = itemView.generalIconProductImageView
 
         val favoritelIconProductImageView = itemView.favoritelIconProductImageView
-        val productDiscountTextViewProzent = itemView.productDiscountTextView
-        val isBestsellerTextView = itemView.isBestsellerTextView
+
         val priceWithDiscountTextView = itemView.priceWithDiscountTextView
         val priceOlDTextView = itemView.priceOlDTextView
-        val buttonAddToBasket = itemView.buttonAddToBasket
         val productItemTextView = itemView.nameOfProduct
         val product = itemView.product
+        val textViewDelete = itemView.textViewDelete
 
         val visible = View.VISIBLE
 
         fun bind(productsItem: OnProductItem) {
 
 
-            if (productsItem.productInBasket){
-                buttonAddToBasket.text = "В корзине"
-                buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
-            }
-            buttonAddToBasket.setOnClickListener {
-
-                if (!productsItem.productInBasket){
-                    Log.v("VTBYUNIM","Net")
-                    productsItem.productInBasket = true
-                    Toast.makeText(itemView.context,"Добавлено в корзину",Toast.LENGTH_SHORT).show()
-                    buttonAddToBasket.text = "В корзине"
-                    buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
-
-                    setClickBasketProduct?.onClickHeart(productsItem)
-                }else{
-                    Log.v("VTBYUNIM","Da")
-                    productsItem.productInBasket = false
-                    buttonAddToBasket.text = "В корзину"
-                    buttonAddToBasket.setBackgroundResource(R.drawable.button_next)
-                    Toast.makeText(itemView.context,"Удалено из корзины",Toast.LENGTH_SHORT).show()
-                    setClickBasketProduct?.onClickHeart(productsItem)
-                }
-            }
 
             when(productsItem.type.type){
 
@@ -113,6 +87,10 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
                 }
             }
 
+
+            textViewDelete.setOnClickListener {
+                setOnBasketDelete?.onClickHeart(productsItem)
+            }
             product.setOnClickListener {
                 generalIconProductImageView.transitionName = productsItem.images?.get(0)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
@@ -121,12 +99,14 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
 
                 if(!productsItem.favoritelIconProduct){
                     productsItem.favoritelIconProduct = true
-                    favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
+
+                    favoritelIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0);
                     setClickHeartProduct?.onClickHeart(productsItem)
                     Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
                 }else{
                     productsItem.favoritelIconProduct = false
-                    favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
+                    favoritelIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike_favorite_products_icon_heart, 0, 0, 0);
+
                     setClickHeartProduct?.onClickHeart(productsItem)
                     Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
                 }
@@ -149,15 +129,15 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
             favoritelIconProductImageView.visibility = visible
 
             if (productsItem.favoritelIconProduct) {
-                favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
+
+                favoritelIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0);
             }
 
             productsItem.productDiscount?.let {
-                productDiscountTextViewProzent.visibility = visible
+
                 priceWithDiscountTextView.visibility = visible
                 priceOlDTextView.visibility = visible
 
-                productDiscountTextViewProzent.text = productsItem.productDiscount
                 priceWithDiscountTextView.text = productsItem.priceWithDiscount
                 priceOlDTextView.text = productsItem.priceOlD
             } ?: run {
@@ -166,15 +146,6 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
                     priceWithDiscountTextView.text = productsItem.priceWithDiscount
                     priceWithDiscountTextView.setTextColor(Color.GRAY)
                 }
-            }
-
-            if (productsItem.isBestseller) {
-                isBestsellerTextView.visibility = View.VISIBLE
-            }
-
-
-            if (productsItem.goToBasket) {
-                buttonAddToBasket.visibility = View.VISIBLE
             }
 
         }

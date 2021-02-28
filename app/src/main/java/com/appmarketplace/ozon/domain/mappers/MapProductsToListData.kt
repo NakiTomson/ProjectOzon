@@ -16,6 +16,7 @@ class MapProductsToListData<T,M>(
     val bottomOffer:String = "",
     val requestName:String = "",
     val listIds:List<Int>?,
+    val listIdsBakset:List<Int>?,
 
 ) :MapperUI<T,M>{
 
@@ -50,6 +51,7 @@ class MapProductsToListData<T,M>(
                     type = type,
                     generalIconProductSting = it.image,
                     favoritelIconProduct = cheakFavorite(listIds,it.sku ?:0 ),
+                    productInBasket = cheakFavorite(listIdsBakset,it.sku ?:0 ),
                     productDiscount = getDiscount(it.salePrice, it.regularPrice),
                     priceWithDiscount = it.salePrice.toString() + " $",
                     priceOlD = it.regularPrice.toString() + " $",

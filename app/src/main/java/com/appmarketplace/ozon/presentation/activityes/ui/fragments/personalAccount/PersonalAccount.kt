@@ -42,6 +42,7 @@ class PersonalAccount : Fragment() {
                 mainViewModel.navigateInHome(R.id.signInFragment)
             }
         }else{
+
             frameAccount.visibility = View.GONE
             viewModel.getUSer(mAuth.currentUser?.email.toString())
             viewModel.userLive.observe(viewLifecycleOwner, Observer {

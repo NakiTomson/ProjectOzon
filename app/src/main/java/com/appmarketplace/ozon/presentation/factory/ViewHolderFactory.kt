@@ -1,6 +1,7 @@
 package com.appmarketplace.ozon.presentation.factory
 
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -227,6 +228,8 @@ object ViewHolderFactory {
 
         var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
 
+        var setClickBasketProduct: ProductsRowType.OnClickHeart? = null
+
         fun bind(listProducts: List<OnProductItem>,spain:Int){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             val productAdapter = ProductItemAdapter()
@@ -244,7 +247,12 @@ object ViewHolderFactory {
                 override fun onClickHeart(productsItem: OnProductItem) {
                     setClickHeartProduct?.onClickHeart(productsItem)
                 }
-
+            }
+            productAdapter.setClickBasketProduct = object :ProductsRowType.OnClickHeart{
+                override fun onClickHeart(productsItem: OnProductItem) {
+                    Log.v("TAGLCICK","CKCUICL3")
+                    setClickBasketProduct?.onClickHeart(productsItem)
+                }
             }
         }
     }

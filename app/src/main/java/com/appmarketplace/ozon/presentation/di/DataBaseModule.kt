@@ -2,10 +2,7 @@ package com.appmarketplace.ozon.presentation.di
 
 import android.content.Context
 import androidx.room.Room
-import com.appmarketplace.ozon.data.db.HintsProductsDao
-import com.appmarketplace.ozon.data.db.OzonAppDataBase
-import com.appmarketplace.ozon.data.db.ProductDao
-import com.appmarketplace.ozon.data.db.UserDao
+import com.appmarketplace.ozon.data.db.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -38,6 +35,13 @@ class DataBaseModule {
     @Provides
     fun provideProductDao(db: OzonAppDataBase): ProductDao {
         return db.productsDao()
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideBuasketProductDao(db: OzonAppDataBase): BasketProductDao {
+        return db.productsBasketDao()
     }
 
 }
