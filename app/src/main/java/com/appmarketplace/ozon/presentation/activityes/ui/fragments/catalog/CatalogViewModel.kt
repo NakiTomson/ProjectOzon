@@ -2,14 +2,10 @@ package com.appmarketplace.ozon.presentation.activityes.ui.fragments.catalog
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.appmarketplace.ozon.data.remote.services.APIKEY1
 import com.appmarketplace.ozon.data.remote.services.APIKEY5
-import com.appmarketplace.ozon.domain.mappers.MapListCategoryToListData
-import com.appmarketplace.ozon.domain.modelsUI.GeneralCategory
 import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 import com.appmarketplace.ozon.domain.repositories.HomeRepository
 import com.appmarketplace.ozon.domain.repositories.Params
-import com.appmarketplace.ozon.domain.repositories.Results
 import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.rowType.Resource
 import kotlinx.coroutines.*
@@ -37,21 +33,13 @@ class CatalogViewModel: ViewModel(), CoroutineScope {
     fun getCatalogProducts() {
         if (categoryProductliveData.value?.data != null) return
         launch(Dispatchers.IO) {
-            val categoryResult: Deferred<Results.ResultCategoryProduct<MutableList<MutableList<OnBoardingItem>>>> =  async {
-                homeRepositoryImplBestBye
-                    .loadCategories(
-                        Params.CategoriesProductParam<MutableList<MutableList<OnBoardingItem>>, GeneralCategory>(
-                            mapper = MapListCategoryToListData(),
-                            pageSize = "100",
-                            apikey = APIKEY5,
-                            page = "1"
-                        )
-                    )
+            val categoryResult =  async {
+                homeRepositoryImplBestBye.loadCategories(
+                    Params.CategoriesProductParams(pageSize = "100", apikey = APIKEY5, page = "1"))
             }
             withContext(Dispatchers.Main){
                 categoryProductliveData.value = categoryResult.await().result
             }
-
         }
 
     }

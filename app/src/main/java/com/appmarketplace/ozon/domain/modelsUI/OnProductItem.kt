@@ -6,7 +6,7 @@ data class OnProductItem (
 
     val skuId:Int,
 
-    var type:Type  = Type.OnlyImage(),
+    var type:Type  = Type.OnlyImage,
 
     val generalIconProduct: Int? = null,
     val generalIconProductSting: String? = null,
@@ -18,6 +18,7 @@ data class OnProductItem (
     val priceOlD:String? = null,
     val goToBasket:Boolean = false,
     val nameOfProduct:String? = null,
+    val inHints:Boolean = true,
 
     //For Details
 
@@ -43,20 +44,10 @@ data class OnProductItem (
 
     ):Serializable{
 
-    sealed class Type constructor(open val type:Int = 0):Serializable {
-        class OnlyImage(override val type: Int = 1) : Type(type), Serializable
-        class ProductNonName(override val type: Int = 2) : Type(type),Serializable
-        class ProductWithName(override val type: Int = 3) : Type(type),Serializable
-        class GetType(): Type() {
-            fun getType(type: Int?):Type{
-                return when (type) {
-                    1 -> OnlyImage()
-                    2 -> ProductNonName()
-                    3 -> ProductWithName()
-                    else -> OnlyImage()
-                }
-            }
-        }
+    sealed class Type constructor():Serializable {
+        object OnlyImage : Type(), Serializable
+        object ProductNonName : Type(), Serializable
+        object ProductWithName : Type(), Serializable
     }
 }
 

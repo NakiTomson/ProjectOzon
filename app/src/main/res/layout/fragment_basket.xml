@@ -9,7 +9,8 @@
     android:background="@color/white_Light"
     tools:context=".presentation.activityes.ui.fragments.catalog.CatalogFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -19,8 +20,17 @@
         tools:context=".presentation.activityes.ui.fragments.catalog.CatalogFragment">
 
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/basketGroup"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:constraint_referenced_ids="basketsRecyclerView,finallyPrice,allPrice,goToMakeOrder"
+            >
+
+        </androidx.constraintlayout.widget.Group>
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mutipleBaketRecyclerView"
+            android:id="@+id/basketsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +41,7 @@
 
 
         <TextView
-            android:id="@+id/textView31"
+            android:id="@+id/finallyPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -42,13 +52,13 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mutipleBaketRecyclerView">
+            app:layout_constraintTop_toBottomOf="@+id/basketsRecyclerView">
 
         </TextView>
 
 
         <TextView
-            android:id="@+id/allMaonu"
+            android:id="@+id/allPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -58,9 +68,9 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView31"
+            app:layout_constraintBottom_toBottomOf="@+id/finallyPrice"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mutipleBaketRecyclerView">
+            app:layout_constraintTop_toBottomOf="@+id/basketsRecyclerView">
 
         </TextView>
 
@@ -74,17 +84,27 @@
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView31">
+            app:layout_constraintTop_toBottomOf="@+id/finallyPrice">
 
         </Button>
 
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/groupEmptyBasket"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="frameBasket"
+            android:visibility="gone"
+            >
+
+        </androidx.constraintlayout.widget.Group>
+
         <LinearLayout
-            android:id="@+id/frameBusket"
+            android:id="@+id/frameBasket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -119,7 +139,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
             <TextView
-                android:id="@+id/textView29"
+                android:id="@+id/startShopping"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -136,7 +156,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listRecomedsProduct"
+            android:id="@+id/listRecommendsProduct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

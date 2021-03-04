@@ -16,25 +16,14 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 class SignInFragment : Fragment() {
 
-
-    private lateinit var viewModel: AuthorizationViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
     }
 
-
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(AuthorizationViewModel::class.java)
 
         val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-
 
         val navController = findNavController()
 
@@ -53,7 +42,6 @@ class SignInFragment : Fragment() {
         imageSignIn.setOnClickListener {
             signIn(mAuth)
         }
-
     }
 
 
@@ -82,5 +70,4 @@ class SignInFragment : Fragment() {
 
             }
     }
-
 }

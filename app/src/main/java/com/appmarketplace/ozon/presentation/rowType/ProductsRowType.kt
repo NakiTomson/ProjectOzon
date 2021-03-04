@@ -10,18 +10,18 @@ import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int) :RowType {
 
 
-    var setClickListenerProduct:OnClickProduct? = null
+    var setClickListenerProduct:OnProductClickListener? = null
 
-    var setClickHeartProduct: OnClickHeart? = null
+    var setClickHeartProduct: OnClickListener? = null
 
-    var setClickBasketProduct: OnClickHeart? = null
+    var setClickBasketProduct: OnClickListener? = null
 
-    interface OnClickProduct{
+    interface OnProductClickListener{
         fun clickProduct(product: OnProductItem,imageView: ImageView)
     }
 
-    interface OnClickHeart{
-        fun onClickHeart(productsItem: OnProductItem)
+    interface OnClickListener{
+        fun onClick(productsItem: OnProductItem)
     }
 
     override fun getItemViewType(): Int {
@@ -32,21 +32,21 @@ data class ProductsRowType(val listProducts: List<OnProductItem>, val spain:Int)
         val productionViewHolder = viewHolder as ViewHolderFactory.ProductViewHolder
         productionViewHolder.bind(listProducts,spain)
 
-        productionViewHolder.setClickListenerProduct = object :OnClickProduct{
+        productionViewHolder.setClickListenerProduct = object :OnProductClickListener{
 
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                 setClickListenerProduct?.clickProduct(product,imageView)
             }
         }
-        productionViewHolder.setClickHeartProduct = object :OnClickHeart{
-            override fun onClickHeart(productsItem: OnProductItem) {
-                setClickHeartProduct?.onClickHeart(productsItem)
+        productionViewHolder.setClickHeartProduct = object :OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                setClickHeartProduct?.onClick(productsItem)
             }
         }
-        productionViewHolder.setClickBasketProduct = object :OnClickHeart{
-            override fun onClickHeart(productsItem: OnProductItem) {
+        productionViewHolder.setClickBasketProduct = object :OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
                 Log.v("TAGLCICK","CKCUICL2")
-                setClickBasketProduct?.onClickHeart(productsItem)
+                setClickBasketProduct?.onClick(productsItem)
             }
         }
     }

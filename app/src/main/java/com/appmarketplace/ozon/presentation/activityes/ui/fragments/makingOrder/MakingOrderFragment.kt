@@ -7,17 +7,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.domain.repositories.DataBaseRepository
+import com.appmarketplace.ozon.presentation.OzonApp
+import com.appmarketplace.ozon.presentation.activityes.MainViewModel
+import com.appmarketplace.ozon.presentation.activityes.MainViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_making_order.*
+import javax.inject.Inject
 
 class MakingOrderFragment : Fragment() {
 
 
-    private lateinit var viewModel: MakingOrderViewModel
+
+
+    init {
+        OzonApp.appComponent.inject(makingOrderFragment = this)
+    }
+
+
+    @Inject
+    lateinit var repository: DataBaseRepository
+
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_making_order, container, false)
@@ -25,13 +44,12 @@ class MakingOrderFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MakingOrderViewModel::class.java)
 
         val mAuth = FirebaseAuth.getInstance()
-        viewModel.getUSer(mAuth.currentUser?.email!!)
+        mainViewModel.getUser(mAuth.currentUser?.email!!)
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.GONE
 
-        viewModel.userLive.observe(viewLifecycleOwner, Observer {user->
+        mainViewModel.userLive.observe(viewLifecycleOwner, Observer {user->
             textView8.text = user.address
             textView13.text = user.name+", "+user.phone
         })
@@ -44,10 +62,6 @@ class MakingOrderFragment : Fragment() {
         val oldPrice = arguments?.getString("oldPrice")
         val discount = arguments?.getString("discount")
         val finalPrice = arguments?.getString("finalPrice")
-//        val arrayImage = arguments?.getStringArray("imagesUrls")
-
-
-
 
         Picasso.with(context)
             .load(imageUrl)

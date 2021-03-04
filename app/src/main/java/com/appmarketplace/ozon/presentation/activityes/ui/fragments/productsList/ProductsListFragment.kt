@@ -1,31 +1,54 @@
 package com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
+import com.appmarketplace.ozon.domain.repositories.DataBaseRepository
+import com.appmarketplace.ozon.domain.repositories.ListProductRepository
+import com.appmarketplace.ozon.presentation.OzonApp
+import com.appmarketplace.ozon.presentation.activityes.*
 import com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeFragmentDirections
 import com.appmarketplace.ozon.presentation.adapters.ProductItemAdapter
 import com.appmarketplace.ozon.presentation.rowType.ProductsRowType
-import com.appmarketplace.ozon.presentation.rowType.Resource
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
+import javax.inject.Inject
+import javax.inject.Named
 
 
 class ProductsListFragment : Fragment() {
 
 
-    private lateinit var viewModel: ProductsListViewModel
 
+    init {
+        OzonApp.appComponent.inject(productsListFragment = this)
+    }
+
+
+    @Inject
+    lateinit var repository: DataBaseRepository
+
+    @Inject
+    @field : Named("bestbuy")
+    lateinit var listProductRepositoryImpl: ListProductRepository
+
+
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
+
+    private val viewModel: ProductsListViewModel by viewModels {
+        ProductsListViewModelFactory(listProductRepositoryImpl)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_products_list, container, false)
@@ -34,22 +57,28 @@ class ProductsListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ProductsListViewModel::class.java)
 
         val navController = findNavController()
+
         foundProductsRecyclerView.layoutManager = GridLayoutManager(activity,3)
         val productsAdapter = ProductItemAdapter()
         productsAdapter.setHasStableIds(true)
         foundProductsRecyclerView.adapter =  productsAdapter
 
 
-
-        productsAdapter.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
-            override fun onClickHeart(productsItem: OnProductItem) {
-                viewModel.insertOrDeleteFavoriteProduct(productsItem)
+        productsAdapter.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
-        productsAdapter.setClickListenerProduct = object :ProductsRowType.OnClickProduct{
+
+        productsAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                mainViewModel.insertOrDeleteBasket(productsItem)
+            }
+        }
+
+        productsAdapter.setClickListenerProduct = object :ProductsRowType.OnProductClickListener{
 
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                 val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
@@ -96,7 +125,6 @@ class ProductsListFragment : Fragment() {
         })
 
 
-
         searchTextInput?.setOnTouchListener { v, event ->
             if (navController.currentDestination?.id != R.id.searchHintProductHomeFragment){
                 val keywords = searchTextInput.text.toString().trim().replace(" ", "&search=")
@@ -111,18 +139,9 @@ class ProductsListFragment : Fragment() {
     }
 
     fun stopLoadingsOneFrame(){
-        loadingFrame.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
 
-    fun <T> gettingErrors(resource: Resource<T>): Boolean {
-        return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)
-    }
-
-    fun <T> errorhandling(name: String, resource: Resource<T>) {
-        Log.v(name, "${resource.exception?.message}")
-        Log.v(name, "${resource.exception}")
-        Log.v(name, "${resource.status}")
-    }
 
 }

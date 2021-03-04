@@ -1,8 +1,6 @@
 package com.appmarketplace.ozon.data.db
 
 import androidx.room.*
-
-import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
 import com.appmarketplace.ozon.data.remote.modelsDB.UserDB
 
 
@@ -13,7 +11,7 @@ interface UserDao {
     fun getAll(): List<UserDB>?
 
     @Query("SELECT * FROM user WHERE mail == :login")
-    fun getUser(login:String):UserDB
+    fun getUser(login: String):UserDB
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

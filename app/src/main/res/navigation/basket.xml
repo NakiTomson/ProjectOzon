@@ -13,7 +13,7 @@
         />
     <fragment
         android:id="@+id/detailsProductFragement3"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragement"
+        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragment"
         android:label="fragment_details_product"
         tools:layout="@layout/fragment_details_product">
 

@@ -5,33 +5,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.data.remote.modelsDB.UserDB
+import com.appmarketplace.ozon.domain.repositories.DataBaseRepository
+import com.appmarketplace.ozon.presentation.OzonApp
+import com.appmarketplace.ozon.presentation.activityes.MainViewModel
+import com.appmarketplace.ozon.presentation.activityes.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+import javax.inject.Inject
 
 class SignUpFragment : Fragment() {
 
+    init {
+        OzonApp.appComponent.inject(signUpFragment = this)
+    }
 
-    private lateinit var viewModel: AuthorizationViewModel
+    @Inject
+    lateinit var repository: DataBaseRepository
+
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(AuthorizationViewModel::class.java)
-
 
         val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-
 
         signUp.setOnClickListener {
 
@@ -56,13 +68,9 @@ class SignUpFragment : Fragment() {
                 .addOnCompleteListener{ task->
                     when{
                         task.isSuccessful ->{
-                            viewModel.setUser(
-                                UserDB(nameUser,phone,login,password,addresDelivery)
-                            )
-                            viewModel.liveInsert.observe(viewLifecycleOwner, Observer {
-                                findNavController().popBackStack()
-                                requireActivity().bottomNavigationView.selectedItemId = R.id.account
-                            })
+                            mainViewModel.setUser(UserDB(nameUser,phone,login,password,addresDelivery))
+                            findNavController().popBackStack()
+                            requireActivity().bottomNavigationView.selectedItemId = R.id.account
                         }
                         else ->{
                             Toast.makeText(activity, "Error SignUp", Toast.LENGTH_SHORT).show()
@@ -71,8 +79,6 @@ class SignUpFragment : Fragment() {
                 }
         }
     }
-
-
 
     fun checkInput(
         email: String,

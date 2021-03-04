@@ -27,20 +27,20 @@ class DataBaseModule {
 
     @Singleton
     @Provides
-    fun provideHintDao(db: OzonAppDataBase): HintsProductsDao {
+    fun provideHintDao(db: OzonAppDataBase): HintProductDao {
         return db.hintProductsDao()
     }
 
     @Singleton
     @Provides
-    fun provideProductDao(db: OzonAppDataBase): ProductDao {
+    fun provideProductDao(db: OzonAppDataBase): FavoriteProductDao {
         return db.productsDao()
     }
 
 
     @Singleton
     @Provides
-    fun provideBuasketProductDao(db: OzonAppDataBase): BasketProductDao {
+    fun provideBuasketProductDao(db: OzonAppDataBase): InBasketDao {
         return db.productsBasketDao()
     }
 

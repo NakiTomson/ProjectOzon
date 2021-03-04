@@ -11,9 +11,9 @@ import com.appmarketplace.ozon.data.remote.modelsDB.UserDB
 @Database(entities = [HintProductDB::class,UserDB::class,ProductDb::class,BasketProductDb::class], version = 1)
 abstract class OzonAppDataBase : RoomDatabase() {
 
-    abstract fun hintProductsDao(): HintsProductsDao
+    abstract fun hintProductsDao(): HintProductDao
     abstract fun userDao(): UserDao
-    abstract fun productsDao(): ProductDao
-    abstract fun productsBasketDao(): BasketProductDao
+    abstract fun productsDao(): FavoriteProductDao
+    abstract fun productsBasketDao(): InBasketDao
 }
 

@@ -1,9 +1,6 @@
 package com.appmarketplace.ozon.data.remote.modelsDB
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.appmarketplace.ozon.domain.modelsUI.CategoryPath
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.google.gson.Gson
@@ -37,8 +34,6 @@ data class BasketProductDb(
 
 
     val color: String? = null,
-
-//    val categoryPath: List<CategoryPath>? = null,
 
     @PrimaryKey
     val id: Int

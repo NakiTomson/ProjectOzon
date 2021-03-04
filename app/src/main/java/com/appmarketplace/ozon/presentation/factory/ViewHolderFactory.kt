@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.appmarketplace.ozon.R
@@ -224,11 +223,11 @@ object ViewHolderFactory {
 
         val productsRecyclerView = itemView.productsByOfferItemRecyclerView
 
-        var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+        var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
 
-        var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+        var setClickHeartProduct: ProductsRowType.OnClickListener? = null
 
-        var setClickBasketProduct: ProductsRowType.OnClickHeart? = null
+        var setClickBasketProduct: ProductsRowType.OnClickListener? = null
 
         fun bind(listProducts: List<OnProductItem>,spain:Int){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
@@ -236,22 +235,22 @@ object ViewHolderFactory {
             productAdapter.setData(listProducts)
             productsRecyclerView.adapter = productAdapter
 
-            productAdapter.setClickListenerProduct = object : ProductsRowType.OnClickProduct{
+            productAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
 
                 override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                     setClickListenerProduct?.clickProduct(product,imageView)
                 }
             }
 
-            productAdapter.setClickHeartProduct = object:ProductsRowType.OnClickHeart{
-                override fun onClickHeart(productsItem: OnProductItem) {
-                    setClickHeartProduct?.onClickHeart(productsItem)
+            productAdapter.setClickHeartProduct = object:ProductsRowType.OnClickListener{
+                override fun onClick(productsItem: OnProductItem) {
+                    setClickHeartProduct?.onClick(productsItem)
                 }
             }
-            productAdapter.setClickBasketProduct = object :ProductsRowType.OnClickHeart{
-                override fun onClickHeart(productsItem: OnProductItem) {
+            productAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
+                override fun onClick(productsItem: OnProductItem) {
                     Log.v("TAGLCICK","CKCUICL3")
-                    setClickBasketProduct?.onClickHeart(productsItem)
+                    setClickBasketProduct?.onClick(productsItem)
                 }
             }
         }

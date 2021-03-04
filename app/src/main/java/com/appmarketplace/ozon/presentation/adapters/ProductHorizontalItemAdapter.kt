@@ -1,8 +1,6 @@
 package com.appmarketplace.ozon.presentation.adapters
 
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +17,11 @@ class ProductHorizontalItemAdapter() : RecyclerView.Adapter<ProductHorizontalIte
 
     var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+    var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+    var setClickHeartProduct: ProductsRowType.OnClickListener? = null
 
-    var setOnBasketDelete: ProductsRowType.OnClickHeart? = null
+    var setOnBasketDelete: ProductsRowType.OnClickListener? = null
 
 
     fun setData(list: List<OnProductItem>) {
@@ -70,17 +68,16 @@ class ProductHorizontalItemAdapter() : RecyclerView.Adapter<ProductHorizontalIte
         fun bind(productsItem: OnProductItem) {
 
 
+            when(productsItem.type){
 
-            when(productsItem.type.type){
-
-                OnProductItem.Type.OnlyImage().type ->{
+                OnProductItem.Type.OnlyImage ->{
                     setOnlyImage(productsItem)
                 }
-                OnProductItem.Type.ProductNonName().type ->{
+                OnProductItem.Type.ProductNonName ->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                 }
-                OnProductItem.Type.ProductWithName().type->{
+                OnProductItem.Type.ProductWithName->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                     setWithName(productsItem)
@@ -89,7 +86,7 @@ class ProductHorizontalItemAdapter() : RecyclerView.Adapter<ProductHorizontalIte
 
 
             textViewDelete.setOnClickListener {
-                setOnBasketDelete?.onClickHeart(productsItem)
+                setOnBasketDelete?.onClick(productsItem)
             }
             product.setOnClickListener {
                 generalIconProductImageView.transitionName = productsItem.images?.get(0)
@@ -101,13 +98,13 @@ class ProductHorizontalItemAdapter() : RecyclerView.Adapter<ProductHorizontalIte
                     productsItem.favoritelIconProduct = true
 
                     favoritelIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0);
-                    setClickHeartProduct?.onClickHeart(productsItem)
+                    setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
                 }else{
                     productsItem.favoritelIconProduct = false
                     favoritelIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike_favorite_products_icon_heart, 0, 0, 0);
 
-                    setClickHeartProduct?.onClickHeart(productsItem)
+                    setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
                 }
             }

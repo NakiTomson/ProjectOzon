@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.fragment_specifications.*
 
 class DescriptionFragment(val contextDetail: ViewModelStoreOwner) : Fragment() {
 
-
-
     private lateinit var viewModel: DetailsProductViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -30,11 +28,7 @@ class DescriptionFragment(val contextDetail: ViewModelStoreOwner) : Fragment() {
         viewModel = ViewModelProvider(contextDetail).get(DetailsProductViewModel::class.java)
 
         viewModel.descriptions.observe(viewLifecycleOwner, Observer {
-            Log.v("SETETTE","ser des $it")
-            textDescription.setText(it ?: "Null")
+            textDescription.text = it ?: "Null"
         })
-
     }
-
-
 }

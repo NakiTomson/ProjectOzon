@@ -1,6 +1,5 @@
 package com.appmarketplace.ozon.presentation.adapters
 
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,24 +12,17 @@ import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
 import com.appmarketplace.ozon.presentation.rowType.ProductsRowType
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.io.InputStream
-import java.net.URL
-import java.net.URLConnection
-import kotlin.concurrent.thread
 
 
 class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
 
     var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.OnClickProduct? = null
+    var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.OnClickHeart? = null
+    var setClickHeartProduct: ProductsRowType.OnClickListener? = null
 
-    var setClickBasketProduct: ProductsRowType.OnClickHeart? = null
+    var setClickBasketProduct: ProductsRowType.OnClickListener? = null
 
 
     fun setData(list: List<OnProductItem>) {
@@ -86,27 +78,27 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
                     buttonAddToBasket.text = "В корзине"
                     buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
 
-                    setClickBasketProduct?.onClickHeart(productsItem)
+                    setClickBasketProduct?.onClick(productsItem)
                 }else{
                     Log.v("VTBYUNIM","Da")
                     productsItem.productInBasket = false
                     buttonAddToBasket.text = "В корзину"
                     buttonAddToBasket.setBackgroundResource(R.drawable.button_next)
                     Toast.makeText(itemView.context,"Удалено из корзины",Toast.LENGTH_SHORT).show()
-                    setClickBasketProduct?.onClickHeart(productsItem)
+                    setClickBasketProduct?.onClick(productsItem)
                 }
             }
 
-            when(productsItem.type.type){
+            when(productsItem.type){
 
-                OnProductItem.Type.OnlyImage().type ->{
+                OnProductItem.Type.OnlyImage ->{
                     setOnlyImage(productsItem)
                 }
-                OnProductItem.Type.ProductNonName().type ->{
+                OnProductItem.Type.ProductNonName ->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                 }
-                OnProductItem.Type.ProductWithName().type->{
+                OnProductItem.Type.ProductWithName->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                     setWithName(productsItem)
@@ -122,12 +114,12 @@ class ProductItemAdapter() : RecyclerView.Adapter<ProductItemAdapter.CategoryOff
                 if(!productsItem.favoritelIconProduct){
                     productsItem.favoritelIconProduct = true
                     favoritelIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
-                    setClickHeartProduct?.onClickHeart(productsItem)
+                    setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
                 }else{
                     productsItem.favoritelIconProduct = false
                     favoritelIconProductImageView.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
-                    setClickHeartProduct?.onClickHeart(productsItem)
+                    setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
                 }
             }

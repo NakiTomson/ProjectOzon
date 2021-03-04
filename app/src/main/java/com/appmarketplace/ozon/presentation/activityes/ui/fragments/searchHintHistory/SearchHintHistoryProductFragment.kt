@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -18,14 +20,31 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.data.remote.modelsDB.HintProductDB
+import com.appmarketplace.ozon.domain.repositories.DataBaseRepository
+import com.appmarketplace.ozon.presentation.OzonApp
+import com.appmarketplace.ozon.presentation.activityes.MainViewModel
+import com.appmarketplace.ozon.presentation.activityes.MainViewModelFactory
 import com.appmarketplace.ozon.presentation.adapters.HintSearchProductsAdapter
 import kotlinx.android.synthetic.main.fragment_search_hint_history_product.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
+import javax.inject.Inject
 
 
 class SearchHintHistoryProductFragment : Fragment() {
 
-    private lateinit var viewModel: SearchHintHistoryProductViewModel
+
+    init {
+        OzonApp.appComponent.inject(searchHintHistoryProductFragment = this)
+    }
+
+
+    @Inject
+    lateinit var repository: DataBaseRepository
+
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_search_hint_history_product, container, false)
@@ -33,9 +52,6 @@ class SearchHintHistoryProductFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(SearchHintHistoryProductViewModel::class.java)
-        viewModel.getHintsDB()
 
 
         val navController = findNavController()
@@ -70,8 +86,12 @@ class SearchHintHistoryProductFragment : Fragment() {
         }
 
 
-        viewModel.liveDataHints.observe(viewLifecycleOwner, Observer { data ->
-            adapterHints.setHints(data.map { it.nameRequset }.toMutableList())
+        mainViewModel.hintProducts?.observe(viewLifecycleOwner, Observer { data ->
+            if(data.isEmpty()){
+                adapterHints.setHints(mutableListOf("Tv's","iPhone 12 Pro Max", "Samsung"))
+            }else{
+                adapterHints.setHints(data.map { it.nameRequset }.toMutableList())
+            }
         })
 
 
@@ -79,7 +99,7 @@ class SearchHintHistoryProductFragment : Fragment() {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
                 if (event.action === KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                     if (searchTextInput.text.length > 2) {
-                        viewModel.setHintDB(HintProductDB(searchTextInput.text.toString()))
+                        mainViewModel.insertOrDeleteHintsProduct(searchTextInput.text.toString())
                         startSearchWordRequest(searchTextInput.text.toString(), navController)
                     } else {
                         Toast.makeText(activity, "Слишком короткий запрос", Toast.LENGTH_SHORT).show()

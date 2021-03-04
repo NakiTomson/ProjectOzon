@@ -2,11 +2,11 @@ package com.appmarketplace.ozon.domain.repositories
 
 
 import com.appmarketplace.ozon.data.remote.services.*
+import com.appmarketplace.ozon.domain.mappers.Mapper
 import com.appmarketplace.ozon.presentation.rowType.Resource
 import com.appmarketplace.ozon.domain.modelsUI.OnBoardingItem
 
-class HomeRepository(val marketPlaceApi: ServerApi.MarketPlaceService)
-    : AppRepository<Params, Results> {
+class HomeRepository(val marketPlaceApi: ServerApi.MarketPlaceService,val mapper: Mapper) {
 
 
     suspend fun getBannerStart(): Results.ResultBanner {
@@ -28,26 +28,34 @@ class HomeRepository(val marketPlaceApi: ServerApi.MarketPlaceService)
 
 
 
-    suspend fun<T,M> loadCategories(params: Params.CategoriesProductParam<T,M>): Results.ResultCategoryProduct<T> {
+    suspend fun loadCategories(params: Params): Results.ResultCategoryProduct {
         return try {
             val listGeneralCategory = marketPlaceApi
                 .getCategoryProducts(params.pageSize, params.page,params.apikey)
                 .await()
-            Results.ResultCategoryProduct( params.mapper.map(listGeneralCategory as M))
+
+            Results.ResultCategoryProduct(
+                mapper.mapCategoriesFromApiToUiCategories(listGeneralCategory)
+            )
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
     }
 
 
-    override suspend fun<T,M> loadProducts(params: Params.ProductsParam<T,M>):Results.ResultProduct<T> {
+    suspend fun loadProducts(params: Params):Results.ResultProduct {
         return try {
 
             val listProducts = marketPlaceApi
                 .getProductsByCategory(params.pathId, params.pageSize, params.page, params.apikey)
                 .await()
 
-            Results.ResultProduct(params.mapper.map(listProducts as M))
+            Results.ResultProduct(
+                mapper.mapProductFromApiToUiProduct(
+                    listProducts,
+                    type = params.typeProduct
+                )
+            )
 
         } catch (e: Exception) {
             Results.ResultProduct( Resource(status = Resource.Status.ERROR, data = null, exception = e))

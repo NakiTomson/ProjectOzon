@@ -119,19 +119,15 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
         loadingProgress(strings)
 
         rightHistory.setOnClickListener {
-//            valueMove.postValue(true)
-//            nextHistory(strings,++position)
+
         }
         leftHistory.setOnClickListener {
-//            valueMove.postValue(true)
-//            nextHistory(strings,postion -1)
+
         }
 
     }
 
     val valueProcess:MutableLiveData<Int> = MutableLiveData()
-
-
 
     fun loadingProgress(strings: Array<String>) {
 
@@ -179,14 +175,6 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
         p0: YouTubePlayer.Provider?,
         p1: YouTubeInitializationResult?
     ) {
-        if (p1!!.isUserRecoverableError) {
-            Log.v("CRTYBU", "re ${p1.isUserRecoverableError}")
-            Log.v("CRTYBU", "re ${p1.name}")
-        } else {
-            Log.v("CRTYBU", "re ${p1.isUserRecoverableError}")
-            Log.v("CRTYBU", "re ${p1.name}")
-
-        }
     }
 
 }

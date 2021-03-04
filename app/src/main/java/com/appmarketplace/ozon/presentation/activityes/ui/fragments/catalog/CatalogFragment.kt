@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
+import com.appmarketplace.ozon.presentation.activityes.errorhandling
+import com.appmarketplace.ozon.presentation.activityes.gettingErrors
 import com.appmarketplace.ozon.presentation.adapters.CombinationProductsAdapter
 import com.appmarketplace.ozon.presentation.adapters.MultipleTypesAdapter
 import com.appmarketplace.ozon.presentation.rowType.CategoryRowType
@@ -26,7 +28,6 @@ class CatalogFragment : Fragment() {
 
 
     lateinit var  catalogViewModel:CatalogViewModel
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_catalog, container, false)
@@ -52,9 +53,7 @@ class CatalogFragment : Fragment() {
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
 
-                    Log.v("FRTGYHUI","e ${lists[0][0].category}")
                     combinationProductAdapterViewPager.setData(lists)
-
                     val categoryRowType = CategoryRowType(combinationProductAdapterViewPager)
                     adapterMultiple.setData(categoryRowType)
 
@@ -71,18 +70,5 @@ class CatalogFragment : Fragment() {
                 errorhandling("ERROR CATEGORY", resource)
             }
         })
-
-
-    }
-
-    fun <T> gettingErrors(resource: Resource<T>): Boolean {
-        return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)
-    }
-
-    fun <T> errorhandling(name: String, resource: Resource<T>) {
-        Log.v(name, "${resource.exception?.message}")
-        Log.v(name, "${resource.exception}")
-        Log.v(name, "${resource.exception?.stackTrace}")
-        Log.v(name, "${resource.status}")
     }
 }

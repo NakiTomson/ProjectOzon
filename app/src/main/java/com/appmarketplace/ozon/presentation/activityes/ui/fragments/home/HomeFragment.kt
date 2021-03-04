@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -19,7 +18,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.appmarketplace.ozon.R
 import com.appmarketplace.ozon.domain.modelsUI.OnProductItem
+import com.appmarketplace.ozon.domain.repositories.DataBaseRepository
+import com.appmarketplace.ozon.presentation.OzonApp
 import com.appmarketplace.ozon.presentation.activityes.MainViewModel
+import com.appmarketplace.ozon.presentation.activityes.MainViewModelFactory
+import com.appmarketplace.ozon.presentation.activityes.errorhandling
+import com.appmarketplace.ozon.presentation.activityes.gettingErrors
 import com.appmarketplace.ozon.presentation.adapters.*
 import com.appmarketplace.ozon.presentation.rowType.*
 import com.google.firebase.auth.FirebaseAuth
@@ -28,13 +32,23 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 class HomeFragment : Fragment() {
 
-    private lateinit var viewModel: HomeViewModel
+    init {
+        OzonApp.appComponent.inject(homeFragment = this)
+    }
 
-    private lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var repository: DataBaseRepository
+
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
+
+    private lateinit var viewModel: HomeViewModel
 
     lateinit var navController:NavController
 
@@ -46,19 +60,15 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-
         viewModel.startLoading()
 
         val startBannerAdapterViewPager = BannerAdapter()
         val centerBannerAdapterViewPager = BannerAdapter()
         val downBannerAdapterViewPager = BannerAdapter()
-
         val combinationProductAdapterViewPager = CombinationProductsAdapter()
         val liveItemAdapterViewPager = LiveItemAdapter()
-
-
         val adapterMultiple = MultipleTypesAdapter()
+
 
         navController = findNavController()
 
@@ -83,28 +93,17 @@ class HomeFragment : Fragment() {
             v.performClick()
             v.onTouchEvent(event)
         }
-
-
-        mainViewModel.liveNavigation.observeOnce(viewLifecycleOwner, Observer {fragment->
-            if (fragment != null){
-                navController.navigate(fragment)
-                mainViewModel.liveNavigation.value = null
-            }
-        })
     }
 
     fun navigateToMock(
-        mockImage: String = "",
-        liveStrem: String = "",
+        mockImage: String = "", liveStrem: String = "",
         extras: FragmentNavigator.Extras,
         listOf: List<String>? = null,
-        position: Int? = null
-    ){
+        position: Int? = null) {
 
         val bundle = Bundle()
         bundle.putString("arg1", mockImage)
         bundle.putString("arg2", liveStrem)
-
 
         val action = HomeFragmentDirections.actionHomeFragmentToMockFragment(
             imageUrl = mockImage,
@@ -112,27 +111,15 @@ class HomeFragment : Fragment() {
             arrayHistory = listOf?.toTypedArray(),
             position = position ?: 0
         )
-
         navController.navigate(action, extras)
     }
 
 
-
-    fun setupAdapter(adapterMultiple: MultipleTypesAdapter) {
+    private fun setupAdapter(adapterMultiple: MultipleTypesAdapter) {
         adapterMultiple.setHasStableIds(true)
         mutipleHomeRecyclerView.layoutManager =  LinearLayoutManager(context)
         mutipleHomeRecyclerView.adapter = adapterMultiple
         mutipleHomeRecyclerView.setHasFixedSize(false)
-    }
-
-    fun <T> gettingErrors(resource: Resource<T>): Boolean {
-        return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)
-    }
-
-    fun <T> errorhandling(name: String, resource: Resource<T>) {
-        Log.v(name, "${resource.exception?.message}")
-        Log.v(name, "${resource.exception}")
-        Log.v(name, "${resource.status}")
     }
 
     fun startBannerGettingData(
@@ -143,27 +130,19 @@ class HomeFragment : Fragment() {
         viewModel.bannerListStart.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v(
-                        "TAGTIME",
-                        "re1 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
-                    )
-
+                    Log.v("TAGTIME", "re1 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
                     startBannerAdapterViewPager.setData(lists)
                     val banner = BannerRowType(startBannerAdapterViewPager)
                     adapterMultiple.setData(banner)
 
                     banner.bannerClickListener = object : BannerRowType.BannerListener {
-                        override fun onClickBanner(
-                            imageUrl: String,
-                            imageOnboarding: RoundedImageView
-                        ) {
+                        override fun onClickBanner(imageUrl: String, imageOnboarding: RoundedImageView) {
                             val extras = FragmentNavigatorExtras(
                                 imageOnboarding to imageUrl
                             )
                             navigateToMock(mockImage = imageUrl, extras = extras)
                         }
                     }
-
                 }
             } else {
                 errorhandling("ERROR BOARDING START", resource)
@@ -175,19 +154,13 @@ class HomeFragment : Fragment() {
         adapterMultiple: MultipleTypesAdapter,
         combinationProductAdapterViewPager: CombinationProductsAdapter
     ) {
-
         viewModel.categoryProductliveData.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v(
-                        "TAGTIME",
-                        "re2 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
-                    )
+                    Log.v("TAGTIME", "re2 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
                     combinationProductAdapterViewPager.setData(lists)
-
                     val categoryRowType = CategoryRowType(combinationProductAdapterViewPager)
                     adapterMultiple.setData(categoryRowType)
-
                     categoryRowType.clickOnCategoryItem =
                         object : CategoryRowType.ClickCategoryListener {
                             override fun onClickItem(data: String) {
@@ -204,23 +177,14 @@ class HomeFragment : Fragment() {
     }
 
     fun historyGettingData(adapterMultiple: MultipleTypesAdapter) {
-
         viewModel.historyItemsLiveData.observe(viewLifecycleOwner, Observer { resource ->
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
-                    Log.v(
-                        "TAGTIME",
-                        "re3 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}"
-                    )
-
+                    Log.v("TAGTIME", "re3 ${SimpleDateFormat("HH:mm:ss.SSS").format(Calendar.getInstance().time)}")
                     val historyData = HistoryRowType(lists)
                     adapterMultiple.setData(historyData)
                     historyData.historClickListener = object : HistoryRowType.HistoryListener {
-                        override fun onClickHistory(
-                            listOf: List<String>,
-                            position: Int,
-                            imageView: ImageView
-                        ) {
+                        override fun onClickHistory(listOf: List<String>, position: Int, imageView: ImageView) {
                             val extras = FragmentNavigatorExtras(
                                 imageView to listOf[position]
                             )
@@ -265,20 +229,19 @@ class HomeFragment : Fragment() {
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
-                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
-                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            Log.v("TAGLCICK","CKCUICL1")
-                            viewModel.insertOrDeleteBasket(productsItem)
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickListener {
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteBasket(productsItem)
                         }
                     }
 
-                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                             val extras = FragmentNavigatorExtras(
@@ -293,8 +256,7 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-                    lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
-
+                    lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
 
                     val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
                     if (mAuth.currentUser == null){
@@ -322,20 +284,20 @@ class HomeFragment : Fragment() {
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
-                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
-                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteBasket(productsItem)
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickListener {
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteBasket(productsItem)
                         }
                     }
 
 
-                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                             val extras = FragmentNavigatorExtras(
@@ -349,7 +311,7 @@ class HomeFragment : Fragment() {
                             navController.navigate(action,extras)
                         }
                     }
-                    lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
+                    lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                 }
             } else {
                 errorhandling("ERROR PRODUCT 2", resource)
@@ -367,7 +329,6 @@ class HomeFragment : Fragment() {
                     adapterMultiple.setData(banner)
                     banner.bannerClickListener = object : BannerRowType.BannerListener {
                         override fun onClickBanner(imageUrlBest: String, imageOnboarding: RoundedImageView) {
-
                             val extras = FragmentNavigatorExtras(
                                 imageOnboarding to imageUrlBest
                             )
@@ -390,26 +351,24 @@ class HomeFragment : Fragment() {
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
-                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
 
-                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteBasket(productsItem)
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickListener {
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteBasket(productsItem)
                         }
                     }
 
-
-                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                             val extras = FragmentNavigatorExtras(
                                 imageView to product.nameOfProduct!!
                             )
-
                             val action = HomeFragmentDirections.actionGlobalDetailsProductFragement(
                                 product = product,
                                 transitionName = product.nameOfProduct
@@ -418,7 +377,7 @@ class HomeFragment : Fragment() {
                         }
                     }
 
-                    lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
+                    lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                 }
             } else {
                 errorhandling("ERROR Produt 3", resource)
@@ -461,19 +420,19 @@ class HomeFragment : Fragment() {
                     val rowProduct = ProductsRowType(lists.list, 2)
                     adapterMultiple.setData(rowProduct)
 
-                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickHeart{
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteFavoriteProduct(productsItem)
+                    rowProduct.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
                         }
                     }
-                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickHeart {
-                        override fun onClickHeart(productsItem: OnProductItem) {
-                            viewModel.insertOrDeleteBasket(productsItem)
+                    rowProduct.setClickBasketProduct = object : ProductsRowType.OnClickListener {
+                        override fun onClick(productsItem: OnProductItem) {
+                            mainViewModel.insertOrDeleteBasket(productsItem)
                         }
                     }
 
 
-                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnClickProduct {
+                    rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                             val extras = FragmentNavigatorExtras(
@@ -487,7 +446,7 @@ class HomeFragment : Fragment() {
                             navController.navigate(action,extras)
                         }
                     }
-                    lists.bottonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
+                    lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
                     stopLoadingsOneFrame()
                 }
             } else {
@@ -500,14 +459,5 @@ class HomeFragment : Fragment() {
     fun stopLoadingsOneFrame(){
         loadingFrame.visibility = View.GONE
     }
-}
-
-fun <T> MutableLiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-    observe(lifecycleOwner, object : Observer<T> {
-        override fun onChanged(t: T?) {
-            observer.onChanged(t)
-            removeObserver(this)
-        }
-    })
 }
 

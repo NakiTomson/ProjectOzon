@@ -61,10 +61,10 @@ class ContainerProductsAdapter(val spain:Int) :
                 topStringOffer.text = onProductsByOfferItem.topStringOffer
             }
 
-            onProductsByOfferItem.bottonStringOffer?.let {
+            onProductsByOfferItem.boltonStringOffer?.let {
                 imageNextAllFilms.visibility = View.VISIBLE
                 bottonStringOffer.visibility = View.VISIBLE
-                bottonStringOffer.text = onProductsByOfferItem.bottonStringOffer
+                bottonStringOffer.text = onProductsByOfferItem.boltonStringOffer
             }
 
 
