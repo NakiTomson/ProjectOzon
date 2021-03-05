@@ -13,7 +13,7 @@
     android:paddingEnd="10dp">
 
     <TextView
-        android:id="@+id/topTextMaybeBestzeller"
+        android:id="@+id/topTextMaybeBestseller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -35,7 +35,7 @@
         android:textSize="25sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/iconGeneralText"
-        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller" />
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestseller" />
 
 
     <ImageButton
@@ -49,7 +49,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/generalText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestseller"
         app:srcCompat="@drawable/ic_right" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/generalText"
         app:layout_constraintStart_toEndOf="@+id/generalText"
-        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestseller"
         app:layout_constraintVertical_bias="0.7" />
 
 
@@ -92,11 +92,12 @@
         android:id="@+id/iconGeneralText"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/icon_app_ozon"
+        android:src="@drawable/icon_market_place_app"
         android:visibility="gone"
         android:alpha="0.5"
+        android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="@+id/generalText"
-        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestzeller"
+        app:layout_constraintTop_toBottomOf="@+id/topTextMaybeBestseller"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="10dp">
 

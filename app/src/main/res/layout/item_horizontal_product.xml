@@ -17,11 +17,12 @@
         android:layout_gravity="center"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
+        android:contentDescription="@string/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/gideLineCanter"
 
-        app:srcCompat="@drawable/product_by_offer_exmplae" />
+        app:srcCompat="@drawable/product_by_offer_example" />
 
 
     <TextView
@@ -103,41 +104,39 @@
     </View>
 
     <TextView
-        android:id="@+id/favoritelIconProductImageView"
+        android:id="@+id/favoriteIconProductImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:layout_marginTop="10dp"
-        android:padding="5dp"
+        android:padding="10dp"
         android:drawablePadding="10dp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:drawableStart="@drawable/ic_unlike_favorite_products_icon_heart"
         app:layout_constraintStart_toStartOf="@+id/view6"
         app:layout_constraintTop_toBottomOf="@+id/view6"
         android:text="В избранное"
-        />
+        app:drawableStartCompat="@drawable/ic_unlike_favorite_products_icon_heart" />
 
     <TextView
         android:id="@+id/textViewDelete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_delete"
         android:drawablePadding="10dp"
-        android:padding="5dp"
+        android:padding="10dp"
         android:text="Удалить"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/favoritelIconProductImageView3"
-        app:layout_constraintStart_toEndOf="@+id/favoritelIconProductImageView"
-        app:layout_constraintTop_toTopOf="@+id/favoritelIconProductImageView" />
+        app:layout_constraintEnd_toStartOf="@+id/favoriteIconProductImageView3"
+        app:layout_constraintStart_toEndOf="@+id/favoriteIconProductImageView"
+        app:layout_constraintTop_toTopOf="@+id/favoriteIconProductImageView"
+        app:drawableStartCompat="@drawable/ic_delete" />
 
     <TextView
-        android:id="@+id/favoritelIconProductImageView3"
+        android:id="@+id/favoriteIconProductImageView3"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:drawableEnd="@drawable/ic_count_products"
         android:drawablePadding="10dp"
         android:padding="5dp"
         android:text="1 шт"
@@ -146,7 +145,8 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/textViewDelete"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/favoritelIconProductImageView" />
+        app:layout_constraintTop_toTopOf="@+id/favoriteIconProductImageView"
+        app:drawableEndCompat="@drawable/ic_count_products" />
 
 
     <View

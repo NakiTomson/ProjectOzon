@@ -7,35 +7,90 @@
 
     <fragment
         android:id="@+id/basketFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.basket.BasketFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.basket.BasketFragment"
         android:label="BasketFragment"
         tools:layout="@layout/fragment_basket"
         />
     <fragment
-        android:id="@+id/detailsProductFragement3"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragment"
+        android:id="@+id/detailsProductFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductFragment"
         android:label="fragment_details_product"
         tools:layout="@layout/fragment_details_product">
 
         <argument
             android:name="product"
-            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:argType="com.app.marketPlace.domain.modelsUI.OnProductItem"
             app:nullable="true"
             android:defaultValue="@null" />
-        <argument
-            android:name="transitionName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="deftransition" />
+
+        <action
+            android:id="@+id/action_detailsProductFragment_to_mockFragment"
+            app:destination="@id/mockFragment" />
 
 
     </fragment>
 
 
-    <action android:id="@+id/action_global_detailsProductFragement3" app:destination="@id/detailsProductFragement3" />
+    <action android:id="@+id/action_global_detailsProductFragment" app:destination="@id/detailsProductFragment" />
+
     <fragment
-        android:id="@+id/makingOrderFragment2"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.makingOrder.MakingOrderFragment"
+        android:id="@+id/makingOrderFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.makingOrder.MakingOrderFragment"
         android:label="fragment_making_order"
         tools:layout="@layout/fragment_making_order" />
+
+
+    <fragment
+        android:id="@+id/mockFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.mock.MockFragment"
+        android:label="fragment_mock"
+        tools:layout="@layout/fragment_mock">
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+
+        <argument
+            android:name="videoUrl"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="arrayHistory"
+            app:argType="string[]"
+            app:nullable="true"
+            />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+
+
+        <argument
+            android:name="mockGiftImage"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productsListFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.productsList.ProductsListFragment"
+        android:label="fragment_products_list"
+        tools:layout="@layout/fragment_products_list" />
+
+    <fragment
+        android:id="@+id/searchHintProductHomeFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
+        android:label="fragment_search_hint_history_product"
+        tools:layout="@layout/fragment_search_hint_history_product">
+
+        <argument
+            android:name="requestName"
+            app:argType="string"
+            android:defaultValue="iPhone 10" />
+
+    </fragment>
+
+
 </navigation>

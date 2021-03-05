@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white_Light"
-    tools:context=".presentation.activityes.ui.fragments.detail.DetailsProductFragment">
+    tools:context=".presentation.activities.ui.fragments.detail.DetailsProductFragment">
 
 
     <LinearLayout

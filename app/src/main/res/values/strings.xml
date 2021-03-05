@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectOzon</string>
+    <string name="app_name">MarketPlace</string>
     <string name="get_started">Get started</string>
 
 
@@ -9,6 +9,44 @@
     <string name="skip">Skip</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="connectionStop">Ооps Соединение прервано</string>
+    <string name="defValue">defValue</string>
+    <string name="address_delivery">Address Delivery</string>
+    <string name="priceWithDiscount">%1$s $</string>
+
+    <string name="inBasket">В корзину          %1$s</string>
+    <string name="totalCost">Общая стоймость</string>
+    <string name="allPrice">9 460 $</string>
+    <string name="goToTheDesign">Перейти к оформлению</string>
+    <string name="basketIsEmpty">Корзина пуста</string>
+    <string name="useTheSearch">Воспользуйтесь поиском, что бы найти все что нужно</string>
+    <string name="startShopping">Начать покупки</string>
+    <string name="likedIsEmpty">Понравишееся пуста</string>
+    <string name="deliveryMethod">Способ доставки</string>
+    <string name="toChange">Изменить</string>
+    <string name="pointMarketplace">Пункт MarketPlace</string>
+    <string name="exampleAddress">г.Москва, ш Хорошевское, д. 90</string>
+    <string name="exampleNameAndPhone">Рыжов Дмитрий, 79854603578</string>
+    <string name="storage">Срок хранения заказа - 5 дней</string>
+    <string name="youCanPick">Можно забрать завтра 1 марта</string>
+    <string name="warehouse">Склад Market (Московская обл.) ⋅ 1 товар ⋅ 600 гр</string>
+    <string name="delivery">Доставка в Пункт MarketPlace</string>
+    <string name="when">завтра, 1 марта, бесплатно</string>
+    <string name="yourOrder">Ваш заказ</string>
+    <string name="products">Товары</string>
+    <string name="_3_490">3 490 $</string>
+    <string name="shippingCost">Стоймость доставки</string>
+    <string name="_0">0 $</string>
+    <string name="total">Итого</string>
+    <string name="_2000">2000 $</string>
+    <string name="payOnline">Оплатить онлайн</string>
+    <string name="iSendTheGift">Кому Отправить подарок?</string>
+    <string name="writeTheRecipientsName">Напишите имя получателя подрака, чтобы мы могли его провильно оформить</string>
+    <string name="aboutTheRecipient">О получателе</string>
+    <string name="name">Имя Получателя *</string>
+    <string name="next">Даллее</string>
 
 
 </resources>

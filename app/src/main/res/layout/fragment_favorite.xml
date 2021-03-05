@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.activityes.ui.fragments.favorite.`Favorite Fragment`">
+    tools:context=".presentation.activities.ui.fragments.favorite.FavoriteFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Понравишееся пуста"
+            android:text="@string/likedIsEmpty"
             android:layout_gravity="center"
             android:textColor="@color/black"
             android:textSize="25sp"
@@ -53,7 +53,7 @@
             android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Воспользуйтесь поиском, что бы найти все что нужно"
+            android:text="@string/useTheSearch"
             android:textColor="@color/black"
             android:padding="5dp"
             android:layout_gravity="center"
@@ -66,7 +66,7 @@
             android:id="@+id/startShopping"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Начать покупки"
+            android:text="@string/startShopping"
             android:padding="20sp"
             android:textSize="20sp"
             android:layout_gravity="center"

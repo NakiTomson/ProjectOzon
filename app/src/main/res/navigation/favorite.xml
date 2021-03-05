@@ -7,34 +7,31 @@
 
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.favorite.FavoriteFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.favorite.FavoriteFragment"
         android:label="favorite_fragment"
         tools:layout="@layout/fragment_favorite" />
     <fragment
-        android:id="@+id/detailsProductFragement2"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragment"
+        android:id="@+id/detailsProductFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductFragment"
         android:label="fragment_details_product"
         tools:layout="@layout/fragment_details_product">
 
         <argument
             android:name="product"
-            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:argType="com.app.marketPlace.domain.modelsUI.OnProductItem"
             app:nullable="true"
             android:defaultValue="@null" />
-        <argument
-            android:name="transitionName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="deftransition" />
+
         <action
-            android:id="@+id/action_detailsProductFragement2_to_mockFragment2"
-            app:destination="@id/mockFragment2" />
+            android:id="@+id/action_detailsProductFragment_to_mockFragment"
+            app:destination="@id/mockFragment" />
     </fragment>
 
-    <action android:id="@+id/action_global_detailsProductFragement2" app:destination="@id/detailsProductFragement2" />
+    <action android:id="@+id/action_global_detailsProductFragment" app:destination="@id/detailsProductFragment" />
+
     <fragment
-        android:id="@+id/mockFragment2"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.mock.MockFragment"
+        android:id="@+id/mockFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.mock.MockFragment"
         android:label="fragment_mock"
         tools:layout="@layout/fragment_mock">
 
@@ -45,7 +42,7 @@
             />
 
         <argument
-            android:name="videUrl"
+            android:name="videoUrl"
             app:argType="string"
             android:defaultValue=""
             />
@@ -61,9 +58,33 @@
 
 
         <argument
-            android:name="mockGiftImge"
+            android:name="mockGiftImage"
             app:argType="string"
             android:defaultValue="" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/makingOrderFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.makingOrder.MakingOrderFragment"
+        android:label="fragment_making_order"
+        tools:layout="@layout/fragment_making_order" />
+
+    <fragment
+        android:id="@+id/productsListFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.productsList.ProductsListFragment"
+        android:label="fragment_products_list"
+        tools:layout="@layout/fragment_products_list" />
+    <fragment
+        android:id="@+id/searchHintProductHomeFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
+        android:label="fragment_search_hint_history_product"
+        tools:layout="@layout/fragment_search_hint_history_product" >
+
+        <argument
+            android:name="requestName"
+            app:argType="string"
+            android:defaultValue="iPhone 10" />
+
     </fragment>
 
 </navigation>
