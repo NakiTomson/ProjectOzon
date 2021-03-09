@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/detailNestedScroll"
     android:background="@color/white_Light"
     tools:context=".presentation.activities.ui.fragments.detail.DetailsProductFragment">
 

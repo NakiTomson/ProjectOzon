@@ -66,11 +66,13 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
         fun bind(productsItem: OnProductItem) {
 
+            generalIconProductImageView.transitionName = productsItem.generalIconProductSting
 
             if (productsItem.productInBasket){
                 buttonAddToBasket.text = "В корзине"
                 buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
             }
+
             buttonAddToBasket.setOnClickListener {
 
                 if (!productsItem.productInBasket){
@@ -106,9 +108,17 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             }
 
             product.setOnClickListener {
-                generalIconProductImageView.transitionName = productsItem.images?.get(0)
+                generalIconProductImageView.transitionName = productsItem.generalIconProductSting
+
+                productsItem.images?.remove(productsItem.generalIconProductSting!!)
+
+                val list = productsItem.images
+                productsItem.images?.clear()
+                productsItem.images?.add(productsItem.generalIconProductSting!!)
+//                productsItem.images?.addAll(list!!)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
+
             favoriteIconProductImageView.setOnClickListener {
 
                 if(!productsItem.favoriteIconProduct){

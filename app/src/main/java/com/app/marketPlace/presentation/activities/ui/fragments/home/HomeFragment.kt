@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
@@ -115,10 +114,24 @@ class HomeFragment : Fragment() {
     }
 
 
+//    PositionalDataSource
+//    PageKeyedDataSource
+//    ItemKeyedDataSource
+
     private fun setupAdapter(adapterMultiple: MultipleTypesAdapter) {
         adapterMultiple.setHasStableIds(true)
         multipleHomeRecyclerView.layoutManager =  LinearLayoutManager(context)
         multipleHomeRecyclerView.adapter = adapterMultiple
+
+        multipleHomeRecyclerView.apply {
+            adapter = adapterMultiple
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+        }
         multipleHomeRecyclerView.setHasFixedSize(false)
     }
 
@@ -243,10 +256,15 @@ class HomeFragment : Fragment() {
 
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.generalIconProductSting!!
+                            )
+
                             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                                 product = product
                             )
-                            navController.navigate(action)
+                            navController.navigate(action,extras)
                         }
                     }
 
@@ -295,10 +313,14 @@ class HomeFragment : Fragment() {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.generalIconProductSting!!
+                            )
+
                             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                                 product = product
                             )
-                            navController.navigate(action)
+                            navController.navigate(action,extras)
                         }
                     }
                     lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
@@ -356,10 +378,13 @@ class HomeFragment : Fragment() {
                     rowProduct.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.generalIconProductSting!!
+                            )
                             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                                 product = product
                             )
-                            navController.navigate(action)
+                            navController.navigate(action,extras)
                         }
                     }
 
@@ -422,10 +447,14 @@ class HomeFragment : Fragment() {
 
                         override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
+                            val extras = FragmentNavigatorExtras(
+                                imageView to product.generalIconProductSting!!
+                            )
+
                             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                                 product = product
                             )
-                            navController.navigate(action)
+                            navController.navigate(action,extras)
                         }
                     }
                     lists.boltonStringOffer?.let { adapterMultiple.setData(BottomSloganRowType(it)) }
@@ -441,5 +470,6 @@ class HomeFragment : Fragment() {
     private fun stopLoadingsOneFrame(){
         loadingFrame.visibility = View.GONE
     }
+
 }
 

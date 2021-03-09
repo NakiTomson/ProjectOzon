@@ -3,16 +3,19 @@ package com.app.marketPlace.presentation.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.modelsUI.OnBoardingItem
+import com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductFragment
 import com.app.marketPlace.presentation.rowType.BannerRowType
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import java.util.*
 
 
-class BannerAdapter : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
+class BannerAdapter(val fragment: Fragment? = null) : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
 
 
     @Volatile private var countPosition = -1
@@ -71,11 +74,28 @@ class BannerAdapter : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolde
                     .noFade()
                     .into(imageOnBoarding)
             }else{
-                imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
+                imageOnBoarding.transitionName = onBoardingItem.transitionName
+
+
+//                Glide.with(itemView.context)
+//                    .load(onBoardingItem.onBoardingImageUrl)
+//                    .apply(RequestOptions().dontTransform())
+//                    .into(imageOnBoarding)
+
+
                 Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
-                    .resize(500,500)
+//                    .centerCrop()
                     .centerInside()
-                    .into(imageOnBoarding)
+                    .resize(500,500)
+//                    .fit()
+                    .into(imageOnBoarding,object :Callback{
+                        override fun onSuccess() {
+                            fragment?.startPostponedEnterTransition()
+                        }
+                        override fun onError() {
+                        }
+                    })
+
             }
 
             onBoardingItem.title?.let{
@@ -87,6 +107,7 @@ class BannerAdapter : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolde
                 textDescription.visibility = View.VISIBLE
                 textDescription?.text = it
             }
+
 
             imageOnBoarding.setOnClickListener {
                 imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl

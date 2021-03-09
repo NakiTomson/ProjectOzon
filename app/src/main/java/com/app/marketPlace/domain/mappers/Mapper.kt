@@ -156,7 +156,7 @@ class Mapper {
         return false
     }
 
-    private fun getListImages(products: Product):List<String>{
+    private fun getListImages(products: Product):MutableList<String>{
         val imagesList:MutableList<String> = ArrayList()
 
         products.largeFrontImage?.let {

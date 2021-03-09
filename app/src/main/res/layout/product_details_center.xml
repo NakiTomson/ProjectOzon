@@ -170,7 +170,7 @@
 
 
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frameDescriptionContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -179,7 +179,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tabsLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         >
-    </FrameLayout>
+    </androidx.fragment.app.FragmentContainerView>
 
 
 

@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_mock.*
 import kotlinx.coroutines.*
 
 
-class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
+class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializedListener {
 
     var API_YOUTUBE_KEY = "AIzaSyCkso3lU92eEjOHnhn6alaowRkD6i3gGXU"
 
@@ -35,18 +35,11 @@ class MockFragment : Fragment(), YouTubePlayer.OnInitializedListener {
 
     var position = 0
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        return inflater.inflate(R.layout.fragment_mock, container, false)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
+        super.onActivityCreated(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         youtube = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
 
         activity?.bottomNavigationView?.visibility = View.GONE

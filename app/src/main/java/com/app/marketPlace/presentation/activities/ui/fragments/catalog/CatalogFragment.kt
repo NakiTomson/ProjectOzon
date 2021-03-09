@@ -37,6 +37,7 @@ class CatalogFragment : Fragment() {
 
         val combinationProductAdapterViewPager = CombinationProductsAdapter()
         val adapterMultiple = MultipleTypesAdapter()
+
         adapterMultiple.setHasStableIds(true)
         multipleHomeRecyclerViewCatalog.layoutManager =  LinearLayoutManager(context)
         multipleHomeRecyclerViewCatalog.adapter = adapterMultiple

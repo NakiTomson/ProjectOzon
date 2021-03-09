@@ -23,7 +23,7 @@ data class BasketProductDb(
 
     val longDescription: String? = null,
 
-    val images: List<String>? = null,
+    val images: MutableList<String>? = null,
 
     val company: String? = null,
 

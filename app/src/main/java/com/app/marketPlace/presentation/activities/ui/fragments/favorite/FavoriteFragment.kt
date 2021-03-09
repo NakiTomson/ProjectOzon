@@ -55,11 +55,16 @@ class FavoriteFragment : Fragment() {
         }
 
         productsAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
+
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                val extras = FragmentNavigatorExtras(
+                    imageView to product.generalIconProductSting!!
+                )
                 val action = FavoriteFragmentDirections.actionGlobalDetailsProductFragment(
                     product = product
                 )
-                findNavController().navigate(action)
+                findNavController().navigate(action,extras)
             }
         }
 

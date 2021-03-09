@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.factory
 
+import android.app.Activity
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.postponeEnterTransition
+import androidx.core.app.ActivityCompat.startPostponedEnterTransition
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -16,9 +19,11 @@ import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.modelsUI.ResultHistoryData
+import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragment
 import com.app.marketPlace.presentation.rowType.*
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
@@ -234,7 +239,17 @@ object ViewHolderFactory {
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             val productAdapter = ProductItemAdapter()
             productAdapter.setData(listProducts)
-            productsRecyclerView.adapter = productAdapter
+//            productsRecyclerView.adapter = productAdapter
+
+            productsRecyclerView.apply {
+                adapter = productAdapter
+                postponeEnterTransition(itemView.context as Activity)
+                viewTreeObserver
+                    .addOnPreDrawListener {
+                        startPostponedEnterTransition(itemView.context as Activity)
+                        true
+                    }
+            }
 
             productAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
 

@@ -38,8 +38,6 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
     val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
     val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    var descriptions:MutableLiveData<String> = MutableLiveData()
-    var specifications:MutableLiveData<String> = MutableLiveData()
 
     fun getListEquivalentProducts(name: String?) {
         if (name == null) return

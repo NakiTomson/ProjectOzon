@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
@@ -75,10 +76,15 @@ class BasketFragment : Fragment() {
 
         adapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                val extras = FragmentNavigatorExtras(
+                    imageView to product.generalIconProductSting!!
+                )
+
                 val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(
                     product = product
                 )
-                findNavController().navigate(action)
+                findNavController().navigate(action,extras)
             }
         }
 
@@ -101,10 +107,14 @@ class BasketFragment : Fragment() {
 
         basketAdapter.setClickListenerProduct = object :ProductsRowType.OnProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                val extras = FragmentNavigatorExtras(
+                    imageView to product.generalIconProductSting!!
+                )
                 val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(
                     product = product
                 )
-                findNavController().navigate(action)
+                findNavController().navigate(action,extras)
             }
         }
 

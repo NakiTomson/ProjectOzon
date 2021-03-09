@@ -38,11 +38,8 @@
             android:id="@+id/multipleHomeRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white_Light"
-            android:nestedScrollingEnabled="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:nestedScrollingEnabled="false"
+            android:background="@color/white_Light">
 
         </androidx.recyclerview.widget.RecyclerView>
 

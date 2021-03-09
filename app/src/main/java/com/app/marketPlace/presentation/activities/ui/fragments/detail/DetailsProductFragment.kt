@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.detail
 
 import android.graphics.Color
 import android.os.Bundle
+import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,10 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.core.os.bundleOf
+import androidx.fragment.app.*
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +29,6 @@ import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
-import com.app.marketPlace.presentation.activities.ui.fragments.description.SpecificationsFragment
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.adapters.SimpleDataAdapter
@@ -65,13 +65,19 @@ class DetailsProductFragment : Fragment() {
 
     private var transaction:Boolean = false
 
-    private val description = DescriptionFragment(this)
-    private val specifications = SpecificationsFragment(this)
+    private var indexTab = 0
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = TransitionSet().apply {
+            addTransition(ChangeImageTransform())
+            addTransition(ChangeBounds())
+            addTransition(ChangeTransform())
+        }
         return inflater.inflate(R.layout.fragment_details_product, container, false)
     }
+
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -94,31 +100,54 @@ class DetailsProductFragment : Fragment() {
 
         initView(detailProduct)
 
+        val bundle = bundleOf(
+            "longDescription" to detailProduct.longDescription,
+            "shortDescription" to detailProduct.shortDescription
+        )
 
-        var activeFragment:Fragment = description
-        if (!transaction){
-            childFragmentManager.beginTransaction().apply {
-                add(R.id.frameDescriptionContainer, description, "description").show(description)
-                add(R.id.frameDescriptionContainer, specifications, "specifications").hide(
-                    specifications
+        if (savedInstanceState == null && !transaction){
+            childFragmentManager.commit {
+                setReorderingAllowed(true)
+                add<DescriptionFragment>(
+                    R.id.frameDescriptionContainer,
+                    args = bundle,
+                    tag = "LONG"
                 )
-            }.commit()
+            }
+            transaction = true
         }
-        transaction = true
+
+        val tab: TabLayout.Tab? = tabsLayout.getTabAt(indexTab)
+        tab?.select()
+
+
 
         tabsLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
-                        childFragmentManager.beginTransaction().hide(activeFragment)
-                            .show(description).commit()
-                        activeFragment = description
-
+                        childFragmentManager.commit {
+                            setCustomAnimations(
+                                R.anim.slide_in,
+                                R.anim.fade_out,
+                                R.anim.fade_in,
+                                R.anim.slide_out
+                            )
+                            replace<DescriptionFragment>(R.id.frameDescriptionContainer, args = bundle, tag = "LONG")
+                            indexTab = 0
+                        }
                     }
                     1 -> {
-                        childFragmentManager.beginTransaction().hide(activeFragment)
-                            .show(specifications).commit()
-                        activeFragment = specifications
+                        childFragmentManager.commit {
+                            setCustomAnimations(
+                                R.anim.slide_in,
+                                R.anim.fade_out,
+                                R.anim.fade_in,
+                                R.anim.slide_out
+                            )
+                            replace<DescriptionFragment>(R.id.frameDescriptionContainer, args = bundle, tag = "SHORT")
+                            indexTab  = 1
+                        }
                     }
                 }
             }
@@ -126,9 +155,6 @@ class DetailsProductFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
-
-        viewModel.descriptions.value = detailProduct.longDescription
-        viewModel.specifications.value = detailProduct.shortDescription
     }
 
 
@@ -139,7 +165,10 @@ class DetailsProductFragment : Fragment() {
         val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
         basket?.visibility = View.VISIBLE
 
-        basket?.text = String.format(resources.getString(R.string.inBasket), detailProduct.priceWithDiscount)
+        basket?.text = String.format(
+            resources.getString(R.string.inBasket),
+            detailProduct.priceWithDiscount
+        )
 
         sellerName.text = detailProduct.company
         priceWithDiscountTextView.text = detailProduct.priceWithDiscount
@@ -218,8 +247,7 @@ class DetailsProductFragment : Fragment() {
                     .setPositiveButton("Да") { dialog, id ->
                         navController.navigate(R.id.signInFragment)
                     }
-                    .setNegativeButton("Нет") {
-                            dialog, id -> dialog.cancel()
+                    .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
                     }
 
                 val alertDialog: AlertDialog = builder.create()
@@ -228,12 +256,26 @@ class DetailsProductFragment : Fragment() {
         }
 
 
-        val adapterImages = BannerAdapter()
+        val adapterImages = BannerAdapter(this)
         detailProduct.images?.forEach {
-            adapterImages.setItem(OnBoardingItem(onBoardingImageUrl = it))
+            adapterImages.setItem(
+                OnBoardingItem(
+                    onBoardingImageUrl = it,
+                    transitionName = detailProduct.generalIconProductSting!!
+                )
+            )
         }
 
-        imageDetailViewPager.adapter  = adapterImages
+
+        imageDetailViewPager.apply {
+            adapter = adapterImages
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    true
+                }
+        }
+
         setupIndicator(adapterImages.itemCount)
         setCurrentIndicator(0)
 
@@ -268,10 +310,15 @@ class DetailsProductFragment : Fragment() {
 
         adapterEquivalent.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                val extras = FragmentNavigatorExtras(
+                    imageView to product.generalIconProductSting!!
+                )
+
                 val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(
                     product = product
                 )
-                navController.navigate(action)
+                navController.navigate(action,extras)
             }
         }
 
@@ -292,10 +339,15 @@ class DetailsProductFragment : Fragment() {
 
         adapterSimilar.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
+
+                val extras = FragmentNavigatorExtras(
+                    imageView to product.generalIconProductSting!!
+                )
+
                 val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(
                     product = product
                 )
-                navController.navigate(action)
+                navController.navigate(action,extras)
             }
         }
 

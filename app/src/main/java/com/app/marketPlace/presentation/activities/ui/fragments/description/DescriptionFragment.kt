@@ -12,21 +12,19 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductViewModel
 import kotlinx.android.synthetic.main.fragment_description.*
 
-class DescriptionFragment(private val contextDetail: ViewModelStoreOwner) : Fragment() {
+class DescriptionFragment : Fragment(R.layout.fragment_description) {
 
-    private lateinit var viewModel: DetailsProductViewModel
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_description, container, false)
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(contextDetail).get(DetailsProductViewModel::class.java)
+        when(tag){
+            "LONG"->{ setDescription( arguments?.getString("longDescription"))}
+            "SHORT"->{ setDescription (arguments?.getString("shortDescription"))}
+        }
+    }
 
-        viewModel.descriptions.observe(viewLifecycleOwner, {
-            textDescription.text = it ?: "Null"
-        })
+    private fun setDescription(text:String?){
+        textDescription.text = text
     }
 }

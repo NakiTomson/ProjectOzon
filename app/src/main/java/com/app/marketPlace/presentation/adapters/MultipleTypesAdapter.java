@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.adapters;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,6 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-
         return dataSet.get(position).getItemViewType();
     }
 
