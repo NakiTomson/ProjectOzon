@@ -10,15 +10,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-const val APIKEY1 ="o6yWoCED4JFpMvv45axyfGyi"
+const val APIKEY1 ="CJiicx0Rre1CVBLRQfSjyPwW"
 
-const val APIKEY2 ="vGl3EXqKru2nx5WnQBt2hAzA"
+const val APIKEY2 ="J9NSJ6qcKddf7wxPdSIKL4eA"
 
-const val APIKEY3 ="aauvEghFugCCd4G0AaVaBP80"
+const val APIKEY3 ="zXSRzd1MQNKNebKntBATTcQj"
 
-const val APIKEY4 ="yAawHzk7vxwssz1nY1g1Ghl2"
+const val APIKEY4 ="km1UJHSme0nGgFIkfD5QqdhC"
 
-const val APIKEY5 ="LpHWBU9t15h8aAWezq5dwABr"
+const val APIKEY5 ="ym8kR5h96jJEZ76EXzpsVZhF"
 
 
 interface ServerApi{

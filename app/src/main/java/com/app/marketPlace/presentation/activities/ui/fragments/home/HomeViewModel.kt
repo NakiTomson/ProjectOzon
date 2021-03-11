@@ -136,7 +136,9 @@ class HomeViewModel : BaseViewModel() {
                     pageSize = "6",
                     apiKey = APIKEY3,
                     page = "53",
-                    typeProduct = OnProductItem.Type.ProductNonName
+                    typeProduct = OnProductItem.Type.ProductNonName,
+                    topOffer = "Это выгодно! Успей купить!",
+                    bottomOffer = "Смотреть все товары !"
                 )
             )
         }
@@ -166,7 +168,8 @@ class HomeViewModel : BaseViewModel() {
                     pageSize = "3",
                     apiKey = APIKEY4,
                     page = "233",
-                    typeProduct = OnProductItem.Type.ProductNonName
+                    typeProduct = OnProductItem.Type.ProductNonName,
+                    topOffer = "Рекомендуем ",
                 )
             )
         }
@@ -195,7 +198,9 @@ class HomeViewModel : BaseViewModel() {
                     pageSize = "4",
                     apiKey = APIKEY5,
                     page = "23",
-                    typeProduct = OnProductItem.Type.ProductNonName
+                    typeProduct = OnProductItem.Type.ProductNonName,
+                    topOffer = "Акции недели !",
+                    bottomOffer = "Скидки до -80 % здесь!"
                 )
             )
         }

@@ -1,5 +1,6 @@
 package com.app.marketPlace.domain.repositories
 
+import android.view.textclassifier.ConversationActions
 import com.app.marketPlace.data.remote.services.APIKEY1
 import com.app.marketPlace.data.remote.services.APIKEY2
 import com.app.marketPlace.data.utils.Configs
@@ -13,6 +14,9 @@ sealed class Params(
     open var pageSize: String = "3",
     open var apiKey: String = APIKEY2,
     open var page: String = "1",
+    open var topOffer: String = "",
+    open var bottomOffer: String = "",
+    open var requestName: String = "",
     open var typeProduct: Type = Type.OnlyImage
 ){
 
@@ -28,6 +32,9 @@ sealed class Params(
         override var pageSize: String = "3",
         override var apiKey: String = APIKEY2,
         override var page: String = "1",
+        override var topOffer: String = "",
+        override var bottomOffer: String = "",
+        override var requestName: String = "",
         override var typeProduct:Type,
     ) : Params()
 

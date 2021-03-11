@@ -19,11 +19,9 @@ import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.modelsUI.ResultHistoryData
-import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragment
 import com.app.marketPlace.presentation.rowType.*
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
@@ -50,7 +48,7 @@ object ViewHolderFactory {
 
         fun bind(onBoardingAdapter: BannerAdapter){
 
-            onBoardingAdapter.bannerClickListener = object : BannerRowType.BannerListener{
+            onBoardingAdapter.setBannerClickListener = object : BannerRowType.BannerListener{
                 override fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView) {
                     setBannerClickListener?.onClickBanner(imageUrl, imageOnBoarding)
                 }

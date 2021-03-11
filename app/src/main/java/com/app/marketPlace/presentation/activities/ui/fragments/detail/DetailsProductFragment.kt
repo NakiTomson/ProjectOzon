@@ -32,6 +32,7 @@ import com.app.marketPlace.presentation.activities.ui.fragments.description.Desc
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.adapters.SimpleDataAdapter
+import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.app.marketPlace.presentation.rowType.ProductsRowType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
@@ -256,7 +257,9 @@ class DetailsProductFragment : Fragment() {
         }
 
 
-        val adapterImages = BannerAdapter(this)
+
+        val adapterImages = BannerAdapter()
+
         detailProduct.images?.forEach {
             adapterImages.setItem(
                 OnBoardingItem(
@@ -266,14 +269,14 @@ class DetailsProductFragment : Fragment() {
             )
         }
 
+        postponeEnterTransition()
 
-        imageDetailViewPager.apply {
-            adapter = adapterImages
-            postponeEnterTransition()
-            viewTreeObserver
-                .addOnPreDrawListener {
-                    true
-                }
+        imageDetailViewPager.adapter = adapterImages
+
+        adapterImages.setCompleteListener = object : BannerRowType.CompleteListener{
+            override fun onComplete() {
+                startPostponedEnterTransition()
+            }
         }
 
         setupIndicator(adapterImages.itemCount)

@@ -3,11 +3,9 @@ package com.app.marketPlace.presentation.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.modelsUI.OnBoardingItem
-import com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductFragment
 import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -15,12 +13,13 @@ import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import java.util.*
 
 
-class BannerAdapter(val fragment: Fragment? = null) : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
+class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
 
 
     @Volatile private var countPosition = -1
 
-    var bannerClickListener: BannerRowType.BannerListener? = null
+    var setBannerClickListener: BannerRowType.BannerListener? = null
+    var setCompleteListener: BannerRowType.CompleteListener? = null
 
     val onBoardingItems:MutableList<OnBoardingItem> = LinkedList()
 
@@ -90,7 +89,7 @@ class BannerAdapter(val fragment: Fragment? = null) : RecyclerView.Adapter<Banne
 //                    .fit()
                     .into(imageOnBoarding,object :Callback{
                         override fun onSuccess() {
-                            fragment?.startPostponedEnterTransition()
+                            setCompleteListener?.onComplete()
                         }
                         override fun onError() {
                         }
@@ -111,7 +110,7 @@ class BannerAdapter(val fragment: Fragment? = null) : RecyclerView.Adapter<Banne
 
             imageOnBoarding.setOnClickListener {
                 imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
-                bannerClickListener?.onClickBanner(
+                setBannerClickListener?.onClickBanner(
                     onBoardingItem.onBoardingImageUrl,
                     imageOnBoarding
                 )

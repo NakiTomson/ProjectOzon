@@ -53,7 +53,10 @@ class HomeRepository(private val marketPlaceApi: ServerApi.MarketPlaceService, v
             Results.ResultProduct(
                 mapper.mapProductFromApiToUiProduct(
                     listProducts,
-                    type = params.typeProduct
+                    type = params.typeProduct,
+                    topOffer = params.topOffer,
+                    bottomOffer = params.bottomOffer,
+                    requestName = params.requestName
                 )
             )
 

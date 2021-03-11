@@ -23,6 +23,10 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
         fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView)
     }
 
+    interface CompleteListener {
+        fun onComplete()
+    }
+
     override fun getItemViewType(): Int {
         return RowType.BANNER_ROW_TYPE
     }
