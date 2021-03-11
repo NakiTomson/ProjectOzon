@@ -1,6 +1,6 @@
 package com.app.marketPlace.presentation.di
 
-import com.app.marketPlace.data.remote.services.ServerApi
+import com.app.marketPlace.data.remote.services.MarketPlaceService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -70,15 +70,16 @@ class RestApiModule {
     @Provides
     @Named("dropbox")
     @Singleton
-    fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): ServerApi.MarketPlaceService {
-        return retrofit.create(ServerApi.MarketPlaceService::class.java)
+    fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): MarketPlaceService {
+        return retrofit.create(MarketPlaceService::class.java)
     }
+
 
     @Provides
     @Named("bestbuy")
     @Singleton
-    fun provideMarketPlaceServiceApiDropBox(@Named("bestbuy") retrofit: Retrofit): ServerApi.MarketPlaceService {
-        return retrofit.create(ServerApi.MarketPlaceService::class.java)
+    fun provideMarketPlaceServiceApiDropBox(@Named("bestbuy") retrofit: Retrofit): MarketPlaceService {
+        return retrofit.create(MarketPlaceService::class.java)
     }
 
 }

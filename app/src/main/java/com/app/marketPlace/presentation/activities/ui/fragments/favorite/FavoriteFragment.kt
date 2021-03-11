@@ -20,6 +20,7 @@ import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.rowType.ProductsRowType
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import javax.inject.Inject
 
@@ -77,6 +78,10 @@ class FavoriteFragment : Fragment() {
             }
         }
 
+
+        startShopping.setOnClickListener {
+            requireActivity().bottomNavigationView.selectedItemId = R.id.home
+        }
 
         mainViewModel.favorite.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNullOrEmpty()) frameFavorite.visibility = View.VISIBLE else frameFavorite.visibility = View.GONE

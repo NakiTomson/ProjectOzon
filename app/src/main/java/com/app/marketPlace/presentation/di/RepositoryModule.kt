@@ -4,7 +4,7 @@ import com.app.marketPlace.data.db.InBasketDao
 import com.app.marketPlace.data.db.FavoriteProductDao
 import com.app.marketPlace.data.db.HintProductDao
 import com.app.marketPlace.data.db.UserDao
-import com.app.marketPlace.data.remote.services.ServerApi
+import com.app.marketPlace.data.remote.services.MarketPlaceService
 import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.domain.repositories.HomeRepository
@@ -20,7 +20,7 @@ class RepositoryModule {
 
     @Provides
     @Named("bestbuy")
-    fun provideHomeRepositoryImpl1(@Named("bestbuy") serviceApi: ServerApi.MarketPlaceService,mapper: Mapper): HomeRepository {
+    fun provideHomeRepositoryImpl1(@Named("bestbuy") serviceApi: MarketPlaceService, mapper: Mapper): HomeRepository {
         return HomeRepository(serviceApi,mapper)
     }
 
@@ -46,7 +46,7 @@ class RepositoryModule {
 
     @Provides
     @Named("dropbox")
-    fun provideHomeRepositoryImpl2(@Named("dropbox") serviceApi: ServerApi.MarketPlaceService,mapper: Mapper): HomeRepository {
+    fun provideHomeRepositoryImpl2(@Named("dropbox") serviceApi: MarketPlaceService,mapper: Mapper): HomeRepository {
         return HomeRepository(serviceApi,mapper)
     }
 

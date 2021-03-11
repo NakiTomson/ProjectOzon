@@ -91,11 +91,13 @@
     </fragment>
 
     <action android:id="@+id/action_global_detailsProductFragment" app:destination="@id/detailsProductFragment"/>
+
     <fragment
         android:id="@+id/makingOrderFragment"
         android:name="com.app.marketPlace.presentation.activities.ui.fragments.makingOrder.MakingOrderFragment"
         android:label="fragment_making_order"
         tools:layout="@layout/fragment_making_order" />
+
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.app.marketPlace.presentation.activities.ui.fragments.authorization.SignInFragment"

@@ -77,7 +77,6 @@ class DetailsProductFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         sharedElementEnterTransition = TransitionSet().apply {
             addTransition(ChangeImageTransform())
             addTransition(ChangeBounds())
@@ -248,7 +247,7 @@ class DetailsProductFragment : Fragment() {
 
             if (mAuth.currentUser != null){
                 val bundle = Bundle()
-                bundle.putString("imageUrl0", detailProduct.generalIconProductSting)
+                bundle.putStringArrayList("images", arrayListOf(detailProduct.generalIconProductSting))
                 bundle.putString("oldPrice", detailProduct.priceOlD)
                 bundle.putString(
                     "discount", ((detailProduct.priceOlD?.replace("$", "")?.trim())?.toFloat()

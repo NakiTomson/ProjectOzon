@@ -5,9 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -17,12 +18,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_making_order.*
+import java.util.ArrayList
 import javax.inject.Inject
 
 class MakingOrderFragment : Fragment() {
-
-
-
 
     init {
         MarketPlaceApp.appComponent.inject(makingOrderFragment = this)
@@ -53,17 +52,11 @@ class MakingOrderFragment : Fragment() {
         })
 
 
+        val imagesUrls = arguments?.getStringArrayList("images")
 
-        val imageUrl = arguments?.getString("imageUrl0")
-        val imageUrl2 = arguments?.getString("imageUrl1")
-        val imageUrl3 = arguments?.getString("imageUrl2")
         val oldPrice = arguments?.getString("oldPrice")
         val discount = arguments?.getString("discount")
         val finalPrice = arguments?.getString("finalPrice")
-
-        Picasso.with(context)
-            .load(imageUrl)
-            .into(imageView5)
 
         textView21.text = "$oldPrice"
 
@@ -79,24 +72,33 @@ class MakingOrderFragment : Fragment() {
             Toast.makeText(context,"Успешно купили",Toast.LENGTH_SHORT).show()
         }
 
-        if (imageUrl2 != null){
-            imageView6.visibility = View.VISIBLE
-
-            Picasso.with(context)
-                .load(imageUrl2)
-                .into(imageView6)
-        }
-
-        if (imageUrl3 != null){
-            imageView7.visibility = View.VISIBLE
-
-            Picasso.with(context)
-                .load(imageUrl3)
-                .into(imageView7)
-        }
-
+        setUpImages(imagesUrls)
     }
 
+    private fun setUpImages(listImagesUrl: ArrayList<String>?){
+        if (listImagesUrl == null) return
+        val images = arrayOfNulls<ImageView>(listImagesUrl.size)
+
+        val layoutParams: LinearLayout.LayoutParams =
+
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+
+        for ( i in images.indices){
+            images[i] = ImageView(context)
+            images[i]?.let {
+
+                Picasso.with(context)
+                    .load(listImagesUrl[i])
+                    .into(it)
+
+                it.layoutParams = layoutParams
+                containerImages.addView(it)
+            }
+        }
+    }
     override fun onDestroyView() {
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
         super.onDestroyView()

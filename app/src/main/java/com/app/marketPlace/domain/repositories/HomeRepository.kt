@@ -6,7 +6,7 @@ import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.modelsUI.OnBoardingItem
 
-class HomeRepository(private val marketPlaceApi: ServerApi.MarketPlaceService, val mapper: Mapper) {
+class HomeRepository(private val marketPlaceApi: MarketPlaceService, val mapper: Mapper) {
 
 
     fun getBannerStart(): Results.ResultBanner {

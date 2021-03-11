@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
                 listIdsFavorite.addAll(it)
             }
         })
+
     }
 
 

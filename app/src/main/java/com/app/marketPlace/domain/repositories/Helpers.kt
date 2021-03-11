@@ -42,11 +42,9 @@ sealed class Params(
 
 
 sealed class Results {
-
     data class ResultCategoryProduct(val result: Resource<MutableList<MutableList<OnBoardingItem>>>):Results()
     data class ResultBanner(val result : Resource<MutableList<OnBoardingItem>>):Results()
     data class ResultHistory(val result : Resource<OnHistoryItem>):Results()
     data class ResultLive(val result : Resource<OnLiveItem>):Results()
     data class ResultProduct(val result : Resource<OnOfferProductsItem>):Results()
-
 }

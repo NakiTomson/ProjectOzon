@@ -37,7 +37,9 @@ class CombinationProductsAdapter : RecyclerView.Adapter<CombinationProductsAdapt
         return onBoardingItems.size
     }
 
-
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
 
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

@@ -204,9 +204,11 @@ class BasketFragment : Fragment() {
         goToMakeOrder.setOnClickListener {
             if (mAuth.currentUser != null){
                 val bundle = Bundle()
-                for ((index, value) in (images!!).withIndex()){
-                    bundle.putString("imageUrl$index", value)
-                }
+
+                val arrayList = ArrayList<String>(images)
+
+                bundle.putStringArrayList("images",arrayList)
+
                 bundle.putString("oldPrice", "$oldPrice $")
                 val decimalFormat = DecimalFormat("#.#")
                 val result: String = decimalFormat.format(oldPrice - priceWithDiscount)

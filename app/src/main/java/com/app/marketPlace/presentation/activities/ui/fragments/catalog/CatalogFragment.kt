@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.modelsUI.OnBoardingItem
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
+import com.app.marketPlace.presentation.adapters.CategoryAdapter
 import com.app.marketPlace.presentation.adapters.CombinationProductsAdapter
 import com.app.marketPlace.presentation.adapters.MultipleTypesAdapter
 import com.app.marketPlace.presentation.rowType.CategoryRowType
@@ -32,27 +35,22 @@ class CatalogFragment : Fragment() {
         catalogViewModel = ViewModelProvider(this).get(CatalogViewModel::class.java)
 
         catalogViewModel.getCatalogProducts()
-
         val navController = findNavController()
 
-        val combinationProductAdapterViewPager = CombinationProductsAdapter()
-        val adapterMultiple = MultipleTypesAdapter()
+        val categoryAdapter = CategoryAdapter()
 
-        adapterMultiple.setHasStableIds(true)
-        multipleHomeRecyclerViewCatalog.layoutManager =  LinearLayoutManager(context)
-        multipleHomeRecyclerViewCatalog.adapter = adapterMultiple
-        multipleHomeRecyclerViewCatalog.setHasFixedSize(false)
+        categoryProductsAdapter.layoutManager =  GridLayoutManager(context,5)
+        categoryProductsAdapter.adapter = categoryAdapter
+        categoryProductsAdapter.setHasFixedSize(false)
 
         catalogViewModel.categoryProductLiveData.observe(viewLifecycleOwner, { resource ->
 
             if (gettingErrors(resource)) {
                 resource.data?.let { lists ->
 
-                    combinationProductAdapterViewPager.setData(lists)
-                    val categoryRowType = CategoryRowType(combinationProductAdapterViewPager)
-                    adapterMultiple.setData(categoryRowType)
+                    categoryAdapter.setData(lists.flatten() as MutableList<OnBoardingItem>)
 
-                    categoryRowType.clickOnCategoryItem =
+                    categoryAdapter.clickOnCategoryItem =
                         object : CategoryRowType.ClickCategoryListener {
                             override fun onClickItem(data: String) {
                                 val bundle = Bundle()
