@@ -43,6 +43,22 @@ class HomeRepository(private val marketPlaceApi: ServerApi.MarketPlaceService, v
     }
 
 
+    suspend fun loadSearchProducts(params: Params): Results.ResultProduct {
+        return try {
+
+            val listProducts = marketPlaceApi
+                .getProductsBySearchAsync(params.pathId, params.pageSize, params.page, params.apiKey).await()
+
+            Results.ResultProduct(
+                mapper.mapProductFromApiToUiProduct(listProducts, type = params.typeProduct,requestName = params.requestName)
+            )
+
+        } catch (e: Exception) {
+            Results.ResultProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
+        }
+    }
+
+
     suspend fun loadProducts(params: Params):Results.ResultProduct {
         return try {
 

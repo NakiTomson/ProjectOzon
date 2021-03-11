@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.app.marketPlace.data.remote.services.APIKEY4
 import com.app.marketPlace.domain.modelsUI.OnOfferProductsItem
 import com.app.marketPlace.domain.modelsUI.OnProductItem
-import com.app.marketPlace.domain.repositories.ListProductRepository
+import com.app.marketPlace.domain.repositories.HomeRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.rowType.Resource
@@ -24,7 +24,7 @@ class BasketViewModel:ViewModel(), CoroutineScope {
 
     @Inject
     @field : Named("bestbuy")
-    lateinit var listProductRepository: ListProductRepository
+    lateinit var listProductRepository: HomeRepository
 
 
     val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()

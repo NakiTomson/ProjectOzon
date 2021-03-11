@@ -16,6 +16,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -42,6 +43,9 @@ class HomeFragment : Fragment() {
 
     @Inject
     lateinit var repository: DataBaseRepository
+
+    @Inject
+    lateinit var mapper: Mapper
 
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
@@ -239,6 +243,8 @@ class HomeFragment : Fragment() {
                 resource.data?.let { lists ->
                     Log.v("TAGTIME", "re5 ${SimpleDateFormat("HH:mm:ss.SSS",Locale.GERMAN).format(Calendar.getInstance().time)}")
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
+
+
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
@@ -293,6 +299,8 @@ class HomeFragment : Fragment() {
                 resource.data?.let { lists ->
                     Log.v("TAGTIME", "re6 ${SimpleDateFormat("HH:mm:ss.SSS",Locale.GERMAN).format(Calendar.getInstance().time)}")
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
+
+
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 
@@ -360,6 +368,7 @@ class HomeFragment : Fragment() {
                 resource.data?.let { lists ->
                     Log.v("TAGTIME", "re8 ${SimpleDateFormat("HH:mm:ss.SSS",Locale.GERMAN).format(Calendar.getInstance().time)}")
                     lists.topStringOffer?.let { adapterMultiple.setData(TopSloganRowType(it)) }
+
                     val rowProduct = ProductsRowType(lists.list, 3)
                     adapterMultiple.setData(rowProduct)
 

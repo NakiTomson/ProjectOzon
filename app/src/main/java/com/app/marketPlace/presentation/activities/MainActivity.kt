@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.activities
 
 
 import android.os.*
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allIdsInBaskets.observe(this, { list->
             list?.let {
+                Log.v("CRTYBUN","re $it")
                 listIdsBasket.clear()
                 listIdsBasket.addAll(it)
             }
@@ -57,6 +59,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allIdsInFavorite.observe(this, { list->
             list?.let {
+                Log.v("CRTYBUN","re2 $it")
                 listIdsFavorite.clear()
                 listIdsFavorite.addAll(it)
             }

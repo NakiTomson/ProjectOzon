@@ -3,6 +3,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.detail
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.*
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -20,6 +23,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.modelsUI.OnBoardingItem
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
@@ -58,6 +62,9 @@ class DetailsProductFragment : Fragment() {
     @Inject
     lateinit var repository: DataBaseRepository
 
+    @Inject
+    lateinit var mapper: Mapper
+
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
@@ -86,7 +93,7 @@ class DetailsProductFragment : Fragment() {
 
 
         viewModel = ViewModelProvider(this).get(DetailsProductViewModel::class.java)
-        val detailProduct = args.product
+        val detailProduct:OnProductItem? = args.product
 
         val nameProduct:String =
             detailProduct?.nameOfProduct?.replace("-", "")!!.replace("  ", " ")
@@ -99,7 +106,8 @@ class DetailsProductFragment : Fragment() {
         viewModel.getListEquivalentProducts(searchWord)
         viewModel.getListSimilarCategory(detailProduct.categoryPath)
 
-        initView(detailProduct)
+
+        initView(mapper.reMapProduct(detailProduct))
 
         val bundle = bundleOf(
             "longDescription" to detailProduct.longDescription,
@@ -159,12 +167,22 @@ class DetailsProductFragment : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
+
+        basket?.visibility = View.VISIBLE
+        Log.v("LOGING","re initView2")
+    }
+
     private fun initView(detailProduct: OnProductItem){
         val navController =findNavController()
         val mAuth = FirebaseAuth.getInstance()
 
         val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
+
         basket?.visibility = View.VISIBLE
+        Log.v("LOGING","re initView")
 
         basket?.text = String.format(
             resources.getString(R.string.inBasket),
@@ -331,6 +349,12 @@ class DetailsProductFragment : Fragment() {
             }
         }
 
+        adapterEquivalent.setClickBasketProduct =object: ProductsRowType.OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                mainViewModel.insertOrDeleteBasket(productsItem)
+            }
+        }
+
 
         val adapterSimilar  = ProductItemAdapter()
         listProductsSimilar.adapter = adapterSimilar
@@ -359,6 +383,13 @@ class DetailsProductFragment : Fragment() {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
+
+        adapterSimilar.setClickBasketProduct = object: ProductsRowType.OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                mainViewModel.insertOrDeleteBasket(productsItem)
+            }
+        }
+
 
         setEquivalent(adapterEquivalent)
         setSimilar(adapterSimilar)
@@ -437,9 +468,12 @@ class DetailsProductFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onStop() {
         activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.GONE
+        Log.v("LOGING","re onDestroyView")
+        super.onStop()
     }
+
+
 
 }

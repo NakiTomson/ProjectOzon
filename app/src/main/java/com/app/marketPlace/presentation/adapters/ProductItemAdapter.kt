@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.presentation.rowType.ProductsRowType
 import com.squareup.picasso.Picasso
@@ -25,6 +26,8 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
     var setClickHeartProduct: ProductsRowType.OnClickListener? = null
 
     var setClickBasketProduct: ProductsRowType.OnClickListener? = null
+
+    val mapper = Mapper()
 
 
     fun setData(list: List<OnProductItem>) {
@@ -43,8 +46,10 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        listOnProductsByOfferItems?.get(position)?.let { holder.bind(it) }
+
+        listOnProductsByOfferItems?.get(position)?.let { holder.bind( mapper.reMapProduct(it)) }
     }
+
 
     override fun getItemCount() = listOnProductsByOfferItems?.size ?: 0
 
@@ -110,12 +115,9 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             product.setOnClickListener {
                 generalIconProductImageView.transitionName = productsItem.generalIconProductSting
 
-                productsItem.images?.remove(productsItem.generalIconProductSting!!)
 
-                val list = productsItem.images
-                productsItem.images?.clear()
-                productsItem.images?.add(productsItem.generalIconProductSting!!)
-//                productsItem.images?.addAll(list!!)
+                productsItem.images?.set(0,productsItem.generalIconProductSting!!)
+
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
 

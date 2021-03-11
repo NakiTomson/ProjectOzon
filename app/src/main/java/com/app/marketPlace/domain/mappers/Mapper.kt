@@ -100,6 +100,7 @@ class Mapper {
         )
     }
 
+
     private fun getUiProducts(products: List<Product>?, type: OnProductItem.Type) : List<OnProductItem>{
 
         val newProductsList: MutableList<OnProductItem> = ArrayList()
@@ -137,9 +138,9 @@ class Mapper {
         return newProductsList
     }
 
-    private fun checkInFavorite(skuId:Int):Boolean{
+    fun checkInFavorite(skuId:Int):Boolean{
 
-        listIdsBasket.forEach {
+        listIdsFavorite.forEach {
             if (it == skuId){
                 return true
             }
@@ -147,8 +148,8 @@ class Mapper {
         return false
     }
 
-    private fun checkInBasket(skuId:Int):Boolean{
-        listIdsFavorite.forEach {
+    fun checkInBasket(skuId:Int):Boolean{
+        listIdsBasket.forEach {
             if (it == skuId){
                 return true
             }
@@ -245,7 +246,7 @@ class Mapper {
             OnProductItem(
                 type = OnProductItem.Type.ProductWithName,
                 generalIconProductSting = it.iconProduct,
-                favoriteIconProduct = it.isFavorite,
+                favoriteIconProduct = checkInFavorite(it.id),
                 productDiscount = it.productDiscount,
                 isBestseller = it.isBestseller,
                 priceWithDiscount = it.priceWithDiscount,
@@ -261,4 +262,25 @@ class Mapper {
             )
         }
     }
+
+    fun reMapProduct(products: OnOfferProductsItem):OnOfferProductsItem {
+
+        products.list.forEach {
+            it.productInBasket = checkInBasket(it.skuId)
+            it.favoriteIconProduct = checkInFavorite(it.skuId)
+        }
+        return OnOfferProductsItem(
+            topStringOffer = products.topStringOffer,
+            boltonStringOffer = products.boltonStringOffer,
+            requestName = products.requestName,
+            list = products.list
+        )
+    }
+
+    fun reMapProduct(products: OnProductItem):OnProductItem {
+        products.favoriteIconProduct = checkInFavorite(products.skuId)
+        products.productInBasket = checkInBasket(products.skuId)
+        return products
+    }
+
 }

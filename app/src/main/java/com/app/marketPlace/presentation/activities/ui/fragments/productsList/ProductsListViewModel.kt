@@ -4,15 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.marketPlace.data.remote.services.APIKEY1
 import com.app.marketPlace.data.remote.services.APIKEY2
-import com.app.marketPlace.domain.repositories.ListProductRepository
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.modelsUI.OnOfferProductsItem
 import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.domain.repositories.HomeRepository
 import com.app.marketPlace.domain.repositories.Params
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class ProductsListViewModel(private val repository: ListProductRepository) :ViewModel(), CoroutineScope {
+class ProductsListViewModel(private val repository: HomeRepository) :ViewModel(), CoroutineScope {
 
     private val job: Job = Job()
 
@@ -21,6 +21,7 @@ class ProductsListViewModel(private val repository: ListProductRepository) :View
 
 
     val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
     val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
@@ -36,7 +37,8 @@ class ProductsListViewModel(private val repository: ListProductRepository) :View
                             pageSize = "100",
                             apiKey = APIKEY1,
                             page = "1",
-                            typeProduct = OnProductItem.Type.ProductWithName
+                            typeProduct = OnProductItem.Type.ProductWithName,
+                            requestName = keyWordOne
                         )
                     )
                 }

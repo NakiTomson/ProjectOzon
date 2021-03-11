@@ -29,7 +29,6 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
         return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_category_product,parent,false))
     }
 
-    
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
         holder.bind(onBoardingItems[position])

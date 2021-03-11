@@ -8,7 +8,7 @@ import com.app.marketPlace.data.remote.services.ServerApi
 import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.domain.repositories.HomeRepository
-import com.app.marketPlace.domain.repositories.ListProductRepository
+
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -42,11 +42,7 @@ class RepositoryModule {
         return Mapper()
     }
 
-    @Provides
-    @Named("bestbuy")
-    fun provide(@Named("bestbuy") serviceApi: ServerApi.MarketPlaceService,mapper: Mapper): ListProductRepository {
-        return ListProductRepository(serviceApi,mapper)
-    }
+
 
     @Provides
     @Named("dropbox")

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.domain.repositories.ListProductRepository
+import com.app.marketPlace.domain.repositories.HomeRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.*
 import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmentDirections
@@ -45,7 +45,7 @@ class ProductsListFragment : Fragment() {
 
     @Inject
     @field : Named("bestbuy")
-    lateinit var listProductRepositoryImpl: ListProductRepository
+    lateinit var listProductRepositoryImpl: HomeRepository
 
 
     private val mainViewModel: MainViewModel by viewModels {
@@ -74,7 +74,6 @@ class ProductsListFragment : Fragment() {
         val productsAdapter = ProductItemAdapter()
         productsAdapter.setHasStableIds(true)
         foundProductsRecyclerView.adapter =  productsAdapter
-
 
 
         productsAdapter.setClickHeartProduct = object :ProductsRowType.OnClickListener{

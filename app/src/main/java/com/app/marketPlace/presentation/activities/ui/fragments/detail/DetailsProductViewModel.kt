@@ -9,7 +9,7 @@ import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.modelsUI.OnOfferProductsItem
 import com.app.marketPlace.domain.modelsUI.OnProductItem
-import com.app.marketPlace.domain.repositories.ListProductRepository
+import com.app.marketPlace.domain.repositories.HomeRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
 import kotlinx.coroutines.*
@@ -32,7 +32,7 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
 
     @Inject
     @field : Named("bestbuy")
-    lateinit var listProductRepository: ListProductRepository
+    lateinit var listProductRepository: HomeRepository
 
 
     val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
@@ -50,7 +50,8 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
                             pageSize = "20",
                             apiKey = APIKEY3,
                             page = "1",
-                            typeProduct = OnProductItem.Type.ProductWithName
+                            typeProduct = OnProductItem.Type.ProductWithName,
+                            requestName = name
                         )
                     )
                 }

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -30,6 +31,9 @@ class FavoriteFragment : Fragment() {
 
     @Inject
     lateinit var repository: DataBaseRepository
+
+    @Inject
+    lateinit var mapper: Mapper
 
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
@@ -54,8 +58,13 @@ class FavoriteFragment : Fragment() {
             }
         }
 
-        productsAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
+        productsAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
+            override fun onClick(productsItem: OnProductItem) {
+                mainViewModel.insertOrDeleteBasket(productsItem)
+            }
+        }
 
+        productsAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener {
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                 val extras = FragmentNavigatorExtras(
@@ -70,30 +79,11 @@ class FavoriteFragment : Fragment() {
 
 
         mainViewModel.favorite.observe(viewLifecycleOwner, Observer { list ->
-
             if (list.isNullOrEmpty()) frameFavorite.visibility = View.VISIBLE else frameFavorite.visibility = View.GONE
             if (list == null) return@Observer
-            productsAdapter.setData(
-                list.map {
-                    OnProductItem(
-                        type = OnProductItem.Type.ProductWithName,
-                        generalIconProductSting = it.iconProduct,
-                        favoriteIconProduct = it.isFavorite,
-                        productDiscount = it.productDiscount,
-                        isBestseller = it.isBestseller,
-                        priceWithDiscount = it.priceWithDiscount,
-                        priceOlD = it.priceOlD,
-                        goToBasket = it.goToBasket,
-                        nameOfProduct = it.nameOfProduct,
-                        shortDescription = it.shortDescription,
-                        longDescription = it.longDescription,
-                        images = it.images,
-                        company = it.company,
-                        color = it.color,
-                        skuId = it.id
-                    )
-                })
+            productsAdapter.setData(mapper.mapDbBasketToUi(list)!!)
         })
+
     }
 
 }

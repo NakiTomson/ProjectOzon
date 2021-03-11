@@ -7,7 +7,7 @@ import com.app.marketPlace.data.remote.modelsDB.HintProductDB
 import com.app.marketPlace.data.remote.modelsDB.UserDB
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.domain.repositories.ListProductRepository
+import com.app.marketPlace.domain.repositories.HomeRepository
 import com.app.marketPlace.presentation.activities.ui.fragments.productsList.ProductsListViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.coroutines.*
@@ -30,7 +30,7 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
 
     val baskets: LiveData<List<BasketProductDb>?> = repository.baskets.asLiveData()
 
-    val favorite: LiveData<List<BasketProductDb>?> = repository.baskets.asLiveData()
+    val favorite: LiveData<List<BasketProductDb>?> = repository.favorite.asLiveData()
 
     val hintProducts: LiveData<List<HintProductDB>>? = repository.hintProducts?.asLiveData()
 
@@ -127,7 +127,7 @@ class MainViewModelFactory(private val repository: DataBaseRepository) : ViewMod
 }
 
 
-class ProductsListViewModelFactory(private val repository: ListProductRepository) : ViewModelProvider.Factory {
+class ProductsListViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ProductsListViewModel::class.java)) {
