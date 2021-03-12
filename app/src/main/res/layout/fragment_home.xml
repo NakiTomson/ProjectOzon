@@ -27,24 +27,25 @@
 
 
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScroll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        >
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/nestedScroll"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="?attr/actionBarSize"-->
+<!--        >-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/multipleHomeRecyclerView"
             android:layout_width="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
+            android:nestedScrollingEnabled="true"
             android:background="@color/white_Light">
 
         </androidx.recyclerview.widget.RecyclerView>
 
 
-    </androidx.core.widget.NestedScrollView>
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
     <FrameLayout

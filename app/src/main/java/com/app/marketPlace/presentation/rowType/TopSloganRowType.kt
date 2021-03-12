@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.rowType
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory

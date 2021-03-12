@@ -1,5 +1,6 @@
 package com.app.marketPlace.data.remote.services
 
+import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
 import com.app.marketPlace.data.remote.modelsAPI.ProductsModel
 import com.app.marketPlace.domain.modelsUI.GeneralCategory
 import com.app.marketPlace.domain.modelsUI.OnHistoryItem
@@ -50,7 +51,7 @@ interface MarketPlaceService {
 
 
     @GET("/s/0w71n1rc6v85s0r/historyData.json?dl=1")
-    fun getHistoryAsync(): Deferred<OnHistoryItem>
+    fun getHistoryAsync(): Deferred<HistoryModels>
 
 
     @GET("/s/xgal8vjau426dka/liveData.json?dl=1")

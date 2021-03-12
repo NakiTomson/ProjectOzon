@@ -1,10 +1,12 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
@@ -16,7 +18,7 @@ import com.makeramen.roundedimageview.RoundedImageView
 data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
 
-
+    var wasSetup:Boolean = false
     var bannerClickListener: BannerListener? = null
 
     interface BannerListener {
@@ -32,6 +34,7 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
+        if (wasSetup) return
         val bannerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
         bannerViewHolder.bind(onBoardingAdapter)
 
@@ -53,11 +56,12 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
                 }
             }
         })
+        wasSetup = true
     }
 
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
-
+        if (indicatorsContainer.children.count() >0) return
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
 
@@ -82,7 +86,6 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
         }
     }
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){
-
         val childCount  = indicatorsContainers.childCount
 
         for (i in 0 until  childCount){

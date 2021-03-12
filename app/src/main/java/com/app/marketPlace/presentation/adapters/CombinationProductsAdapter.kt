@@ -33,7 +33,6 @@ class CombinationProductsAdapter : RecyclerView.Adapter<CombinationProductsAdapt
     }
 
     override fun getItemCount(): Int {
-
         return onBoardingItems.size
     }
 

@@ -99,6 +99,7 @@ class MakingOrderFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroyView() {
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.VISIBLE
         super.onDestroyView()

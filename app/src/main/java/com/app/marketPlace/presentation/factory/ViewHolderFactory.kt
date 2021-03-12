@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.factory
 
 import android.app.Activity
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +16,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
+import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.domain.modelsUI.OnProductItem
-import com.app.marketPlace.domain.modelsUI.ResultHistoryData
 import com.app.marketPlace.presentation.rowType.*
 import com.makeramen.roundedimageview.RoundedImageView
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.items_history.view.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.imageNextAll
@@ -47,12 +46,12 @@ object ViewHolderFactory {
 
 
         fun bind(onBoardingAdapter: BannerAdapter){
-
             onBoardingAdapter.setBannerClickListener = object : BannerRowType.BannerListener{
                 override fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView) {
                     setBannerClickListener?.onClickBanner(imageUrl, imageOnBoarding)
                 }
             }
+
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
             bannekerViewPager.adapter  = onBoardingAdapter
         }
@@ -79,53 +78,33 @@ object ViewHolderFactory {
     }
 
     class HistoryViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
+
         lateinit var setHistoryClickListener: HistoryRowType.HistoryListener
         val historyButton: Button = itemView.historyItemButton
         val financeButton: Button = itemView.financeItemButton
+        val container: LinearLayout? = itemView.containerImages
 
 
-        private val listOfImage = listOf<ImageView>(
-                itemView.oneHistoryItem,
-                itemView.twoHistoryItem,
-                itemView.threeHistoryItem,
-                itemView.fourHistoryItem,
-                itemView.fiveHistoryItem,
-                itemView.sixHistoryItem
-        )
+        fun bind(modelHistory: HistoryModels) {
 
-        fun bind(listOf: List<ResultHistoryData>) {
-
-            for ((index,item) in (listOf).withIndex()){
-                Picasso.with(itemView.context)
-                    .load(item.historyUrl)
-                    .noFade()
-                    .placeholder(R.drawable.one_history)
-                    .into(listOfImage[index])
-
-                val items = listOf.map { it.historyUrl.toString() }
-
-                listOfImage[index].setOnClickListener {
-                    listOfImage[index].transitionName = items[index]
-                    setHistoryClickListener.onClick(items,index,listOfImage[index])
-                }
-            }
         }
+
     }
 
     class LiveViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
         var serLiveClickListener: LiveRowType.LiveListener? = null
 
-        private val liveStreamPager: ViewPager2 = itemView.onLiveStreamViewPager
+        val liveStreamPager: ViewPager2 = itemView.onLiveStreamViewPager
 
         fun bind(liveItemAdapter: LiveItemAdapter){
+
             liveStreamPager.adapter = liveItemAdapter
 
             liveItemAdapter.liveClickListener = object : LiveRowType.LiveListener{
-                override fun onClick(liveUrl: String) {
-                    serLiveClickListener?.onClick(liveUrl)
+                override fun onClick(liveUrl: String, view: ImageView) {
+                    serLiveClickListener?.onClick(liveUrl,view)
                 }
-
             }
         }
     }
@@ -215,7 +194,6 @@ object ViewHolderFactory {
 
 
 
-
 //            iconGeneral.setImageResource(R.drawable.icon_market_place_app)
 //            iconGeneral.visibility = View.VISIBLE
 
@@ -225,7 +203,7 @@ object ViewHolderFactory {
 
     class ProductViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
-        private val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
+        val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
 
         var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
 
@@ -233,14 +211,12 @@ object ViewHolderFactory {
 
         var setClickBasketProduct: ProductsRowType.OnClickListener? = null
 
-        fun bind(listProducts: List<OnProductItem>,spain:Int){
+        fun bind(listProducts: List<OnProductItem>, spain: Int, productItemAdapter: ProductItemAdapter){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
-            val productAdapter = ProductItemAdapter()
-            productAdapter.setData(listProducts)
-//            productsRecyclerView.adapter = productAdapter
+            productItemAdapter.setData(listProducts)
 
             productsRecyclerView.apply {
-                adapter = productAdapter
+                adapter = productItemAdapter
                 postponeEnterTransition(itemView.context as Activity)
                 viewTreeObserver
                     .addOnPreDrawListener {
@@ -249,19 +225,18 @@ object ViewHolderFactory {
                     }
             }
 
-            productAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
-
+            productItemAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
                 override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                     setClickListenerProduct?.clickProduct(product,imageView)
                 }
             }
 
-            productAdapter.setClickHeartProduct = object:ProductsRowType.OnClickListener{
+            productItemAdapter.setClickHeartProduct = object:ProductsRowType.OnClickListener{
                 override fun onClick(productsItem: OnProductItem) {
                     setClickHeartProduct?.onClick(productsItem)
                 }
             }
-            productAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
+            productItemAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
                 override fun onClick(productsItem: OnProductItem) {
                     setClickBasketProduct?.onClick(productsItem)
                 }
@@ -270,52 +245,53 @@ object ViewHolderFactory {
     }
 
 
-    @JvmStatic
-    fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
-            RowType.BANNER_ROW_TYPE->{
-                val bannerTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_banner,parent,false)
-                BannerViewHolder(bannerTypeView)
-            }
-            RowType.CATEGORY_ROW_TYPE->{
-                val categoryTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_banner,parent,false)
-                CategoryViewHolder(categoryTypeView)
-            }
-            RowType.HISTORY_ROW_TYPE->{
-                val historyTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_history,parent,false)
-                HistoryViewHolder(historyTypeView)
-            }
-            RowType.LIVE_ROW_TYPE->{
-                val liveTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_live,parent,false)
-                LiveViewHolder(liveTypeView)
-            }
-            RowType.REGISTRATION_ROW_TYPE->{
-                val registrationTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_registration,parent,false)
-                RegistrationViewHolder(registrationTypeView)
-            }
+//    companion object{
+        @JvmStatic
+        fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return when(viewType){
+                RowType.BANNER_ROW_TYPE->{
+                    val bannerTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_banner,parent,false)
+                    BannerViewHolder(bannerTypeView)
+                }
+                RowType.CATEGORY_ROW_TYPE->{
+                    val categoryTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_banner,parent,false)
+                    CategoryViewHolder(categoryTypeView)
+                }
+                RowType.HISTORY_ROW_TYPE->{
+                    val historyTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_history,parent,false)
+                    HistoryViewHolder(historyTypeView)
+                }
+                RowType.LIVE_ROW_TYPE->{
+                    val liveTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_live,parent,false)
+                    LiveViewHolder(liveTypeView)
+                }
+                RowType.REGISTRATION_ROW_TYPE->{
+                    val registrationTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_registration,parent,false)
+                    RegistrationViewHolder(registrationTypeView)
+                }
 
-            RowType.PRODUCTS_ROW_TYPE->{
-                val productTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_products,parent,false)
-                ProductViewHolder(productTypeView)
-            }
+                RowType.PRODUCTS_ROW_TYPE->{
+                    val productTypeView= LayoutInflater.from(parent.context).inflate(R.layout.row_type_products,parent,false)
+                    ProductViewHolder(productTypeView)
+                }
 
-            RowType.PRODUCTS_SLOGAN_TOP_TYPE->{
-                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_top_slogan,parent,false)
-                TopSloganOfferProduct(sloganViewType)
-            }
-            RowType.PRODUCTS_SLOGAN_BOTTOM_TYPE->{
-                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_bottom_slogan,parent,false)
-                BottomSloganOfferProduct(sloganViewType)
-            }
-            RowType.PRODUCTS_SLOGAN_COMPLEX_TYPE->{
-                val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_complex_slogan,parent,false)
-                ComplexSloganOfferProduct(sloganViewType)
-            }
-            else -> {
-                throw UnknownFormatFlagsException("Not Found Row Type")
-            }
+                RowType.PRODUCTS_SLOGAN_TOP_TYPE->{
+                    val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_top_slogan,parent,false)
+                    TopSloganOfferProduct(sloganViewType)
+                }
+                RowType.PRODUCTS_SLOGAN_BOTTOM_TYPE->{
+                    val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_bottom_slogan,parent,false)
+                    BottomSloganOfferProduct(sloganViewType)
+                }
+                RowType.PRODUCTS_SLOGAN_COMPLEX_TYPE->{
+                    val sloganViewType= LayoutInflater.from(parent.context).inflate(R.layout.row_type_complex_slogan,parent,false)
+                    ComplexSloganOfferProduct(sloganViewType)
+                }
+                else -> {
+                    throw UnknownFormatFlagsException("Not Found Row Type")
+                }
 
-        }
+            }
+//        }
     }
-
 }

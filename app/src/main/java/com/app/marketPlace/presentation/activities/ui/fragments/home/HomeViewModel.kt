@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import androidx.lifecycle.MutableLiveData
+import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
 import com.app.marketPlace.data.remote.services.*
 import com.app.marketPlace.data.utils.Configs.CELL_PHONES
 import com.app.marketPlace.data.utils.Configs.HOME_AUDIO
@@ -38,7 +39,7 @@ class HomeViewModel : BaseViewModel() {
 
     val categoryProductLiveData:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
 
-    val historyItemsLiveData:MutableLiveData<Resource<OnHistoryItem>> = MutableLiveData()
+    val historyItemsLiveData:MutableLiveData<Resource<HistoryModels>> = MutableLiveData()
 
     val liveItemsLiveData:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
 
@@ -81,7 +82,6 @@ class HomeViewModel : BaseViewModel() {
                 )
         }
         loadingBannerStart()
-        Thread.sleep(50)
         withContext(Dispatchers.Main){
             categoryProductLiveData.value = categoryResult.await().result
         }
@@ -90,7 +90,6 @@ class HomeViewModel : BaseViewModel() {
     private suspend fun loadingHistoryData(){
         val historyItems:Deferred<Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
         loadingCategoryProduct()
-        Thread.sleep(100)
         withContext(Dispatchers.Main){
             historyItemsLiveData.value = historyItems.await().result
         }
@@ -99,7 +98,6 @@ class HomeViewModel : BaseViewModel() {
     private suspend fun loadingLiveData(){
         val liveItems:Deferred<Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
         loadingHistoryData()
-        Thread.sleep(150)
         withContext(Dispatchers.Main){
             liveItemsLiveData.value = liveItems.await().result
         }
@@ -122,7 +120,6 @@ class HomeViewModel : BaseViewModel() {
                 )
         }
         loadingLiveData()
-        Thread.sleep(200)
         withContext(Dispatchers.Main){
             listProductsLiveData.value = products.await().result
         }
@@ -143,7 +140,6 @@ class HomeViewModel : BaseViewModel() {
             )
         }
         getSimpleImageProducts()
-        Thread.sleep(250)
         withContext(Dispatchers.Main) {
             listProductsLiveData2.value = products.await().result
         }
@@ -153,7 +149,6 @@ class HomeViewModel : BaseViewModel() {
     private suspend fun loadingBannerCenter(){
         val bannerCenter:Deferred<Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
         getProductsPhone()
-        Thread.sleep(300)
         withContext(Dispatchers.Main){
             bannerListCenter.value = bannerCenter.await().result
         }
@@ -174,7 +169,6 @@ class HomeViewModel : BaseViewModel() {
             )
         }
         loadingBannerCenter()
-        Thread.sleep(350)
         withContext(Dispatchers.Main) {
             listProductsLiveData3.value = products3.await().result
         }
@@ -183,7 +177,6 @@ class HomeViewModel : BaseViewModel() {
     private suspend fun loadingBannerDown(){
         val bannerDown:Deferred<Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
         getProductsLaptops()
-        Thread.sleep(400)
         withContext(Dispatchers.Main){
             bannerListDown.value = bannerDown.await().result
         }
@@ -205,7 +198,6 @@ class HomeViewModel : BaseViewModel() {
             )
         }
         loadingBannerDown()
-        Thread.sleep(500)
         withContext(Dispatchers.Main) {
             listProductsLiveData4.value = products4.await().result
         }

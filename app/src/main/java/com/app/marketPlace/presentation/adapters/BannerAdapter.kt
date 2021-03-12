@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
         fun bind(onBoardingItem: OnBoardingItem){
 
 
-            if (onBoardingItem.onBoardingImageUrl.contains("dropBox".toUpperCase(Locale.ROOT))) {
+            if (onBoardingItem.onBoardingImageUrl.contains("drop".toUpperCase(Locale.ROOT))) {
                 Picasso.with(itemView.context)
                     .load(onBoardingItem.onBoardingImageUrl)
                     .placeholder(R.drawable.example_ads_banner)
@@ -75,18 +76,9 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
             }else{
                 imageOnBoarding.transitionName = onBoardingItem.transitionName
 
-
-//                Glide.with(itemView.context)
-//                    .load(onBoardingItem.onBoardingImageUrl)
-//                    .apply(RequestOptions().dontTransform())
-//                    .into(imageOnBoarding)
-
-
                 Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
-//                    .centerCrop()
                     .centerInside()
                     .resize(500,500)
-//                    .fit()
                     .into(imageOnBoarding,object :Callback{
                         override fun onSuccess() {
                             setCompleteListener?.onComplete()

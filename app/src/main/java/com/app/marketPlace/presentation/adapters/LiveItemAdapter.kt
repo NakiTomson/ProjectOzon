@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,6 @@ class LiveItemAdapter : RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemViewH
     fun setData(items:OnLiveItem) {
         val newList = items.resultLiveData
         newList?.let {
-            onBoardingItems.clear()
             onBoardingItems.addAll(newList)
             notifyDataSetChanged()
         }
@@ -69,7 +69,10 @@ class LiveItemAdapter : RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemViewH
             nameOfCompanyTitle?.text = liveItem.nameOfCompany
             textDescription?.text = liveItem.description
 
-            imageOnBoarding.setOnClickListener { liveClickListener?.onClick("8JLIJoIJpEU") }
+            imageOnBoarding.setOnClickListener {
+                imageOnBoarding.transitionName = liveItem.onIconCompanyUrl
+                liveItem.onIconCompanyUrl?.let { urlImage -> liveClickListener?.onClick(urlImage,imageOnBoarding) }
+            }
         }
 
     }

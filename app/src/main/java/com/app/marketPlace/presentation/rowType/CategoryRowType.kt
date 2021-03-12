@@ -1,10 +1,12 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
@@ -16,6 +18,7 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
 
 
     var clickOnCategoryItem:ClickCategoryListener? = null
+    var wasSetup:Boolean = false
 
     interface ClickCategoryListener{
         fun onClickItem(data: String)
@@ -26,6 +29,7 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
+        if (wasSetup) return
         val categoryViewHolder = viewHolder as  ViewHolderFactory.CategoryViewHolder
         categoryViewHolder.bind(combinationProductsAdapter)
 
@@ -36,8 +40,6 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
-
-
                 viewHolder.clickOnCategoryItem = object :ClickCategoryListener {
                     override fun onClickItem(data: String) {
                         clickOnCategoryItem?.onClickItem(data)
@@ -45,10 +47,12 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
                 }
             }
         })
+
+        wasSetup = true
     }
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
-
+        if (indicatorsContainer.children.count() >0) return
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
@@ -70,6 +74,7 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
                 indicatorsContainer.addView(it)
             }
         }
+        wasSetup = true
     }
 
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){
