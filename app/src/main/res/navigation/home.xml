@@ -81,7 +81,7 @@
         tools:layout="@layout/fragment_details_product" >
         <argument
             android:name="product"
-            app:argType="com.app.marketPlace.domain.modelsUI.OnProductItem"
+            app:argType="com.app.marketPlace.domain.models.ProductItem"
             app:nullable="true"
             android:defaultValue="@null" />
 

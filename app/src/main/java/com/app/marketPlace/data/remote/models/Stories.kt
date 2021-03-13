@@ -1,12 +1,11 @@
-package com.app.marketPlace.data.remote.modelsAPI
+package com.app.marketPlace.data.remote.models
 
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
 
-class HistoryModels {
-
+class Stories {
 
     @SerializedName("array")
     @Expose

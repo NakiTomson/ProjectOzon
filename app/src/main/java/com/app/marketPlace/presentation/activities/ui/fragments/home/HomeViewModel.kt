@@ -1,88 +1,81 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import androidx.lifecycle.MutableLiveData
-import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
-import com.app.marketPlace.data.remote.services.*
-import com.app.marketPlace.data.utils.Configs.CAMERA
-import com.app.marketPlace.data.utils.Configs.CELL_PHONES
-import com.app.marketPlace.data.utils.Configs.HOME_AUDIO
-import com.app.marketPlace.data.utils.Configs.LAPTOPS
-import com.app.marketPlace.data.utils.Configs.TVS
-import com.app.marketPlace.domain.repositories.HomeRepository
+import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Stories
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY1
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY2
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY3
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY4
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY5
+import com.app.marketPlace.data.utils.ConstantsApp.CAMERA
+import com.app.marketPlace.data.utils.ConstantsApp.CELL_PHONES
+import com.app.marketPlace.data.utils.ConstantsApp.HOME_AUDIO
+import com.app.marketPlace.data.utils.ConstantsApp.LAPTOPS
+import com.app.marketPlace.data.utils.ConstantsApp.TVS
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
-import com.app.marketPlace.domain.modelsUI.*
+import com.app.marketPlace.domain.models.*
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import javax.inject.Named
 
-class HomeViewModel : BaseViewModel() {
-
+class HomeViewModel() : BaseViewModel() {
 
     init {
-        MarketPlaceApp.appComponent.inject(listProductsHome = this)
+        MarketPlaceApp.appComponent.inject(this)
     }
 
-
-    @Inject @field : Named("bestbuy")
-    lateinit var homeRepositoryImplBestBye: HomeRepository
-
-
-    @Inject @field : Named("dropbox")
-    lateinit var homeRepositoryImplDropBox: HomeRepository
-
+    @Inject
+    lateinit var repository: AppRepository
 
     val completed:MutableLiveData<Boolean> = MutableLiveData()
 
-    val bannerListTop:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListTop:MutableLiveData<Resource<MutableList<Banner>>> = MutableLiveData()
 
-    val categoryProducts:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
+    val categoryProducts:MutableLiveData<Resource<MutableList<MutableList<Banner>>>> = MutableLiveData()
 
-    val storiesItems:MutableLiveData<Resource<HistoryModels>> = MutableLiveData()
+    val storiesItems:MutableLiveData<Resource<Stories>> = MutableLiveData()
 
-    val liveStreams:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
+    val liveStreams:MutableLiveData<Resource<LiveStreamItem>> = MutableLiveData()
 
-    val firstPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val firstPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val secondPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val secondPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val bannerListCenter:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListCenter:MutableLiveData<Resource<MutableList<Banner>>> = MutableLiveData()
 
-    val thirdPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val thirdPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val bannerListDown:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListDown:MutableLiveData<Resource<MutableList<Banner>>> = MutableLiveData()
 
-    val fourthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val fourthPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val fifthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val fifthPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val sixthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val sixthPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val seventhPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val seventhPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val eighthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val eighthPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val ninthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
-
+    val ninthPartProducts:MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
 
     fun startLoading() {
         loadData(Dispatchers.IO) {
-            when (bannerListTop.value?.data) {
-                null -> {
-                    loadProductsFourth()
-                }
-            }
+            loadProductsFourth()
         }
     }
 
     private suspend fun loadBannerTop(){
-        val banners:Deferred<Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
+        if (bannerListTop.value != null) return
+        val banners:Deferred<Results.ResultBanner> = async { repository.getBannerStart()}
         withContext(Dispatchers.Main){
             val result = banners.await().result
             when(gettingErrors(result)){
@@ -94,8 +87,9 @@ class HomeViewModel : BaseViewModel() {
 
 
     private suspend fun loadProductCategories(){
+        if (categoryProducts.value != null) return
         val categories = async {
-            homeRepositoryImplBestBye.loadCategories(
+            repository.loadCategories(
                 Params.CategoriesProductParams(pageSize = "20", apiKey = APIKEY1, page = "1")
             )
         }
@@ -110,7 +104,8 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private suspend fun loadStories(){
-        val stories:Deferred<Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
+        if (storiesItems.value != null) return
+        val stories:Deferred<Results.ResultHistory> = async {  repository.getHistoryItems()}
         loadProductCategories()
         withContext(Dispatchers.Main){
             val result = stories.await().result
@@ -122,7 +117,8 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private suspend fun loadLiveStream(){
-        val liveStreamItems:Deferred<Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
+        if (liveStreams.value != null) return
+        val liveStreamItems:Deferred<Results.ResultLive> = async {  repository.getLiveItems()}
         loadStories()
         withContext(Dispatchers.Main){
             val result = liveStreamItems.await().result
@@ -135,15 +131,16 @@ class HomeViewModel : BaseViewModel() {
 
 
     private suspend fun loadProductsFirst(){
+        if (firstPartProducts.value != null) return
         val products = async {
-            homeRepositoryImplBestBye
+            repository
                 .loadProducts(
                     Params.ProductsParams(
                         pathId = HOME_AUDIO,
                         pageSize = "3",
                         apiKey = APIKEY2,
                         page = "1",
-                        typeProduct = OnProductItem.Type.OnlyImage
+                        typeProduct = ProductItem.Type.OnlyImage
                     )
                 )
         }
@@ -158,14 +155,15 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private suspend fun loadProductsSecond(){
+        if (secondPartProducts.value != null) return
         val products = async {
-            homeRepositoryImplBestBye.loadProducts(
+            repository.loadProducts(
                 Params.ProductsParams(
                     pathId = CELL_PHONES,
                     pageSize = "6",
                     apiKey = APIKEY3,
                     page = "53",
-                    typeProduct = OnProductItem.Type.ProductNonName,
+                    typeProduct = ProductItem.Type.ProductNonName,
                     topOffer = "Это выгодно! Успей купить!",
                     bottomOffer = "Смотреть все товары !"
                 )
@@ -183,7 +181,8 @@ class HomeViewModel : BaseViewModel() {
 
 
     private suspend fun loadBannerCenter(){
-        val banners:Deferred<Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
+        if (bannerListCenter.value != null) return
+        val banners:Deferred<Results.ResultBanner> = async {  repository.getBannerCenter()}
         loadProductsSecond()
         withContext(Dispatchers.Main){
             val result = banners.await().result
@@ -196,14 +195,15 @@ class HomeViewModel : BaseViewModel() {
 
 
     private suspend fun loadProductsThird(){
+        if (thirdPartProducts.value != null) return
         val products = async {
-            homeRepositoryImplBestBye.loadProducts(
+            repository.loadProducts(
                 Params.ProductsParams(
                     pathId = LAPTOPS,
                     pageSize = "3",
                     apiKey = APIKEY4,
                     page = "233",
-                    typeProduct = OnProductItem.Type.ProductNonName,
+                    typeProduct = ProductItem.Type.ProductNonName,
                     topOffer = "Рекомендуем ",
                 )
             )
@@ -219,7 +219,8 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private suspend fun loadBannerDown(){
-        val banners:Deferred<Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
+        if (bannerListDown.value != null) return
+        val banners:Deferred<Results.ResultBanner> = async{ repository.getBannerDown() }
         loadProductsThird()
         withContext(Dispatchers.Main){
             val result = banners.await().result
@@ -231,14 +232,15 @@ class HomeViewModel : BaseViewModel() {
     }
 
     private suspend fun loadProductsFourth(){
+        if (fourthPartProducts.value != null) return
         val products = async {
-            homeRepositoryImplBestBye.loadProducts(
+            repository.loadProducts(
                 Params.ProductsParams(
                     pathId = TVS,
                     pageSize = "4",
                     apiKey = APIKEY5,
                     page = "23",
-                    typeProduct = OnProductItem.Type.ProductNonName,
+                    typeProduct = ProductItem.Type.ProductNonName,
                     topOffer = "Акции недели !",
                     bottomOffer = "Скидки до -80 % здесь!"
                 )
@@ -251,6 +253,7 @@ class HomeViewModel : BaseViewModel() {
                 true -> fourthPartProducts.value = result
                 else -> errorHandling("ERROR PRODUCT 4",result)
             }
+            completed.value = true
         }
     }
 
@@ -259,13 +262,13 @@ class HomeViewModel : BaseViewModel() {
         if (fifthPartProducts.value != null) return
         GlobalScope.launch(Dispatchers.IO) {
             val products = async {
-                homeRepositoryImplBestBye.loadProducts(
+                repository.loadProducts(
                     Params.ProductsParams(
                         pathId = CAMERA,
                         pageSize = "10",
                         apiKey = APIKEY1,
                         page = "1",
-                        typeProduct = OnProductItem.Type.ProductWithName,
+                        typeProduct = ProductItem.Type.ProductWithName,
                         topOffer = "Вас может заинтересовать "
                     )
                 )
@@ -276,7 +279,6 @@ class HomeViewModel : BaseViewModel() {
                     true -> fifthPartProducts.value = result
                     else -> errorHandling("ERROR PRODUCT 5",result)
                 }
-                completed.value = true
             }
         }
     }

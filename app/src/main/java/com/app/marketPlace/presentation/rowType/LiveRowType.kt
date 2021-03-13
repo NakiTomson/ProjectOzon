@@ -11,7 +11,7 @@ import kotlin.math.abs
 
 data class LiveRowType(val liveItemAdapter: LiveStreamAdapter) :RowType {
 
-    lateinit var setOnLiveSreamClickListener: LiveListener
+    lateinit var setOnLiveStreamClickListener: LiveListener
     var wasSetup:Boolean = false
 
     fun interface LiveListener {
@@ -29,10 +29,9 @@ data class LiveRowType(val liveItemAdapter: LiveStreamAdapter) :RowType {
 
         liveViewHolder.serLiveClickListener = object :LiveListener{
             override fun onClick(liveUrl: String, view: ImageView) {
-                setOnLiveSreamClickListener.onClick(liveUrl,view)
+                setOnLiveStreamClickListener.onClick(liveUrl,view)
             }
         }
-
 
         liveViewHolder.liveStreamPager.clipToPadding = false
         liveViewHolder.liveStreamPager.clipChildren = false
@@ -46,7 +45,6 @@ data class LiveRowType(val liveItemAdapter: LiveStreamAdapter) :RowType {
             page.scaleY = (0.85f + r * 0.15f)
         }
         liveViewHolder.liveStreamPager.setPageTransformer(compositePageTransformer)
-
         wasSetup = true
     }
 }

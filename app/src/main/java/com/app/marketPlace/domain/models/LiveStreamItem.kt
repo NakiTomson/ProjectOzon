@@ -1,11 +1,11 @@
-package com.app.marketPlace.domain.modelsUI
+package com.app.marketPlace.domain.models
 
 import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
 
-class OnLiveItem {
+class LiveStreamItem {
     @SerializedName("resultLiveData")
     @Expose
     var resultLiveData: MutableList<ListResultLiveItems>? = null

@@ -26,7 +26,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
 
     private var youtube: YouTubePlayerSupportFragment? = null
 
-
     private var urlStream = ""
 
     private val args: MockFragmentArgs by navArgs()
@@ -36,12 +35,10 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
     var position = 0
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         youtube = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
-
         activity?.bottomNavigationView?.visibility = View.GONE
 
         val imageUrl =  args.imageUrl
@@ -57,7 +54,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
         }
 
         imageUrl.let {
-
             if (imageUrl.isNotEmpty()){
                 progressBar.visibility = View.VISIBLE
                 imageMock.visibility = View.VISIBLE
@@ -75,7 +71,8 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
                 imageMock.visibility = View.GONE
                 frameMock.visibility = View.VISIBLE
                 urlStream = videoUrl
-//                youtube?.initialize(API_YOUTUBE_KEY, this)
+                
+                youtube?.initialize(API_YOUTUBE_KEY, this)
             }
         }
 
@@ -94,6 +91,7 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
 
     }
 
+
     private fun insertHistory(strings: Array<String>, position: Int) {
         imageMock.apply {
             strings[position].also { transitionName = it }
@@ -102,22 +100,12 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
                 .noFade()
                 .into(this)
         }
-
         loadingProgress(strings)
-
-        rightHistory.setOnClickListener {
-
-        }
-        leftHistory.setOnClickListener {
-
-        }
-
     }
 
     private val valueProcess:MutableLiveData<Int> = MutableLiveData()
 
     private fun loadingProgress(strings: Array<String>) {
-
         valueProcess.observe(viewLifecycleOwner, { progress ->
             progressBar?.progress = progress
             if (progress == 100 && progressBar != null) {
@@ -132,7 +120,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
                 valueProcess.postValue(i)
             }
         }
-
     }
 
     private fun nextHistory(strings: Array<String>, position: Int) {
@@ -143,25 +130,18 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
         }
     }
 
-    override fun onInitializationSuccess(
-        p0: YouTubePlayer.Provider?,
-        p1: YouTubePlayer?,
-        p2: Boolean
-    ) {
+    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
         youtubePlayer = p1
         if (!p2) {
             p1?.cueVideo(urlStream)
         }
     }
 
+    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+    }
+
     override fun onDestroyView() {
         activity?.bottomNavigationView?.visibility = View.VISIBLE
         super.onDestroyView()
     }
-    override fun onInitializationFailure(
-        p0: YouTubePlayer.Provider?,
-        p1: YouTubeInitializationResult?
-    ) {
-    }
-
 }

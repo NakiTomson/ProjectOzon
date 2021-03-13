@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.marketPlace.R
-import com.app.marketPlace.data.remote.modelsDB.UserDB
+import com.app.marketPlace.data.db.models.UserDb
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
@@ -21,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
 import javax.inject.Inject
 
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
     init {
         MarketPlaceApp.appComponent.inject(signUpFragment = this)
@@ -35,12 +34,8 @@ class SignUpFragment : Fragment() {
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -67,7 +62,7 @@ class SignUpFragment : Fragment() {
                 .addOnCompleteListener{ task->
                     when{
                         task.isSuccessful ->{
-                            mainViewModel.setUser(UserDB(nameUser,phone,login,password,addressDelivery))
+                            mainViewModel.setUser(UserDb(nameUser,phone,login,password,addressDelivery))
                             findNavController().popBackStack()
                             requireActivity().bottomNavigationView.selectedItemId = R.id.account
                         }
@@ -78,6 +73,7 @@ class SignUpFragment : Fragment() {
                 }
         }
     }
+
 
     private fun checkInput(
         email: String,

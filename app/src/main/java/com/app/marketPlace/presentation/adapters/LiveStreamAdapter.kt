@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.LiveRowType
-import com.app.marketPlace.domain.modelsUI.ListResultLiveItems
-import com.app.marketPlace.domain.modelsUI.OnLiveItem
+import com.app.marketPlace.domain.models.ListResultLiveItems
+import com.app.marketPlace.domain.models.LiveStreamItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_live.view.*
 import kotlin.collections.ArrayList
@@ -15,18 +15,16 @@ import kotlin.collections.ArrayList
 
 class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemViewHolder>(){
 
-
     private val onBoardingItems:MutableList<ListResultLiveItems> = ArrayList()
 
-    var liveClickListener: LiveRowType.LiveListener? = null
+    var setOnLiveClickListener: LiveRowType.LiveListener? = null
 
-    fun setData(items:OnLiveItem) {
+    fun setData(items:LiveStreamItem) {
         val newList = items.resultLiveData
         newList?.let {
             onBoardingItems.addAll(newList)
             notifyDataSetChanged()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
@@ -42,8 +40,6 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
     }
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
-
-
         private val imageOnBoarding = view.imageOnBoarding
         private val iconOfCompany = view.iconOfCompany
         private val statusLive = view.statusLive
@@ -61,7 +57,6 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
                 .load(liveItem.onIconCompanyUrl)
                 .into(iconOfCompany)
 
-
             statusLive.text = liveItem.statusLiveStream
             countUserLive?.text = liveItem.countUser
 
@@ -70,7 +65,7 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
 
             imageOnBoarding.setOnClickListener {
                 imageOnBoarding.transitionName = liveItem.onIconCompanyUrl
-                liveItem.onIconCompanyUrl?.let { urlImage -> liveClickListener?.onClick(urlImage,imageOnBoarding) }
+                liveItem.onIconCompanyUrl?.let { urlImage -> setOnLiveClickListener?.onClick(urlImage,imageOnBoarding) }
             }
         }
 

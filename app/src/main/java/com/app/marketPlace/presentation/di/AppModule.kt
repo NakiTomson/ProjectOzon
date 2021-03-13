@@ -12,5 +12,4 @@ class AppModule(private val app: MarketPlaceApp) {
     @Provides
     @Singleton
     fun provideContext(): Context = app
-
 }

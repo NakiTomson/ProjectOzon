@@ -1,8 +1,8 @@
-package com.app.marketPlace.domain.modelsUI
+package com.app.marketPlace.domain.models
 
 import java.io.Serializable
 
-data class OnProductItem (
+data class ProductItem (
 
     val skuId:Int,
 

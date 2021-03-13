@@ -1,5 +1,5 @@
 <resources>
-    <string name="marketPlaceLiveapp_name">MarketPlace</string>
+    <string name="app_name">MarketPlace</string>
     <string name="get_started">Get started</string>
 
 

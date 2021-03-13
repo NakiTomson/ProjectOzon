@@ -2,14 +2,12 @@ package com.app.marketPlace.presentation.activities.ui.fragments.makingOrder
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -22,12 +20,11 @@ import kotlinx.android.synthetic.main.fragment_making_order.*
 import java.util.ArrayList
 import javax.inject.Inject
 
-class MakingOrderFragment : Fragment() {
+class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
 
     init {
         MarketPlaceApp.appComponent.inject(makingOrderFragment = this)
     }
-
 
     @Inject
     lateinit var repository: DataBaseRepository
@@ -36,20 +33,16 @@ class MakingOrderFragment : Fragment() {
         MainViewModelFactory(repository)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_making_order, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val mAuth = FirebaseAuth.getInstance()
         mainViewModel.getUser(mAuth.currentUser?.email!!)
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility = View.GONE
 
         mainViewModel.userLive.observe(viewLifecycleOwner, { user->
-            textView8.text = user.address
-            textView13.text = user.name+", "+user.phone
+            deliveryAddress.text = user.address
+            nameAndNumberOfUser.text = user.name+", "+user.phone
         })
 
 
@@ -57,9 +50,9 @@ class MakingOrderFragment : Fragment() {
 
         val oldPrice = arguments?.getString("oldPrice")
         val discount = arguments?.getString("discount")
-        val finalPrice = arguments?.getString("finalPrice")
+        val finalCost = arguments?.getString("finalPrice")
 
-        textView21.text = "$oldPrice"
+        prodcutsPriceNumber.text = "$oldPrice"
 
         if (discount?.toFloat()!! > 0){
             textView23.visibility = View.VISIBLE
@@ -67,14 +60,15 @@ class MakingOrderFragment : Fragment() {
             textView23.text = ("- $discount $")
         }
 
-        textView27.text = "$finalPrice"
+        finalPrice.text = "$finalCost"
 
-        buttonMakeSell.setOnClickListener {
+        buttonMakePurchase.setOnClickListener {
             Toast.makeText(context,"Успешно купили",Toast.LENGTH_SHORT).show()
         }
 
         setUpImages(imagesUrls)
     }
+
 
     private fun setUpImages(listImagesUrl: ArrayList<String>?){
         if (listImagesUrl == null) return

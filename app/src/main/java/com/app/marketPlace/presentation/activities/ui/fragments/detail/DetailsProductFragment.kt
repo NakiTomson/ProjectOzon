@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.transition.*
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -22,15 +22,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.mappers.Mapper
-import com.app.marketPlace.domain.modelsUI.OnBoardingItem
-import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.activities.errorHandling
-import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
+import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeViewModel
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.adapters.SimpleDataAdapter
@@ -48,20 +47,14 @@ import kotlinx.android.synthetic.main.product_details_top.*
 import javax.inject.Inject
 
 
-class DetailsProductFragment : Fragment() {
+class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
     init {
         MarketPlaceApp.appComponent.inject(detailsProductFragment = this)
     }
 
-
-    private lateinit var viewModel:DetailsProductViewModel
-
     @Inject
     lateinit var repository: DataBaseRepository
-
-    @Inject
-    lateinit var mapper: Mapper
 
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
@@ -73,24 +66,19 @@ class DetailsProductFragment : Fragment() {
 
     private var indexTab = 0
 
+    lateinit var navController: NavController
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    private val viewModel: DetailsProductViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         sharedElementEnterTransition = TransitionSet().apply {
             addTransition(ChangeImageTransform())
             addTransition(ChangeBounds())
             addTransition(ChangeTransform())
         }
-        return inflater.inflate(R.layout.fragment_details_product, container, false)
-    }
 
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-        viewModel = ViewModelProvider(this).get(DetailsProductViewModel::class.java)
-        val detailProduct:OnProductItem? = args.product
+        val detailProduct:ProductItem? = args.product
 
         val nameProduct:String =
             detailProduct?.nameOfProduct?.replace("-", "")!!.replace("  ", " ")
@@ -104,7 +92,8 @@ class DetailsProductFragment : Fragment() {
         viewModel.getListSimilarCategory(detailProduct.categoryPath)
 
 
-        initView(mapper.reMapProduct(detailProduct))
+        initView(Mapper.reMapProduct(detailProduct))
+
 
         val bundle = bundleOf(
             "longDescription" to detailProduct.longDescription,
@@ -125,7 +114,6 @@ class DetailsProductFragment : Fragment() {
 
         val tab: TabLayout.Tab? = tabsLayout.getTabAt(indexTab)
         tab?.select()
-
 
 
         tabsLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
@@ -163,23 +151,14 @@ class DetailsProductFragment : Fragment() {
         })
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
-
-        basket?.visibility = View.VISIBLE
-        Log.v("LOGING","re initView2")
-    }
-
-    private fun initView(detailProduct: OnProductItem){
+    private fun initView(detailProduct: ProductItem){
         val navController =findNavController()
         val mAuth = FirebaseAuth.getInstance()
 
         val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
 
         basket?.visibility = View.VISIBLE
-        Log.v("LOGING","re initView")
+
 
         basket?.text = String.format(
             resources.getString(R.string.inBasket),
@@ -242,42 +221,52 @@ class DetailsProductFragment : Fragment() {
         }
 
         byeOneClick.setOnClickListener {
-
-            if (mAuth.currentUser != null){
-                val bundle = Bundle()
-                bundle.putStringArrayList("images", arrayListOf(detailProduct.generalIconProductSting))
-                bundle.putString("oldPrice", detailProduct.priceOlD)
-                bundle.putString(
-                    "discount", ((detailProduct.priceOlD?.replace("$", "")?.trim())?.toFloat()
-                        ?.minus(
-                            (detailProduct.priceWithDiscount?.replace("$", "")?.trim())!!.toFloat()
-                        )).toString()
-                )
-                bundle.putString("finalPrice", detailProduct.priceWithDiscount)
-                navController.navigate(R.id.makingOrderFragment, bundle)
-            }else {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Вы не зарегестрировались")
-                builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
-                    .setCancelable(false)
-                    .setPositiveButton("Да") { dialog, id ->
-                        navController.navigate(R.id.signInFragment)
-                    }
-                    .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
-                    }
-
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.show()
-            }
+            handleByeOneClick(mAuth,detailProduct)
         }
 
+        setupBannerAdapter(detailProduct)
+        setupSimpleAdapter(detailProduct)
+        setupSimilarAdapter()
+        setupEquivalentAdapter()
+    }
 
 
+    private fun handleByeOneClick(mAuth:FirebaseAuth,detailProduct: ProductItem){
+        if (mAuth.currentUser != null){
+            val bundle = Bundle()
+            bundle.putStringArrayList("images", arrayListOf(detailProduct.generalIconProductSting))
+            bundle.putString("oldPrice", detailProduct.priceOlD)
+            bundle.putString(
+                "discount", ((detailProduct.priceOlD?.replace("$", "")?.trim())?.toFloat()
+                    ?.minus(
+                        (detailProduct.priceWithDiscount?.replace("$", "")?.trim())!!.toFloat()
+                    )).toString()
+            )
+            bundle.putString("finalPrice", detailProduct.priceWithDiscount)
+            navController.navigate(R.id.makingOrderFragment, bundle)
+        }else {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Вы не зарегестрировались")
+            builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
+                .setCancelable(false)
+                .setPositiveButton("Да") { dialog, id ->
+                    navController.navigate(R.id.signInFragment)
+                }
+                .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
+                }
+
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
+    }
+
+
+    private fun setupBannerAdapter(detailProduct: ProductItem){
         val adapterImages = BannerAdapter()
 
         detailProduct.images?.forEach {
             adapterImages.setItem(
-                OnBoardingItem(
+                Banner(
                     onBoardingImageUrl = it,
                     transitionName = detailProduct.generalIconProductSting!!
                 )
@@ -297,125 +286,83 @@ class DetailsProductFragment : Fragment() {
         setupIndicator(adapterImages.itemCount)
         setCurrentIndicator(0)
 
-        imageDetailViewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
+        imageDetailViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
             }
         })
+    }
 
+    private fun setupSimpleAdapter(detailProduct: ProductItem){
         val simpleAdapter = SimpleDataAdapter()
-        simpleAdapter.setOnClickCategoryListener = object : SimpleDataAdapter.OnClickCategoryListener{
-            override fun onClickCategory(path: String) {
-                val bundle = Bundle()
-                bundle.putString("category", path)
-                navController.navigate(R.id.productsListFragment, bundle)
-            }
+        simpleAdapter.setOnClickCategoryListener = SimpleDataAdapter.OnClickCategoryListener { path ->
+            val bundle = Bundle()
+            bundle.putString("category", path)
+            navController.navigate(R.id.productsListFragment, bundle)
         }
+
         simpleAdapter.setData(detailProduct.categoryPath?.toMutableList())
         similarCategory.layoutManager = LinearLayoutManager(context)
         similarCategory.adapter = simpleAdapter
-
-
-        val adapterEquivalent  = ProductItemAdapter()
-        listProductsEquivalent.adapter = adapterEquivalent
-        listProductsEquivalent.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-
-        adapterEquivalent.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-
-                val extras = FragmentNavigatorExtras(
-                    imageView to product.generalIconProductSting!!
-                )
-
-                val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action,extras)
-            }
-        }
-
-        adapterEquivalent.setClickHeartProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-            }
-        }
-
-        adapterEquivalent.setClickBasketProduct =object: ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteBasket(productsItem)
-            }
-        }
-
-
-        val adapterSimilar  = ProductItemAdapter()
-        listProductsSimilar.adapter = adapterSimilar
-        listProductsSimilar.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-
-        adapterSimilar.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-
-                val extras = FragmentNavigatorExtras(
-                    imageView to product.generalIconProductSting!!
-                )
-
-                val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action,extras)
-            }
-        }
-
-        adapterSimilar.setClickHeartProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-            }
-        }
-
-        adapterSimilar.setClickBasketProduct = object: ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteBasket(productsItem)
-            }
-        }
-
-
-        setEquivalent(adapterEquivalent)
-        setSimilar(adapterSimilar)
     }
 
+    private fun setupSimilarAdapter(){
+        val adapterSimilar  = ProductItemAdapter()
+        listProductsSimilar.adapter = adapterSimilar
+        listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
+        adapterSimilar.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+            val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+            navController.navigate(action, extras)
+        }
 
-    private fun setEquivalent(adapterEquivalent: ProductItemAdapter){
+        adapterSimilar.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
+        }
+
+        adapterSimilar.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteBasket(productsItem)
+        }
+        setupSimilarProducts(adapterSimilar)
+    }
+
+    private fun setupEquivalentAdapter(){
+        val adapterEquivalent  = ProductItemAdapter()
+        listProductsEquivalent.adapter = adapterEquivalent
+        listProductsEquivalent.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+        adapterEquivalent.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+            val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+            navController.navigate(action, extras)
+        }
+
+        adapterEquivalent.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
+        }
+
+        adapterEquivalent.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteBasket(productsItem)
+        }
+        setupEquivalentProducts(adapterEquivalent)
+    }
+
+    private fun setupEquivalentProducts(adapterEquivalent: ProductItemAdapter){
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
-            if (gettingErrors(resource)) {
-                resource.data?.list?.let { list ->
-                    if (list.isEmpty()) errorHandling("Empty List Equivalent Product", resource)
-                    adapterEquivalent.setData(list)
-                }
-            } else {
-                errorHandling("ERROR PRODUCT 1", resource)
+            if (resource.data!!.list.isNotEmpty()) {
+                adapterEquivalent.setData(resource.data.list)
+                groupEquivalent.visibility = View.VISIBLE
             }
         })
     }
 
-    private fun setSimilar(adapterSimilar: ProductItemAdapter){
+    private fun setupSimilarProducts(adapterSimilar: ProductItemAdapter){
         viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
-            if (gettingErrors(resource)) {
-                resource.data?.list?.let { list ->
-                    if (list.isEmpty()) errorHandling("Empty List Similar Product", resource)
-                    adapterSimilar.setData(list)
-                }
-            } else {
-                errorHandling("ERROR PRODUCT 1", resource)
+            if (resource.data!!.list.isNotEmpty()) {
+                adapterSimilar.setData(resource.data.list)
+                groupSimilar.visibility = View.VISIBLE
             }
         })
     }
@@ -465,12 +412,13 @@ class DetailsProductFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.GONE
-        Log.v("LOGING","re onDestroyView")
-        super.onStop()
+    override fun onResume() {
+        super.onResume()
+        activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.VISIBLE
     }
 
-
-
+    override fun onStop() {
+        activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.GONE
+        super.onStop()
+    }
 }

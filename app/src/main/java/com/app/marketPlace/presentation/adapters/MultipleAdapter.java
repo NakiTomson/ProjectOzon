@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MultipleAdapter extends RecyclerView.Adapter {
 
-    private final List<RowType> dataSet = new ArrayList<>(40);
+    private final List<RowType> dataSet = new ArrayList<>(30);
 
     public OnNextDataListener setNextDataListener;
 
@@ -35,8 +35,6 @@ public class MultipleAdapter extends RecyclerView.Adapter {
         notifyItemChanged(countPosition);
     }
 
-
-
     @Override
     public int getItemViewType(int position) {
         return dataSet.get(position).getItemViewType();
@@ -48,11 +46,10 @@ public class MultipleAdapter extends RecyclerView.Adapter {
         return ViewHolderFactory.create(parent, viewType);
     }
 
-
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
-        if ((dataSet.size() >= 17 || position > dataSet.size() - 2) && onDownload) {
+        if ((dataSet.size() >= 17 && position > dataSet.size() - 2) && onDownload) {
             setNextDataListener.onNextData();
             onDownload = false;
         }
@@ -63,7 +60,6 @@ public class MultipleAdapter extends RecyclerView.Adapter {
         String id = String.valueOf(dataSet.get(position).hashCode()).replace("-","");
         return Long.parseLong(id);
     }
-
 
     @Override
     public int getItemCount() {

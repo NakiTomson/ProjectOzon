@@ -24,11 +24,8 @@ class RestApiModule {
             override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
                 val original = chain.request()
                 val originalHttpUrl = original.url
-                val url = originalHttpUrl.newBuilder()
-//                        .addQueryParameter("apiKey", "VZVWfwM3TwxNTbFvNiAxuCPL")
-                        .build()
-                val requestBuilder = original.newBuilder()
-                        .url(url)
+                val url = originalHttpUrl.newBuilder().build()
+                val requestBuilder = original.newBuilder().url(url)
                 val request = requestBuilder.build()
                 return chain.proceed(request)
             }
@@ -41,7 +38,6 @@ class RestApiModule {
     }
 
     @Provides
-    @Named("bestbuy")
     @Singleton
     fun provideRetrofitBestBy(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
@@ -53,32 +49,11 @@ class RestApiModule {
                 .build()
     }
 
-    @Provides
-    @Named("dropbox")
-    @Singleton
-    fun provideRetrofitDropBox(okHttpClient: OkHttpClient): Retrofit {
-
-        return Retrofit
-                .Builder()
-                .baseUrl("https://www.dropbox.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .client(okHttpClient)
-                .build()
-    }
-
-    @Provides
-    @Named("dropbox")
-    @Singleton
-    fun provideMarketPlaceServiceApiBestBye(@Named("dropbox") retrofit: Retrofit): MarketPlaceService {
-        return retrofit.create(MarketPlaceService::class.java)
-    }
 
 
     @Provides
-    @Named("bestbuy")
     @Singleton
-    fun provideMarketPlaceServiceApiDropBox(@Named("bestbuy") retrofit: Retrofit): MarketPlaceService {
+    fun provideMarketPlaceServiceApiDropBox(retrofit: Retrofit): MarketPlaceService {
         return retrofit.create(MarketPlaceService::class.java)
     }
 

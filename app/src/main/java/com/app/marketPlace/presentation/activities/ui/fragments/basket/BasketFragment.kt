@@ -1,27 +1,22 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.basket
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.data.utils.Configs.PLAYSTATION
+import com.app.marketPlace.data.utils.ConstantsApp.PLAYSTATION
 import com.app.marketPlace.domain.mappers.Mapper
-import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.activities.errorHandling
-import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.adapters.ProductHorizontalItemAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.rowType.ProductsRowType
@@ -32,9 +27,7 @@ import java.text.DecimalFormat
 import javax.inject.Inject
 
 
-class BasketFragment : Fragment() {
-
-    private lateinit var  viewModel: BasketViewModel
+class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     init {
         MarketPlaceApp.appComponent.inject(basketFragment = this)
@@ -43,112 +36,91 @@ class BasketFragment : Fragment() {
     @Inject
     lateinit var repository: DataBaseRepository
 
-    @Inject
-    lateinit var mapper: Mapper
+    private val viewModel: BasketViewModel by viewModels()
+
+    lateinit var navController: NavController
 
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_basket, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(BasketViewModel::class.java)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.getListSimilarCategory(PLAYSTATION)
+        navController = findNavController()
 
         val mAuth = FirebaseAuth.getInstance()
 
         val basketAdapter = ProductHorizontalItemAdapter()
-        basketAdapter.setHasStableIds(true)
+        val recommendAdapter  = ProductItemAdapter()
 
-        val adapter  = ProductItemAdapter()
-        listRecommendsProduct.adapter = adapter
-        listRecommendsProduct.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-
-        adapter.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-
-                val extras = FragmentNavigatorExtras(
-                    imageView to product.generalIconProductSting!!
-                )
-
-                val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                findNavController().navigate(action,extras)
-            }
-        }
-
-        adapter.setClickHeartProduct = object : ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-            }
-        }
-
-        adapter.setClickBasketProduct = object : ProductsRowType.ClickListener {
-            override fun onClick(productsItem: OnProductItem) {
-
-                mainViewModel.insertOrDeleteBasket(productsItem)
-
-                if (productsItem.productInBasket){
-                    basketAdapter.setData(productsItem)
-                }
-            }
-        }
-
-        basketAdapter.setClickListenerProduct = object :ProductsRowType.ProductClickListener{
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-
-                val extras = FragmentNavigatorExtras(
-                    imageView to product.generalIconProductSting!!
-                )
-                val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                findNavController().navigate(action,extras)
-            }
-        }
-
-        viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
-            if (gettingErrors(resource)) {
-                resource.data?.list?.let { list ->
-                    if (list.isEmpty()) errorHandling("Empty List Similar Product", resource)
-                    adapter.setData(list)
-                }
-            } else {
-                errorHandling("ERROR PRODUCT 1", resource)
-            }
-        })
-
+        setupBasketAdapter(basketAdapter)
+        setupListRecommendAdapter(recommendAdapter,basketAdapter)
+        setupRecommendProducts(recommendAdapter)
+        setupBasketProducts(mAuth,basketAdapter)
 
         startShopping.setOnClickListener {
             requireActivity().bottomNavigationView.selectedItemId = R.id.home
         }
+    }
 
-
+    private fun setupBasketAdapter(basketAdapter: ProductHorizontalItemAdapter) {
+        basketAdapter.setHasStableIds(true)
+        basketAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
+            val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
+            val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+            findNavController().navigate(action, extras)
+        }
         basketsRecyclerView.layoutManager = LinearLayoutManager(context)
         basketsRecyclerView.adapter = basketAdapter
         basketsRecyclerView.setHasFixedSize(true)
 
+        basketAdapter.setClickHeartProduct = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteFavoriteProduct(product)
+        }
 
+        basketAdapter.setOnBasketDelete = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteBasket(product)
+            basketAdapter.deleteProduct(product)
+        }
+    }
+
+    private fun setupListRecommendAdapter(recommendAdapter: ProductItemAdapter,basketAdapter: ProductHorizontalItemAdapter) {
+        listRecommendProduct.adapter = recommendAdapter
+        listRecommendProduct.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+        recommendAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
+            val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
+            val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+            findNavController().navigate(action, extras)
+        }
+
+        recommendAdapter.setClickHeartProduct = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteFavoriteProduct(product)
+        }
+
+        recommendAdapter.setClickBasketProduct = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteBasket(product)
+            if (product.productInBasket) {
+                basketAdapter.setData(product)
+            }
+        }
+    }
+
+    private fun setupRecommendProducts(recommendAdapter: ProductItemAdapter) {
+        viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
+            recommendAdapter.setData(resource.data!!.list)
+        })
+    }
+
+    private fun setupBasketProducts(mAuth: FirebaseAuth,basketAdapter: ProductHorizontalItemAdapter){
         var images:List<String>? = null
         var oldPrice = 0f
         var priceWithDiscount = 0f
 
         mainViewModel.baskets.observe(viewLifecycleOwner, {
-
-            val baskets = mapper.mapDbBasketToUi(it)
-
+            val baskets = Mapper.MapperToUi.mapListBasketDb(it)
             var priceWithDiscountLocal = 0f
-
             var priceOldLocal = 0f
 
             if (baskets.isNullOrEmpty()) {
@@ -157,8 +129,6 @@ class BasketFragment : Fragment() {
             } else {
                 groupEmptyBasket.visibility = View.GONE
                 basketGroup.visibility = View.VISIBLE
-
-
                 basketAdapter.setData(baskets)
                 images = baskets.map { basketMap -> basketMap.generalIconProductSting.toString() }
 
@@ -175,63 +145,42 @@ class BasketFragment : Fragment() {
                 }
 
                 priceWithDiscount = priceWithDiscountLocal
-
-
                 allPrice.text = String.format(resources.getString(R.string.priceWithDiscount), priceWithDiscountLocal)
                 priceWithDiscountLocal = 0f
                 oldPrice = priceOldLocal
                 priceOldLocal = 0f
-
             }
         })
 
-        basketAdapter.setClickHeartProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-            }
-        }
-
-        basketAdapter.setOnBasketDelete = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteBasket(productsItem)
-                basketAdapter.deleteProduct(productsItem)
-            }
-        }
-
-
-        val navController = findNavController()
         goToMakeOrder.setOnClickListener {
-            if (mAuth.currentUser != null){
-                val bundle = Bundle()
-
-                val arrayList = ArrayList<String>(images)
-
-                bundle.putStringArrayList("images",arrayList)
-
-                bundle.putString("oldPrice", "$oldPrice $")
-                val decimalFormat = DecimalFormat("#.#")
-                val result: String = decimalFormat.format(oldPrice - priceWithDiscount)
-                bundle.putString("discount", result)
-                bundle.putString("finalPrice", "$priceWithDiscount $")
-                navController.navigate(R.id.makingOrderFragment, bundle)
-            }else {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Вы не зарегестрировались")
-                builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
-                    .setCancelable(false)
-                    .setPositiveButton("Да") { dialog, id ->
-                        requireActivity().bottomNavigationView.selectedItemId = R.id.home
-                    }
-                    .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
-                    }
-
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.show()
-            }
+            handleMakeOrder(mAuth,images,oldPrice,priceWithDiscount)
         }
     }
 
+    private fun handleMakeOrder(mAuth: FirebaseAuth, images: List<String>?, oldPrice: Float, priceWithDiscount: Float) {
+        if (mAuth.currentUser != null){
+            val bundle = Bundle()
+            val arrayList = ArrayList<String>(images)
+            bundle.putStringArrayList("images",arrayList)
+            bundle.putString("oldPrice", "$oldPrice $")
+            val decimalFormat = DecimalFormat("#.#")
+            val result: String = decimalFormat.format(oldPrice - priceWithDiscount)
+            bundle.putString("discount", result)
+            bundle.putString("finalPrice", "$priceWithDiscount $")
+            navController.navigate(R.id.makingOrderFragment, bundle)
+        }else {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Вы не зарегестрировались")
+            builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
+                .setCancelable(false)
+                .setPositiveButton("Да") { dialog, id ->
+                    requireActivity().bottomNavigationView.selectedItemId = R.id.home
+                }
+                .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
+                }
 
-
-
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        }
+    }
 }

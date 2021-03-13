@@ -24,10 +24,8 @@ import javax.inject.Singleton
 @Singleton
 interface AppComponent {
 
-
     fun inject(listProductsHome: HomeViewModel)
     fun inject(catalogViewModel: CatalogViewModel)
-    fun inject(searchHintProductHomeViewModel: ProductsListViewModel)
     fun inject(detailsProductViewModel: DetailsProductViewModel)
     fun inject(basketViewModel: BasketViewModel)
     fun inject(mainActivity: MainActivity)
@@ -37,9 +35,9 @@ interface AppComponent {
     fun inject(basketFragment: BasketFragment)
     fun inject(searchHintHistoryProductFragment: SearchHintHistoryProductFragment)
     fun inject(makingOrderFragment: MakingOrderFragment)
+    fun inject(productsListViewModel: ProductsListViewModel)
     fun inject(favoriteFragment: FavoriteFragment)
     fun inject(signUpFragment: SignUpFragment)
     fun inject(detailsProductFragment: DetailsProductFragment)
-
 
 }

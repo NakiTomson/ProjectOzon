@@ -11,14 +11,11 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
     private val job: Job = Job()
 
-
     private val viewModelScope = CoroutineScope(Dispatchers.Main + job)
-
 
     fun <P> loadData(coroutineContexts: CoroutineContext,doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)
     }
-
 
     private inline fun <P> doCoroutineWork(
         crossinline doOnAsyncBlock: suspend CoroutineScope.() -> P,
@@ -32,10 +29,8 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
         }
     }
 
-
     override fun onCleared() {
         super.onCleared()
         job.cancelChildren()
     }
-
 }

@@ -13,15 +13,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
 
-class SignInFragment : Fragment() {
+class SignInFragment : Fragment(R.layout.fragment_sign_in) {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_sign_in, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
         val navController = findNavController()
@@ -54,15 +49,15 @@ class SignInFragment : Fragment() {
         }
 
         mAuth.signInWithEmailAndPassword(email, passWord)
-            .addOnCompleteListener { task->
-                when{
-                    task.isSuccessful ->{
+            .addOnCompleteListener { task ->
+                when {
+                    task.isSuccessful -> {
                         val user = mAuth.currentUser
-                        val bundle =Bundle()
-                        bundle.putBoolean("isSuccessful",true)
+                        val bundle = Bundle()
+                        bundle.putBoolean("isSuccessful", true)
                         requireActivity().bottomNavigationView.selectedItemId = R.id.account
                     }
-                    else ->{
+                    else -> {
                         Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                     }
                 }

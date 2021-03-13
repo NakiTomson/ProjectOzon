@@ -9,26 +9,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
-import com.app.marketPlace.domain.modelsUI.OnBoardingItem
+import com.app.marketPlace.data.remote.models.Banner
 import com.squareup.picasso.Picasso
 
 
-class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>(){
-    var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
+class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>() {
+    var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
-    private val onBoardingItems: MutableList<OnBoardingItem> = mutableListOf()
+    private val onBoardingItems: MutableList<Banner> = mutableListOf()
 
-    fun setData(items: MutableList<OnBoardingItem>) {
+    fun setData(items: MutableList<Banner>) {
         onBoardingItems.clear()
         onBoardingItems.addAll(items)
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
-        return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_category_product,parent,false))
+        return OnBoardingItemViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_category_product, parent, false)
+        )
     }
-
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
         holder.bind(onBoardingItems[position])
@@ -38,14 +38,14 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
         return onBoardingItems.size
     }
 
-    inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
+    inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val imageOnBoarding = view.findViewById<ImageView>(R.id.imageOnBoarding)
         private val textTitle = view.findViewById<TextView>(R.id.textTitle)
         private val textDescription = view.findViewById<TextView>(R.id.textDescription)
         private val categoryItem = view.findViewById<LinearLayout>(R.id.categoryItem)
 
-        fun bind(onBoardingItem: OnBoardingItem){
+        fun bind(onBoardingItem: Banner) {
             textTitle?.text = onBoardingItem.title
             textDescription?.text = onBoardingItem.description
 
@@ -56,23 +56,8 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
                 .into(imageOnBoarding)
 
             categoryItem.setOnClickListener {
-                onBoardingItem.category?.let { clickOnCategoryItem?.onClickItem(it)}
+                onBoardingItem.category?.let { setOnCategoryClickListener?.onClickItem(it) }
             }
-
         }
-
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

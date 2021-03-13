@@ -6,7 +6,6 @@ import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
 data class RegistrationRowType(val randomId: Double = Math.random() *123) :RowType {
 
-
     var setOnAuthorizationClickListener:AuthorizationClickListener? = null
 
     fun interface AuthorizationClickListener{

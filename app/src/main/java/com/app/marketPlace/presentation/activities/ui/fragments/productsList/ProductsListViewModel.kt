@@ -2,75 +2,88 @@ package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.remote.services.APIKEY1
-import com.app.marketPlace.data.remote.services.APIKEY2
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY1
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY2
 import com.app.marketPlace.presentation.rowType.Resource
-import com.app.marketPlace.domain.modelsUI.OnOfferProductsItem
-import com.app.marketPlace.domain.modelsUI.OnProductItem
-import com.app.marketPlace.domain.repositories.HomeRepository
+import com.app.marketPlace.domain.models.CombineProductsItem
+import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.presentation.MarketPlaceApp
+import com.app.marketPlace.presentation.activities.errorHandling
+import com.app.marketPlace.presentation.activities.gettingErrors
 import kotlinx.coroutines.*
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class ProductsListViewModel(private val repository: HomeRepository) :ViewModel(), CoroutineScope {
+class ProductsListViewModel :ViewModel(), CoroutineScope {
+
+
+    init {
+        MarketPlaceApp.appComponent.inject(this)
+    }
+    @Inject
+    lateinit var repository: AppRepository
 
     private val job: Job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
+    val searchProductsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
-    val searchProductsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
-
-    val productsResultList: MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
-
-
+    val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
 
     fun loadProductsByWord(keyWordOne: String) {
         if (searchProductsResultList.value?.data == null) {
             launch(Dispatchers.IO) {
-                val data = async {
+                val products = async {
                     repository.loadSearchProducts(
                         Params.ProductsParams(
                             pathId = keyWordOne,
                             pageSize = "100",
                             apiKey = APIKEY1,
                             page = "1",
-                            typeProduct = OnProductItem.Type.ProductWithName,
+                            typeProduct = ProductItem.Type.ProductWithName,
                             requestName = keyWordOne
                         )
                     )
                 }
                 withContext(Dispatchers.Main) {
-                    searchProductsResultList.value = data.await().result
+                    val result = products.await().result
+                    when(gettingErrors(result)){
+                        true -> searchProductsResultList.value = result
+                        else -> errorHandling("ERROR PRODUCT 1",result)
+                    }
                 }
             }
         }
     }
 
-    fun getProductsByCategory(category:String){
+    fun loadProductsByCategory(category:String){
         if(productsResultList.value?.data == null){
             launch {
                 val products= async {
-                    repository
-                        .loadProducts(
+                    repository.loadProducts(
                             Params.ProductsParams(
                                 pathId = category,
                                 pageSize = "100",
                                 apiKey = APIKEY2,
                                 page = "1",
-                                typeProduct = OnProductItem.Type.ProductWithName
+                                typeProduct = ProductItem.Type.ProductWithName
                             )
                         )
                 }
                 withContext(Dispatchers.Main){
-                    productsResultList.value = products.await().result
+                    val result = products.await().result
+                    when(gettingErrors(result)){
+                        true -> productsResultList.value = result
+                        else -> errorHandling("ERROR PRODUCT 1",result)
+                    }
                 }
             }
         }
     }
-
-
 }
 

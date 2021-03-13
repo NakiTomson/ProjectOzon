@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private var currentNavController: LiveData<NavController>? = null
 
-
     companion object{
         var listIdsBasket:MutableList<Int> = mutableListOf()
         var listIdsFavorite:MutableList<Int> = mutableListOf()
@@ -51,7 +50,6 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allIdsInBaskets.observe(this, { list->
             list?.let {
-                Log.v("CRTYBUN","re $it")
                 listIdsBasket.clear()
                 listIdsBasket.addAll(it)
             }
@@ -59,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allIdsInFavorite.observe(this, { list->
             list?.let {
-                Log.v("CRTYBUN","re2 $it")
                 listIdsFavorite.clear()
                 listIdsFavorite.addAll(it)
             }
@@ -76,9 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigationBar() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
         val navGraphIds = listOf(R.navigation.home, R.navigation.category, R.navigation.basket,R.navigation.favorite,R.navigation.account)
-
         val controller = bottomNavigationView.setupWithNavController(
             navGraphIds = navGraphIds,
             fragmentManager = supportFragmentManager,
@@ -86,10 +81,8 @@ class MainActivity : AppCompatActivity() {
             intent = intent
         )
 
-
         currentNavController = controller
         checkInternetConnection()
-
         bottomNavigationView.callOnClick()
     }
 
@@ -97,7 +90,6 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
     }
-
 
     private fun checkInternetConnection() {
         val networkConnection = NetworkConnection(applicationContext)
@@ -109,5 +101,4 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
 }

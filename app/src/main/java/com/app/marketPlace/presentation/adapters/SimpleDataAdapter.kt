@@ -7,17 +7,16 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.modelsUI.CategoryPath
+import com.app.marketPlace.domain.models.CategoryPath
 import kotlinx.android.synthetic.main.item_simple.view.*
 
 class SimpleDataAdapter : RecyclerView.Adapter<SimpleDataAdapter.SimpleDataAdapterViewHolder>() {
 
     private val listItems:MutableList<CategoryPath> = ArrayList()
 
-
     var setOnClickCategoryListener:OnClickCategoryListener? = null
 
-    interface OnClickCategoryListener{
+    fun interface OnClickCategoryListener{
         fun onClickCategory(path: String)
     }
 

@@ -18,14 +18,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_personal_account.*
 import javax.inject.Inject
 
-class PersonalAccount : Fragment() {
-
-
+class PersonalAccount : Fragment(R.layout.fragment_personal_account) {
 
     init {
         MarketPlaceApp.appComponent.inject(personalAccount = this)
     }
-
 
     @Inject
     lateinit var repository: DataBaseRepository
@@ -34,18 +31,8 @@ class PersonalAccount : Fragment() {
         MainViewModelFactory(repository)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_personal_account, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val mAuth = FirebaseAuth.getInstance()
 
         if (mAuth.currentUser == null){

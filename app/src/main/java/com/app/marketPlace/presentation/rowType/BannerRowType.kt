@@ -14,7 +14,7 @@ import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import com.makeramen.roundedimageview.RoundedImageView
 
-data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
+data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
 
 
     var wasSetup:Boolean = false
@@ -24,7 +24,7 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
         fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView)
     }
 
-    interface CompleteListener {
+    fun interface CompleteListener {
         fun onComplete()
     }
 
@@ -35,9 +35,9 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         if (wasSetup) return
         val bannerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
-        bannerViewHolder.bind(onBoardingAdapter)
+        bannerViewHolder.bind(bannerAdapter)
 
-        setupIndicator(bannerViewHolder.bannerIndicatorsContainer!!,onBoardingAdapter.itemCount,viewHolder.itemView.context)
+        setupIndicator(bannerViewHolder.bannerIndicatorsContainer!!,bannerAdapter.itemCount,viewHolder.itemView.context)
         setIndicatorsContainer(0, bannerViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
 
         bannerViewHolder.bannekerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -48,7 +48,7 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
                 viewHolder.setBannerClickListener = object :BannerListener{
                     override fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView) {
                         setOnBannerClickListener?.onClickBanner(
-                            onBoardingAdapter.onBoardingItems[position].onBoardingImageUrl,
+                            bannerAdapter.onBoardingItems[position].onBoardingImageUrl,
                             imageOnBoarding
                         )
                     }

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.adapters.BannerAdapter
-import com.app.marketPlace.domain.modelsUI.OnBoardingItem
+import com.app.marketPlace.data.remote.models.Banner
 import kotlinx.android.synthetic.main.activity_onboarding_first_start.*
 
 class OnBoardingFirstStartActivity : AppCompatActivity() {
@@ -34,17 +34,17 @@ class OnBoardingFirstStartActivity : AppCompatActivity() {
         onBoardingAdapter.setData(
 
             mutableListOf(
-                OnBoardingItem(
+                Banner(
                     onBoardingImage = R.drawable.one_card_shopping,
                     title = "Best Market Place",
                     description = "Best Market Place"
                 ),
-                OnBoardingItem(
+                Banner(
                     onBoardingImage = R.drawable.two_board_market,
                     title = "Best Market Place",
                     description = "Best Market Place"
                 ),
-                OnBoardingItem(
+                Banner(
                     onBoardingImage = R.drawable.three_enjoying_time,
                     title = "Best Market Place",
                     description = "Best Market Place"

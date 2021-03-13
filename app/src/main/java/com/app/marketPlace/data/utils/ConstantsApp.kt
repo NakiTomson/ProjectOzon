@@ -1,7 +1,18 @@
 package com.app.marketPlace.data.utils
 
-object Configs {
+object ConstantsApp {
 
+
+
+    const val APIKEY1 ="LAkspZvwEmxShGSnQ7UFX4Ay"
+
+    const val APIKEY2 ="rkfxT8wgbk7yLrsPvqmVBBIU"
+
+    const val APIKEY3 ="zXSRzd1MQNKNebKntBATTcQj"
+
+    const val APIKEY4 ="PTAhSZLl6Yehntjaiy0klz6y"
+
+    const val APIKEY5 ="ZnyPtrseY8S0PdmEWC8xzAzg"
 
     const val HOME_AUDIO = "pcmcat241600050001"
     const val CELL_PHONES = "pcmcat209400050001"

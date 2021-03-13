@@ -2,19 +2,17 @@ package com.app.marketPlace.presentation.activities
 
 import android.util.Log
 import androidx.lifecycle.*
-import com.app.marketPlace.data.remote.modelsDB.BasketProductDb
-import com.app.marketPlace.data.remote.modelsDB.HintProductDB
-import com.app.marketPlace.data.remote.modelsDB.UserDB
-import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.data.db.models.BasketProductDb
+import com.app.marketPlace.data.db.models.HintProductDb
+import com.app.marketPlace.data.db.models.FavoriteProductDb
+import com.app.marketPlace.data.db.models.UserDb
+import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.domain.repositories.HomeRepository
-import com.app.marketPlace.presentation.activities.ui.fragments.productsList.ProductsListViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), CoroutineScope {
-
 
     private val job: Job = Job()
 
@@ -22,17 +20,18 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         get() = Dispatchers.Main + job
 
 
+
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
 
     val allIdsInBaskets: LiveData<List<Int>?> = repository.productsInBasketIds.asLiveData()
 
-    val userLive: MutableLiveData<UserDB> = MutableLiveData()
+    val userLive: MutableLiveData<UserDb> = MutableLiveData()
 
     val baskets: LiveData<List<BasketProductDb>?> = repository.baskets.asLiveData()
 
-    val favorite: LiveData<List<BasketProductDb>?> = repository.favorite.asLiveData()
+    val favorite: LiveData<List<FavoriteProductDb>?> = repository.favorite.asLiveData()
 
-    val hintProducts: LiveData<List<HintProductDB>>? = repository.hintProducts?.asLiveData()
+    val hintProducts: LiveData<List<HintProductDb>>? = repository.hintProducts?.asLiveData()
 
 
     fun insertOrDeleteHintsProduct(request: String){
@@ -51,7 +50,7 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         }
     }
 
-    fun insertOrDeleteFavoriteProduct(productsItem: OnProductItem){
+    fun insertOrDeleteFavoriteProduct(productsItem: ProductItem){
         if (productsItem.favoriteIconProduct){
             insertProduct(productsItem)
         }else{
@@ -59,20 +58,20 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         }
     }
 
-    private fun insertProduct(product: OnProductItem){
+    private fun insertProduct(product: ProductItem){
         launch (Dispatchers.IO){
             repository.insertProductInFavorite(product)
         }
     }
 
-    internal fun deleteProduct(basket: OnProductItem){
+    internal fun deleteProduct(basket: ProductItem){
         launch (Dispatchers.IO){
             repository.deleteProductFromFavorite(basket)
         }
     }
 
 
-    fun insertOrDeleteBasket(productsItem: OnProductItem){
+    fun insertOrDeleteBasket(productsItem: ProductItem){
         if (productsItem.productInBasket) {
             insertBasket(productsItem)
         } else {
@@ -80,13 +79,13 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         }
     }
 
-    private fun insertBasket(basket: OnProductItem){
+    private fun insertBasket(basket: ProductItem){
         launch (Dispatchers.IO){
             repository.insertBasket(basket)
         }
     }
 
-    private fun deleteBasket(basket: OnProductItem){
+    private fun deleteBasket(basket: ProductItem){
         launch (Dispatchers.IO){
             repository.deleteBasket(basket)
         }
@@ -94,7 +93,7 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
 
 
 
-    fun setUser(user: UserDB) {
+    fun setUser(user: UserDb) {
         launch (Dispatchers.IO){
             repository.insertUser(user)
         }
@@ -126,18 +125,16 @@ class MainViewModelFactory(private val repository: DataBaseRepository) : ViewMod
     }
 }
 
-
-class ProductsListViewModelFactory(private val repository: HomeRepository) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ProductsListViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ProductsListViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
+//class ModelFactory(private var vieModel: ViewModel) : ViewModelProvider.Factory {
+//
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(vieModel::class.java)) {
+//            @Suppress("UNCHECKED_CAST")
+//            return vieModel as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }
+//}
 
 fun <T> gettingErrors(resource: Resource<T>): Boolean {
     return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)

@@ -1,8 +1,8 @@
-package com.app.marketPlace.domain.modelsUI
+package com.app.marketPlace.domain.models
 
-data class OnOfferProductsItem(
+data class CombineProductsItem(
     val topStringOffer:String?= null,
-    val list: List<OnProductItem>,
+    val list: List<ProductItem>,
     val boltonStringOffer:String? = null,
     val requestName:String? = null
 )

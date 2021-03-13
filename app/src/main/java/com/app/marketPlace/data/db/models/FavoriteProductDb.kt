@@ -1,14 +1,15 @@
-package com.app.marketPlace.data.remote.modelsDB
+package com.app.marketPlace.data.db.models
 
 import androidx.room.*
+import com.app.marketPlace.data.db.converters.ProductConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 
 @Entity(tableName = "products")
-@TypeConverters(Converters::class)
-data class ProductDb(
+@TypeConverters(ProductConverter::class)
+data class FavoriteProductDb(
 
     val nameOfProduct: String? = null,
     val iconProduct: String? = null,
@@ -24,7 +25,7 @@ data class ProductDb(
 
     val longDescription: String? = null,
 
-    val images: List<String>? = null,
+    val images: MutableList<String>? = null,
 
     val company: String? = null,
 
@@ -36,18 +37,3 @@ data class ProductDb(
 
 )
 
-class Converters {
-
-    @TypeConverter
-    fun fromString(value: String?): List<String> {
-        val listType: Type? = object : TypeToken<List<String?>?>() {}.type
-        return Gson().fromJson(value, listType)
-    }
-
-    @TypeConverter
-    fun fromArrayList(list: List<String>?): String {
-        val gson = Gson()
-        return gson.toJson(list)
-    }
-
-}

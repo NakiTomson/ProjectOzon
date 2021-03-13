@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,13 +26,11 @@ import kotlinx.android.synthetic.main.toolbar_custom.*
 import javax.inject.Inject
 
 
-class SearchHintHistoryProductFragment : Fragment() {
-
+class SearchHintHistoryProductFragment : Fragment(R.layout.fragment_search_hint_history_product) {
 
     init {
         MarketPlaceApp.appComponent.inject(searchHintHistoryProductFragment = this)
     }
-
 
     @Inject
     lateinit var repository: DataBaseRepository
@@ -43,14 +39,8 @@ class SearchHintHistoryProductFragment : Fragment() {
         MainViewModelFactory(repository)
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_search_hint_history_product, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val navController = findNavController()
 
@@ -61,23 +51,17 @@ class SearchHintHistoryProductFragment : Fragment() {
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(searchTextInput, InputMethodManager.SHOW_IMPLICIT)
 
-
         val adapterHints = HintSearchProductsAdapter()
 
-        adapterHints.hintProductsListener =
-            object : HintSearchProductsAdapter.HintProductsListener {
-                override fun onHintSelected(hintProduct: String) {
-                    startSearchWordRequest(hintProduct, navController)
-                }
-            }
+        adapterHints.setOnHintProductsClickListener = HintSearchProductsAdapter.HintProductsListener { hintProduct ->
+            startSearchWordRequest(hintProduct, navController)
+        }
 
         listHitProductsSearch.layoutManager = LinearLayoutManager(activity)
         adapterHints.setHasStableIds(true)
         listHitProductsSearch.adapter = adapterHints
 
-
         val searchWord = requireArguments().getString("arg1")
-
         searchWord?.let {
             searchTextInput.setText(it.replace("&search=", " "))
             searchTextInput.setSelection(searchTextInput.text.length)
@@ -91,7 +75,6 @@ class SearchHintHistoryProductFragment : Fragment() {
                 adapterHints.setHints(data.map { it.nameRequest }.toMutableList())
             }
         })
-
 
         searchTextInput?.setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
@@ -107,7 +90,6 @@ class SearchHintHistoryProductFragment : Fragment() {
                 return false
             }
         })
-
 
         searchTextInput?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

@@ -2,10 +2,9 @@ package com.app.marketPlace.presentation.interfaces;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-
 public interface RowType {
 
-    int BANNER_ROW_TYPE =   0;
+    int BANNER_ROW_TYPE = 0;
     int CATEGORY_ROW_TYPE = 1;
     int HISTORY_ROW_TYPE = 2;
     int LIVE_ROW_TYPE = 3;

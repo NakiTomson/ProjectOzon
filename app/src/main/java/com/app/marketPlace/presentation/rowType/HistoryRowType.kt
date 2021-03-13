@@ -7,13 +7,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
+import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import com.squareup.picasso.Picasso
 
 
-data class HistoryRowType(val historyModel: HistoryModels?) :RowType {
+data class HistoryRowType(val historyModel: Stories?) :RowType {
 
     lateinit var setOnStoriesClickListener: HistoryListener
 
@@ -51,27 +51,19 @@ data class HistoryRowType(val historyModel: HistoryModels?) :RowType {
                 setOnStoriesClickListener.onClick(listOf, position, imageView)
             }
         }
-
-
         setUpImages(historyModel?.arrayImages!!,container)
         wasSetup = true
     }
 
 
     private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout?){
-
-
         val images = arrayOfNulls<ImageView>(listImagesUrl.size)
-
         val layoutParams: LinearLayout.LayoutParams =
-
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 500
             )
-
         layoutParams.setMargins(8,8,8,8)
-
         for ( i in images.indices){
             images[i] = ImageView(container?.context)
             images[i]?.let {image:ImageView->

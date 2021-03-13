@@ -2,18 +2,17 @@ package com.app.marketPlace.presentation.rowType
 
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import com.app.marketPlace.presentation.interfaces.RowType
 
 
 data class ProductsRowType(
-    val listProducts: List<OnProductItem>,
+    val listProducts: List<ProductItem>,
     val spain: Int,
     val productItemAdapter: ProductItemAdapter
 ) :RowType {
-
 
     var setOnProductClickListener:ProductClickListener? = null
 
@@ -21,14 +20,13 @@ data class ProductsRowType(
 
     var setOnBasketProductClickListener: ClickListener? = null
 
-//    var wasSetup:Boolean = false
 
     fun interface ProductClickListener{
-        fun clickProduct(product: OnProductItem, imageView: ImageView)
+        fun clickProduct(product: ProductItem, view: ImageView)
     }
 
     fun interface ClickListener{
-        fun onClick(product: OnProductItem)
+        fun onClick(product: ProductItem)
     }
 
     override fun getItemViewType(): Int {
@@ -36,30 +34,20 @@ data class ProductsRowType(
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-//        if (wasSetup) return
-
-
         val productionViewHolder = viewHolder as ViewHolderFactory.ProductViewHolder
+
         productionViewHolder.bind(listProducts, spain, productItemAdapter)
 
-
-
-        productionViewHolder.setClickListenerProduct = object :ProductClickListener{
-
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-                setOnProductClickListener?.clickProduct(product, imageView)
-            }
+        productionViewHolder.setClickListenerProduct = ProductClickListener { product, imageView ->
+            setOnProductClickListener?.clickProduct(product, imageView)
         }
-        productionViewHolder.setClickHeartProduct = object :ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                setOnHeartProductClickListener?.onClick(productsItem)
-            }
+
+        productionViewHolder.setClickHeartProduct = ClickListener { productsItem ->
+            setOnHeartProductClickListener?.onClick(productsItem)
         }
-        productionViewHolder.setClickBasketProduct = object :ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                setOnBasketProductClickListener?.onClick(productsItem)
-            }
+
+        productionViewHolder.setClickBasketProduct = ClickListener { productsItem ->
+            setOnBasketProductClickListener?.onClick(productsItem)
         }
-//        wasSetup = true
     }
 }

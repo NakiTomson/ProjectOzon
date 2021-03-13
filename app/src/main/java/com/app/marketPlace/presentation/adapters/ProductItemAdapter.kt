@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.adapters
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,16 +11,17 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.mappers.Mapper
-import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.domain.mappers.Mapper.reMapProduct
+import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.rowType.ProductsRowType
+
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 
 
 class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
 
-    private var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
+    private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
 
     var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
 
@@ -27,16 +29,14 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
     var setClickBasketProduct: ProductsRowType.ClickListener? = null
 
-    val mapper = Mapper()
 
-
-    fun setData(list: List<OnProductItem>) {
+    fun setData(list: List<ProductItem>) {
         listOnProductsByOfferItems?.clear()
         listOnProductsByOfferItems?.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun deleteProduct(productsItem: OnProductItem) {
+    fun deleteProduct(productsItem: ProductItem) {
         listOnProductsByOfferItems?.remove(productsItem)
         notifyDataSetChanged()
     }
@@ -46,18 +46,14 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-
-        listOnProductsByOfferItems?.get(position)?.let { holder.bind( mapper.reMapProduct(it)) }
+        listOnProductsByOfferItems?.get(position)?.let { holder.bind( reMapProduct(it)) }
     }
-
 
     override fun getItemCount() = listOnProductsByOfferItems?.size ?: 0
 
     inner class CategoryOfferItemProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
         private val generalIconProductImageView: ImageView = itemView.generalIconProductImageView
-
         private val favoriteIconProductImageView: ImageView = itemView.favoriteIconProductImageView
         private val productDiscountTextViewPercent:TextView = itemView.productDiscountTextView
         private val isBestsellerTextView:TextView = itemView.isBestsellerTextView
@@ -69,8 +65,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
         private val visible = View.VISIBLE
 
-        fun bind(productsItem: OnProductItem) {
-
+        fun bind(productsItem: ProductItem) {
             generalIconProductImageView.transitionName = productsItem.generalIconProductSting
 
             if (productsItem.productInBasket){
@@ -79,17 +74,16 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             }
 
             buttonAddToBasket.setOnClickListener {
-
+                Log.v("BINFS","REEE 2")
                 if (!productsItem.productInBasket){
                     productsItem.productInBasket = true
                     Toast.makeText(itemView.context,"Добавлено в корзину",Toast.LENGTH_SHORT).show()
-                    buttonAddToBasket.text = "В корзине"
+//                    buttonAddToBasket.text = "В корзине"
                     buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
-
                     setClickBasketProduct?.onClick(productsItem)
                 }else{
                     productsItem.productInBasket = false
-                    buttonAddToBasket.text = "В корзину"
+//                    buttonAddToBasket.text = "В корзину"
                     buttonAddToBasket.setBackgroundResource(R.drawable.button_next)
                     Toast.makeText(itemView.context,"Удалено из корзины",Toast.LENGTH_SHORT).show()
                     setClickBasketProduct?.onClick(productsItem)
@@ -98,14 +92,14 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
             when(productsItem.type){
 
-                OnProductItem.Type.OnlyImage ->{
+                ProductItem.Type.OnlyImage ->{
                     setOnlyImage(productsItem)
                 }
-                OnProductItem.Type.ProductNonName ->{
+                ProductItem.Type.ProductNonName ->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                 }
-                OnProductItem.Type.ProductWithName->{
+                ProductItem.Type.ProductWithName->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                     setWithName(productsItem)
@@ -114,15 +108,11 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
             product.setOnClickListener {
                 generalIconProductImageView.transitionName = productsItem.generalIconProductSting
-
-
                 productsItem.images?.set(0,productsItem.generalIconProductSting!!)
-
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
 
             favoriteIconProductImageView.setOnClickListener {
-
                 if(!productsItem.favoriteIconProduct){
                     productsItem.favoriteIconProduct = true
                     favoriteIconProductImageView.setImageResource(R.drawable.like_favorite_products_icon_heart)
@@ -137,7 +127,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             }
         }
 
-        private fun setOnlyImage(productsItem: OnProductItem) {
+        private fun setOnlyImage(productsItem: ProductItem) {
             productsItem.generalIconProductSting?.let {
                 Picasso.with(itemView.context)
                     .load(productsItem.generalIconProductSting)
@@ -148,7 +138,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             }
         }
 
-        private fun setNonName(productsItem: OnProductItem) {
+        private fun setNonName(productsItem: ProductItem) {
 
             favoriteIconProductImageView.visibility = visible
 
@@ -183,21 +173,15 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
         }
 
-        private fun setWithName(productsItem: OnProductItem) {
+        private fun setWithName(productsItem: ProductItem) {
             productsItem.nameOfProduct?.let {
                 productItemTextView.visibility = visible
                 productItemTextView.text = it
             }
         }
-
     }
-
-
 
     override fun getItemId(position: Int): Long {
         return listOnProductsByOfferItems?.get(position)?.hashCode()?.toLong() ?: 0
     }
-
-
-
 }

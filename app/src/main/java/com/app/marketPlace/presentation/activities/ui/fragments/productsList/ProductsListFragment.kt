@@ -1,10 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -12,9 +9,9 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.modelsUI.OnProductItem
+import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.domain.repositories.HomeRepository
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.*
 import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmentDirections
@@ -23,45 +20,29 @@ import com.app.marketPlace.presentation.rowType.ProductsRowType
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import javax.inject.Inject
-import javax.inject.Named
 
 
-class ProductsListFragment : Fragment() {
-
-
+class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
     init {
         MarketPlaceApp.appComponent.inject(productsListFragment = this)
     }
 
-
     @Inject
     lateinit var repository: DataBaseRepository
 
     @Inject
-    @field : Named("bestbuy")
-    lateinit var listProductRepositoryImpl: HomeRepository
+    lateinit var homeRepository: AppRepository
 
 
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 
-    private val viewModel: ProductsListViewModel by viewModels {
-        ProductsListViewModelFactory(listProductRepositoryImpl)
-    }
+    private val viewModel: ProductsListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_products_list, container, false)
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val navController = findNavController()
 
@@ -70,31 +51,20 @@ class ProductsListFragment : Fragment() {
         productsAdapter.setHasStableIds(true)
         foundProductsRecyclerView.adapter =  productsAdapter
 
-
         productsAdapter.setClickHeartProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
+            override fun onClick(productsItem: ProductItem) {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
 
-        productsAdapter.setClickBasketProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: OnProductItem) {
-                mainViewModel.insertOrDeleteBasket(productsItem)
-            }
+        productsAdapter.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteBasket(productsItem)
         }
 
-        productsAdapter.setClickListenerProduct = object :ProductsRowType.ProductClickListener{
-
-            override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-
-                val extras = FragmentNavigatorExtras(
-                    imageView to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action,extras)
-            }
+        productsAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+            val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+            navController.navigate(action, extras)
         }
 
         val searchWord = requireArguments().getString("arg1")
@@ -106,51 +76,34 @@ class ProductsListFragment : Fragment() {
         }
 
         category?.let {
-            viewModel.getProductsByCategory(it)
+            viewModel.loadProductsByCategory(it)
         }
 
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
-            if (gettingErrors(resource)) {
-                resource.data?.let { lists ->
-                    productsAdapter.setData(lists.list)
-                    lists.requestName?.let { searchTextInput.setText(it) }
-                    stopLoadingsOneFrame()
-                }
-            } else {
-                errorHandling("ERROR SEARCH PRODUCTS", resource)
-            }
+            productsAdapter.setData(resource.data!!.list)
+            resource.data.requestName?.let { searchTextInput.setText(it) }
+            stopProgressBar()
         })
-
 
         viewModel.productsResultList.observe(viewLifecycleOwner, { resource->
-            if (gettingErrors(resource)) {
-                resource.data?.let { lists ->
-                    productsAdapter.setData(lists.list)
-                    stopLoadingsOneFrame()
-                }
-            } else {
-                errorHandling("ERROR RESULT PRODUCTS", resource)
-            }
+            productsAdapter.setData(resource.data!!.list)
+            stopProgressBar()
         })
 
-
-        searchTextInput?.setOnTouchListener { v, event ->
+        searchTextInput?.setOnTouchListener { view, event ->
             if (navController.currentDestination?.id != R.id.searchHintProductHomeFragment){
                 val keywords = searchTextInput.text.toString().trim().replace(" ", "&search=")
                 val bundle = Bundle()
                 bundle.putString("arg1", keywords)
                 navController.navigate(R.id.searchHintProductHomeFragment,bundle)
             }
-            v.performClick()
-            v.onTouchEvent(event)
+            view.performClick()
+            view.onTouchEvent(event)
         }
-
     }
 
-    private fun stopLoadingsOneFrame(){
+    private fun stopProgressBar(){
         progressBar.visibility = View.GONE
     }
-
-
 
 }

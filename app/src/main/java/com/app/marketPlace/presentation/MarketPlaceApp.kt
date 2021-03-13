@@ -7,12 +7,9 @@ import com.google.firebase.FirebaseApp
 
 class MarketPlaceApp:Application() {
 
-
-
     companion object{
         lateinit var appComponent: AppComponent
     }
-
 
     override fun onCreate() {
         super.onCreate()

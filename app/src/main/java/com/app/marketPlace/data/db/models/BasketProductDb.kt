@@ -1,10 +1,11 @@
-package com.app.marketPlace.data.remote.modelsDB
+package com.app.marketPlace.data.db.models
 
 import androidx.room.*
+import com.app.marketPlace.data.db.converters.ProductConverter
 
 
 @Entity(tableName = "basket")
-@TypeConverters(Converters::class)
+@TypeConverters(ProductConverter::class)
 data class BasketProductDb(
 
     var type: Int? = null,

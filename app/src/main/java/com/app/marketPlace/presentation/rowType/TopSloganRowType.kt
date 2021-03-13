@@ -7,7 +7,6 @@ import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
 data class TopSloganRowType(val sloganOffer: String,val randomId: Double = Math.random() *421) :RowType{
 
-
     override fun getItemViewType(): Int {
         return RowType.PRODUCTS_SLOGAN_TOP_TYPE
     }

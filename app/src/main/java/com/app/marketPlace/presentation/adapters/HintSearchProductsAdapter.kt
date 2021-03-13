@@ -11,28 +11,20 @@ class HintSearchProductsAdapter : RecyclerView.Adapter<HintSearchProductsAdapter
 
     private var listHits:ArrayList<String> = ArrayList()
 
-    lateinit var hintProductsListener: HintProductsListener
+    lateinit var setOnHintProductsClickListener: HintProductsListener
 
-    interface HintProductsListener {
+    fun interface HintProductsListener {
         fun onHintSelected(hintProduct: String)
     }
 
     fun setHints(hint: MutableList<String>){
         listHits.clear()
-
         listHits.addAll(hint)
         notifyDataSetChanged()
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderHintSearchProducts {
-        return ViewHolderHintSearchProducts(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_hint_search,
-                parent,
-                false
-            )
-        )
+        return ViewHolderHintSearchProducts(LayoutInflater.from(parent.context).inflate(R.layout.item_hint_search, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolderHintSearchProducts, position: Int) {
@@ -43,11 +35,9 @@ class HintSearchProductsAdapter : RecyclerView.Adapter<HintSearchProductsAdapter
         return listHits.size
     }
 
-
     override fun getItemId(position: Int): Long {
         return listHits[position].hashCode().toLong()
     }
-
 
     inner class ViewHolderHintSearchProducts(itemView: View):RecyclerView.ViewHolder(itemView){
 
@@ -55,9 +45,8 @@ class HintSearchProductsAdapter : RecyclerView.Adapter<HintSearchProductsAdapter
 
         fun bind(hint: String){
             texViewHint.text = hint
-
             texViewHint.setOnClickListener {
-                hintProductsListener.onHintSelected(texViewHint.text.toString())
+                setOnHintProductsClickListener.onHintSelected(texViewHint.text.toString())
             }
         }
     }

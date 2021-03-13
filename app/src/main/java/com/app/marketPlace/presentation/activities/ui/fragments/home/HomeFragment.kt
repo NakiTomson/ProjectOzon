@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
-
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
+
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.rowType.*
 import com.google.firebase.auth.FirebaseAuth
@@ -23,7 +23,6 @@ import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import javax.inject.Inject
-
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -41,7 +40,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels()
 
     lateinit var navController:NavController
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -165,7 +163,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             multipleAdapter.setData(TopSloganRowType( getString(R.string.marketPlaceLive)))
             val rowTypeLive = LiveRowType(liveStreamAdapter)
             multipleAdapter.setData(rowTypeLive)
-            rowTypeLive.setOnLiveSreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
+            rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
                 val extras = FragmentNavigatorExtras(view to liveUrl)
                 navigateToMock(liveStream = liveUrl, extras = extras)
             }
@@ -178,6 +176,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val productAdapter = ProductItemAdapter()
             val rowProduct = ProductsRowType(resource.data.list, 3, productAdapter)
             multipleAdapter.setData(rowProduct)
+
             rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
                 mainViewModel.insertOrDeleteFavoriteProduct(product)
             }

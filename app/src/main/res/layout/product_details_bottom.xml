@@ -36,6 +36,7 @@
         app:srcCompat="@drawable/ic_next" />
 
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listProductsEquivalent"
         android:layout_width="0dp"
@@ -85,5 +86,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productCategorySimilar" />
 
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupEquivalent"
+        android:layout_width="0dp"
+        android:visibility="gone"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="productCategory,imageNextAllProducts,listProductsEquivalent"
+        >
+
+    </androidx.constraintlayout.widget.Group>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupSimilar"
+        android:layout_width="0dp"
+        android:visibility="gone"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="productCategorySimilar,imageNextAllSimilar,listProductsSimilar"
+        >
+
+    </androidx.constraintlayout.widget.Group>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
