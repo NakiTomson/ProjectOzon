@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-data class TopSloganRowType(val sloganOffer: String) :RowType{
+data class TopSloganRowType(val sloganOffer: String,val randomId: Double = Math.random() *421) :RowType{
 
 
     override fun getItemViewType(): Int {

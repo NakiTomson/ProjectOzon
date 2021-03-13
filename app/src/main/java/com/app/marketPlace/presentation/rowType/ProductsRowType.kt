@@ -1,11 +1,7 @@
 package com.app.marketPlace.presentation.rowType
 
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.app.marketPlace.R
 import com.app.marketPlace.domain.modelsUI.OnProductItem
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
@@ -19,20 +15,20 @@ data class ProductsRowType(
 ) :RowType {
 
 
-    var setClickListenerProduct:OnProductClickListener? = null
+    var setOnProductClickListener:ProductClickListener? = null
 
-    var setClickHeartProduct: OnClickListener? = null
+    var setOnHeartProductClickListener: ClickListener? = null
 
-    var setClickBasketProduct: OnClickListener? = null
+    var setOnBasketProductClickListener: ClickListener? = null
 
-    var wasSetup:Boolean = false
+//    var wasSetup:Boolean = false
 
-    interface OnProductClickListener{
+    fun interface ProductClickListener{
         fun clickProduct(product: OnProductItem, imageView: ImageView)
     }
 
-    interface OnClickListener{
-        fun onClick(productsItem: OnProductItem)
+    fun interface ClickListener{
+        fun onClick(product: OnProductItem)
     }
 
     override fun getItemViewType(): Int {
@@ -40,36 +36,30 @@ data class ProductsRowType(
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        if (wasSetup) return
+//        if (wasSetup) return
 
-        val animation: Animation = AnimationUtils.loadAnimation(
-            viewHolder?.itemView?.context,
-            R.anim.appearances_out
-        )
-        val controller = LayoutAnimationController(animation)
 
         val productionViewHolder = viewHolder as ViewHolderFactory.ProductViewHolder
         productionViewHolder.bind(listProducts, spain, productItemAdapter)
 
-        productionViewHolder.productsRecyclerView.layoutAnimation = controller
 
 
-        productionViewHolder.setClickListenerProduct = object :OnProductClickListener{
+        productionViewHolder.setClickListenerProduct = object :ProductClickListener{
 
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
-                setClickListenerProduct?.clickProduct(product, imageView)
+                setOnProductClickListener?.clickProduct(product, imageView)
             }
         }
-        productionViewHolder.setClickHeartProduct = object :OnClickListener{
+        productionViewHolder.setClickHeartProduct = object :ClickListener{
             override fun onClick(productsItem: OnProductItem) {
-                setClickHeartProduct?.onClick(productsItem)
+                setOnHeartProductClickListener?.onClick(productsItem)
             }
         }
-        productionViewHolder.setClickBasketProduct = object :OnClickListener{
+        productionViewHolder.setClickBasketProduct = object :ClickListener{
             override fun onClick(productsItem: OnProductItem) {
-                setClickBasketProduct?.onClick(productsItem)
+                setOnBasketProductClickListener?.onClick(productsItem)
             }
         }
-        wasSetup = true
+//        wasSetup = true
     }
 }

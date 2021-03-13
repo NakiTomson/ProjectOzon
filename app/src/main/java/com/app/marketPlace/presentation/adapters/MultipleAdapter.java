@@ -14,12 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MultipleTypesAdapter extends RecyclerView.Adapter {
+public class MultipleAdapter extends RecyclerView.Adapter {
 
-    private final List<RowType> dataSet = new ArrayList<>(17);
+    private final List<RowType> dataSet = new ArrayList<>(40);
 
+    public OnNextDataListener setNextDataListener;
+
+    public interface OnNextDataListener {
+        public void onNextData();
+    }
 
     private volatile int countPosition = -1;
+
+    private Boolean onDownload = true;
 
 
     public void setData(RowType dataSets){
@@ -45,11 +52,16 @@ public class MultipleTypesAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
+        if ((dataSet.size() >= 17 || position > dataSet.size() - 2) && onDownload) {
+            setNextDataListener.onNextData();
+            onDownload = false;
+        }
     }
 
     @Override
     public long getItemId(int position) {
-        return dataSet.get(position).hashCode();
+        String id = String.valueOf(dataSet.get(position).hashCode()).replace("-","");
+        return Long.parseLong(id);
     }
 
 

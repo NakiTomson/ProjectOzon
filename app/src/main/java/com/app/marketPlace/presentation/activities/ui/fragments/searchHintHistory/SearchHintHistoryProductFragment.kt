@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
@@ -38,7 +39,7 @@ class SearchHintHistoryProductFragment : Fragment() {
     @Inject
     lateinit var repository: DataBaseRepository
 
-    private val mainViewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 

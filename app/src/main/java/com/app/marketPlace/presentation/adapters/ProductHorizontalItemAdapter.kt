@@ -20,11 +20,11 @@ class ProductHorizontalItemAdapter : RecyclerView.Adapter<ProductHorizontalItemA
 
     private var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
+    var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.OnClickListener? = null
+    var setClickHeartProduct: ProductsRowType.ClickListener? = null
 
-    var setOnBasketDelete: ProductsRowType.OnClickListener? = null
+    var setOnBasketDelete: ProductsRowType.ClickListener? = null
 
 
     fun setData(list: List<OnProductItem>) {

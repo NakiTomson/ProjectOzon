@@ -20,6 +20,5 @@ data class ComplexSloganRowType(val itemData: Item) :RowType{
         class SetBestseller(val company: String):Item()
         class SetPrice(val actualPrice: String, val oldPrice:String):Item()
         class SetSimpleOffer(val offer: String):Item()
-
     }
 }

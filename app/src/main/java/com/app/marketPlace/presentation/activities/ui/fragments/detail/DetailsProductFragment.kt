@@ -14,8 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -65,7 +63,7 @@ class DetailsProductFragment : Fragment() {
     @Inject
     lateinit var mapper: Mapper
 
-    private val mainViewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 
@@ -328,7 +326,7 @@ class DetailsProductFragment : Fragment() {
             false
         )
 
-        adapterEquivalent.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
+        adapterEquivalent.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                 val extras = FragmentNavigatorExtras(
@@ -342,13 +340,13 @@ class DetailsProductFragment : Fragment() {
             }
         }
 
-        adapterEquivalent.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+        adapterEquivalent.setClickHeartProduct = object :ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
 
-        adapterEquivalent.setClickBasketProduct =object: ProductsRowType.OnClickListener{
+        adapterEquivalent.setClickBasketProduct =object: ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteBasket(productsItem)
             }
@@ -363,7 +361,7 @@ class DetailsProductFragment : Fragment() {
             false
         )
 
-        adapterSimilar.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
+        adapterSimilar.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                 val extras = FragmentNavigatorExtras(
@@ -377,13 +375,13 @@ class DetailsProductFragment : Fragment() {
             }
         }
 
-        adapterSimilar.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+        adapterSimilar.setClickHeartProduct = object :ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
 
-        adapterSimilar.setClickBasketProduct = object: ProductsRowType.OnClickListener{
+        adapterSimilar.setClickBasketProduct = object: ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteBasket(productsItem)
             }

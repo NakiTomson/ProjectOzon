@@ -1,21 +1,20 @@
 package com.app.marketPlace.presentation.rowType
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.app.marketPlace.presentation.interfaces.RowType
-import com.app.marketPlace.presentation.adapters.LiveItemAdapter
+import com.app.marketPlace.presentation.adapters.LiveStreamAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import kotlin.math.abs
 
-data class LiveRowType(val liveItemAdapter: LiveItemAdapter) :RowType {
+data class LiveRowType(val liveItemAdapter: LiveStreamAdapter) :RowType {
 
-    lateinit var setLiveClickListener: LiveListener
+    lateinit var setOnLiveSreamClickListener: LiveListener
     var wasSetup:Boolean = false
 
-    interface LiveListener {
+    fun interface LiveListener {
         fun onClick(liveUrl: String,view:ImageView)
     }
 
@@ -30,7 +29,7 @@ data class LiveRowType(val liveItemAdapter: LiveItemAdapter) :RowType {
 
         liveViewHolder.serLiveClickListener = object :LiveListener{
             override fun onClick(liveUrl: String, view: ImageView) {
-                setLiveClickListener.onClick(liveUrl,view)
+                setOnLiveSreamClickListener.onClick(liveUrl,view)
             }
         }
 

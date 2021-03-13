@@ -10,14 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.modelsUI.OnBoardingItem
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.adapters.CategoryAdapter
-import com.app.marketPlace.presentation.adapters.CombinationProductsAdapter
-import com.app.marketPlace.presentation.adapters.MultipleTypesAdapter
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import kotlinx.android.synthetic.main.fragment_catalog.*
 

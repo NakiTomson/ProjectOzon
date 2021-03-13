@@ -21,11 +21,11 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
 
     private var listOnProductsByOfferItems: MutableList<OnProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
+    var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.OnClickListener? = null
+    var setClickHeartProduct: ProductsRowType.ClickListener? = null
 
-    var setClickBasketProduct: ProductsRowType.OnClickListener? = null
+    var setClickBasketProduct: ProductsRowType.ClickListener? = null
 
     val mapper = Mapper()
 

@@ -1,7 +1,6 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -17,10 +16,10 @@ import com.app.marketPlace.presentation.factory.ViewHolderFactory
 data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
 
 
-    var clickOnCategoryItem:ClickCategoryListener? = null
+    var setOnCategoryItemClickListener:ClickCategoryListener? = null
     var wasSetup:Boolean = false
 
-    interface ClickCategoryListener{
+    fun interface ClickCategoryListener{
         fun onClickItem(data: String)
     }
 
@@ -42,7 +41,7 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
                 setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
                 viewHolder.clickOnCategoryItem = object :ClickCategoryListener {
                     override fun onClickItem(data: String) {
-                        clickOnCategoryItem?.onClickItem(data)
+                        setOnCategoryItemClickListener?.onClickItem(data)
                     }
                 }
             }

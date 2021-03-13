@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import kotlinx.android.synthetic.main.item_live.view.*
 import kotlin.collections.ArrayList
 
 
-class LiveItemAdapter : RecyclerView.Adapter<LiveItemAdapter.OnBoardingItemViewHolder>(){
+class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemViewHolder>(){
 
 
     private val onBoardingItems:MutableList<ListResultLiveItems> = ArrayList()

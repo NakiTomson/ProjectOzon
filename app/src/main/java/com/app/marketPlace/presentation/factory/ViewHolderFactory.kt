@@ -2,10 +2,12 @@ package com.app.marketPlace.presentation.factory
 
 import android.app.Activity
 import android.graphics.Typeface
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -97,7 +99,7 @@ object ViewHolderFactory {
 
         val liveStreamPager: ViewPager2 = itemView.onLiveStreamViewPager
 
-        fun bind(liveItemAdapter: LiveItemAdapter){
+        fun bind(liveItemAdapter: LiveStreamAdapter){
 
             liveStreamPager.adapter = liveItemAdapter
 
@@ -205,11 +207,17 @@ object ViewHolderFactory {
 
         val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
 
-        var setClickListenerProduct: ProductsRowType.OnProductClickListener? = null
+        var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
 
-        var setClickHeartProduct: ProductsRowType.OnClickListener? = null
+        var setClickHeartProduct: ProductsRowType.ClickListener? = null
 
-        var setClickBasketProduct: ProductsRowType.OnClickListener? = null
+        var setClickBasketProduct: ProductsRowType.ClickListener? = null
+
+        val animation: Animation = AnimationUtils.loadAnimation(
+            itemView.context,
+            R.anim.appearances_out
+        )
+        val controller = LayoutAnimationController(animation)
 
         fun bind(listProducts: List<OnProductItem>, spain: Int, productItemAdapter: ProductItemAdapter){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
@@ -221,22 +229,24 @@ object ViewHolderFactory {
                 viewTreeObserver
                     .addOnPreDrawListener {
                         startPostponedEnterTransition(itemView.context as Activity)
+                        productsRecyclerView.layoutAnimation.start()
                         true
                     }
             }
 
-            productItemAdapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
+            productsRecyclerView.layoutAnimation = controller
+            productItemAdapter.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
                 override fun clickProduct(product: OnProductItem, imageView: ImageView) {
                     setClickListenerProduct?.clickProduct(product,imageView)
                 }
             }
 
-            productItemAdapter.setClickHeartProduct = object:ProductsRowType.OnClickListener{
+            productItemAdapter.setClickHeartProduct = object:ProductsRowType.ClickListener{
                 override fun onClick(productsItem: OnProductItem) {
                     setClickHeartProduct?.onClick(productsItem)
                 }
             }
-            productItemAdapter.setClickBasketProduct = object :ProductsRowType.OnClickListener{
+            productItemAdapter.setClickBasketProduct = object :ProductsRowType.ClickListener{
                 override fun onClick(productsItem: OnProductItem) {
                     setClickBasketProduct?.onClick(productsItem)
                 }

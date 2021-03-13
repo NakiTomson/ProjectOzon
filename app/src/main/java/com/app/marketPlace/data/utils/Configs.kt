@@ -8,6 +8,7 @@ object Configs {
     const val LAPTOPS = "abcat0502000"
     const val TVS = "abcat0101000"
     const val PLAYSTATION = "pcmcat295700050012"
+    const val CAMERA = "abcat0401000"
 
 
     val listImagesByCategory = listOf(

@@ -10,17 +10,16 @@ import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
-import com.app.marketPlace.domain.modelsUI.OnHistoryItem
 import com.squareup.picasso.Picasso
 
 
 data class HistoryRowType(val historyModel: HistoryModels?) :RowType {
 
-    lateinit var setHistoryClickListener: HistoryListener
+    lateinit var setOnStoriesClickListener: HistoryListener
 
     private var wasSetup:Boolean = false
 
-    interface HistoryListener {
+    fun interface HistoryListener {
         fun onClick(listOf: List<String>, position: Int, imageView: ImageView)
     }
 
@@ -49,7 +48,7 @@ data class HistoryRowType(val historyModel: HistoryModels?) :RowType {
 
         historyViewHolder.setHistoryClickListener = object :HistoryListener{
             override fun onClick(listOf: List<String>, position: Int, imageView: ImageView) {
-                setHistoryClickListener.onClick(listOf, position, imageView)
+                setOnStoriesClickListener.onClick(listOf, position, imageView)
             }
         }
 
@@ -87,7 +86,7 @@ data class HistoryRowType(val historyModel: HistoryModels?) :RowType {
 
                 image.setOnClickListener {
                     image.transitionName = listImagesUrl[i]
-                    setHistoryClickListener.onClick(listImagesUrl,i,image)
+                    setOnStoriesClickListener.onClick(listImagesUrl,i,image)
                 }
             }
         }

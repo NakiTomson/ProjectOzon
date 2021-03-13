@@ -4,12 +4,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-class RegistrationRowType :RowType {
+data class RegistrationRowType(val randomId: Double = Math.random() *123) :RowType {
 
 
-    var setClickAuthorization:AuthorizationClickListener? = null
+    var setOnAuthorizationClickListener:AuthorizationClickListener? = null
 
-    interface AuthorizationClickListener{
+    fun interface AuthorizationClickListener{
         fun onClick()
     }
     override fun getItemViewType(): Int {
@@ -20,7 +20,7 @@ class RegistrationRowType :RowType {
         val registrationViewHolder = viewHolder as ViewHolderFactory.RegistrationViewHolder
         registrationViewHolder.bind()
         registrationViewHolder.financeButton.setOnClickListener {
-            setClickAuthorization?.onClick()
+            setOnAuthorizationClickListener?.onClick()
         }
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MarketPlace</string>
+    <string name="marketPlaceLiveapp_name">MarketPlace</string>
     <string name="get_started">Get started</string>
 
 
@@ -47,6 +47,7 @@
     <string name="aboutTheRecipient">О получателе</string>
     <string name="name">Имя Получателя *</string>
     <string name="next">Даллее</string>
+    <string name="marketPlaceLive">MarketPlace Live - успей купить со скидкой!</string>
 
 
 </resources>

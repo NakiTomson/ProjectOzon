@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.repositories.DataBaseRepository
@@ -31,7 +32,7 @@ class MakingOrderFragment : Fragment() {
     @Inject
     lateinit var repository: DataBaseRepository
 
-    private val mainViewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 

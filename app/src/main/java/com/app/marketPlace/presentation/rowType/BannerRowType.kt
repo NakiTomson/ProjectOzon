@@ -1,7 +1,6 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -19,9 +18,9 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
 
     var wasSetup:Boolean = false
-    var bannerClickListener: BannerListener? = null
+    var setOnBannerClickListener: BannerListener? = null
 
-    interface BannerListener {
+    fun interface BannerListener {
         fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView)
     }
 
@@ -48,7 +47,7 @@ data class BannerRowType(val onBoardingAdapter: BannerAdapter) :RowType{
 
                 viewHolder.setBannerClickListener = object :BannerListener{
                     override fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView) {
-                        bannerClickListener?.onClickBanner(
+                        setOnBannerClickListener?.onClickBanner(
                             onBoardingAdapter.onBoardingItems[position].onBoardingImageUrl,
                             imageOnBoarding
                         )

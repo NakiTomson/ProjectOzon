@@ -3,6 +3,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.home
 import androidx.lifecycle.MutableLiveData
 import com.app.marketPlace.data.remote.modelsAPI.HistoryModels
 import com.app.marketPlace.data.remote.services.*
+import com.app.marketPlace.data.utils.Configs.CAMERA
 import com.app.marketPlace.data.utils.Configs.CELL_PHONES
 import com.app.marketPlace.data.utils.Configs.HOME_AUDIO
 import com.app.marketPlace.data.utils.Configs.LAPTOPS
@@ -14,6 +15,8 @@ import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.modelsUI.*
+import com.app.marketPlace.presentation.activities.errorHandling
+import com.app.marketPlace.presentation.activities.gettingErrors
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -34,79 +37,104 @@ class HomeViewModel : BaseViewModel() {
     lateinit var homeRepositoryImplDropBox: HomeRepository
 
 
+    val completed:MutableLiveData<Boolean> = MutableLiveData()
 
-    val bannerListStart:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
+    val bannerListTop:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    val categoryProductLiveData:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
+    val categoryProducts:MutableLiveData<Resource<MutableList<MutableList<OnBoardingItem>>>> = MutableLiveData()
 
-    val historyItemsLiveData:MutableLiveData<Resource<HistoryModels>> = MutableLiveData()
+    val storiesItems:MutableLiveData<Resource<HistoryModels>> = MutableLiveData()
 
-    val liveItemsLiveData:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
+    val liveStreams:MutableLiveData<Resource<OnLiveItem>> = MutableLiveData()
 
-    val listProductsLiveData:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val firstPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
-    val listProductsLiveData2:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val secondPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     val bannerListCenter:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    val listProductsLiveData3:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val thirdPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
     val bannerListDown:MutableLiveData<Resource<MutableList<OnBoardingItem>>> = MutableLiveData()
 
-    val listProductsLiveData4:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+    val fourthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
+    val fifthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
+    val sixthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
+    val seventhPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
+    val eighthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
+
+    val ninthPartProducts:MutableLiveData<Resource<OnOfferProductsItem>> = MutableLiveData()
 
 
 
     fun startLoading() {
         loadData(Dispatchers.IO) {
-            when (bannerListStart.value?.data) {
-                null -> { loadingProductsFore() }
+            when (bannerListTop.value?.data) {
+                null -> {
+                    loadProductsFourth()
+                }
             }
         }
     }
 
-    private suspend fun loadingBannerStart(){
-        val bannerStart:Deferred<Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
+    private suspend fun loadBannerTop(){
+        val banners:Deferred<Results.ResultBanner> = async { homeRepositoryImplBestBye.getBannerStart()}
         withContext(Dispatchers.Main){
-            bannerListStart.value = bannerStart.await().result
+            val result = banners.await().result
+            when(gettingErrors(result)){
+                true -> bannerListTop.value = result
+                else -> errorHandling("ERROR BOARDING TOP",result)
+            }
         }
     }
 
 
-    private suspend fun loadingCategoryProduct(){
-
-        val categoryResult =  async {
-            homeRepositoryImplBestBye
-                .loadCategories(
-                    Params.CategoriesProductParams(pageSize = "20", apiKey = APIKEY1, page = "1")
-                )
+    private suspend fun loadProductCategories(){
+        val categories = async {
+            homeRepositoryImplBestBye.loadCategories(
+                Params.CategoriesProductParams(pageSize = "20", apiKey = APIKEY1, page = "1")
+            )
         }
-        loadingBannerStart()
+        loadBannerTop()
         withContext(Dispatchers.Main){
-            categoryProductLiveData.value = categoryResult.await().result
+            val result = categories.await().result
+            when(gettingErrors(result)){
+                true -> categoryProducts.value = result
+                else -> errorHandling("ERROR CATEGORY PRODUCTS HOME",result)
+            }
         }
     }
 
-    private suspend fun loadingHistoryData(){
-        val historyItems:Deferred<Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
-        loadingCategoryProduct()
+    private suspend fun loadStories(){
+        val stories:Deferred<Results.ResultHistory> = async {  homeRepositoryImplDropBox.getHistoryItems()}
+        loadProductCategories()
         withContext(Dispatchers.Main){
-            historyItemsLiveData.value = historyItems.await().result
+            val result = stories.await().result
+            when(gettingErrors(result)){
+                true -> storiesItems.value = result
+                else -> errorHandling("ERROR STORIES",result)
+            }
         }
     }
 
-    private suspend fun loadingLiveData(){
-        val liveItems:Deferred<Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
-        loadingHistoryData()
+    private suspend fun loadLiveStream(){
+        val liveStreamItems:Deferred<Results.ResultLive> = async {  homeRepositoryImplDropBox.getLiveItems()}
+        loadStories()
         withContext(Dispatchers.Main){
-            liveItemsLiveData.value = liveItems.await().result
+            val result = liveStreamItems.await().result
+            when(gettingErrors(result)){
+                true -> liveStreams.value = result
+                else -> errorHandling("ERROR LIVE",result)
+            }
         }
     }
 
 
-
-    private suspend fun getSimpleImageProducts(){
-
+    private suspend fun loadProductsFirst(){
         val products = async {
             homeRepositoryImplBestBye
                 .loadProducts(
@@ -119,13 +147,17 @@ class HomeViewModel : BaseViewModel() {
                     )
                 )
         }
-        loadingLiveData()
+        loadLiveStream()
         withContext(Dispatchers.Main){
-            listProductsLiveData.value = products.await().result
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> firstPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 1",result)
+            }
         }
     }
 
-    private suspend fun getProductsPhone(){
+    private suspend fun loadProductsSecond(){
         val products = async {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParams(
@@ -139,24 +171,32 @@ class HomeViewModel : BaseViewModel() {
                 )
             )
         }
-        getSimpleImageProducts()
+        loadProductsFirst()
         withContext(Dispatchers.Main) {
-            listProductsLiveData2.value = products.await().result
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> secondPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 2",result)
+            }
         }
     }
 
 
-    private suspend fun loadingBannerCenter(){
-        val bannerCenter:Deferred<Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
-        getProductsPhone()
+    private suspend fun loadBannerCenter(){
+        val banners:Deferred<Results.ResultBanner> = async {  homeRepositoryImplBestBye.getBannerCenter()}
+        loadProductsSecond()
         withContext(Dispatchers.Main){
-            bannerListCenter.value = bannerCenter.await().result
+            val result = banners.await().result
+            when(gettingErrors(result)){
+                true -> bannerListCenter.value = result
+                else -> errorHandling("ERROR BANNER CENTER",result)
+            }
         }
     }
 
 
-    private suspend fun getProductsLaptops(){
-        val products3 = async {
+    private suspend fun loadProductsThird(){
+        val products = async {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParams(
                     pathId = LAPTOPS,
@@ -168,23 +208,30 @@ class HomeViewModel : BaseViewModel() {
                 )
             )
         }
-        loadingBannerCenter()
+        loadBannerCenter()
         withContext(Dispatchers.Main) {
-            listProductsLiveData3.value = products3.await().result
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> thirdPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 3",result)
+            }
         }
     }
 
-    private suspend fun loadingBannerDown(){
-        val bannerDown:Deferred<Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
-        getProductsLaptops()
+    private suspend fun loadBannerDown(){
+        val banners:Deferred<Results.ResultBanner> = async{ homeRepositoryImplBestBye.getBannerDown() }
+        loadProductsThird()
         withContext(Dispatchers.Main){
-            bannerListDown.value = bannerDown.await().result
+            val result = banners.await().result
+            when(gettingErrors(result)){
+                true -> bannerListDown.value = result
+                else -> errorHandling("ERROR BANNER DOWN",result)
+            }
         }
     }
 
-    private suspend fun loadingProductsFore(){
-        val products4 = async {
-
+    private suspend fun loadProductsFourth(){
+        val products = async {
             homeRepositoryImplBestBye.loadProducts(
                 Params.ProductsParams(
                     pathId = TVS,
@@ -197,12 +244,41 @@ class HomeViewModel : BaseViewModel() {
                 )
             )
         }
-        loadingBannerDown()
+        loadBannerDown()
         withContext(Dispatchers.Main) {
-            listProductsLiveData4.value = products4.await().result
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> fourthPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 4",result)
+            }
         }
     }
 
 
+    internal fun loadProductsFifth(){
+        if (fifthPartProducts.value != null) return
+        GlobalScope.launch(Dispatchers.IO) {
+            val products = async {
+                homeRepositoryImplBestBye.loadProducts(
+                    Params.ProductsParams(
+                        pathId = CAMERA,
+                        pageSize = "10",
+                        apiKey = APIKEY1,
+                        page = "1",
+                        typeProduct = OnProductItem.Type.ProductWithName,
+                        topOffer = "Вас может заинтересовать "
+                    )
+                )
+            }
+            withContext(Dispatchers.Main) {
+                val result = products.await().result
+                when(gettingErrors(result)){
+                    true -> fifthPartProducts.value = result
+                    else -> errorHandling("ERROR PRODUCT 5",result)
+                }
+                completed.value = true
+            }
+        }
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.basket
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -47,7 +46,7 @@ class BasketFragment : Fragment() {
     @Inject
     lateinit var mapper: Mapper
 
-    private val mainViewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
 
@@ -74,7 +73,7 @@ class BasketFragment : Fragment() {
             false
         )
 
-        adapter.setClickListenerProduct = object : ProductsRowType.OnProductClickListener{
+        adapter.setClickListenerProduct = object : ProductsRowType.ProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                 val extras = FragmentNavigatorExtras(
@@ -88,13 +87,13 @@ class BasketFragment : Fragment() {
             }
         }
 
-        adapter.setClickHeartProduct = object : ProductsRowType.OnClickListener{
+        adapter.setClickHeartProduct = object : ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
 
-        adapter.setClickBasketProduct = object : ProductsRowType.OnClickListener {
+        adapter.setClickBasketProduct = object : ProductsRowType.ClickListener {
             override fun onClick(productsItem: OnProductItem) {
 
                 mainViewModel.insertOrDeleteBasket(productsItem)
@@ -105,7 +104,7 @@ class BasketFragment : Fragment() {
             }
         }
 
-        basketAdapter.setClickListenerProduct = object :ProductsRowType.OnProductClickListener{
+        basketAdapter.setClickListenerProduct = object :ProductsRowType.ProductClickListener{
             override fun clickProduct(product: OnProductItem, imageView: ImageView) {
 
                 val extras = FragmentNavigatorExtras(
@@ -186,13 +185,13 @@ class BasketFragment : Fragment() {
             }
         })
 
-        basketAdapter.setClickHeartProduct = object :ProductsRowType.OnClickListener{
+        basketAdapter.setClickHeartProduct = object :ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
             }
         }
 
-        basketAdapter.setOnBasketDelete = object :ProductsRowType.OnClickListener{
+        basketAdapter.setOnBasketDelete = object :ProductsRowType.ClickListener{
             override fun onClick(productsItem: OnProductItem) {
                 mainViewModel.insertOrDeleteBasket(productsItem)
                 basketAdapter.deleteProduct(productsItem)
