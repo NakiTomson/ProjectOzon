@@ -16,10 +16,10 @@ import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.rowType.ProductsRowType
 
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_product.view.*
+import kotlinx.android.synthetic.main.item_product_horizontal.view.*
 
 
-class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductItemHorizontalAdapter : RecyclerView.Adapter<ProductItemHorizontalAdapter.CategoryOfferItemProductViewHolder>() {
 
     private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
 
@@ -42,7 +42,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
-        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
+        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product_horizontal, parent, false))
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {

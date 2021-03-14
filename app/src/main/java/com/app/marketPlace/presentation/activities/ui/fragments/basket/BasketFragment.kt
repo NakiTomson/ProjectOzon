@@ -17,7 +17,7 @@ import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.adapters.ProductHorizontalItemAdapter
+import com.app.marketPlace.presentation.adapters.ProductBasketAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.rowType.ProductsRowType
 import com.google.firebase.auth.FirebaseAuth
@@ -51,7 +51,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
         val mAuth = FirebaseAuth.getInstance()
 
-        val basketAdapter = ProductHorizontalItemAdapter()
+        val basketAdapter = ProductBasketAdapter()
         val recommendAdapter  = ProductItemAdapter()
 
         setupBasketAdapter(basketAdapter)
@@ -64,7 +64,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         }
     }
 
-    private fun setupBasketAdapter(basketAdapter: ProductHorizontalItemAdapter) {
+    private fun setupBasketAdapter(basketAdapter: ProductBasketAdapter) {
         basketAdapter.setHasStableIds(true)
         basketAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
@@ -85,7 +85,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         }
     }
 
-    private fun setupListRecommendAdapter(recommendAdapter: ProductItemAdapter,basketAdapter: ProductHorizontalItemAdapter) {
+    private fun setupListRecommendAdapter(recommendAdapter: ProductItemAdapter,basketAdapter: ProductBasketAdapter) {
         listRecommendProduct.adapter = recommendAdapter
         listRecommendProduct.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
@@ -113,7 +113,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         })
     }
 
-    private fun setupBasketProducts(mAuth: FirebaseAuth,basketAdapter: ProductHorizontalItemAdapter){
+    private fun setupBasketProducts(mAuth: FirebaseAuth,basketAdapter: ProductBasketAdapter){
         var images:List<String>? = null
         var oldPrice = 0f
         var priceWithDiscount = 0f

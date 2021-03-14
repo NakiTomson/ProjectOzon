@@ -16,7 +16,7 @@ data class ProductItem (
     var isBestseller :Boolean= false,
     val priceWithDiscount:String? = null,
     val priceOlD:String? = null,
-    val goToBasket:Boolean = false,
+    var goToBasket:Boolean = false,
     val nameOfProduct:String? = null,
     val inHints:Boolean = true,
 
@@ -48,6 +48,8 @@ data class ProductItem (
         object OnlyImage : Type(), Serializable
         object ProductNonName : Type(), Serializable
         object ProductWithName : Type(), Serializable
+        object ProductNoNBasket : Type(), Serializable
+        object ProductHorizontal : Type(), Serializable
     }
 }
 

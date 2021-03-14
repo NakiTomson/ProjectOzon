@@ -14,12 +14,16 @@ object ConstantsApp {
 
     const val APIKEY5 ="ZnyPtrseY8S0PdmEWC8xzAzg"
 
-    const val HOME_AUDIO = "pcmcat241600050001"
+    const val HOME_AUDIO = "abcat0912005"
     const val CELL_PHONES = "pcmcat209400050001"
     const val LAPTOPS = "abcat0502000"
     const val TVS = "abcat0101000"
     const val PLAYSTATION = "pcmcat295700050012"
     const val CAMERA = "abcat0401000"
+    const val HEADPHONES = "abcat0204000"
+    const val MONITORS = "abcat0509000"
+    const val COMPUTER_KEYBOARDS = "abcat0513004"
+    const val PHONES = "abcat0800000"
 
 
     val listImagesByCategory = listOf(

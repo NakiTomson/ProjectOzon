@@ -10,8 +10,12 @@ import com.app.marketPlace.data.utils.ConstantsApp.APIKEY4
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY5
 import com.app.marketPlace.data.utils.ConstantsApp.CAMERA
 import com.app.marketPlace.data.utils.ConstantsApp.CELL_PHONES
+import com.app.marketPlace.data.utils.ConstantsApp.COMPUTER_KEYBOARDS
+import com.app.marketPlace.data.utils.ConstantsApp.HEADPHONES
 import com.app.marketPlace.data.utils.ConstantsApp.HOME_AUDIO
 import com.app.marketPlace.data.utils.ConstantsApp.LAPTOPS
+import com.app.marketPlace.data.utils.ConstantsApp.MONITORS
+import com.app.marketPlace.data.utils.ConstantsApp.PHONES
 import com.app.marketPlace.data.utils.ConstantsApp.TVS
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
@@ -258,29 +262,141 @@ class HomeViewModel() : BaseViewModel() {
     }
 
 
-    internal fun loadProductsFifth(){
+
+    fun loadAdditionalData() {
+        loadData(Dispatchers.IO) {
+            loadProductsNinth()
+        }
+    }
+
+
+    private suspend fun loadProductsFifth(){
         if (fifthPartProducts.value != null) return
-        GlobalScope.launch(Dispatchers.IO) {
-            val products = async {
-                repository.loadProducts(
-                    Params.ProductsParams(
-                        pathId = CAMERA,
-                        pageSize = "10",
-                        apiKey = APIKEY1,
-                        page = "1",
-                        typeProduct = ProductItem.Type.ProductWithName,
-                        topOffer = "Вас может заинтересовать "
-                    )
+        val products = async {
+            repository.loadProducts(
+                Params.ProductsParams(
+                    pathId = CAMERA,
+                    pageSize = "8",
+                    apiKey = APIKEY1,
+                    page = "3",
+                    typeProduct = ProductItem.Type.ProductWithName,
+                    topOffer = "Вас может заинтересовать "
                 )
-            }
-            withContext(Dispatchers.Main) {
-                val result = products.await().result
-                when(gettingErrors(result)){
-                    true -> fifthPartProducts.value = result
-                    else -> errorHandling("ERROR PRODUCT 5",result)
-                }
+            )
+        }
+        withContext(Dispatchers.Main) {
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> fifthPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 5",result)
             }
         }
     }
 
+
+
+    private suspend fun loadProductsSixth(){
+        if (sixthPartProducts.value != null) return
+
+        val products = async {
+            repository.loadProducts(
+                Params.ProductsParams(
+                    pathId = HEADPHONES,
+                    pageSize = "12",
+                    apiKey = APIKEY2,
+                    page = "1",
+                    typeProduct = ProductItem.Type.ProductNoNBasket,
+                    topOffer = "Музыка для души "
+                )
+            )
+        }
+        loadProductsFifth()
+        withContext(Dispatchers.Main) {
+            val result = products.await().result
+            when (gettingErrors(result)) {
+                true -> sixthPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 6", result)
+            }
+        }
+    }
+
+
+
+    private suspend fun loadProductsSeventh(){
+        if (seventhPartProducts.value != null) return
+
+        val products = async {
+            repository.loadProducts(
+                Params.ProductsParams(
+                    pathId = MONITORS,
+                    pageSize = "6",
+                    apiKey = APIKEY3,
+                    page = "1",
+                    typeProduct = ProductItem.Type.ProductHorizontal,
+                    topOffer = "Лучшие мониторы 90 % скидка"
+                )
+            )
+        }
+        loadProductsSixth()
+        withContext(Dispatchers.Main) {
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> seventhPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 7",result)
+            }
+        }
+    }
+
+
+
+    private suspend fun loadProductsEighth(){
+        if (eighthPartProducts.value != null) return
+
+        val products = async {
+            repository.loadProducts(
+                Params.ProductsParams(
+                    pathId = COMPUTER_KEYBOARDS,
+                    pageSize = "6",
+                    apiKey = APIKEY4,
+                    page = "1",
+                    typeProduct = ProductItem.Type.ProductWithName,
+                    topOffer = "Удачная покупка"
+                )
+            )
+        }
+        loadProductsSeventh()
+        withContext(Dispatchers.Main) {
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> eighthPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 8",result)
+            }
+        }
+    }
+
+
+
+    private suspend fun loadProductsNinth(){
+        if (ninthPartProducts.value != null) return
+        val products = async {
+            repository.loadProducts(
+                Params.ProductsParams(
+                    pathId = PHONES,
+                    pageSize = "20",
+                    apiKey = APIKEY5,
+                    page = "1",
+                    typeProduct = ProductItem.Type.ProductWithName,
+                    topOffer = "Пора обновить телефон !"
+                )
+            )
+        }
+        loadProductsEighth()
+        withContext(Dispatchers.Main) {
+            val result = products.await().result
+            when(gettingErrors(result)){
+                true -> ninthPartProducts.value = result
+                else -> errorHandling("ERROR PRODUCT 9",result)
+            }
+        }
+    }
 }

@@ -21,6 +21,7 @@ import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.presentation.interfaces.RowType.PRODUCTS_HORIZONTAL_ROW_TYPE
 import com.app.marketPlace.presentation.rowType.*
 import kotlinx.android.synthetic.main.row_type_banner.view.*
 import kotlinx.android.synthetic.main.row_type_bottom_slogan.view.*
@@ -223,6 +224,53 @@ object ViewHolderFactory {
     }
 
 
+    class ProductHorizontalViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
+
+        private val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
+
+        var setClickListenerProduct: ProductsHorizontalRowType.ProductClickListener? = null
+
+        var setClickHeartProduct: ProductsHorizontalRowType.ClickListener? = null
+
+        var setClickBasketProduct: ProductsHorizontalRowType.ClickListener? = null
+
+        private val animation: Animation = AnimationUtils.loadAnimation(
+            itemView.context,
+            R.anim.appearances_out
+        )
+
+        val controller = LayoutAnimationController(animation)
+
+        fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductItemHorizontalAdapter){
+            productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
+            productItemAdapter.setData(listProducts)
+
+            productsRecyclerView.apply {
+                adapter = productItemAdapter
+                postponeEnterTransition(itemView.context as Activity)
+                viewTreeObserver
+                    .addOnPreDrawListener {
+                        startPostponedEnterTransition(itemView.context as Activity)
+                        productsRecyclerView.layoutAnimation.start()
+                        true
+                    }
+            }
+
+            productsRecyclerView.layoutAnimation = controller
+            productItemAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+                setClickListenerProduct?.clickProduct(product,imageView)
+            }
+
+            productItemAdapter.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+                setClickHeartProduct?.onClick(productsItem)
+            }
+
+            productItemAdapter.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+                setClickBasketProduct?.onClick(productsItem)
+            }
+        }
+    }
+
 @JvmStatic
 fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     return when (viewType) {
@@ -250,6 +298,10 @@ fun create(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         RowType.PRODUCTS_ROW_TYPE -> {
             val productTypeView = LayoutInflater.from(parent.context).inflate(R.layout.row_type_products, parent, false)
             ProductViewHolder(productTypeView)
+        }
+        RowType.PRODUCTS_HORIZONTAL_ROW_TYPE -> {
+            val productTypeView = LayoutInflater.from(parent.context).inflate(R.layout.row_type_products, parent, false)
+            ProductHorizontalViewHolder(productTypeView)
         }
 
         RowType.PRODUCTS_SLOGAN_TOP_TYPE -> {

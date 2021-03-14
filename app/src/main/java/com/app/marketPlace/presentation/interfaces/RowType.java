@@ -13,6 +13,7 @@ public interface RowType {
     int PRODUCTS_SLOGAN_TOP_TYPE = 6;
     int PRODUCTS_SLOGAN_BOTTOM_TYPE = 7;
     int PRODUCTS_SLOGAN_COMPLEX_TYPE = 8;
+    int PRODUCTS_HORIZONTAL_ROW_TYPE = 9;
 
     int getItemViewType();
 

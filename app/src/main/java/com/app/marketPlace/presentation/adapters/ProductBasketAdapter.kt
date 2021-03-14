@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_horizontal_product.view.*
 
 
-class ProductHorizontalItemAdapter : RecyclerView.Adapter<ProductHorizontalItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductBasketAdapter : RecyclerView.Adapter<ProductBasketAdapter.CategoryOfferItemProductViewHolder>() {
 
     private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
 

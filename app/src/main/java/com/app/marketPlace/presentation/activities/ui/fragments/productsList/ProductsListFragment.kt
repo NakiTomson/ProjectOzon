@@ -2,6 +2,9 @@ package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -9,7 +12,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -51,10 +53,15 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         productsAdapter.setHasStableIds(true)
         foundProductsRecyclerView.adapter =  productsAdapter
 
-        productsAdapter.setClickHeartProduct = object :ProductsRowType.ClickListener{
-            override fun onClick(productsItem: ProductItem) {
-                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-            }
+        val anim: Animation = AnimationUtils.loadAnimation(
+            this.context,
+            R.anim.lunge_from_bottom
+        )
+
+        val controller = LayoutAnimationController(anim)
+
+        productsAdapter.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
         }
 
         productsAdapter.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
@@ -81,13 +88,17 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
             productsAdapter.setData(resource.data!!.list)
-            resource.data.requestName?.let { searchTextInput.setText(it) }
+            resource.data.requestName?.let {
+                searchTextInput.setText(it.replace("&search="," "))
+            }
             stopProgressBar()
+            setAnim(controller)
         })
 
         viewModel.productsResultList.observe(viewLifecycleOwner, { resource->
             productsAdapter.setData(resource.data!!.list)
             stopProgressBar()
+            setAnim(controller)
         })
 
         searchTextInput?.setOnTouchListener { view, event ->
@@ -100,8 +111,16 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
             view.performClick()
             view.onTouchEvent(event)
         }
+
+        foundProductsRecyclerView.viewTreeObserver.addOnPreDrawListener {
+            foundProductsRecyclerView?.layoutAnimation?.start()
+            true
+        }
     }
 
+    private fun setAnim(navController: LayoutAnimationController) {
+        foundProductsRecyclerView.layoutAnimation = navController
+    }
     private fun stopProgressBar(){
         progressBar.visibility = View.GONE
     }

@@ -6,6 +6,9 @@ import android.transition.*
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -19,6 +22,9 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.mappers.Mapper
@@ -45,6 +51,7 @@ import kotlinx.android.synthetic.main.product_details_bottom.*
 import kotlinx.android.synthetic.main.product_details_center.*
 import kotlinx.android.synthetic.main.product_details_top.*
 import javax.inject.Inject
+import kotlin.math.abs
 
 
 class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
@@ -78,11 +85,12 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
             addTransition(ChangeTransform())
         }
 
+        navController = findNavController()
+
         val detailProduct:ProductItem? = args.product
 
         val nameProduct:String =
             detailProduct?.nameOfProduct?.replace("-", "")!!.replace("  ", " ")
-
 
         val searchWord = nameProduct
             .substring(0, nameProduct.indexOf(' ', nameProduct.indexOf(' ') + 7))
@@ -93,7 +101,6 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
 
         initView(Mapper.reMapProduct(detailProduct))
-
 
         val bundle = bundleOf(
             "longDescription" to detailProduct.longDescription,
@@ -158,7 +165,6 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
 
         basket?.visibility = View.VISIBLE
-
 
         basket?.text = String.format(
             resources.getString(R.string.inBasket),
@@ -292,6 +298,19 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
                 setCurrentIndicator(position)
             }
         })
+
+        imageDetailViewPager.clipToPadding = false
+        imageDetailViewPager.clipChildren = false
+        imageDetailViewPager.offscreenPageLimit = 3
+        imageDetailViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer()
+        compositePageTransformer.addTransformer(MarginPageTransformer(40))
+        compositePageTransformer.addTransformer { page, position ->
+            val r = 1 - abs(position)
+            page.scaleY = (0.85f + r * 0.15f)
+        }
+        imageDetailViewPager.setPageTransformer(compositePageTransformer)
     }
 
     private fun setupSimpleAdapter(detailProduct: ProductItem){
@@ -325,6 +344,15 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         adapterSimilar.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
+
+        val animation: Animation = AnimationUtils.loadAnimation(
+            context,
+            R.anim.appearances_out
+        )
+
+        val controller = LayoutAnimationController(animation)
+        listProductsSimilar.layoutAnimation = controller
+
         setupSimilarProducts(adapterSimilar)
     }
 
@@ -346,6 +374,15 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         adapterEquivalent.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
+
+        val animation: Animation = AnimationUtils.loadAnimation(
+            context,
+            R.anim.appearances_out
+        )
+
+        val controller = LayoutAnimationController(animation)
+        listProductsEquivalent.layoutAnimation = controller
+
         setupEquivalentProducts(adapterEquivalent)
     }
 
