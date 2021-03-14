@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.appmarketplace.ozon">
+    package="com.app.marketPlace">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".presentation.OzonApp"
-        android:allowBackup="true"
+        android:name="com.app.marketPlace.presentation.MarketPlaceApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProjectOzon"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/Theme.ProjectMarketPlace"
+       >
 
-        <activity android:name=".presentation.activityes.OnboardingFirstStartActivity">
-
-        </activity>
-
-
-        <activity android:name=".presentation.activityes.SplashActivity">
+        <activity android:name="com.app.marketPlace.presentation.activities.OnBoardingFirstStartActivity">
 
         </activity>
 
-        <activity android:name=".presentation.activityes.MainActivity"
-            android:screenOrientation="portrait"
+
+        <activity android:name="com.app.marketPlace.presentation.activities.SplashActivity">
+
+        </activity>
+
+        <activity android:name="com.app.marketPlace.presentation.activities.MainActivity"
             >
 
             <intent-filter>
@@ -35,6 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
             </intent-filter>
+
             <nav-graph android:value="@navigation/home" />
 
         </activity>

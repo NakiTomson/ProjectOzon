@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.activityes.SplashActivity">
+    tools:context=".presentation.activities.SplashActivity">
 
 
 
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_app_ozon" />
+        app:srcCompat="@drawable/icon_market_place_app" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

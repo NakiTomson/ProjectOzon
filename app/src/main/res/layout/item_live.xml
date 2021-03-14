@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="16dp"
     >
@@ -15,11 +13,12 @@
         >
 
         <ImageView
-            android:id="@+id/imageOnboarding"
+            android:id="@+id/imageOnBoarding"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:adjustViewBounds="true"
             android:src="@drawable/ic_live_example"
+            android:contentDescription="@string/app_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,30 +66,31 @@
             android:layout_height="30dp"
             android:adjustViewBounds="true"
             android:background="@color/gray"
+            android:contentDescription="@string/app_name"
             app:layout_constraintBottom_toBottomOf="@+id/countUserLive"
             app:layout_constraintStart_toEndOf="@+id/countUserLive"
             app:layout_constraintTop_toTopOf="@+id/countUserLive"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/sream_eyes" />
+            app:srcCompat="@drawable/stream_eyes" />
 
         <TextView
             android:id="@+id/textDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:gravity="start"
+            android:gravity="center"
             android:textColor="@color/black"
             android:layout_marginStart="15dp"
-            android:text="Natures Miracle впервые в прямом эфире Ozon Live!"
+            android:text="Natures Miracle впервые в прямом эфире MarketPlace Live!"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageOnboarding"
-            app:layout_constraintTop_toBottomOf="@+id/imageOnboarding" />
+            app:layout_constraintStart_toStartOf="@+id/imageOnBoarding"
+            app:layout_constraintTop_toBottomOf="@+id/imageOnBoarding" />
 
 
         <View
-            android:id="@+id/razdelitel"
+            android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/black"
@@ -110,10 +110,11 @@
             android:id="@+id/iconOfCompany"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:contentDescription="@string/app_name"
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@+id/textDescription"
-            app:layout_constraintTop_toBottomOf="@+id/razdelitel"
-            app:srcCompat="@drawable/icon_app_ozon" />
+            app:layout_constraintTop_toBottomOf="@+id/separator"
+            app:srcCompat="@drawable/icon_market_place_app" />
 
         <TextView
             android:id="@+id/nameOfCompanyTitle"
@@ -130,4 +131,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</com.google.android.material.card.MaterialCardView>
+</FrameLayout>

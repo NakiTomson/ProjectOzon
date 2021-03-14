@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.activityes.ui.fragments.authorization.SignInFragment">
+    tools:context=".presentation.activities.ui.fragments.authorization.SignInFragment">
 
 
     <TextView
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:text="Nice"
         android:padding="5dp"
         android:textColor="@color/black"
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:text="To see you"
         android:textColor="@color/black"
         android:textSize="40sp"
@@ -43,6 +45,7 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:paddingStart="30dp"
+        android:paddingEnd="30dp"
         android:text="Again"
         android:textColor="@color/black"
         android:textSize="40sp"
@@ -109,6 +112,7 @@
         android:adjustViewBounds="true"
         android:padding="25dp"
         android:src="@drawable/ic_long_right"
+        android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="@+id/signIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/signIn" />
@@ -136,6 +140,7 @@
         android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:padding="25dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/ic_long_right"
         app:layout_constraintBottom_toBottomOf="@+id/signUp"
         app:layout_constraintEnd_toEndOf="parent"

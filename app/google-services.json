@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:66770773446:android:397557dd8cf087efd67ec7",
         "android_client_info": {
-          "package_name": "com.appmarketplace.ozon"
+          "package_name": "com.MarketPlace.app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "66770773446-ej7ng96hakfiq5hrgerkkpvmoj6o0vin.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.appmarketplace.ozon",
+            "package_name": "com.MarketPlace.app",
             "certificate_hash": "013e47c6f52fd33badaf7aa84da701fb21432308"
           }
         },

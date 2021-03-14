@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.home.HomeFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -23,25 +23,25 @@
 
     <fragment
         android:id="@+id/searchHintProductHomeFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
         android:label="search_list_product_home_fragment"
         tools:layout="@layout/fragment_search_hint_history_product" >
         <argument
-            android:name="requestname"
+            android:name="requestName"
             app:argType="string"
             android:defaultValue="iPhone 10" />
     </fragment>
 
     <fragment
         android:id="@+id/productsListFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.productsList.ProductsListFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.productsList.ProductsListFragment"
         android:label="fragment_products_list"
         tools:layout="@layout/fragment_products_list" >
 
     </fragment>
     <fragment
         android:id="@+id/mockFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.mock.MockFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.mock.MockFragment"
         android:label="fragment_mock"
         tools:layout="@layout/fragment_mock">
 
@@ -53,7 +53,7 @@
             />
 
         <argument
-            android:name="videUrl"
+            android:name="videoUrl"
             app:argType="string"
             android:defaultValue=""
             />
@@ -69,49 +69,50 @@
 
 
         <argument
-            android:name="mockGiftImge"
+            android:name="mockGiftImage"
             app:argType="string"
             android:defaultValue="" />
     </fragment>
 
     <fragment
-        android:id="@+id/detailsProductFragement"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.detail.DetailsProductFragement"
+        android:id="@+id/detailsProductFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.detail.DetailsProductFragment"
         android:label="fragment_details_product"
         tools:layout="@layout/fragment_details_product" >
         <argument
             android:name="product"
-            app:argType="com.appmarketplace.ozon.domain.modelsUI.OnProductItem"
+            app:argType="com.app.marketPlace.domain.models.ProductItem"
             app:nullable="true"
             android:defaultValue="@null" />
-        <argument
-            android:name="transitionName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="deftransition" />
+
         <action
-            android:id="@+id/action_detailsProductFragement_to_mockFragment"
+            android:id="@+id/action_detailsProductFragment_to_mockFragment"
             app:destination="@id/mockFragment" />
     </fragment>
 
-    <action android:id="@+id/action_global_detailsProductFragement" app:destination="@id/detailsProductFragement"/>
+    <action android:id="@+id/action_global_detailsProductFragment" app:destination="@id/detailsProductFragment"/>
+
     <fragment
         android:id="@+id/makingOrderFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.makingOrder.MakingOrderFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.makingOrder.MakingOrderFragment"
         android:label="fragment_making_order"
         tools:layout="@layout/fragment_making_order" />
+
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignInFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.authorization.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        tools:layout="@layout/fragment_sign_in">
 
 
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="android-app://presentation.activities.ui.fragments.authorization/signInFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.authorization.SignUpFragment"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.authorization.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
 

@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/home"
-        android:icon="@drawable/home_selecter"
+        android:icon="@drawable/home_selector"
         android:title="Home"  />
 
     <item
         android:id="@+id/category"
-        android:icon="@drawable/express_selecter"
+        android:icon="@drawable/express_selector"
         android:title="Category" />
 
     <item
         android:id="@+id/basket"
-        android:icon="@drawable/basket_selecter"
+        android:icon="@drawable/basket_selector"
         android:title="Basket" />
 
     <item
@@ -30,11 +30,11 @@
 
     <!--    <item-->
 <!--        android:id="@+id/expressItem3"-->
-<!--        android:icon="@drawable/home_selecter"-->
+<!--        android:icon="@drawable/home_selector"-->
 <!--        android:title="Home" />-->
 
 <!--    <item-->
 <!--        android:id="@+id/expressItem4"-->
-<!--        android:icon="@drawable/home_selecter"-->
+<!--        android:icon="@drawable/home_selector"-->
 <!--        android:title="Home" />-->
 </menu>

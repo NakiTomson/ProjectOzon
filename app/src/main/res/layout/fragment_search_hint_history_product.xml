@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.activityes.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
+    tools:context=".presentation.activities.ui.fragments.searchHintHistory.SearchHintHistoryProductFragment"
     android:orientation="vertical">
 
 
@@ -63,11 +63,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:drawableStart="@drawable/ic_search"
-            android:drawableEnd="@drawable/ic_right"
             android:drawablePadding="10dp"
             android:textColor="@color/black"
-            android:textSize="16sp">
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_search"
+            app:drawableEndCompat="@drawable/ic_right">
 
         </TextView>
 
@@ -78,10 +78,9 @@
             android:textSize="16sp"
             android:textColor="@color/black"
             android:drawablePadding="10dp"
-            android:drawableEnd="@drawable/ic_right"
-            android:drawableStart="@drawable/ic_search"
             android:layout_marginBottom="30dp"
-            >
+            app:drawableEndCompat="@drawable/ic_right"
+            app:drawableStartCompat="@drawable/ic_search">
         </TextView>
 
         <TextView
@@ -91,23 +90,21 @@
             android:textSize="16sp"
             android:textColor="@color/black"
             android:drawablePadding="10dp"
-            android:drawableEnd="@drawable/ic_right"
-            android:drawableStart="@drawable/ic_search"
             android:layout_marginBottom="30dp"
-            >
+            app:drawableEndCompat="@drawable/ic_right"
+            app:drawableStartCompat="@drawable/ic_search">
         </TextView>
 
         <TextView
-            android:id="@+id/exampleSearchFoureTextView"
+            android:id="@+id/exampleSearchFourTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/black"
             android:drawablePadding="10dp"
-            android:drawableEnd="@drawable/ic_right"
-            android:drawableStart="@drawable/ic_search"
             android:layout_marginBottom="30dp"
-            >
+            app:drawableEndCompat="@drawable/ic_right"
+            app:drawableStartCompat="@drawable/ic_search">
         </TextView>
     </LinearLayout>
 

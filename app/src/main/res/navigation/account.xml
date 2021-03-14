@@ -7,7 +7,8 @@
 
     <fragment
         android:id="@+id/personalAccount"
-        android:name="com.appmarketplace.ozon.presentation.activityes.ui.fragments.personalAccount.PersonalAccount"
+        android:name="com.app.marketPlace.presentation.activities.ui.fragments.personalAccount.PersonalAccount"
         android:label="fragment_personal_account"
         tools:layout="@layout/fragment_personal_account" />
+
 </navigation>

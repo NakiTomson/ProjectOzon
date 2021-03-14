@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@color/white_Light"
     android:layout_height="match_parent"
-    tools:context=".presentation.activityes.ui.fragments.mock.MockFragment">
+    tools:context=".presentation.activities.ui.fragments.mock.MockFragment">
 
 
 
@@ -41,6 +41,7 @@
         android:visibility="gone"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/two_history"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +87,7 @@
          />
 
     <LinearLayout
-        android:id="@+id/giftLayoute"
+        android:id="@+id/giftLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +106,7 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="Кому Отправить подарок?"
+            android:text="@string/iSendTheGift"
             android:layout_height="wrap_content">
         </TextView>
 
@@ -116,7 +117,7 @@
             android:textSize="16sp"
             android:gravity="center"
             android:textStyle="bold"
-            android:text="Напишите имя получателя подрака, чтобы мы могли его провильно оформить"
+            android:text="@string/writeTheRecipientsName"
             android:layout_height="wrap_content">
         </TextView>
 
@@ -141,7 +142,8 @@
                     android:layout_height="300dp"
                     android:adjustViewBounds="true"
                     android:paddingTop="30dp"
-                    android:src="@drawable/ic_prhone"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_phone"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -153,7 +155,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="О получателе"
+                    android:text="@string/aboutTheRecipient"
                     android:textColor="@color/black"
                     android:textSize="22sp"
                     android:textStyle="bold"
@@ -183,7 +185,7 @@
                         android:textStyle="bold"
 
 
-                        android:hint="Имя Получателя *"
+                        android:hint="@string/name"
                         >
 
                     </com.google.android.material.textfield.TextInputEditText>
@@ -200,7 +202,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:padding="5dp"
-                    android:text="Даллее"
+                    android:text="@string/next"
                     android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@+id/inputTExt"
                     app:layout_constraintStart_toStartOf="parent"

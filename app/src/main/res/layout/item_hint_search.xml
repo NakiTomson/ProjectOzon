@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/exampleSearchHitns"
+        android:id="@+id/exampleSearchHints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="@string/app_name"
-        android:drawableStart="@drawable/ic_search"
-        android:drawableEnd="@drawable/ic_right"
         android:drawablePadding="20dp"
         android:textColor="@color/black"
-        android:textSize="16sp">
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_search"
+        app:drawableEndCompat="@drawable/ic_right">
     </TextView>
 
 </FrameLayout>

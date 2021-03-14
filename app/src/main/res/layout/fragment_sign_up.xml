@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="55dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.activityes.ui.fragments.authorization.SignUpFragment">
+    tools:context=".presentation.activities.ui.fragments.authorization.SignUpFragment">
 
 
     <ImageView
@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_app_ozon" />
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/icon_market_place_app" />
 
     <EditText
         android:id="@+id/emailLogin"
@@ -79,14 +80,14 @@
         android:hint="Name"
         android:inputType="textPersonName"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/addresDelivery"
+        app:layout_constraintBottom_toTopOf="@+id/addressDelivery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 
 
     <EditText
-        android:id="@+id/addresDelivery"
+        android:id="@+id/addressDelivery"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -96,7 +97,7 @@
         android:background="@drawable/fields"
         android:ems="10"
         android:fontFamily="@font/roboto_slab_bold"
-        android:hint="Adress Delivery"
+        android:hint="@string/address_delivery"
         android:inputType="textPersonName"
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/phone"
@@ -127,7 +128,7 @@
     <Button
         android:id="@+id/signUp"
         android:layout_width="0dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_height="wrap_content"
         android:text="Sign up"
         android:layout_marginBottom="3dp"
