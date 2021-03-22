@@ -6,11 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.presentation.extensions.uploadPicture
 import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_boarding_container.view.*
 import java.util.*
+
+
 
 
 class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
@@ -56,7 +59,9 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
 
             imageOnBoarding.transitionName = onBoardingItem.transitionName
 
+
             if (onBoardingItem.onBoardingImageUrl.contains("drop".toUpperCase(Locale.ROOT))) {
+
                 Picasso.with(itemView.context)
                     .load(onBoardingItem.onBoardingImageUrl)
                     .placeholder(R.drawable.example_ads_banner)
@@ -71,6 +76,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
                             setCompleteListener?.onComplete()
                         }
                         override fun onError() {
+                            setCompleteListener?.onComplete()
                         }
                     })
             }
@@ -92,6 +98,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
         }
     }
 }
+
 
 
 

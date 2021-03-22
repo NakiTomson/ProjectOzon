@@ -17,7 +17,6 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
 
 
     var setOnCategoryItemClickListener:ClickCategoryListener? = null
-    var wasSetup:Boolean = false
 
     fun interface ClickCategoryListener{
         fun onClickItem(data: String)
@@ -28,7 +27,6 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        if (wasSetup) return
         val categoryViewHolder = viewHolder as  ViewHolderFactory.CategoryViewHolder
         categoryViewHolder.bind(combinationProductsAdapter)
 
@@ -39,15 +37,11 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
-                viewHolder.clickOnCategoryItem = object :ClickCategoryListener {
-                    override fun onClickItem(data: String) {
-                        setOnCategoryItemClickListener?.onClickItem(data)
-                    }
+                viewHolder.clickOnCategoryItem = ClickCategoryListener { data ->
+                    setOnCategoryItemClickListener?.onClickItem(data)
                 }
             }
         })
-
-        wasSetup = true
     }
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
@@ -73,7 +67,6 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAd
                 indicatorsContainer.addView(it)
             }
         }
-        wasSetup = true
     }
 
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){

@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Stories
@@ -17,19 +18,16 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
 
     lateinit var setOnStoriesClickListener: HistoryListener
 
-    private var wasSetup:Boolean = false
 
     fun interface HistoryListener {
         fun onClick(listOf: List<String>, position: Int, imageView: ImageView)
     }
-
 
     override fun getItemViewType(): Int {
         return RowType.HISTORY_ROW_TYPE
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        if (wasSetup) return
         val historyViewHolder = viewHolder as ViewHolderFactory.HistoryViewHolder
         val container = historyViewHolder.container
         historyModel?.let { historyViewHolder.bind(it) }
@@ -52,11 +50,11 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
             }
         }
         setUpImages(historyModel?.arrayImages!!,container)
-        wasSetup = true
     }
 
 
-    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout?){
+    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout){
+        if (container.children.count() >0) return
         val images = arrayOfNulls<ImageView>(listImagesUrl.size)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
@@ -65,16 +63,16 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
             )
         layoutParams.setMargins(8,8,8,8)
         for ( i in images.indices){
-            images[i] = ImageView(container?.context)
+            images[i] = ImageView(container.context)
             images[i]?.let {image:ImageView->
-                Picasso.with(container?.context)
+                Picasso.with(container.context)
                     .load(listImagesUrl[i])
                     .placeholder(R.drawable.one_history)
                     .into(image)
 
                 image.layoutParams = layoutParams
                 image.adjustViewBounds = true
-                container?.addView(image)
+                container.addView(image)
 
                 image.setOnClickListener {
                     image.transitionName = listImagesUrl[i]
@@ -83,4 +81,5 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
             }
         }
     }
+    
 }

@@ -13,6 +13,7 @@ import com.app.marketPlace.data.remote.models.Banner
 class CombinationProductsAdapter : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
 
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
+
     private val onBoardingItems: MutableList<MutableList<Banner>> = mutableListOf(mutableListOf())
 
     fun setData(items: MutableList<MutableList<Banner>>) {

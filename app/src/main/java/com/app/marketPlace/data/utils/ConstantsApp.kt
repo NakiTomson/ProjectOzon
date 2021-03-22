@@ -4,17 +4,17 @@ object ConstantsApp {
 
 
 
-    const val APIKEY1 ="LAkspZvwEmxShGSnQ7UFX4Ay"
+    const val APIKEY ="zXSRzd1MQNKNebKntBATTcQj"
 
-    const val APIKEY2 ="rkfxT8wgbk7yLrsPvqmVBBIU"
+//    const val APIKEY2 ="zXSRzd1MQNKNebKntBATTcQj"
+//
+//    const val APIKEY3 ="zXSRzd1MQNKNebKntBATTcQj"
+//
+//    const val APIKEY4 ="zXSRzd1MQNKNebKntBATTcQj"
+//
+//    const val APIKEY5 ="zXSRzd1MQNKNebKntBATTcQj"
 
-    const val APIKEY3 ="zXSRzd1MQNKNebKntBATTcQj"
-
-    const val APIKEY4 ="PTAhSZLl6Yehntjaiy0klz6y"
-
-    const val APIKEY5 ="ZnyPtrseY8S0PdmEWC8xzAzg"
-
-    const val HOME_AUDIO = "abcat0912005"
+    const val COFFEE_MAKER = "abcat0912005"
     const val CELL_PHONES = "pcmcat209400050001"
     const val LAPTOPS = "abcat0502000"
     const val TVS = "abcat0101000"

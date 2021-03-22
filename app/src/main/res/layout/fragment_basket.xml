@@ -29,6 +29,7 @@
             >
 
         </androidx.constraintlayout.widget.Group>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/basketsRecyclerView"
             android:layout_width="match_parent"

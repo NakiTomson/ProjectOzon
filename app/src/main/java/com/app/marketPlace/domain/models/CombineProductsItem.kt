@@ -1,8 +1,9 @@
 package com.app.marketPlace.domain.models
 
 data class CombineProductsItem(
-    val topStringOffer:String?= null,
+    val topOffer:String?= null,
     val list: List<ProductItem>,
-    val boltonStringOffer:String? = null,
-    val requestName:String? = null
+    val bottomOffer:String? = null,
+    val requestName:String? = null,
+    val spain:Int = 3
 )

@@ -2,8 +2,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY1
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY2
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
@@ -43,7 +42,7 @@ class ProductsListViewModel :ViewModel(), CoroutineScope {
                         Params.ProductsParams(
                             pathId = keyWordOne,
                             pageSize = "100",
-                            apiKey = APIKEY1,
+                            apiKey = APIKEY,
                             page = "1",
                             typeProduct = ProductItem.Type.ProductWithName,
                             requestName = keyWordOne
@@ -69,7 +68,7 @@ class ProductsListViewModel :ViewModel(), CoroutineScope {
                             Params.ProductsParams(
                                 pathId = category,
                                 pageSize = "100",
-                                apiKey = APIKEY2,
+                                apiKey = APIKEY,
                                 page = "1",
                                 typeProduct = ProductItem.Type.ProductWithName
                             )

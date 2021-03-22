@@ -18,7 +18,6 @@ interface InFavoriteProductDao {
     @Query("SELECT id FROM products")
     fun getAllIds(): Flow<List<Int>?>
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(product: FavoriteProductDb?)
 

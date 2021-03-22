@@ -18,7 +18,7 @@
 
 
     <Button
-        android:id="@+id/inBasketButton"
+        android:id="@+id/in_basket_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -52,7 +52,7 @@
 
 
     <FrameLayout
-        android:id="@+id/connectionFrame"
+        android:id="@+id/connection_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"

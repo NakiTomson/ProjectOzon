@@ -10,8 +10,9 @@ import com.app.marketPlace.data.remote.models.CategoriesProduct
 import com.app.marketPlace.data.utils.ConstantsApp.listImagesByCategory
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.domain.models.*
-import com.app.marketPlace.presentation.activities.MainActivity.Companion.listIdsBasket
-import com.app.marketPlace.presentation.activities.MainActivity.Companion.listIdsFavorite
+import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.presentation.activities.MainViewModel.Companion.listIdsBasket
+import com.app.marketPlace.presentation.activities.MainViewModel.Companion.listIdsFavorite
 import com.app.marketPlace.presentation.rowType.Resource
 import java.text.DecimalFormat
 
@@ -42,24 +43,23 @@ object Mapper {
 
         fun mapProductsFromServer(
             products: Products,
-            topOffer:String = "",
-            bottomOffer:String = "",
-            requestName:String = "",
-            type: ProductItem.Type
+            params: Params
         ):Resource<CombineProductsItem>{
 
 
             val data = CombineProductsItem(
-                topStringOffer = topOffer,
-                boltonStringOffer = bottomOffer,
-                list = getUiProducts(products.products,type),
-                requestName = requestName
+                topOffer = params.topOffer,
+                bottomOffer = params.bottomOffer,
+                list = getUiProducts(products.products,params.typeProduct),
+                requestName = params.requestName,
+                spain = params.spain
             )
 
             return Resource(
                 status = Resource.Status.COMPLETED,
                 data = data,
-                exception = null
+                exception = null,
+                type = params.resourceType
             )
         }
 
@@ -210,7 +210,7 @@ object Mapper {
         }
 
 
-        fun mapCategoriesFromServer(category: CategoriesProduct?): Resource<MutableList<MutableList<Banner>>> {
+        fun mapCategoriesFromServer(category: CategoriesProduct?, params: Params): Resource<MutableList<MutableList<Banner>>> {
 
             for ((index, i) in (0 until category?.categories!!.size).withIndex()) {
                 category.categories[i].image = listImagesByCategory[index]
@@ -247,7 +247,7 @@ object Mapper {
                 )
             }
 
-            return Resource(status = Resource.Status.COMPLETED, data = data , exception = null)
+            return Resource(status = Resource.Status.COMPLETED, data = data , exception = null,type = params.resourceType)
         }
 
     }

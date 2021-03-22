@@ -1,8 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.detail
 
 import androidx.lifecycle.MutableLiveData
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY3
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY4
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.domain.models.CategoryPath
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 
@@ -47,7 +46,7 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
                     Params.ProductsParams(
                         pathId = name!!.replace(" ","&search="),
                         pageSize = "20",
-                        apiKey = APIKEY3,
+                        apiKey = APIKEY,
                         page = "1",
                         typeProduct = ProductItem.Type.ProductWithName,
                         requestName = name
@@ -74,7 +73,7 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
                         Params.ProductsParams(
                             pathId = category?.get(category.size-1)?.id ?: "null",
                             pageSize = "20",
-                            apiKey = APIKEY4,
+                            apiKey = APIKEY,
                             page = "1",
                             typeProduct = ProductItem.Type.ProductWithName
                         )

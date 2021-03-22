@@ -48,7 +48,7 @@ class SplashActivity : AppCompatActivity() {
 
             }
         })
-        mainImageView.animation = animation
+        label_ImageView.animation = animation
     }
 
 

@@ -2,8 +2,8 @@ package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY5
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -35,7 +35,7 @@ class CatalogViewModel: ViewModel(), CoroutineScope {
         launch(Dispatchers.IO) {
             val categories =  async {
                 repository.loadCategories(
-                    Params.CategoriesProductParams(pageSize = "100", apiKey = APIKEY5, page = "1"))
+                    Params.CategoriesProductParams(pageSize = "100", apiKey = APIKEY, page = "1"))
             }
             withContext(Dispatchers.Main){
                 val result = categories.await().result

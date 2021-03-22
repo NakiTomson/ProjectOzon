@@ -1,33 +1,37 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
+import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Stories
+import com.app.marketPlace.domain.exception.NotFoundRealizationException
+import com.app.marketPlace.domain.models.CombineProductsItem
+import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-
+import com.app.marketPlace.presentation.rowType.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
+import com.app.marketPlace.presentation.extensions.launchWhenCreated
 import com.app.marketPlace.presentation.rowType.*
-import com.google.firebase.auth.FirebaseAuth
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
+import kotlinx.coroutines.flow.onEach
 import java.util.*
 import javax.inject.Inject
 
@@ -43,39 +47,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(repository)
     }
+    val TAG = HomeFragment::class.java.simpleName
 
     private val viewModel: HomeViewModel by viewModels()
 
-    lateinit var navController:NavController
+    private lateinit var navController:NavController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
-        viewModel.startLoading()
 
-        val startBannerAdapterViewPager = BannerAdapter()
-        val centerBannerAdapterViewPager = BannerAdapter()
-        val downBannerAdapterViewPager = BannerAdapter()
-        val combinationProductAdapterViewPager = CombinationProductsAdapter()
-        val liveItemAdapterViewPager = LiveStreamAdapter()
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
-        setupBannerTop(adapterMultiple, startBannerAdapterViewPager)
-        setupCategoryProducts(adapterMultiple, combinationProductAdapterViewPager)
-        setupStories(adapterMultiple)
-        setupLiveStreams(adapterMultiple, liveItemAdapterViewPager)
-        setupFirstProducts(adapterMultiple)
-        setupSecondProducts(adapterMultiple)
-        setupBannerCenter(adapterMultiple, centerBannerAdapterViewPager)
-        setupThirdProducts(adapterMultiple)
-        setupBannerDown(adapterMultiple, downBannerAdapterViewPager)
-        setupFourthProducts(adapterMultiple)
-        setupFifthProducts(adapterMultiple)
-        setupSixthProducts(adapterMultiple)
-        setupSeventhProducts(adapterMultiple)
-        setupEighthProducts(adapterMultiple)
-        setupNinthProducts(adapterMultiple)
+        setupData(adapterMultiple)
 
         searchTextInput?.setOnTouchListener { view, event ->
             if (navController.currentDestination?.id != R.id.searchHintProductHomeFragment){
@@ -85,7 +70,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             view.onTouchEvent(event)
         }
 
-
         val anim: Animation = AnimationUtils.loadAnimation(
             this.context,
             R.anim.lunge_from_bottom
@@ -94,49 +78,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val controller = LayoutAnimationController(anim)
         viewModel.completed.observe(viewLifecycleOwner, {
             loadingFrame.visibility = View.GONE
-            timeDelayLoadNewData(adapterMultiple)
             multipleHomeRecyclerView.layoutAnimation = controller
-        })
-
-    }
-
-    private fun timeDelayLoadNewData(adapterMultiple: MultipleAdapter) {
-        val timer = Timer()
-        timer.schedule(object:TimerTask(){
-            override fun run() {
-                activity?.runOnUiThread {
-                    adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
-                        viewModel.loadAdditionalData()
-                    }
-                }
+            adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
+                viewModel.loadAdditionalData()
             }
-        },5000)
-    }
-
-    private fun navigateToMock(
-        mockImage: String = "",
-        liveStream: String = "",
-        extras: FragmentNavigator.Extras,
-        listOf: List<String>? = null,
-        position: Int? = null
-    ) {
-        val bundle = Bundle()
-        bundle.putString("arg1", mockImage)
-        bundle.putString("arg2", liveStream)
-
-        val action = HomeFragmentDirections.actionHomeFragmentToMockFragment(
-            imageUrl = mockImage,
-            videoUrl = liveStream,
-            arrayHistory = listOf?.toTypedArray(),
-            position = position ?: 0
-        )
-        navController.navigate(action, extras)
+        })
     }
 
     private fun setupAdapter(multipleAdapter: MultipleAdapter) {
         multipleAdapter.setHasStableIds(true)
         multipleHomeRecyclerView.layoutManager = LinearLayoutManager(context)
-        multipleHomeRecyclerView.adapter = multipleAdapter
 
         multipleHomeRecyclerView.apply {
             adapter = multipleAdapter
@@ -149,399 +100,152 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setupBannerTop(multipleAdapter: MultipleAdapter, bannerAdapter: BannerAdapter) {
-        viewModel.bannerListTop.observe(viewLifecycleOwner, { resource ->
-            resource.data?.forEach { bannerAdapter.setItem(it) }
-            val banner = BannerRowType(bannerAdapter)
-            multipleAdapter.setData(banner)
-            banner.setOnBannerClickListener =
-                BannerRowType.BannerListener { imageUrl: String, view: RoundedImageView ->
-                    val extras = FragmentNavigatorExtras(
-                        view to imageUrl
-                    )
-                    navigateToMock(mockImage = imageUrl, extras = extras)
+
+    private fun setupData(multipleAdapter: MultipleAdapter){
+        viewModel.products.onEach {resource->
+            if (resource.data == null)return@onEach
+            when(resource.type){
+                is Type.BANNER -> {
+                    setBanners(multipleAdapter, resource as Resource<MutableList<Banner>>)
                 }
-        })
-    }
-
-    private fun setupCategoryProducts(
-        multipleAdapter: MultipleAdapter,
-        combinationAdapter: CombinationProductsAdapter
-    ) {
-        viewModel.categoryProducts.observe(viewLifecycleOwner, { resource ->
-            combinationAdapter.setData(resource.data!!)
-            val categoryRowType = CategoryRowType(combinationAdapter)
-            multipleAdapter.setData(categoryRowType)
-            categoryRowType.setOnCategoryItemClickListener =
-                CategoryRowType.ClickCategoryListener { data ->
-                    val bundle = Bundle()
-                    bundle.putString("category", data)
-                    navController.navigate(R.id.productsListFragment, bundle)
+                is Type.CATEGORIES -> {
+                    setCategories(multipleAdapter, resource as Resource<MutableList<MutableList<Banner>>>)
                 }
-        })
-    }
-
-    private fun setupStories(multipleAdapter: MultipleAdapter) {
-        viewModel.storiesItems.observe(viewLifecycleOwner, { resource ->
-            val stories = HistoryRowType(resource.data)
-            multipleAdapter.setData(stories)
-            stories.setOnStoriesClickListener =
-                HistoryRowType.HistoryListener { listOf, position, imageView ->
-                    val extras = FragmentNavigatorExtras(
-                        imageView to listOf[position]
-                    )
-                    navigateToMock(listOf = listOf, position = position, extras = extras)
+                is Type.STORIES -> {
+                    setStories(multipleAdapter, resource as Resource<Stories>)
                 }
-        })
-    }
-
-    private fun setupLiveStreams(
-        multipleAdapter: MultipleAdapter,
-        liveStreamAdapter: LiveStreamAdapter
-    ) {
-        viewModel.liveStreams.observe(viewLifecycleOwner, { resource ->
-            liveStreamAdapter.setData(resource.data!!)
-            liveStreamAdapter.setData(resource.data)
-            multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
-            val rowTypeLive = LiveRowType(liveStreamAdapter)
-            multipleAdapter.setData(rowTypeLive)
-            rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
-                val extras = FragmentNavigatorExtras(view to liveUrl)
-                navigateToMock(liveStream = liveUrl, extras = extras)
-            }
-        })
-    }
-
-    private fun setupFirstProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.firstPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 3, productAdapter)
-            multipleAdapter.setData(rowProduct)
-
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-
-            val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-            if (mAuth.currentUser == null) {
-                val regRowType = RegistrationRowType()
-                multipleAdapter.setData(regRowType)
-                regRowType.setOnAuthorizationClickListener = RegistrationRowType.AuthorizationClickListener {
-                    navController.navigate(R.id.signInFragment)
+                is Type.STREAMS -> {
+                    setLiveStreams(multipleAdapter, resource as Resource<LiveStreamItem>)
+                }
+                is Type.PRODUCT -> {
+                    setProducts(multipleAdapter, resource as Resource<CombineProductsItem>)
+                }
+                is Type.HORIZONTAL_PRODUCT->{
+                    setHorizontalProducts(multipleAdapter,resource as Resource<CombineProductsItem>)
+                }
+                is Type.UNDEFINED -> {
+                    throw NotFoundRealizationException("type non found ${resource.data} ${resource.type}")
                 }
             }
-        })
+        }.launchWhenCreated(lifecycleScope)
     }
 
-    private fun setupSecondProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.secondPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 3, productAdapter)
-            multipleAdapter.setData(rowProduct)
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-            resource.data.boltonStringOffer?.let { multipleAdapter.setData(BottomSloganRowType(it)) }
-        })
+    private fun setBanners(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<Banner>>) {
+        val bannerAdapter  = BannerAdapter()
+        resource.data!!.forEach { bannerAdapter.setItem(it) }
+        val banner = BannerRowType(bannerAdapter)
+        multipleAdapter.setData(banner)
+        banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl: String, view: RoundedImageView ->
+            val extras = FragmentNavigatorExtras(
+                view to imageUrl
+            )
+            navigateToMock(mockImage = imageUrl, extras = extras)
+        }
     }
 
-    private fun setupBannerCenter(multipleAdapter: MultipleAdapter, centerBannerAdapterViewPager: BannerAdapter) {
-        viewModel.bannerListCenter.observe(viewLifecycleOwner, { resource ->
-            resource.data!!.forEach { centerBannerAdapterViewPager.setItem(it) }
-            val banner = BannerRowType(centerBannerAdapterViewPager)
-            multipleAdapter.setData(banner)
-            banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to imageUrl
-                )
-                navigateToMock(mockImage = imageUrl, extras = extras)
-            }
-        })
+    private fun setCategories(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<MutableList<Banner>>>) {
+        val combinationAdapter = CombinationProductsAdapter()
+        combinationAdapter.setData(resource.data!!)
+        val categoryRowType = CategoryRowType(combinationAdapter)
+        multipleAdapter.setData(categoryRowType)
+        categoryRowType.setOnCategoryItemClickListener = CategoryRowType.ClickCategoryListener { data ->
+            val bundle = Bundle()
+            bundle.putString("category", data)
+            navController.navigate(R.id.productsListFragment, bundle)
+        }
     }
 
-    private fun setupThirdProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.thirdPartProducts.observe(viewLifecycleOwner, { resource ->
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 3, productAdapter)
-            multipleAdapter.setData(rowProduct)
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
+    private fun setStories(multipleAdapter: MultipleAdapter,resource: Resource<Stories>) {
+        val stories = HistoryRowType(resource.data)
+        multipleAdapter.setData(stories)
+        stories.setOnStoriesClickListener = HistoryRowType.HistoryListener { listOf, position, imageView ->
+            val extras = FragmentNavigatorExtras(
+                imageView to listOf[position]
+            )
+            navigateToMock(listOf = listOf, position = position, extras = extras)
+        }
     }
 
-    private fun setupBannerDown(multipleAdapter: MultipleAdapter, downBannerAdapterViewPager: BannerAdapter) {
-        viewModel.bannerListDown.observe(viewLifecycleOwner, { resource ->
-            resource.data!!.forEach { downBannerAdapterViewPager.setItem(it) }
-            val banner = BannerRowType(downBannerAdapterViewPager)
-            multipleAdapter.setData(banner)
-            banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to imageUrl
-                )
-                navigateToMock(mockImage = imageUrl, extras = extras)
-            }
-        })
-    }
-
-    private fun setupFourthProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.fourthPartProducts.observe(viewLifecycleOwner, { resource ->
-            resource.data!!.topStringOffer?.let { multipleAdapter.setData(TopSloganRowType(it)) }
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 2, productAdapter)
-            multipleAdapter.setData(rowProduct)
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-            resource.data.boltonStringOffer?.let { multipleAdapter.setData(BottomSloganRowType(it)) }
-        })
+    private fun setLiveStreams(multipleAdapter: MultipleAdapter, resource: Resource<LiveStreamItem>) {
+        val liveStreamAdapter = LiveStreamAdapter()
+        liveStreamAdapter.setData(resource.data!!)
+        liveStreamAdapter.setData(resource.data)
+        multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
+        val rowTypeLive = LiveRowType(liveStreamAdapter)
+        multipleAdapter.setData(rowTypeLive)
+        rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
+            val extras = FragmentNavigatorExtras(view to liveUrl)
+            navigateToMock(liveStream = liveUrl, extras = extras)
+        }
     }
 
 
-    private fun setupFifthProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.fifthPartProducts.observe(viewLifecycleOwner, { resource ->
+    private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>) {
+        resource.data!!.topOffer?.let {
+            multipleAdapter.setData(TopSloganRowType(it))
+        }
 
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
+        val productAdapter = ProductItemAdapter()
+        val rowProduct = ProductsRowType(resource.data.list, resource.data.spain, productAdapter)
+        multipleAdapter.setData(rowProduct)
 
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 2, productAdapter)
-            multipleAdapter.setData(rowProduct)
+        rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteFavoriteProduct(product)
+        }
+        rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteBasket(product)
+        }
+        rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
 
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
+            val extras = FragmentNavigatorExtras(
+                view to product.generalIconProductSting!!
+            )
+            val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
+                product = product
 
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
+            )
+            navController.navigate(action, extras)
+        }
+        resource.data.bottomOffer?.let {
+            multipleAdapter.setData(BottomSloganRowType(it))
+        }
+    }
+    private fun setHorizontalProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>) {
+        resource.data!!.topOffer?.let {
+            multipleAdapter.setData(TopSloganRowType(it))
+        }
 
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
+        val productAdapter = ProductItemHorizontalAdapter()
+        val rowProduct = ProductsHorizontalRowType(resource.data.list, resource.data.spain, productAdapter)
+        multipleAdapter.setData(rowProduct)
 
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
+        rowProduct.setOnHeartProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteFavoriteProduct(product)
+        }
+        rowProduct.setOnBasketProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
+            mainViewModel.insertOrDeleteBasket(product)
+        }
+        rowProduct.setOnProductClickListener = ProductsHorizontalRowType.ProductClickListener { product, view ->
+
+            val extras = FragmentNavigatorExtras(
+                view to product.generalIconProductSting!!
+            )
+            val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
+                product = product
+
+            )
+            navController.navigate(action, extras)
+        }
+        resource.data.bottomOffer?.let {
+            multipleAdapter.setData(BottomSloganRowType(it))
+        }
     }
 
-    private fun setupSixthProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.sixthPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 4, productAdapter)
-            multipleAdapter.setData(rowProduct)
-
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
-    }
-
-    private fun setupSeventhProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.seventhPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemHorizontalAdapter()
-            val rowProduct = ProductsHorizontalRowType(resource.data.list, 1, productAdapter)
-            multipleAdapter.setData(rowProduct)
-
-            rowProduct.setOnHeartProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-
-            rowProduct.setOnBasketProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-
-            rowProduct.setOnProductClickListener = ProductsHorizontalRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
-    }
-
-    private fun setupEighthProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.eighthPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 2, productAdapter)
-            multipleAdapter.setData(rowProduct)
-
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
-    }
-
-    private fun setupNinthProducts(multipleAdapter: MultipleAdapter) {
-        viewModel.ninthPartProducts.observe(viewLifecycleOwner, { resource ->
-
-            resource.data!!.topStringOffer?.let {
-                multipleAdapter.setData(TopSloganRowType(it))
-            }
-
-            val productAdapter = ProductItemAdapter()
-            val rowProduct = ProductsRowType(resource.data.list, 3, productAdapter)
-            multipleAdapter.setData(rowProduct)
-
-            rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteFavoriteProduct(product)
-            }
-
-            rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
-                mainViewModel.insertOrDeleteBasket(product)
-            }
-
-            rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-                val extras = FragmentNavigatorExtras(
-                    view to product.generalIconProductSting!!
-                )
-                val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                    product = product
-                )
-                navController.navigate(action, extras)
-            }
-
-            resource.data.boltonStringOffer?.let {
-                multipleAdapter.setData(BottomSloganRowType(it))
-            }
-        })
+    private fun navigateToMock(mockImage: String = "", liveStream: String = "", extras: FragmentNavigator.Extras, listOf: List<String>? = null, position: Int? = null) {
+        val bundle = Bundle()
+        bundle.putString("arg1", mockImage)
+        bundle.putString("arg2", liveStream)
+        val action = HomeFragmentDirections.actionHomeFragmentToMockFragment(imageUrl = mockImage, videoUrl = liveStream, arrayHistory = listOf?.toTypedArray(), position = position ?: 0)
+        navController.navigate(action, extras)
     }
 }
-

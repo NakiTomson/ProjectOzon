@@ -3,7 +3,6 @@ package com.app.marketPlace.presentation.activities.ui.fragments.detail
 import android.graphics.Color
 import android.os.Bundle
 import android.transition.*
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.*
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -35,7 +33,6 @@ import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
-import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeViewModel
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.adapters.ProductItemAdapter
 import com.app.marketPlace.presentation.adapters.SimpleDataAdapter
@@ -162,7 +159,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         val navController =findNavController()
         val mAuth = FirebaseAuth.getInstance()
 
-        val basket = activity?.findViewById<MaterialButton>(R.id.inBasketButton)
+        val basket = activity?.findViewById<MaterialButton>(R.id.in_basket_button)
 
         basket?.visibility = View.VISIBLE
 
@@ -183,12 +180,12 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         currentColor.text = detailProduct.color
 
         if (detailProduct.productInBasket){
-            activity?.inBasketButton?.setBackgroundResource(R.drawable.button_added)
+            activity?.in_basket_button?.setBackgroundResource(R.drawable.button_added)
         }else{
-            activity?.inBasketButton?.setBackgroundResource(R.drawable.button_next)
+            activity?.in_basket_button?.setBackgroundResource(R.drawable.button_next)
         }
 
-        activity?.inBasketButton?.setOnClickListener {
+        activity?.in_basket_button?.setOnClickListener {
             if (detailProduct.productInBasket){
                 detailProduct.productInBasket = false
                 it.setBackgroundResource(R.drawable.button_next)
@@ -283,10 +280,8 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
         imageDetailViewPager.adapter = adapterImages
 
-        adapterImages.setCompleteListener = object : BannerRowType.CompleteListener{
-            override fun onComplete() {
-                startPostponedEnterTransition()
-            }
+        adapterImages.setCompleteListener = BannerRowType.CompleteListener {
+            startPostponedEnterTransition()
         }
 
         setupIndicator(adapterImages.itemCount)
@@ -405,9 +400,9 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setCurrentIndicator(position: Int) {
-        val childCount  = indicatorsContainer.childCount
+        val childCount  = indicators_container.childCount
         for (i in 0 until  childCount){
-            val imageView = indicatorsContainer.getChildAt(i) as ImageView
+            val imageView = indicators_container.getChildAt(i) as ImageView
             if (i == position){
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
@@ -444,18 +439,18 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
                     )
                 )
                 it.layoutParams = layoutParams
-                indicatorsContainer.addView(it)
+                indicators_container.addView(it)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.VISIBLE
+        activity?.findViewById<MaterialButton>(R.id.in_basket_button)?.visibility = View.VISIBLE
     }
 
     override fun onStop() {
-        activity?.findViewById<MaterialButton>(R.id.inBasketButton)?.visibility = View.GONE
+        activity?.findViewById<MaterialButton>(R.id.in_basket_button)?.visibility = View.GONE
         super.onStop()
     }
 }

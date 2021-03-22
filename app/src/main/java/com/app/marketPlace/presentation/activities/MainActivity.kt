@@ -2,12 +2,10 @@ package com.app.marketPlace.presentation.activities
 
 
 import android.os.*
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.repositories.DataBaseRepository
@@ -21,21 +19,13 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-
-    private var currentNavController: LiveData<NavController>? = null
-
-    companion object{
-        var listIdsBasket:MutableList<Int> = mutableListOf()
-        var listIdsFavorite:MutableList<Int> = mutableListOf()
-    }
-
     init {
         MarketPlaceApp.appComponent.inject(mainActivity = this)
     }
 
+    private var currentNavController: LiveData<NavController>? = null
 
-    @Inject
-    lateinit var repository:DataBaseRepository
+    @Inject lateinit var repository:DataBaseRepository
 
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
@@ -50,15 +40,15 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allIdsInBaskets.observe(this, { list->
             list?.let {
-                listIdsBasket.clear()
-                listIdsBasket.addAll(it)
+                MainViewModel.listIdsBasket.clear()
+                MainViewModel.listIdsBasket.addAll(it)
             }
         })
 
         mainViewModel.allIdsInFavorite.observe(this, { list->
             list?.let {
-                listIdsFavorite.clear()
-                listIdsFavorite.addAll(it)
+                MainViewModel.listIdsFavorite.clear()
+                MainViewModel.listIdsFavorite.addAll(it)
             }
         })
 
@@ -95,9 +85,9 @@ class MainActivity : AppCompatActivity() {
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, { isConnected ->
             if (isConnected) {
-                connectionFrame.visibility = View.GONE
+                connection_frame.visibility = View.GONE
             } else {
-                connectionFrame.visibility = View.VISIBLE
+                connection_frame.visibility = View.VISIBLE
             }
         })
     }

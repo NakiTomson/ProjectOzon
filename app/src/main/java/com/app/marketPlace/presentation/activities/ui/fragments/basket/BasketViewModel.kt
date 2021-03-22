@@ -2,7 +2,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.basket
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY4
+import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.AppRepository
@@ -40,7 +40,7 @@ class BasketViewModel:ViewModel(), CoroutineScope {
                     Params.ProductsParams(
                         pathId = recommendedPath,
                         pageSize = "20",
-                        apiKey = APIKEY4,
+                        apiKey = APIKEY,
                         page = "1",
                         typeProduct = ProductItem.Type.ProductWithName
                     )

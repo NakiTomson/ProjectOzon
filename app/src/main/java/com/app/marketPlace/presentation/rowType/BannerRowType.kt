@@ -17,7 +17,6 @@ import com.makeramen.roundedimageview.RoundedImageView
 data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
 
 
-    var wasSetup:Boolean = false
     var setOnBannerClickListener: BannerListener? = null
 
     fun interface BannerListener {
@@ -33,7 +32,6 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        if (wasSetup) return
         val bannerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
         bannerViewHolder.bind(bannerAdapter)
 
@@ -45,17 +43,14 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, bannerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
 
-                viewHolder.setBannerClickListener = object :BannerListener{
-                    override fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView) {
-                        setOnBannerClickListener?.onClickBanner(
-                            bannerAdapter.onBoardingItems[position].onBoardingImageUrl,
-                            imageOnBoarding
-                        )
-                    }
+                viewHolder.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
+                    setOnBannerClickListener?.onClickBanner(
+                        bannerAdapter.onBoardingItems[position].onBoardingImageUrl,
+                        imageOnBoarding
+                    )
                 }
             }
         })
-        wasSetup = true
     }
 
 
@@ -94,7 +89,7 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
                     ContextCompat.getDrawable(
                     context.applicationContext,
                     R.drawable.indicator_active_background
-                )
+                    )
                 )
             }else{
                 imageView.setImageDrawable(

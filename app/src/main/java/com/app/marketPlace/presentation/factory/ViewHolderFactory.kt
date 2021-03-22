@@ -73,7 +73,7 @@ object ViewHolderFactory {
         lateinit var setHistoryClickListener: HistoryRowType.HistoryListener
         val historyButton: Button = itemView.historyItemButton
         val financeButton: Button = itemView.financeItemButton
-        val container: LinearLayout? = itemView.containerImages
+        val container: LinearLayout = itemView.containerImages
 
         fun bind(stories: Stories) {
 
@@ -196,7 +196,7 @@ object ViewHolderFactory {
         fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductItemAdapter){
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             productItemAdapter.setData(listProducts)
-
+            productsRecyclerView.adapter = productItemAdapter
             productsRecyclerView.apply {
                 adapter = productItemAdapter
                 postponeEnterTransition(itemView.context as Activity)
@@ -207,6 +207,7 @@ object ViewHolderFactory {
                         true
                     }
             }
+
 
             productsRecyclerView.layoutAnimation = controller
             productItemAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->

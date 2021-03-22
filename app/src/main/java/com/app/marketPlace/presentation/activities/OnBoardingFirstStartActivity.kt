@@ -53,28 +53,28 @@ class OnBoardingFirstStartActivity : AppCompatActivity() {
         )
 
 
-        onBoardingViewPager.adapter = onBoardingAdapter
+        boarding_viewPager.adapter = onBoardingAdapter
 
 
-        onBoardingViewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+        boarding_viewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
             }
         })
 
-        (onBoardingViewPager.getChildAt(0) as RecyclerView).overScrollMode =
+        (boarding_viewPager.getChildAt(0) as RecyclerView).overScrollMode =
             RecyclerView.OVER_SCROLL_NEVER
 
         imageNext.setOnClickListener {
-            if (onBoardingViewPager.currentItem + 1 < onBoardingAdapter.itemCount){
-                onBoardingViewPager.currentItem += 1
+            if (boarding_viewPager.currentItem + 1 < onBoardingAdapter.itemCount){
+                boarding_viewPager.currentItem += 1
             }else{
                 navigateToHomeActivity()
             }
         }
 
-        textSkip.setOnClickListener { navigateToHomeActivity() }
+        text_skip.setOnClickListener { navigateToHomeActivity() }
         buttonGetStarted.setOnClickListener { navigateToHomeActivity() }
     }
 
@@ -95,15 +95,15 @@ class OnBoardingFirstStartActivity : AppCompatActivity() {
                     )
                 )
                 it.layoutParams = layoutParams
-                indicatorsContainer.addView(it)
+                indicators_container.addView(it)
             }
         }
     }
 
     private fun setCurrentIndicator(position: Int){
-        val childCount  = indicatorsContainer.childCount
+        val childCount  = indicators_container.childCount
         for (i in 0 until  childCount){
-            val imageView = indicatorsContainer.getChildAt(i) as ImageView
+            val imageView = indicators_container.getChildAt(i) as ImageView
             if (i == position){
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(

@@ -29,7 +29,7 @@ data class BasketProductDb(
     val company: String? = null,
 
 
-    val color: String? = null,
+    var color: String? = null,
 
     @PrimaryKey
     val id: Int

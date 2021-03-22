@@ -14,11 +14,17 @@ import kotlin.coroutines.CoroutineContext
 
 class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), CoroutineScope {
 
+
+    companion object {
+
+        var listIdsBasket: MutableList<Int> = mutableListOf()
+        var listIdsFavorite: MutableList<Int> = mutableListOf()
+    }
+
     private val job: Job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-
 
 
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
@@ -34,44 +40,44 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
     val hintProducts: LiveData<List<HintProductDb>>? = repository.hintProducts?.asLiveData()
 
 
-    fun insertOrDeleteHintsProduct(request: String){
+    fun insertOrDeleteHintsProduct(request: String) {
         insertHint(request)
     }
 
-    private fun insertHint(request: String){
-        launch (Dispatchers.IO){
+    private fun insertHint(request: String) {
+        launch(Dispatchers.IO) {
             repository.insertHint(request)
         }
     }
 
-    private fun deleteHint(request: String){
-        launch (Dispatchers.IO){
+    private fun deleteHint(request: String) {
+        launch(Dispatchers.IO) {
             repository.deleteHint(request)
         }
     }
 
-    fun insertOrDeleteFavoriteProduct(productsItem: ProductItem){
-        if (productsItem.favoriteIconProduct){
+    fun insertOrDeleteFavoriteProduct(productsItem: ProductItem) {
+        if (productsItem.favoriteIconProduct) {
             insertProduct(productsItem)
-        }else{
+        } else {
             deleteProduct(productsItem)
         }
     }
 
-    private fun insertProduct(product: ProductItem){
-        launch (Dispatchers.IO){
+    private fun insertProduct(product: ProductItem) {
+        launch(Dispatchers.IO) {
             repository.insertProductInFavorite(product)
         }
     }
 
-    internal fun deleteProduct(basket: ProductItem){
-        launch (Dispatchers.IO){
+    internal fun deleteProduct(basket: ProductItem) {
+        launch(Dispatchers.IO) {
             repository.deleteProductFromFavorite(basket)
         }
     }
 
 
-    fun insertOrDeleteBasket(productsItem: ProductItem){
+    fun insertOrDeleteBasket(productsItem: ProductItem) {
         if (productsItem.productInBasket) {
             insertBasket(productsItem)
         } else {
@@ -79,28 +85,27 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         }
     }
 
-    private fun insertBasket(basket: ProductItem){
-        launch (Dispatchers.IO){
+    private fun insertBasket(basket: ProductItem) {
+        launch(Dispatchers.IO) {
             repository.insertBasket(basket)
         }
     }
 
-    private fun deleteBasket(basket: ProductItem){
-        launch (Dispatchers.IO){
+    private fun deleteBasket(basket: ProductItem) {
+        launch(Dispatchers.IO) {
             repository.deleteBasket(basket)
         }
     }
 
 
-
     fun setUser(user: UserDb) {
-        launch (Dispatchers.IO){
+        launch(Dispatchers.IO) {
             repository.insertUser(user)
         }
     }
 
     fun getUser(login: String) {
-        launch (Dispatchers.IO){
+        launch(Dispatchers.IO) {
             userLive.postValue(repository.getUser(login))
         }
     }
@@ -110,6 +115,9 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
         job.cancel()
         super.onCleared()
     }
+
+//    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
+
 }
 
 
@@ -141,6 +149,7 @@ fun <T> gettingErrors(resource: Resource<T>): Boolean {
 }
 
 fun <T> errorHandling(name: String, resource: Resource<T>) {
+    if (resource.status == Resource.Status.LOADING) return
     Log.v(name, "${resource.exception?.message}")
     Log.v(name, "${resource.exception}")
     Log.v(name, "${resource.status}")

@@ -9,7 +9,7 @@
 
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/onBoardingViewPager"
+        android:id="@+id/boarding_viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/view_pager_background"
@@ -19,7 +19,7 @@
 
 
     <LinearLayout
-        android:id="@+id/indicatorsContainer"
+        android:id="@+id/indicators_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -31,7 +31,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textSkip"
+        android:id="@+id/text_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

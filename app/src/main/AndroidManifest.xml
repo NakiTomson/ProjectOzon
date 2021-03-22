@@ -25,6 +25,7 @@
         </activity>
 
         <activity android:name="com.app.marketPlace.presentation.activities.MainActivity"
+
             >
 
             <intent-filter>

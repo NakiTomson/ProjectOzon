@@ -14,7 +14,9 @@ import com.app.marketPlace.domain.models.ProductItem
 class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
 
-    fun getBannerStart(): Results.ResultBanner {
+
+
+    suspend fun getBannerStart(params: Params): Results.ResultBanner {
         return try {
             Results.ResultBanner(
                 Resource(
@@ -23,7 +25,8 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
                         Banner(onBoardingImageUrl = "https://www.dropbox.com/s/l5t0828ivc6eb79/oneAdsBanner.jpg?dl=1"),
                         Banner(onBoardingImageUrl = "https://www.dropbox.com/s/scqgvaj8vk7omti/twoAdsBanner.jpg?dl=1"),
                         Banner(onBoardingImageUrl = "https://www.dropbox.com/s/n0bb1qr1n4caci4/threeAdsBanner.jpg?dl=1")
-                    )
+                    ),
+                    type = params.resourceType
                 )
             )
         } catch (e: Exception) {
@@ -35,13 +38,12 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
     suspend fun loadCategories(params: Params): Results.ResultCategoryProduct {
         return try {
-
             val listGeneralCategory = marketPlaceApi
                 .getCategoryProductsAsync(params.pageSize, params.page,params.apiKey)
                 .await()
 
             Results.ResultCategoryProduct(
-                Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory)
+                Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory,params)
             )
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
@@ -56,7 +58,7 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
                 .getProductsBySearchAsync(params.pathId, params.pageSize, params.page, params.apiKey).await()
 
             Results.ResultProduct(
-                Mapper.MapperToUi.mapProductsFromServer(listProducts, type = params.typeProduct,requestName = params.requestName)
+                Mapper.MapperToUi.mapProductsFromServer(listProducts, params)
             )
 
         } catch (e: Exception) {
@@ -75,10 +77,7 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
             Results.ResultProduct(
                 Mapper.MapperToUi.mapProductsFromServer(
                     listProducts,
-                    type = params.typeProduct,
-                    topOffer = params.topOffer,
-                    bottomOffer = params.bottomOffer,
-                    requestName = params.requestName
+                    params = params
                 )
             )
 
@@ -89,17 +88,23 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
 
 
-    suspend fun getHistoryItems(): Results.ResultHistory {
+    suspend fun getHistoryItems(storiesParams: Params): Results.ResultHistory {
         return try {
-            Results.ResultHistory(Resource(status = Resource.Status.COMPLETED, data = marketPlaceApi.getHistoryAsync().await()))
+            Results.ResultHistory(Resource(status = Resource.Status.COMPLETED,
+                data = marketPlaceApi.getHistoryAsync().await(),
+                type = storiesParams.resourceType)
+            )
         } catch (e: Exception) {
             Results.ResultHistory(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
     }
 
-    suspend fun getLiveItems():Results.ResultLive {
+    suspend fun getLiveItems(liveParams: Params):Results.ResultLive {
         return try {
-            Results.ResultLive(Resource(status = Resource.Status.COMPLETED, data = marketPlaceApi.getLivesAsync().await()))
+            Results.ResultLive(Resource(status = Resource.Status.COMPLETED,
+                data = marketPlaceApi.getLivesAsync().await(),
+                type = liveParams.resourceType)
+            )
         } catch (e: Exception) {
             Results.ResultLive( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
@@ -107,29 +112,17 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
 
 
-    fun getBannerCenter(): Results.ResultBanner {
-        return try {
-            Results.ResultBanner(
-                Resource(
-                    status = Resource.Status.COMPLETED,
-                    data = mutableListOf(
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/l5t0828ivc6eb79/oneAdsBanner.jpg?dl=1"),
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/scqgvaj8vk7omti/twoAdsBanner.jpg?dl=1"),
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/n0bb1qr1n4caci4/threeAdsBanner.jpg?dl=1")
-                    )
-                )
-            )
-        } catch (e: Exception) {
-            Results.ResultBanner(Resource(status = Resource.Status.ERROR, data = null, exception = e))
-        }
+    suspend fun getBannerCenter(params: Params): Results.ResultBanner {
+        return getBannerStart(params)
     }
 
-    fun getBannerDown():Results.ResultBanner {
+    fun getBannerDown(params: Params):Results.ResultBanner {
         return try {
             Results.ResultBanner(
                 Resource(
                     status = Resource.Status.COMPLETED,
-                    data = mutableListOf(Banner(onBoardingImageUrl = "https://www.dropbox.com/s/zkgiislgopkjjrh/exzample_banner.jpg?dl=1"))
+                    data = mutableListOf(Banner(onBoardingImageUrl = "https://www.dropbox.com/s/zkgiislgopkjjrh/exzample_banner.jpg?dl=1")),
+                    type = params.resourceType
                 )
             )
         } catch (e: Exception) {
@@ -140,32 +133,47 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
 
 sealed class Params(
-    open var pathId: String = ConstantsApp.HOME_AUDIO,
+    open var pathId: String = ConstantsApp.COFFEE_MAKER,
     open var pageSize: String = "3",
-    open var apiKey: String = ConstantsApp.APIKEY2,
+    open var apiKey: String = ConstantsApp.APIKEY,
     open var page: String = "1",
     open var topOffer: String = "",
     open var bottomOffer: String = "",
     open var requestName: String = "",
-    open var typeProduct: ProductItem.Type = ProductItem.Type.OnlyImage
+    open var typeProduct: ProductItem.Type = ProductItem.Type.OnlyImage,
+    open var resourceType: Resource.Type = Resource.Type.UNDEFINED,
+    open var spain: Int = 3
 ){
 
     class CategoriesProductParams(
         override var pageSize: String = "3",
-        override var apiKey: String = ConstantsApp.APIKEY1,
-        override var page: String = "1"
+        override var apiKey: String = ConstantsApp.APIKEY,
+        override var page: String = "1",
+        override var resourceType: Resource.Type = Resource.Type.CATEGORIES
     ) : Params()
 
 
     class ProductsParams(
-        override var pathId: String = ConstantsApp.HOME_AUDIO,
+        override var pathId: String = ConstantsApp.COFFEE_MAKER,
         override var pageSize: String = "3",
-        override var apiKey: String = ConstantsApp.APIKEY2,
+        override var apiKey: String = ConstantsApp.APIKEY,
         override var page: String = "1",
         override var topOffer: String = "",
         override var bottomOffer: String = "",
         override var requestName: String = "",
         override var typeProduct: ProductItem.Type,
+        override var resourceType: Resource.Type = Resource.Type.PRODUCT,
+        override var spain: Int = 3
+    ) : Params()
+
+    class BannerParams(
+        override var resourceType: Resource.Type = Resource.Type.BANNER
+    ) : Params()
+    class StoriesParams(
+        override var resourceType: Resource.Type = Resource.Type.STORIES
+    ) : Params()
+    class LiveParams(
+        override var resourceType: Resource.Type = Resource.Type.STREAMS
     ) : Params()
 }
 
