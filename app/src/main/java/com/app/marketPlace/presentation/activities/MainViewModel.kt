@@ -6,8 +6,10 @@ import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
+import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
+
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -144,8 +146,18 @@ class MainViewModelFactory(private val repository: DataBaseRepository) : ViewMod
 //    }
 //}
 
+
 fun <T> gettingErrors(resource: Resource<T>): Boolean {
-    return !(resource.status == Resource.Status.ERROR || resource.status == Resource.Status.LOADING || resource.data == null || resource.exception != null)
+    return (resource.status == Resource.Status.COMPLETED && resource.data != null && resource.exception == null)
+}
+
+suspend fun checkingForErrors(data: Resource<*>): Resource<*> {
+    return if (gettingErrors(data)){
+        data
+    }else{
+        errorHandling(data.type.toString(),data)
+        data.copy(data = null)
+    }
 }
 
 fun <T> errorHandling(name: String, resource: Resource<T>) {

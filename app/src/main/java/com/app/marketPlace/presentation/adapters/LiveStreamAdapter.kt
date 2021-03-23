@@ -8,6 +8,8 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.LiveRowType
 import com.app.marketPlace.domain.models.ListResultLiveItems
 import com.app.marketPlace.domain.models.LiveStreamItem
+import com.app.marketPlace.presentation.rowType.BannerRowType
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_live.view.*
 import kotlin.collections.ArrayList
@@ -46,16 +48,21 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
         private val countUserLive = view.countUserLive
         private val textDescription = view.textDescription
         private val nameOfCompanyTitle = view.nameOfCompanyTitle
-
+        private val shimmer = itemView.shimmerLayout
         fun bind(liveItem: ListResultLiveItems){
 
             Picasso.with(itemView.context)
-                    .load(liveItem.onIconCompanyUrl)
-                    .into(iconOfCompany)
-
-            Picasso.with(itemView.context)
                 .load(liveItem.onIconCompanyUrl)
-                .into(iconOfCompany)
+                .into(iconOfCompany,object:Callback{
+                    override fun onSuccess() {
+                        shimmer.stopShimmer()
+                        shimmer.setShimmer(null)
+                    }
+                    override fun onError() {
+                        shimmer.stopShimmer()
+                        shimmer.setShimmer(null)
+                    }
+                })
 
             statusLive.text = liveItem.statusLiveStream
             countUserLive?.text = liveItem.countUser
@@ -68,7 +75,6 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
                 liveItem.onIconCompanyUrl?.let { urlImage -> setOnLiveClickListener?.onClick(urlImage,imageOnBoarding) }
             }
         }
-
     }
 }
 

@@ -10,7 +10,7 @@ import com.app.marketPlace.R
 import com.app.marketPlace.domain.models.CategoryPath
 import kotlinx.android.synthetic.main.item_simple.view.*
 
-class SimpleDataAdapter : RecyclerView.Adapter<SimpleDataAdapter.SimpleDataAdapterViewHolder>() {
+class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleDataAdapterViewHolder>() {
 
     private val listItems:MutableList<CategoryPath> = ArrayList()
 

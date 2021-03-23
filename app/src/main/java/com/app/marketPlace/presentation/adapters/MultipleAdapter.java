@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.marketPlace.data.utils.ConstantsApp;
 import com.app.marketPlace.presentation.interfaces.RowType;
 import com.app.marketPlace.presentation.factory.ViewHolderFactory;
 
@@ -25,8 +26,6 @@ public class MultipleAdapter extends RecyclerView.Adapter {
     }
 
     private volatile int countPosition = -1;
-
-    private Boolean onDownload = true;
 
 
     public void setData(RowType dataSets){
@@ -49,9 +48,8 @@ public class MultipleAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
-        if ((position > dataSet.size() - 2) && onDownload && setNextDataListener != null) {
+        if ((position > dataSet.size() - 2) &&  setNextDataListener != null) {
             setNextDataListener.onNextData();
-            onDownload = false;
         }
     }
 

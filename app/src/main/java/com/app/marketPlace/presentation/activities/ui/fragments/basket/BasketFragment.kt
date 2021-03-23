@@ -17,9 +17,9 @@ import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.adapters.ProductBasketAdapter
-import com.app.marketPlace.presentation.adapters.ProductItemAdapter
-import com.app.marketPlace.presentation.rowType.ProductsRowType
+import com.app.marketPlace.presentation.adapters.BasketAdapter
+import com.app.marketPlace.presentation.adapters.ProductAdapter
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_basket.*
@@ -51,8 +51,8 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
         val mAuth = FirebaseAuth.getInstance()
 
-        val basketAdapter = ProductBasketAdapter()
-        val recommendAdapter  = ProductItemAdapter()
+        val basketAdapter = BasketAdapter()
+        val recommendAdapter  = ProductAdapter()
 
         setupBasketAdapter(basketAdapter)
         setupListRecommendAdapter(recommendAdapter,basketAdapter)
@@ -64,9 +64,9 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         }
     }
 
-    private fun setupBasketAdapter(basketAdapter: ProductBasketAdapter) {
+    private fun setupBasketAdapter(basketAdapter: BasketAdapter) {
         basketAdapter.setHasStableIds(true)
-        basketAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
+        basketAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
             val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             findNavController().navigate(action, extras)
@@ -75,31 +75,31 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         basketsRecyclerView.adapter = basketAdapter
         basketsRecyclerView.setHasFixedSize(true)
 
-        basketAdapter.setClickHeartProduct = ProductsRowType.ClickListener { product ->
+        basketAdapter.setClickHeartProduct = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteFavoriteProduct(product)
         }
 
-        basketAdapter.setOnBasketDelete = ProductsRowType.ClickListener { product ->
+        basketAdapter.setOnBasketDelete = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteBasket(product)
             basketAdapter.deleteProduct(product)
         }
     }
 
-    private fun setupListRecommendAdapter(recommendAdapter: ProductItemAdapter,basketAdapter: ProductBasketAdapter) {
+    private fun setupListRecommendAdapter(recommendAdapter: ProductAdapter, basketAdapter: BasketAdapter) {
         listRecommendProduct.adapter = recommendAdapter
         listRecommendProduct.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
-        recommendAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
+        recommendAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
             val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             findNavController().navigate(action, extras)
         }
 
-        recommendAdapter.setClickHeartProduct = ProductsRowType.ClickListener { product ->
+        recommendAdapter.setClickHeartProduct = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteFavoriteProduct(product)
         }
 
-        recommendAdapter.setClickBasketProduct = ProductsRowType.ClickListener { product ->
+        recommendAdapter.setClickBasketProduct = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteBasket(product)
             if (product.productInBasket) {
                 basketAdapter.setData(product)
@@ -107,13 +107,13 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         }
     }
 
-    private fun setupRecommendProducts(recommendAdapter: ProductItemAdapter) {
+    private fun setupRecommendProducts(recommendAdapter: ProductAdapter) {
         viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
             recommendAdapter.setData(resource.data!!.list)
         })
     }
 
-    private fun setupBasketProducts(mAuth: FirebaseAuth,basketAdapter: ProductBasketAdapter){
+    private fun setupBasketProducts(mAuth: FirebaseAuth,basketAdapter: BasketAdapter){
         var images:List<String>? = null
         var oldPrice = 0f
         var priceWithDiscount = 0f

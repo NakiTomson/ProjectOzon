@@ -13,6 +13,8 @@
     <color name="gray">#464747</color>
     <color name="green">#08F808</color>
     <color name="red">#D31E1E</color>
+    <color name="colorShimmer">#E4E2E2</color>
+    <color name="colorBack">#FFF</color>
 
 
     <!-- Custom Colors-->

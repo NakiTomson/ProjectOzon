@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
@@ -12,6 +13,7 @@ import com.app.marketPlace.data.utils.ConstantsApp.LAPTOPS
 import com.app.marketPlace.data.utils.ConstantsApp.MONITORS
 import com.app.marketPlace.data.utils.ConstantsApp.PHONES
 import com.app.marketPlace.data.utils.ConstantsApp.TVS
+import com.app.marketPlace.data.utils.ConstantsApp.onDownload
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params.BannerParams
 import com.app.marketPlace.domain.repositories.Params.LiveParams
@@ -23,6 +25,7 @@ import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.models.*
+import com.app.marketPlace.presentation.activities.checkingForErrors
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -44,18 +47,22 @@ class HomeViewModel() : BaseViewModel() {
 
     val completed: MutableLiveData<Boolean> = MutableLiveData()
 
-    val products: SharedFlow<Resource<*>> =
+
+    val data: SharedFlow<Resource<*>> =
         _data.shareIn(viewModelScope,started = SharingStarted.Lazily,replay = 20)
 
 
     private suspend fun startLoading(){
         val bannerTop: Deferred<Results.ResultBanner> = async { repository.getBannerStart(BannerParams()) }
+
         val categories = async {
             repository.loadCategories(CategoriesProductParams(
                 pageSize = "20", apiKey = APIKEY, page = "1"
             ))
         }
+
         val stories:Deferred<Results.ResultHistory> = async {  repository.getHistoryItems(StoriesParams())}
+
         val liveStreamItems:Deferred<Results.ResultLive> = async {  repository.getLiveItems(LiveParams())}
 
         val productsOne = async {
@@ -76,7 +83,6 @@ class HomeViewModel() : BaseViewModel() {
         }
 
         val bannersCenter:Deferred<Results.ResultBanner> = async {  repository.getBannerCenter(BannerParams())}
-
         val productsThree = async {
             repository.loadProducts(
                 ProductsParams(pathId = LAPTOPS, pageSize = "3", apiKey = APIKEY, page = "233",
@@ -85,9 +91,7 @@ class HomeViewModel() : BaseViewModel() {
                 )
             )
         }
-
         val bannersDown:Deferred<Results.ResultBanner> = async{ repository.getBannerDown(BannerParams()) }
-
         val productsFour = async {
             repository.loadProducts(
                 ProductsParams(pathId = TVS, pageSize = "4", apiKey = APIKEY, page = "23",
@@ -98,24 +102,29 @@ class HomeViewModel() : BaseViewModel() {
                 )
             )
         }
+
+
         _data.emitAll(
             flow {
-                emit(bannerTop.await().result)
-                emit(categories.await().result)
-                emit(stories.await().result)
-                emit(liveStreamItems.await().result)
-                emit(productsOne.await().result)
-                emit(productsTwo.await().result)
-                emit(bannersCenter.await().result)
-                emit(productsThree.await().result)
-                emit(bannersDown.await().result)
-                emit(productsFour.await().result)
+                emit(checkingForErrors(bannerTop.await().result))
+                emit(checkingForErrors(categories.await().result))
+                emit(checkingForErrors(stories.await().result))
+                emit(checkingForErrors(liveStreamItems.await().result))
+                emit(checkingForErrors(productsOne.await().result))
+                emit(checkingForErrors(productsTwo.await().result))
+                emit(checkingForErrors(bannersCenter.await().result))
+                emit(checkingForErrors(productsThree.await().result))
+                emit(checkingForErrors(bannersDown.await().result))
+                emit(checkingForErrors(productsFour.await().result))
                 completed.postValue(true)
             }
         )
     }
 
     fun loadAdditionalData() {
+        if (onDownload) return
+        onDownload = true
+
         loadData(Dispatchers.IO){
             val productsCamera = async {
                 repository.loadProducts(
@@ -163,15 +172,17 @@ class HomeViewModel() : BaseViewModel() {
                     )
                 )
             }
+
             _data.emitAll(
                 flow {
-                    emit(productsCamera.await().result)
-                    emit(productsHeadPhones.await().result)
-                    emit(productsMonitors.await().result)
-                    emit(productsKeyboard.await().result)
-                    emit(productsPhones.await().result)
+                    emit(checkingForErrors(productsCamera.await().result))
+                    emit(checkingForErrors(productsHeadPhones.await().result))
+                    emit(checkingForErrors(productsMonitors.await().result))
+                    emit(checkingForErrors(productsKeyboard.await().result))
+                    emit(checkingForErrors(productsPhones.await().result))
                 }
             )
         }
     }
+
 }

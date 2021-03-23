@@ -1,77 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<com.facebook.shimmer.ShimmerFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:id="@+id/shimmerLayoutStories"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <LinearLayout
-        android:id="@+id/linearLayoutCheckerButton"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingBottom="5dp"
-        >
+        android:orientation="vertical"
+        android:background="@color/white"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <Button
-            android:id="@+id/historyItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-
-            android:layout_marginTop="5dp"
-            android:textColor="@color/white"
-            android:text="Истории"
-            android:background="@drawable/button_next"
-            app:backgroundTint="@null"
-            android:layout_marginBottom="5dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="10dp"
-            android:textSize="12sp"
-            >
-        </Button>
-
-
-        <Button
-            android:id="@+id/financeItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:textColor="@color/white"
-            android:text="Финансы"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/button_back"
-            app:backgroundTint="@null"
-            android:layout_marginStart="10dp"
-            android:textSize="12sp"
-            >
-
-        </Button>
-
-    </LinearLayout>
-
-    <HorizontalScrollView
-        android:id="@+id/scrollHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:padding="5dp"
-        >
 
         <LinearLayout
-            android:padding="5dp"
-            android:id="@+id/containerImages"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:id="@+id/linearLayoutCheckerButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="5dp"
+            >
+
+            <Button
+                android:id="@+id/historyItemButton"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                android:text="Истории"
+                android:background="@drawable/button_next"
+                app:backgroundTint="@null"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp"
+                android:textSize="12sp"
+                >
+            </Button>
+
+
+            <Button
+                android:id="@+id/financeItemButton"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:textColor="@color/white"
+                android:text="Финансы"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/button_back"
+                app:backgroundTint="@null"
+                android:layout_marginStart="10dp"
+                android:textSize="12sp"
+                >
+
+            </Button>
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:id="@+id/scrollHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            >
 
-    </HorizontalScrollView>
+            <LinearLayout
+                android:padding="5dp"
+                android:id="@+id/containerImages"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-</LinearLayout>
+            </LinearLayout>
+
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</com.facebook.shimmer.ShimmerFrameLayout>

@@ -11,20 +11,20 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.models.ProductItem
-import com.app.marketPlace.presentation.rowType.ProductsRowType
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_horizontal_product.view.*
 
 
-class ProductBasketAdapter : RecyclerView.Adapter<ProductBasketAdapter.CategoryOfferItemProductViewHolder>() {
+class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProductViewHolder>() {
 
     private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
+    var setClickListenerProduct: ProductRowType.ProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.ClickListener? = null
+    var setClickHeartProduct: ProductRowType.ClickListener? = null
 
-    var setOnBasketDelete: ProductsRowType.ClickListener? = null
+    var setOnBasketDelete: ProductRowType.ClickListener? = null
 
 
     fun setData(list: List<ProductItem>) {
@@ -112,9 +112,6 @@ class ProductBasketAdapter : RecyclerView.Adapter<ProductBasketAdapter.CategoryO
                 Picasso.with(itemView.context)
                     .load(productsItem.generalIconProductSting)
                     .into(generalIconProductImageView)
-            } ?: run {
-                productsItem.generalIconProduct?.let { generalIconProductImageView.setImageResource(it) } ?:
-                kotlin.run{generalIconProductImageView.setImageResource(R.drawable.product_by_offer_example)}
             }
         }
 

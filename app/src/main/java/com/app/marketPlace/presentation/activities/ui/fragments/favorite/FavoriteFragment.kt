@@ -14,8 +14,8 @@ import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.adapters.ProductItemAdapter
-import com.app.marketPlace.presentation.rowType.ProductsRowType
+import com.app.marketPlace.presentation.adapters.ProductAdapter
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import javax.inject.Inject
@@ -37,20 +37,20 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         super.onViewCreated(view, savedInstanceState)
 
         favoriteList.layoutManager = GridLayoutManager(activity,2)
-        val productsAdapter = ProductItemAdapter()
+        val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
         favoriteList.adapter = productsAdapter
 
-        productsAdapter.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+        productsAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.deleteProduct(productsItem)
             productsAdapter.deleteProduct(productsItem)
         }
 
-        productsAdapter.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+        productsAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
 
-        productsAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, view ->
+        productsAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
             val action = FavoriteFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             findNavController().navigate(action, extras)

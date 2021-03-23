@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import kotlinx.android.synthetic.main.item_hint_search.view.*
 
-class HintSearchProductsAdapter : RecyclerView.Adapter<HintSearchProductsAdapter.ViewHolderHintSearchProducts>() {
+class HintSearchAdapter : RecyclerView.Adapter<HintSearchAdapter.ViewHolderHintSearchProducts>() {
 
     private var listHits:ArrayList<String> = ArrayList()
 

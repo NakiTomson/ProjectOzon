@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.presentation.rowType.BannerRowType
 
 
-class CombinationProductsAdapter : RecyclerView.Adapter<CombinationProductsAdapter.OnBoardingItemViewHolder>() {
+class CombinationAdapter : RecyclerView.Adapter<CombinationAdapter.OnBoardingItemViewHolder>() {
 
+    lateinit var setCompleteListener: BannerRowType.CompleteListener
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
     private val onBoardingItems: MutableList<MutableList<Banner>> = mutableListOf(mutableListOf())
@@ -50,6 +52,10 @@ class CombinationProductsAdapter : RecyclerView.Adapter<CombinationProductsAdapt
 
             categoryItemAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
                 setOnCategoryClickListener?.onClickItem(data)
+            }
+
+            categoryItemAdapter.setCompleteListener = BannerRowType.CompleteListener {
+                setCompleteListener.onComplete()
             }
         }
     }

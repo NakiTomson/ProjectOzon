@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -27,9 +28,10 @@ import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.rowType.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.*
-import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
 import java.util.*
@@ -56,7 +58,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
-
+//        shimmerLayout.startShimmer()
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
@@ -77,7 +79,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val controller = LayoutAnimationController(anim)
         viewModel.completed.observe(viewLifecycleOwner, {
-            loadingFrame.visibility = View.GONE
             multipleHomeRecyclerView.layoutAnimation = controller
             adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
                 viewModel.loadAdditionalData()
@@ -100,9 +101,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-
     private fun setupData(multipleAdapter: MultipleAdapter){
-        viewModel.products.onEach {resource->
+        viewModel.data.onEach { resource->
             if (resource.data == null)return@onEach
             when(resource.type){
                 is Type.BANNER -> {
@@ -118,10 +118,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     setLiveStreams(multipleAdapter, resource as Resource<LiveStreamItem>)
                 }
                 is Type.PRODUCT -> {
-                    setProducts(multipleAdapter, resource as Resource<CombineProductsItem>)
+                    resource as Resource<CombineProductsItem>
+                    val productAdapter = ProductAdapter()
+                    val rowProduct = ProductsRowType(resource.data!!.list, resource.data.spain, productAdapter)
+                    setProducts(multipleAdapter, resource,rowProduct)
                 }
                 is Type.HORIZONTAL_PRODUCT->{
-                    setHorizontalProducts(multipleAdapter,resource as Resource<CombineProductsItem>)
+                    resource as Resource<CombineProductsItem>
+                    val productAdapter = ProductHorizontalAdapter()
+                    val rowProduct = ProductsHorizontalRowType(resource.data!!.list, resource.data.spain, productAdapter)
+                    setProducts(multipleAdapter, resource,rowProduct)
                 }
                 is Type.UNDEFINED -> {
                     throw NotFoundRealizationException("type non found ${resource.data} ${resource.type}")
@@ -135,7 +141,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         resource.data!!.forEach { bannerAdapter.setItem(it) }
         val banner = BannerRowType(bannerAdapter)
         multipleAdapter.setData(banner)
-        banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl: String, view: RoundedImageView ->
+        banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl: String, view: View ->
             val extras = FragmentNavigatorExtras(
                 view to imageUrl
             )
@@ -144,7 +150,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setCategories(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<MutableList<Banner>>>) {
-        val combinationAdapter = CombinationProductsAdapter()
+        val combinationAdapter = CombinationAdapter()
         combinationAdapter.setData(resource.data!!)
         val categoryRowType = CategoryRowType(combinationAdapter)
         multipleAdapter.setData(categoryRowType)
@@ -180,52 +186,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
 
-    private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>) {
+    private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>, rowProduct: ProductRowType) {
+
         resource.data!!.topOffer?.let {
             multipleAdapter.setData(TopSloganRowType(it))
         }
 
-        val productAdapter = ProductItemAdapter()
-        val rowProduct = ProductsRowType(resource.data.list, resource.data.spain, productAdapter)
         multipleAdapter.setData(rowProduct)
 
-        rowProduct.setOnHeartProductClickListener = ProductsRowType.ClickListener { product ->
+        rowProduct.setOnHeartProductClickListener = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteFavoriteProduct(product)
         }
-        rowProduct.setOnBasketProductClickListener = ProductsRowType.ClickListener { product ->
+        rowProduct.setOnBasketProductClickListener = ProductRowType.ClickListener { product ->
             mainViewModel.insertOrDeleteBasket(product)
         }
-        rowProduct.setOnProductClickListener = ProductsRowType.ProductClickListener { product, view ->
-
-            val extras = FragmentNavigatorExtras(
-                view to product.generalIconProductSting!!
-            )
-            val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
-                product = product
-
-            )
-            navController.navigate(action, extras)
-        }
-        resource.data.bottomOffer?.let {
-            multipleAdapter.setData(BottomSloganRowType(it))
-        }
-    }
-    private fun setHorizontalProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>) {
-        resource.data!!.topOffer?.let {
-            multipleAdapter.setData(TopSloganRowType(it))
-        }
-
-        val productAdapter = ProductItemHorizontalAdapter()
-        val rowProduct = ProductsHorizontalRowType(resource.data.list, resource.data.spain, productAdapter)
-        multipleAdapter.setData(rowProduct)
-
-        rowProduct.setOnHeartProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
-            mainViewModel.insertOrDeleteFavoriteProduct(product)
-        }
-        rowProduct.setOnBasketProductClickListener = ProductsHorizontalRowType.ClickListener { product ->
-            mainViewModel.insertOrDeleteBasket(product)
-        }
-        rowProduct.setOnProductClickListener = ProductsHorizontalRowType.ProductClickListener { product, view ->
+        rowProduct.setOnProductClickListener = ProductRowType.ProductClickListener { product, view ->
 
             val extras = FragmentNavigatorExtras(
                 view to product.generalIconProductSting!!

@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,7 +13,7 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
-import com.makeramen.roundedimageview.RoundedImageView
+import com.facebook.shimmer.ShimmerFrameLayout
 
 data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
 
@@ -20,7 +21,7 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
     var setOnBannerClickListener: BannerListener? = null
 
     fun interface BannerListener {
-        fun onClickBanner(imageUrl: String, imageOnBoarding: RoundedImageView)
+        fun onClickBanner(imageUrl: String, imageOnBoarding: View)
     }
 
     fun interface CompleteListener {
@@ -42,7 +43,6 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, bannerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
-
                 viewHolder.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
                     setOnBannerClickListener?.onClickBanner(
                         bannerAdapter.onBoardingItems[position].onBoardingImageUrl,
@@ -58,12 +58,10 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
         if (indicatorsContainer.children.count() >0) return
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
-
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-
         layoutParams.setMargins(8,0,8,0)
         for ( i in indicators.indices){
             indicators[i] = ImageView(context)

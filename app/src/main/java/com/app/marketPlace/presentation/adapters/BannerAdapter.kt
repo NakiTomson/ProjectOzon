@@ -6,11 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Banner
-import com.app.marketPlace.presentation.extensions.uploadPicture
 import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_boarding_container.view.*
+import kotlinx.android.synthetic.main.item_banner_container.view.*
 import java.util.*
 
 
@@ -38,7 +37,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
-        return  OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_boarding_container, parent, false))
+        return  OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_banner_container, parent, false))
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
@@ -56,30 +55,18 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
         private val textDescription = view.textDescription
 
         fun bind(onBoardingItem: Banner){
-
             imageOnBoarding.transitionName = onBoardingItem.transitionName
-
-
-            if (onBoardingItem.onBoardingImageUrl.contains("drop".toUpperCase(Locale.ROOT))) {
-
-                Picasso.with(itemView.context)
-                    .load(onBoardingItem.onBoardingImageUrl)
-                    .placeholder(R.drawable.example_ads_banner)
-                    .noFade()
-                    .into(imageOnBoarding)
-            }else{
-                Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
-                    .centerInside()
-                    .resize(500,500)
-                    .into(imageOnBoarding,object :Callback{
-                        override fun onSuccess() {
-                            setCompleteListener?.onComplete()
-                        }
-                        override fun onError() {
-                            setCompleteListener?.onComplete()
-                        }
-                    })
-            }
+            Picasso.with(itemView.context)
+                .load(onBoardingItem.onBoardingImageUrl)
+                .noFade()
+                .into(imageOnBoarding,object :Callback{
+                    override fun onSuccess() {
+                        setCompleteListener?.onComplete()
+                    }
+                    override fun onError() {
+                        setCompleteListener?.onComplete()
+                    }
+                })
 
             onBoardingItem.title?.let{
                 textTitle.visibility = View.VISIBLE

@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,7 +18,7 @@ import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
-import com.app.marketPlace.presentation.adapters.HintSearchProductsAdapter
+import com.app.marketPlace.presentation.adapters.HintSearchAdapter
 import kotlinx.android.synthetic.main.fragment_search_hint_history_product.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import javax.inject.Inject
@@ -51,9 +49,9 @@ class SearchHintHistoryProductFragment : Fragment(R.layout.fragment_search_hint_
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(searchTextInput, InputMethodManager.SHOW_IMPLICIT)
 
-        val adapterHints = HintSearchProductsAdapter()
+        val adapterHints = HintSearchAdapter()
 
-        adapterHints.setOnHintProductsClickListener = HintSearchProductsAdapter.HintProductsListener { hintProduct ->
+        adapterHints.setOnHintProductsClickListener = HintSearchAdapter.HintProductsListener { hintProduct ->
             startSearchWordRequest(hintProduct, navController)
         }
 

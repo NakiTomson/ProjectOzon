@@ -11,6 +11,8 @@ import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 
@@ -49,11 +51,11 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
                 setOnStoriesClickListener.onClick(listOf, position, imageView)
             }
         }
-        setUpImages(historyModel?.arrayImages!!,container)
+        setUpImages(historyModel?.arrayImages!!,container,historyViewHolder.shimmer)
     }
 
 
-    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout){
+    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout,shimmer: ShimmerFrameLayout){
         if (container.children.count() >0) return
         val images = arrayOfNulls<ImageView>(listImagesUrl.size)
         val layoutParams: LinearLayout.LayoutParams =
@@ -68,7 +70,17 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
                 Picasso.with(container.context)
                     .load(listImagesUrl[i])
                     .placeholder(R.drawable.one_history)
-                    .into(image)
+                    .into(image,object :Callback{
+                        override fun onSuccess() {
+                            shimmer.stopShimmer()
+                            shimmer.setShimmer(null)
+                        }
+
+                        override fun onError() {
+                            shimmer.stopShimmer()
+                            shimmer.setShimmer(null)
+                        }
+                    })
 
                 image.layoutParams = layoutParams
                 image.adjustViewBounds = true

@@ -13,9 +13,6 @@ import com.app.marketPlace.domain.models.ProductItem
 
 class AppRepository(private val marketPlaceApi: MarketPlaceService) {
 
-
-
-
     suspend fun getBannerStart(params: Params): Results.ResultBanner {
         return try {
             Results.ResultBanner(
@@ -178,10 +175,10 @@ sealed class Params(
 }
 
 
-sealed class Results {
-    data class ResultCategoryProduct(val result: Resource<MutableList<MutableList<Banner>>>):Results()
-    data class ResultBanner(val result : Resource<MutableList<Banner>>):Results()
-    data class ResultHistory(val result : Resource<Stories>):Results()
-    data class ResultLive(val result : Resource<LiveStreamItem>):Results()
-    data class ResultProduct(val result : Resource<CombineProductsItem>):Results()
+sealed class Results(open val result:Resource<*>) {
+    data class ResultCategoryProduct(override val result: Resource<MutableList<MutableList<Banner>>>):Results(result)
+    data class ResultBanner(override val result : Resource<MutableList<Banner>>):Results(result)
+    data class ResultHistory(override val result : Resource<Stories>):Results(result)
+    data class ResultLive(override val result : Resource<LiveStreamItem>):Results(result)
+    data class ResultProduct(override val result : Resource<CombineProductsItem>):Results(result)
 }

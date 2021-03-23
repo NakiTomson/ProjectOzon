@@ -128,4 +128,6 @@ object ConstantsApp {
         "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
         "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1"
     )
+
+    var onDownload = false
 }

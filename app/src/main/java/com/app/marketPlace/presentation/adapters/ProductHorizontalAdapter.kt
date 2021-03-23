@@ -13,21 +13,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.mappers.Mapper.reMapProduct
 import com.app.marketPlace.domain.models.ProductItem
-import com.app.marketPlace.presentation.rowType.ProductsRowType
+import com.app.marketPlace.presentation.interfaces.ProductRowType
+import com.squareup.picasso.Callback
 
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_product.view.*
+import kotlinx.android.synthetic.main.item_product_horizontal.view.*
 
 
-class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOfferItemProductViewHolder>() {
+class ProductHorizontalAdapter : RecyclerView.Adapter<ProductHorizontalAdapter.CategoryOfferItemProductViewHolder>() {
 
     private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
 
-    var setClickListenerProduct: ProductsRowType.ProductClickListener? = null
+    var setClickListenerProduct: ProductRowType.ProductClickListener? = null
 
-    var setClickHeartProduct: ProductsRowType.ClickListener? = null
+    var setClickHeartProduct: ProductRowType.ClickListener? = null
 
-    var setClickBasketProduct: ProductsRowType.ClickListener? = null
+    var setClickBasketProduct: ProductRowType.ClickListener? = null
 
 
     fun setData(list: List<ProductItem>) {
@@ -42,7 +43,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryOfferItemProductViewHolder {
-        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false))
+        return CategoryOfferItemProductViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_product_horizontal, parent, false))
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
@@ -62,6 +63,7 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
         private val buttonAddToBasket:TextView = itemView.buttonAddToBasket
         private val productItemTextView:TextView = itemView.nameOfProduct
         private val product:ConstraintLayout = itemView.product
+        private val shimmer = itemView.shimmerLayout
 
         private val visible = View.VISIBLE
 
@@ -143,10 +145,17 @@ class ProductItemAdapter : RecyclerView.Adapter<ProductItemAdapter.CategoryOffer
             productsItem.generalIconProductSting?.let {
                 Picasso.with(itemView.context)
                     .load(productsItem.generalIconProductSting)
-                    .into(generalIconProductImageView)
-            } ?: run {
-                productsItem.generalIconProduct?.let { generalIconProductImageView.setImageResource(it) } ?:
-                kotlin.run{generalIconProductImageView.setImageResource(R.drawable.product_by_offer_example)}
+                    .into(generalIconProductImageView,object :Callback{
+                        override fun onSuccess() {
+                            shimmer.stopShimmer()
+                            shimmer.setShimmer(null)
+                        }
+
+                        override fun onError() {
+                            shimmer.stopShimmer()
+                            shimmer.setShimmer(null)
+                        }
+                    })
             }
         }
 

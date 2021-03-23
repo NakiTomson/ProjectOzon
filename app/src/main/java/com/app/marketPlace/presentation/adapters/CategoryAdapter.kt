@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.presentation.rowType.BannerRowType
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>() {
+    lateinit var setCompleteListener: BannerRowType.CompleteListener
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
     private val onBoardingItems: MutableList<Banner> = mutableListOf()
@@ -53,8 +56,14 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
                 .load(onBoardingItem.onBoardingImageUrl)
                 .fit()
                 .placeholder(R.drawable.icon_market_place_app)
-                .into(imageOnBoarding)
-
+                .into(imageOnBoarding,object :Callback{
+                    override fun onSuccess() {
+                        setCompleteListener.onComplete()
+                    }
+                    override fun onError() {
+                        setCompleteListener.onComplete()
+                    }
+                })
             categoryItem.setOnClickListener {
                 onBoardingItem.category?.let { setOnCategoryClickListener?.onClickItem(it) }
             }

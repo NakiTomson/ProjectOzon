@@ -34,10 +34,11 @@ import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
 import com.app.marketPlace.presentation.adapters.BannerAdapter
-import com.app.marketPlace.presentation.adapters.ProductItemAdapter
-import com.app.marketPlace.presentation.adapters.SimpleDataAdapter
+import com.app.marketPlace.presentation.adapters.BorderAdapter
+import com.app.marketPlace.presentation.adapters.ProductAdapter
+import com.app.marketPlace.presentation.adapters.SimpleAdapter
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.BannerRowType
-import com.app.marketPlace.presentation.rowType.ProductsRowType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -265,7 +266,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
 
     private fun setupBannerAdapter(detailProduct: ProductItem){
-        val adapterImages = BannerAdapter()
+        val adapterImages = BorderAdapter()
 
         detailProduct.images?.forEach {
             adapterImages.setItem(
@@ -309,8 +310,8 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setupSimpleAdapter(detailProduct: ProductItem){
-        val simpleAdapter = SimpleDataAdapter()
-        simpleAdapter.setOnClickCategoryListener = SimpleDataAdapter.OnClickCategoryListener { path ->
+        val simpleAdapter = SimpleAdapter()
+        simpleAdapter.setOnClickCategoryListener = SimpleAdapter.OnClickCategoryListener { path ->
             val bundle = Bundle()
             bundle.putString("category", path)
             navController.navigate(R.id.productsListFragment, bundle)
@@ -322,21 +323,21 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setupSimilarAdapter(){
-        val adapterSimilar  = ProductItemAdapter()
+        val adapterSimilar  = ProductAdapter()
         listProductsSimilar.adapter = adapterSimilar
         listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
-        adapterSimilar.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+        adapterSimilar.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
             val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             navController.navigate(action, extras)
         }
 
-        adapterSimilar.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+        adapterSimilar.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
         }
 
-        adapterSimilar.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+        adapterSimilar.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
 
@@ -352,21 +353,21 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setupEquivalentAdapter(){
-        val adapterEquivalent  = ProductItemAdapter()
+        val adapterEquivalent  = ProductAdapter()
         listProductsEquivalent.adapter = adapterEquivalent
         listProductsEquivalent.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
-        adapterEquivalent.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+        adapterEquivalent.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
             val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             navController.navigate(action, extras)
         }
 
-        adapterEquivalent.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+        adapterEquivalent.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
         }
 
-        adapterEquivalent.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+        adapterEquivalent.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
 
@@ -381,7 +382,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         setupEquivalentProducts(adapterEquivalent)
     }
 
-    private fun setupEquivalentProducts(adapterEquivalent: ProductItemAdapter){
+    private fun setupEquivalentProducts(adapterEquivalent: ProductAdapter){
         viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
             if (resource.data!!.list.isNotEmpty()) {
                 adapterEquivalent.setData(resource.data.list)
@@ -390,7 +391,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         })
     }
 
-    private fun setupSimilarProducts(adapterSimilar: ProductItemAdapter){
+    private fun setupSimilarProducts(adapterSimilar: ProductAdapter){
         viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
             if (resource.data!!.list.isNotEmpty()) {
                 adapterSimilar.setData(resource.data.list)

@@ -17,8 +17,8 @@ import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.*
 import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmentDirections
-import com.app.marketPlace.presentation.adapters.ProductItemAdapter
-import com.app.marketPlace.presentation.rowType.ProductsRowType
+import com.app.marketPlace.presentation.adapters.ProductAdapter
+import com.app.marketPlace.presentation.interfaces.ProductRowType
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import javax.inject.Inject
@@ -49,7 +49,7 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         val navController = findNavController()
 
         foundProductsRecyclerView.layoutManager = GridLayoutManager(activity,3)
-        val productsAdapter = ProductItemAdapter()
+        val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
         foundProductsRecyclerView.adapter =  productsAdapter
 
@@ -60,15 +60,15 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
         val controller = LayoutAnimationController(anim)
 
-        productsAdapter.setClickHeartProduct = ProductsRowType.ClickListener { productsItem ->
+        productsAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
         }
 
-        productsAdapter.setClickBasketProduct = ProductsRowType.ClickListener { productsItem ->
+        productsAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             mainViewModel.insertOrDeleteBasket(productsItem)
         }
 
-        productsAdapter.setClickListenerProduct = ProductsRowType.ProductClickListener { product, imageView ->
+        productsAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             navController.navigate(action, extras)

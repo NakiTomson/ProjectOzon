@@ -27,10 +27,8 @@ data class LiveRowType(val liveItemAdapter: LiveStreamAdapter) :RowType {
         val liveViewHolder = viewHolder as ViewHolderFactory.LiveViewHolder
         liveViewHolder.bind(liveItemAdapter)
 
-        liveViewHolder.serLiveClickListener = object :LiveListener{
-            override fun onClick(liveUrl: String, view: ImageView) {
-                setOnLiveStreamClickListener.onClick(liveUrl,view)
-            }
+        liveViewHolder.serLiveClickListener = LiveListener { liveUrl, view ->
+            setOnLiveStreamClickListener.onClick(liveUrl,view)
         }
 
         liveViewHolder.liveStreamPager.clipToPadding = false

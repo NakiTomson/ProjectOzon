@@ -8,7 +8,6 @@ data class ProductItem (
 
     var type:Type  = Type.OnlyImage,
 
-    val generalIconProduct: Int? = null,
     val generalIconProductSting: String? = null,
     var favoriteIconProduct: Boolean = false,
     var productInBasket: Boolean = false,

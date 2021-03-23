@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.interfaces.RowType
-import com.app.marketPlace.presentation.adapters.CombinationProductsAdapter
+import com.app.marketPlace.presentation.adapters.CombinationAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-data class CategoryRowType(val combinationProductsAdapter: CombinationProductsAdapter):RowType {
+data class CategoryRowType(val combinationProductsAdapter: CombinationAdapter):RowType {
 
 
     var setOnCategoryItemClickListener:ClickCategoryListener? = null
