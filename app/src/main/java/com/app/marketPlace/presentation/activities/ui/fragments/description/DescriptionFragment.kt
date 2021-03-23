@@ -15,9 +15,8 @@ import kotlinx.android.synthetic.main.fragment_description.*
 class DescriptionFragment : Fragment(R.layout.fragment_description) {
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         when(tag){
             "LONG"->{ setDescription( arguments?.getString("longDescription"))}
             "SHORT"->{ setDescription (arguments?.getString("shortDescription"))}

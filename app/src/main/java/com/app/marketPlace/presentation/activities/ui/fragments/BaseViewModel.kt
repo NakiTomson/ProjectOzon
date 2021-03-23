@@ -11,7 +11,7 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
     private val job: Job = Job()
 
-    private val viewModelScope = CoroutineScope(Dispatchers.Main + job)
+    private val viewModelScope = CoroutineScope(coroutineContext)
 
     fun <P> loadData(coroutineContexts: CoroutineContext,doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)

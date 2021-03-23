@@ -36,7 +36,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     }
 
     private fun setupCategoriesAdapter(categoryAdapter: CategoryAdapter) {
-        categoryProductsAdapter.layoutManager =  GridLayoutManager(context,5)
+        categoryProductsAdapter.layoutManager =  GridLayoutManager(context,4)
         categoryProductsAdapter.adapter = categoryAdapter
         categoryProductsAdapter.setHasFixedSize(false)
 
@@ -46,6 +46,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
             navController.navigate(R.id.productsListFragment, bundle)
         }
     }
+
     private fun setupCategories(categoryAdapter: CategoryAdapter) {
         viewModel.categoryProductLiveData.observe(viewLifecycleOwner, { resource ->
             categoryAdapter.setData(resource.data?.flatten() as MutableList<Banner>)

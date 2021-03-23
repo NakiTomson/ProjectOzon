@@ -5,10 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_personal_account.*
@@ -16,16 +13,7 @@ import javax.inject.Inject
 
 class PersonalAccount : Fragment(R.layout.fragment_personal_account) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(personalAccount = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

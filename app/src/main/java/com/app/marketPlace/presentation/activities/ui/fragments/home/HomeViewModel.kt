@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
@@ -53,6 +52,7 @@ class HomeViewModel() : BaseViewModel() {
 
 
     private suspend fun startLoading(){
+
         val bannerTop: Deferred<Results.ResultBanner> = async { repository.getBannerStart(BannerParams()) }
 
         val categories = async {
@@ -72,6 +72,7 @@ class HomeViewModel() : BaseViewModel() {
                 )
             )
         }
+
         val productsTwo = async {
             repository.loadProducts(
                 ProductsParams(pathId = CELL_PHONES, pageSize = "6", apiKey = APIKEY, page = "53",
@@ -184,5 +185,4 @@ class HomeViewModel() : BaseViewModel() {
             )
         }
     }
-
 }

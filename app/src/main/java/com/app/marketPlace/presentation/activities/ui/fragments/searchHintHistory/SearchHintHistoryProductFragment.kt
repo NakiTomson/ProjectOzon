@@ -14,28 +14,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.adapters.HintSearchAdapter
 import kotlinx.android.synthetic.main.fragment_search_hint_history_product.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
-import javax.inject.Inject
 
 
 class SearchHintHistoryProductFragment : Fragment(R.layout.fragment_search_hint_history_product) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(searchHintHistoryProductFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

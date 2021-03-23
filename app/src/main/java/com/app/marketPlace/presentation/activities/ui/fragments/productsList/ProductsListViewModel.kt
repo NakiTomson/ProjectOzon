@@ -85,4 +85,3 @@ class ProductsListViewModel :ViewModel(), CoroutineScope {
         }
     }
 }
-

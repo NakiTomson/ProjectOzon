@@ -28,12 +28,8 @@ import com.app.marketPlace.R
 import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.domain.models.ProductItem
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
-import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.adapters.BorderAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.adapters.SimpleAdapter
@@ -54,16 +50,8 @@ import kotlin.math.abs
 
 class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(detailsProductFragment = this)
-    }
 
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val args: DetailsProductFragmentArgs by navArgs()
 

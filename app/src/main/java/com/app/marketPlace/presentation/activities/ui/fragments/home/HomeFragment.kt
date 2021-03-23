@@ -21,10 +21,7 @@ import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.LiveStreamItem
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.rowType.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
@@ -35,20 +32,10 @@ import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
 import java.util.*
-import javax.inject.Inject
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(homeFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
     val TAG = HomeFragment::class.java.simpleName
 
     private val viewModel: HomeViewModel by viewModels()
@@ -58,7 +45,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
-//        shimmerLayout.startShimmer()
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
@@ -83,6 +69,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
                 viewModel.loadAdditionalData()
             }
+        })
+        mainViewModel.networkConnection.observe(viewLifecycleOwner, {
+
         })
     }
 

@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.data.utils.ConstantsApp.PLAYSTATION
 import com.app.marketPlace.domain.mappers.Mapper
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.adapters.BasketAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
@@ -29,20 +26,11 @@ import javax.inject.Inject
 
 class BasketFragment : Fragment(R.layout.fragment_basket) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(basketFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
     private val viewModel: BasketViewModel by viewModels()
 
     lateinit var navController: NavController
 
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

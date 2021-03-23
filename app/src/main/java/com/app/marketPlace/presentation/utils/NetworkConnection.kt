@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.net.*
 import android.os.Build
 import androidx.lifecycle.LiveData
+import javax.inject.Inject
 
 class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
 

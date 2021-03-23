@@ -8,29 +8,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.app.marketPlace.R
 import com.app.marketPlace.data.db.models.UserDb
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import java.util.*
-import javax.inject.Inject
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(signUpFragment = this)
-    }
 
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
-
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

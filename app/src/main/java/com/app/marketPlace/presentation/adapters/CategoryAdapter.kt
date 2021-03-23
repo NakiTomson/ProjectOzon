@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>() {
-    lateinit var setCompleteListener: BannerRowType.CompleteListener
+    var setCompleteListener: BannerRowType.CompleteListener? = null
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
     private val onBoardingItems: MutableList<Banner> = mutableListOf()
@@ -58,10 +58,10 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
                 .placeholder(R.drawable.icon_market_place_app)
                 .into(imageOnBoarding,object :Callback{
                     override fun onSuccess() {
-                        setCompleteListener.onComplete()
+                        setCompleteListener?.onComplete()
                     }
                     override fun onError() {
-                        setCompleteListener.onComplete()
+                        setCompleteListener?.onComplete()
                     }
                 })
             categoryItem.setOnClickListener {

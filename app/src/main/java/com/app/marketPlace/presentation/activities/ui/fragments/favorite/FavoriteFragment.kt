@@ -10,28 +10,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.mappers.Mapper
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
-import javax.inject.Inject
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(favoriteFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels ()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

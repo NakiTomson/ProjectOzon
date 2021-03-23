@@ -9,10 +9,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.activities.MainViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
@@ -22,16 +19,7 @@ import javax.inject.Inject
 
 class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(makingOrderFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

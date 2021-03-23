@@ -1,33 +1,41 @@
 package com.app.marketPlace.presentation.activities
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
-import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
+import com.app.marketPlace.presentation.MarketPlaceApp
 
 import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.utils.NetworkConnection
 import kotlinx.coroutines.*
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), CoroutineScope {
-
+class MainViewModel : ViewModel(), CoroutineScope {
 
     companion object {
-
         var listIdsBasket: MutableList<Int> = mutableListOf()
         var listIdsFavorite: MutableList<Int> = mutableListOf()
     }
+
+    init {
+        MarketPlaceApp.appComponent.inject(mainViewModel = this)
+    }
+
+    @Inject lateinit var repository:DataBaseRepository
+
+    @Inject lateinit var networkConnection:NetworkConnection
 
     private val job: Job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
-
 
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
 
@@ -119,32 +127,21 @@ class MainViewModel(private val repository: DataBaseRepository) : ViewModel(), C
     }
 
 //    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-
 }
 
 
 
-class MainViewModelFactory(private val repository: DataBaseRepository) : ViewModelProvider.Factory {
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return MainViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-
-//class ModelFactory(private var vieModel: ViewModel) : ViewModelProvider.Factory {
+//class MainViewModelFactory(private val repository: DataBaseRepository) : ViewModelProvider.Factory {
 //
 //    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(vieModel::class.java)) {
+//        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
 //            @Suppress("UNCHECKED_CAST")
-//            return vieModel as T
+//            return MainViewModel(repository) as T
 //        }
 //        throw IllegalArgumentException("Unknown ViewModel class")
 //    }
 //}
+
 
 
 fun <T> gettingErrors(resource: Resource<T>): Boolean {
@@ -166,5 +163,3 @@ fun <T> errorHandling(name: String, resource: Resource<T>) {
     Log.v(name, "${resource.exception}")
     Log.v(name, "${resource.status}")
 }
-
-

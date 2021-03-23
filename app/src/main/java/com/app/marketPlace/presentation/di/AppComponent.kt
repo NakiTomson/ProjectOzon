@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.di
 
 import com.app.marketPlace.presentation.activities.MainActivity
+import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.ui.fragments.authorization.SignUpFragment
 import com.app.marketPlace.presentation.activities.ui.fragments.basket.BasketFragment
 import com.app.marketPlace.presentation.activities.ui.fragments.basket.BasketViewModel
@@ -28,16 +29,7 @@ interface AppComponent {
     fun inject(catalogViewModel: CatalogViewModel)
     fun inject(detailsProductViewModel: DetailsProductViewModel)
     fun inject(basketViewModel: BasketViewModel)
-    fun inject(mainActivity: MainActivity)
-    fun inject(productsListFragment: ProductsListFragment)
-    fun inject(personalAccount: PersonalAccount)
-    fun inject(homeFragment: HomeFragment)
-    fun inject(basketFragment: BasketFragment)
-    fun inject(searchHintHistoryProductFragment: SearchHintHistoryProductFragment)
-    fun inject(makingOrderFragment: MakingOrderFragment)
     fun inject(productsListViewModel: ProductsListViewModel)
-    fun inject(favoriteFragment: FavoriteFragment)
-    fun inject(signUpFragment: SignUpFragment)
-    fun inject(detailsProductFragment: DetailsProductFragment)
+    fun inject(mainViewModel: MainViewModel)
 
 }

@@ -19,21 +19,14 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    init {
-        MarketPlaceApp.appComponent.inject(mainActivity = this)
-    }
-
     private var currentNavController: LiveData<NavController>? = null
 
-    @Inject lateinit var repository:DataBaseRepository
-
-    private val mainViewModel: MainViewModel by viewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
@@ -51,9 +44,7 @@ class MainActivity : AppCompatActivity() {
                 MainViewModel.listIdsFavorite.addAll(it)
             }
         })
-
     }
-
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -82,12 +73,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkInternetConnection() {
-        val networkConnection = NetworkConnection(applicationContext)
-        networkConnection.observe(this, { isConnected ->
+        mainViewModel.networkConnection.observe(this,{isConnected->
             if (isConnected) {
                 connection_frame.visibility = View.GONE
+                bottomNavigationView.visibility = View.VISIBLE
             } else {
                 connection_frame.visibility = View.VISIBLE
+                bottomNavigationView.visibility = View.GONE
             }
         })
     }

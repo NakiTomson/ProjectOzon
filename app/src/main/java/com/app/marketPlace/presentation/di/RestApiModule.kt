@@ -1,6 +1,8 @@
 package com.app.marketPlace.presentation.di
 
+import android.content.Context
 import com.app.marketPlace.data.remote.services.MarketPlaceService
+import com.app.marketPlace.presentation.utils.NetworkConnection
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -50,13 +52,17 @@ class RestApiModule {
     }
 
 
-
     @Provides
     @Singleton
     fun provideMarketPlaceServiceApiDropBox(retrofit: Retrofit): MarketPlaceService {
         return retrofit.create(MarketPlaceService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideNetworkConnection(context: Context): NetworkConnection {
+        return NetworkConnection(context)
+    }
 }
 
 

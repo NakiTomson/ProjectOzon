@@ -26,20 +26,7 @@ import javax.inject.Inject
 
 class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
-    init {
-        MarketPlaceApp.appComponent.inject(productsListFragment = this)
-    }
-
-    @Inject
-    lateinit var repository: DataBaseRepository
-
-    @Inject
-    lateinit var homeRepository: AppRepository
-
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val viewModel: ProductsListViewModel by viewModels()
 
