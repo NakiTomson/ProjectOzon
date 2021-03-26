@@ -13,17 +13,19 @@ import retrofit2.http.Query
 
 interface MarketPlaceService {
 
-    @GET("/v1/categories?format=json&show=name,id")
+    @GET("/v1/categories{path}?format=json")
     fun getCategoryProductsAsync(
+        @Path("path") path: String,
         @Query("pageSize") pageSize: String,
         @Query("page") page: String,
-        @Query("apiKey") apiKey: String
+        @Query("apiKey") apiKey: String,
     ): Deferred<CategoriesProduct?>
 
+//    https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey=zXSRzd1MQNKNebKntBATTcQj&format=json
 
-    @GET("/v1/products((categoryPath.id={PathId}))?format=json")
+    @GET("/v1/products((categoryPath.id={pathId}))?format=json")
     fun getProductsByCategoryAsync(
-        @Path("PathId") pathId: String,
+        @Path("pathId") pathId: String,
         @Query("pageSize") pageSize: String,
         @Query("page") page: String,
         @Query("apiKey") apiKey: String

@@ -48,7 +48,7 @@ public class MultipleAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
-        if ((position > dataSet.size() - 2) &&  setNextDataListener != null) {
+        if ((position > dataSet.size() - 2) &&  setNextDataListener != null &&  countPosition <=11) {
             setNextDataListener.onNextData();
         }
     }

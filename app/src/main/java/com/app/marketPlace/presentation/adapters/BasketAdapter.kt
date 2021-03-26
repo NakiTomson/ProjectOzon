@@ -86,7 +86,8 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
                 setOnBasketDelete?.onClick(productsItem)
             }
             product.setOnClickListener {
-                generalIconProductImageView.transitionName = productsItem.images?.get(0)
+                generalIconProductImageView.transitionName = productsItem.generalIconProductSting
+                productsItem.images?.set(0,productsItem.generalIconProductSting!!)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }
             favoriteIconProductImageView.setOnClickListener {

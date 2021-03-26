@@ -12,18 +12,17 @@ import com.app.marketPlace.data.utils.ConstantsApp.LAPTOPS
 import com.app.marketPlace.data.utils.ConstantsApp.MONITORS
 import com.app.marketPlace.data.utils.ConstantsApp.PHONES
 import com.app.marketPlace.data.utils.ConstantsApp.TVS
-import com.app.marketPlace.data.utils.ConstantsApp.onDownload
 import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params.BannerParams
-import com.app.marketPlace.domain.repositories.Params.LiveParams
-import com.app.marketPlace.domain.repositories.Params.StoriesParams
-import com.app.marketPlace.domain.repositories.Params.CategoriesProductParams
 import com.app.marketPlace.domain.repositories.Params.ProductsParams
-import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.models.*
+import com.app.marketPlace.domain.repositories.Params.BannerParams
+import com.app.marketPlace.domain.repositories.Params.CategoriesProductParams
+import com.app.marketPlace.domain.repositories.Params.StoriesParams
+import com.app.marketPlace.domain.repositories.Params.LiveParams
+import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -34,21 +33,32 @@ class HomeViewModel() : BaseViewModel() {
     private val _data =
         MutableSharedFlow<Resource<*>>()
 
+    private val _completed: MutableStateFlow<Boolean?> =
+        MutableStateFlow(null)
+
+    var netConnectionState = false
+
     init {
         MarketPlaceApp.appComponent.inject(this)
-        viewModelScope.launch {
+        viewModelScope.launch{
+            delayUntilInternetResumeConnection()
             startLoading()
+        }
+    }
+
+    private suspend fun delayUntilInternetResumeConnection() {
+        while (!netConnectionState){
+            delay(100)
         }
     }
 
     @Inject
     lateinit var repository: AppRepository
 
-    val completed: MutableLiveData<Boolean> = MutableLiveData()
-
-
     val data: SharedFlow<Resource<*>> =
         _data.shareIn(viewModelScope,started = SharingStarted.Lazily,replay = 20)
+
+    val completed: StateFlow<Boolean?>  = _completed.asStateFlow()
 
 
     private suspend fun startLoading(){
@@ -56,9 +66,11 @@ class HomeViewModel() : BaseViewModel() {
         val bannerTop: Deferred<Results.ResultBanner> = async { repository.getBannerStart(BannerParams()) }
 
         val categories = async {
-            repository.loadCategories(CategoriesProductParams(
-                pageSize = "20", apiKey = APIKEY, page = "1"
-            ))
+            repository.loadCategories(
+                CategoriesProductParams(
+                    pageSize = "20", apiKey = APIKEY, page = "1"
+                )
+            )
         }
 
         val stories:Deferred<Results.ResultHistory> = async {  repository.getHistoryItems(StoriesParams())}
@@ -104,7 +116,6 @@ class HomeViewModel() : BaseViewModel() {
             )
         }
 
-
         _data.emitAll(
             flow {
                 emit(checkingForErrors(bannerTop.await().result))
@@ -117,16 +128,15 @@ class HomeViewModel() : BaseViewModel() {
                 emit(checkingForErrors(productsThree.await().result))
                 emit(checkingForErrors(bannersDown.await().result))
                 emit(checkingForErrors(productsFour.await().result))
-                completed.postValue(true)
+                _completed.value = true
             }
         )
     }
 
     fun loadAdditionalData() {
-        if (onDownload) return
-        onDownload = true
 
         loadData(Dispatchers.IO){
+            delayUntilInternetResumeConnection()
             val productsCamera = async {
                 repository.loadProducts(
                     ProductsParams(pathId = CAMERA, pageSize = "8", apiKey = APIKEY, page = "3",
@@ -186,3 +196,4 @@ class HomeViewModel() : BaseViewModel() {
         }
     }
 }
+

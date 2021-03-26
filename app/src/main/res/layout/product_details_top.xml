@@ -87,13 +87,13 @@
         android:text="Нашли Дешевле?"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageNext"
+        app:layout_constraintEnd_toStartOf="@+id/imageNextMoxyData"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceWithDiscountTextView" />
 
 
     <ImageButton
-        android:id="@+id/imageNext"
+        android:id="@+id/imageNextMoxyData"
         android:layout_width="70dp"
         android:layout_height="35dp"
         android:layout_gravity="end"

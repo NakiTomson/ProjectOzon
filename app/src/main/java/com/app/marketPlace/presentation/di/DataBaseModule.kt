@@ -7,6 +7,7 @@ import com.app.marketPlace.data.db.dao.HintProductDao
 import com.app.marketPlace.data.db.dao.InBasketDao
 import com.app.marketPlace.data.db.dao.InFavoriteProductDao
 import com.app.marketPlace.data.db.dao.UserDao
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

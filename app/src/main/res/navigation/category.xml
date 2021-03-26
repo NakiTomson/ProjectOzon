@@ -9,7 +9,18 @@
         android:id="@+id/catalogFragment"
         android:name="com.app.marketPlace.presentation.activities.ui.fragments.catalog.CatalogFragment"
         android:label="fragment_catalog"
-        tools:layout="@layout/fragment_catalog" />
+        tools:layout="@layout/fragment_catalog" >
+
+        <argument
+            android:name="subCategories"
+            app:argType="com.app.marketPlace.data.remote.models.Categories[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchHintProductHomeFragment"
+            app:destination="@id/searchHintProductHomeFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/productsListFragment"
@@ -87,5 +98,9 @@
             android:defaultValue="iPhone 10" />
 
     </fragment>
+
+    <action
+        android:id="@+id/action_global_catalogFragment"
+        app:destination="@id/catalogFragment" />
 
 </navigation>

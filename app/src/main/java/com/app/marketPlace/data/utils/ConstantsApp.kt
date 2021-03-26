@@ -24,6 +24,7 @@ object ConstantsApp {
     const val MONITORS = "abcat0509000"
     const val COMPUTER_KEYBOARDS = "abcat0513004"
     const val PHONES = "abcat0800000"
+    const val BEST_PATH = "(id=abcat*)"
 
 
     val listImagesByCategory = listOf(
@@ -128,6 +129,4 @@ object ConstantsApp {
         "https://www.dropbox.com/s/da22ge77utrs7gk/nine.png?dl=1",
         "https://www.dropbox.com/s/al1j3eqjqwgieda/ten.png?dl=1"
     )
-
-    var onDownload = false
 }

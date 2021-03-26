@@ -44,7 +44,6 @@ import kotlinx.android.synthetic.main.fragment_details_product.*
 import kotlinx.android.synthetic.main.product_details_bottom.*
 import kotlinx.android.synthetic.main.product_details_center.*
 import kotlinx.android.synthetic.main.product_details_top.*
-import javax.inject.Inject
 import kotlin.math.abs
 
 
@@ -84,7 +83,6 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
         viewModel.getListEquivalentProducts(searchWord)
         viewModel.getListSimilarCategory(detailProduct.categoryPath)
-
 
         initView(Mapper.reMapProduct(detailProduct))
 
@@ -193,7 +191,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
             navController.navigate(action)
         }
 
-        imageNext.setOnClickListener {
+        imageNextMoxyData.setOnClickListener {
             val action = DetailsProductFragmentDirections.actionDetailsProductFragmentToMockFragment(
                 arrayHistory = null
             )

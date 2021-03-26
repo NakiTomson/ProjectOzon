@@ -23,7 +23,6 @@ class BasketViewModel:ViewModel(), CoroutineScope {
 
     private val job: Job = Job()
 
-
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 

@@ -1,7 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -25,17 +24,20 @@ import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.rowType.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
+import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import java.util.*
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val mainViewModel: MainViewModel by activityViewModels()
+
     val TAG = HomeFragment::class.java.simpleName
 
     private val viewModel: HomeViewModel by viewModels()
@@ -64,14 +66,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         )
 
         val controller = LayoutAnimationController(anim)
-        viewModel.completed.observe(viewLifecycleOwner, {
+
+        viewModel.completed.onEach {
+            if (it == null)return@onEach
             multipleHomeRecyclerView.layoutAnimation = controller
             adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
                 viewModel.loadAdditionalData()
             }
-        })
-        mainViewModel.networkConnection.observe(viewLifecycleOwner, {
+        }.launchWhenStarted(lifecycleScope)
 
+
+        mainViewModel.networkConnection.observe(viewLifecycleOwner, {
+            viewModel.netConnectionState = it
         })
     }
 

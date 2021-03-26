@@ -7,6 +7,9 @@ import com.app.marketPlace.data.utils.ConstantsApp
 import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Categories
+import com.app.marketPlace.domain.mappers.MapperCategory
+import com.app.marketPlace.domain.mappers.MapperToUi
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
@@ -36,17 +39,29 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
     suspend fun loadCategories(params: Params): Results.ResultCategoryProduct {
         return try {
             val listGeneralCategory = marketPlaceApi
-                .getCategoryProductsAsync(params.pageSize, params.page,params.apiKey)
+                .getCategoryProductsAsync(path = params.pathId,pageSize = params.pageSize, page = params.page, apiKey = params.apiKey)
                 .await()
 
             Results.ResultCategoryProduct(
-                Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory,params)
+                Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory, params)
             )
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
     }
-
+    suspend fun loadCategories2(params: Params): Results.ResultCategoryProduct2 {
+        return try {
+            val listGeneralCategory = marketPlaceApi
+                .getCategoryProductsAsync(path = params.pathId,pageSize = params.pageSize, page = params.page, apiKey = params.apiKey)
+                .await()
+//            Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory, params)
+            Results.ResultCategoryProduct2(
+                params.mapper.map(listGeneralCategory, params)
+            )
+        } catch (e: Exception) {
+            Results.ResultCategoryProduct2(Resource(status = Resource.Status.ERROR, data = null, exception = e))
+        }
+    }
 
     suspend fun loadSearchProducts(params: Params): Results.ResultProduct {
         return try {
@@ -139,14 +154,17 @@ sealed class Params(
     open var requestName: String = "",
     open var typeProduct: ProductItem.Type = ProductItem.Type.OnlyImage,
     open var resourceType: Resource.Type = Resource.Type.UNDEFINED,
-    open var spain: Int = 3
+    open var spain: Int = 3,
+    open var mapper: MapperToUi = MapperCategory()
 ){
 
     class CategoriesProductParams(
         override var pageSize: String = "3",
         override var apiKey: String = ConstantsApp.APIKEY,
         override var page: String = "1",
-        override var resourceType: Resource.Type = Resource.Type.CATEGORIES
+        override var resourceType: Resource.Type = Resource.Type.CATEGORIES,
+        override var mapper: MapperToUi = MapperCategory(),
+        override var pathId: String = ""
     ) : Params()
 
 
@@ -177,6 +195,7 @@ sealed class Params(
 
 sealed class Results(open val result:Resource<*>) {
     data class ResultCategoryProduct(override val result: Resource<MutableList<MutableList<Banner>>>):Results(result)
+    data class ResultCategoryProduct2(override val result: Resource<List<Categories>>):Results(result)
     data class ResultBanner(override val result : Resource<MutableList<Banner>>):Results(result)
     data class ResultHistory(override val result : Resource<Stories>):Results(result)
     data class ResultLive(override val result : Resource<LiveStreamItem>):Results(result)

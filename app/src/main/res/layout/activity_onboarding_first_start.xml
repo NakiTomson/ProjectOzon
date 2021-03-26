@@ -62,10 +62,10 @@
         android:id="@+id/viewCenterOfNext"
         android:layout_width="1dp"
         android:layout_height="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageNext"
-        app:layout_constraintEnd_toEndOf="@+id/imageNext"
-        app:layout_constraintStart_toStartOf="@+id/imageNext"
-        app:layout_constraintTop_toTopOf="@+id/imageNext">
+        app:layout_constraintBottom_toBottomOf="@+id/imageNextMoxyData"
+        app:layout_constraintEnd_toEndOf="@+id/imageNextMoxyData"
+        app:layout_constraintStart_toStartOf="@+id/imageNextMoxyData"
+        app:layout_constraintTop_toTopOf="@+id/imageNextMoxyData">
 
     </View>
     <com.google.android.material.button.MaterialButton
@@ -89,7 +89,7 @@
     </com.google.android.material.button.MaterialButton>
 
     <ImageView
-        android:id="@+id/imageNext"
+        android:id="@+id/imageNextMoxyData"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginBottom="50dp"

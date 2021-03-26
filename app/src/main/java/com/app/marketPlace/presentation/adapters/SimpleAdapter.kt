@@ -35,6 +35,7 @@ class SimpleAdapter : RecyclerView.Adapter<SimpleAdapter.SimpleDataAdapterViewHo
     }
 
     override fun getItemCount(): Int {
+        //ExoPlayer
         return  listItems.size
     }
 

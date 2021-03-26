@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.rowType
 
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -9,6 +10,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
+import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.CombinationAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
@@ -20,6 +22,10 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationAdapter):R
 
     fun interface ClickCategoryListener{
         fun onClickItem(data: String)
+    }
+
+    fun interface ClickCategoryListener2{
+        fun onClickItem(data: Categories,view: View)
     }
 
     override fun getItemViewType(): Int {

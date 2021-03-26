@@ -1,67 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="80dp"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:background="@color/white"
-    android:id="@+id/rootSimpleItem"
-    android:layout_marginTop="5dp"
-    android:padding="10dp"
-  >
 
-    <ImageView
-        android:id="@+id/imageCategory"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintTop_toTopOf="parent">
 
-    </ImageView>
+<!--<com.facebook.shimmer.ShimmerFrameLayout-->
+<!--    android:id="@+id/shimmerSimpleItem"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:background="@color/black"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android">-->
 
-    <TextView
-        android:id="@+id/namePath"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:drawablePadding="10dp"
-        android:gravity="center"
-        android:text="Самртфоны OnePlus"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageCategory"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:text="Категория"
-        android:layout_marginTop="5dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf= "@id/namePath"
-        app:layout_constraintTop_toBottomOf="@+id/namePath"
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/rootSimpleItem"
+        android:padding="7dp"
         >
 
-    </TextView>
+        <ImageView
+            android:id="@+id/imageCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintTop_toTopOf="parent">
+        </ImageView>
 
-    <ImageButton
-        android:id="@+id/imageNextLocation"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:alpha="0.4"
-        android:background="@drawable/button_next"
-        android:backgroundTint="@color/white"
-        android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/ic_right"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/namePath"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawablePadding="10dp"
+            android:gravity="start"
+            android:text="Самртфоны OnePlus"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageNextCategories"
+            app:layout_constraintStart_toEndOf="@id/imageCategory"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <TextView
+            android:id="@+id/titleCategory"
+            android:layout_width="wrap_content"
+            android:text="Категория"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf= "@id/namePath"
+            app:layout_constraintTop_toBottomOf="@+id/namePath"
+            >
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/imageNextCategories"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:alpha="0.4"
+            android:background="?android:attr/selectableItemBackground"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/ic_right" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--</com.facebook.shimmer.ShimmerFrameLayout>-->

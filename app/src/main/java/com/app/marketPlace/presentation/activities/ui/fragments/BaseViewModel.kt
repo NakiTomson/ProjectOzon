@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments
 
 import androidx.lifecycle.ViewModel
+import com.app.marketPlace.data.remote.models.Banner
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -11,7 +12,7 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
     private val job: Job = Job()
 
-    private val viewModelScope = CoroutineScope(coroutineContext)
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + job)
 
     fun <P> loadData(coroutineContexts: CoroutineContext,doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)
@@ -28,6 +29,7 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
             }
         }
     }
+
 
     override fun onCleared() {
         super.onCleared()

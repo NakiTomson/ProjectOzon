@@ -80,7 +80,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
 
             imageOnBoarding.setOnClickListener {
                 imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
-                setBannerClickListener?.onClickBanner(onBoardingItem.onBoardingImageUrl, imageOnBoarding)
+                setBannerClickListener?.onClickBanner(onBoardingItem.onBoardingImageUrl!!, imageOnBoarding)
             }
         }
     }

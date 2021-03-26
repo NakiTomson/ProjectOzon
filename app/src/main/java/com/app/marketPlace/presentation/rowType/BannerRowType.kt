@@ -45,7 +45,7 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
                 setIndicatorsContainer(position, bannerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
                 viewHolder.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
                     setOnBannerClickListener?.onClickBanner(
-                        bannerAdapter.onBoardingItems[position].onBoardingImageUrl,
+                        bannerAdapter.onBoardingItems[position].onBoardingImageUrl!!,
                         imageOnBoarding
                     )
                 }

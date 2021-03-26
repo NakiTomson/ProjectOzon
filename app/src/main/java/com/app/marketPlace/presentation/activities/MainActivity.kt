@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import androidx.transition.Transition
 import com.app.marketPlace.R
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -14,6 +15,7 @@ import com.app.marketPlace.presentation.activities.ui.setupWithNavController
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_catalog.*
 import javax.inject.Inject
 
 
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 MainViewModel.listIdsFavorite.addAll(it)
             }
         })
+
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
