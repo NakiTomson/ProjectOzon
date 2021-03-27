@@ -58,11 +58,6 @@ class RestApiModule {
         return retrofit.create(MarketPlaceService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideNetworkConnection(context: Context): NetworkConnection {
-        return NetworkConnection(context)
-    }
 }
 
 

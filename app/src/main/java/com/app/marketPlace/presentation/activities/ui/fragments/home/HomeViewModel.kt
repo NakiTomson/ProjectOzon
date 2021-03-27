@@ -39,7 +39,6 @@ class HomeViewModel() : BaseViewModel() {
     var netConnectionState = false
 
     init {
-        MarketPlaceApp.appComponent.inject(this)
         viewModelScope.launch{
             delayUntilInternetResumeConnection()
             startLoading()
@@ -52,8 +51,6 @@ class HomeViewModel() : BaseViewModel() {
         }
     }
 
-    @Inject
-    lateinit var repository: AppRepository
 
     val data: SharedFlow<Resource<*>> =
         _data.shareIn(viewModelScope,started = SharingStarted.Lazily,replay = 20)
@@ -134,7 +131,6 @@ class HomeViewModel() : BaseViewModel() {
     }
 
     fun loadAdditionalData() {
-
         loadData(Dispatchers.IO){
             delayUntilInternetResumeConnection()
             val productsCamera = async {

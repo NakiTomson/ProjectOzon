@@ -41,22 +41,11 @@ object ViewHolderFactory {
     class BannerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val shimmer: ShimmerFrameLayout = itemView.shimmerLayout
-        var setBannerClickListener: BannerRowType.BannerListener? = null
-        val bannekerViewPager: ViewPager2 = itemView.onAdsViewPager
-        var bannerIndicatorsContainer: LinearLayout? = null
+        val viewPager: ViewPager2 = itemView.onAdsViewPager
+        var bannerIndicatorsContainer: LinearLayout = itemView.indicatorsContainerAds
 
-        fun bind(onBoardingAdapter: BannerAdapter) {
-            onBoardingAdapter.setBannerClickListener =
-                BannerRowType.BannerListener { imageUrl, view ->
-                    setBannerClickListener?.onClickBanner(imageUrl, view)
-                }
-            bannerIndicatorsContainer = itemView.indicatorsContainerAds
-            bannekerViewPager.adapter = onBoardingAdapter
+        fun bind(bannerAdapter: BannerAdapter) {
 
-            onBoardingAdapter.setCompleteListener = BannerRowType.CompleteListener {
-                shimmer.stopShimmer()
-                shimmer.setShimmer(null)
-            }
         }
     }
 
@@ -71,10 +60,9 @@ object ViewHolderFactory {
             bannerIndicatorsContainer = itemView.indicatorsContainerAds
             bannekerViewPager.adapter = combinationProductsAdapter
 
-            combinationProductsAdapter.setOnCategoryClickListener =
-                CategoryRowType.ClickCategoryListener { data ->
-                    clickOnCategoryItem?.onClickItem(data)
-                }
+            combinationProductsAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
+                clickOnCategoryItem?.onClickItem(data)
+            }
             combinationProductsAdapter.setCompleteListener = BannerRowType.CompleteListener {
                 shimmer.stopShimmer()
                 shimmer.setShimmer(null)
@@ -108,7 +96,6 @@ object ViewHolderFactory {
             liveItemAdapter.setOnLiveClickListener = LiveRowType.LiveListener { liveUrl, view ->
                 serLiveClickListener?.onClick(liveUrl, view)
             }
-
         }
     }
 
@@ -196,47 +183,16 @@ object ViewHolderFactory {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
-
-        var setClickListenerProduct: ProductRowType.ProductClickListener? = null
-
-        var setClickHeartProduct: ProductRowType.ClickListener? = null
-
-        var setClickBasketProduct: ProductRowType.ClickListener? = null
+        internal val productsRecyclerView = itemView.productsByOfferItemRecyclerView
 
         private val animation: Animation =
             AnimationUtils.loadAnimation(itemView.context, R.anim.appearances_out)
 
-        val controller = LayoutAnimationController(animation)
+        private val controller = LayoutAnimationController(animation)
 
         fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductAdapter) {
-            productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
             productItemAdapter.setData(listProducts)
-            productsRecyclerView.adapter = productItemAdapter
-            productsRecyclerView.apply {
-                adapter = productItemAdapter
-                postponeEnterTransition(itemView.context as Activity)
-                viewTreeObserver
-                    .addOnPreDrawListener {
-                        startPostponedEnterTransition(itemView.context as Activity)
-                        productsRecyclerView.layoutAnimation.start()
-                        true
-                    }
-            }
-
-
             productsRecyclerView.layoutAnimation = controller
-            productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-                setClickListenerProduct?.clickProduct(product, imageView)
-            }
-
-            productItemAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
-                setClickHeartProduct?.onClick(productsItem)
-            }
-
-            productItemAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
-                setClickBasketProduct?.onClick(productsItem)
-            }
         }
     }
 
@@ -256,7 +212,7 @@ object ViewHolderFactory {
             R.anim.appearances_out
         )
 
-        val controller = LayoutAnimationController(animation)
+        private val controller = LayoutAnimationController(animation)
 
         fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductHorizontalAdapter) {
             productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)

@@ -1,8 +1,8 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.detail
 
 import androidx.lifecycle.MutableLiveData
+import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
-import com.app.marketPlace.domain.models.CategoryPath
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 
 import com.app.marketPlace.presentation.rowType.Resource
@@ -20,29 +20,15 @@ import kotlin.coroutines.CoroutineContext
 
 class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
 
-    private val job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    init {
-        MarketPlaceApp.appComponent.inject(detailsProductViewModel = this)
-    }
-
-    @Inject
-    lateinit var homeRepository: AppRepository
-
-
     val searchProductsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
     val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
-
 
     fun getListEquivalentProducts(name: String?) {
         if (name == null && searchProductsResultList.value?.data != null) return
 
         launch(Dispatchers.IO) {
             val products = async {
-                homeRepository.loadSearchProducts(
+                repository.loadSearchProducts(
                     Params.ProductsParams(
                         pathId = name!!.replace(" ","&search="),
                         pageSize = "20",
@@ -63,12 +49,12 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
         }
     }
 
-    fun getListSimilarCategory(category: List<CategoryPath>?){
+    fun getListSimilarCategory(category: List<Categories>?){
         if (productsResultList.value?.data != null) return
 
         launch(Dispatchers.IO) {
             val products= async {
-                homeRepository
+                repository
                     .loadProducts(
                         Params.ProductsParams(
                             pathId = category?.get(category.size-1)?.id ?: "null",
@@ -87,10 +73,5 @@ class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
                 }
             }
         }
-    }
-
-    override fun onCleared() {
-        job.cancel()
-        super.onCleared()
     }
 }

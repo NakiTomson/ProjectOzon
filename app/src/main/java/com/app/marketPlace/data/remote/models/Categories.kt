@@ -17,7 +17,7 @@ data class Categories(
     @Expose
     var id: String? = null,
 
-    var image: String? = "https://www.dropbox.com/s/3z9sqdui2zztnws/one.png?dl=0",
+    var image: String? = null,
 
     @SerializedName("subCategories")
     @Expose

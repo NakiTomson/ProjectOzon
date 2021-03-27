@@ -68,6 +68,8 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
 
         fun bind(productsItem: ProductItem) {
 
+            generalIconProductImageView.transitionName = productsItem.generalIconProductSting
+
             when(productsItem.type){
                 ProductItem.Type.OnlyImage ->{
                     setOnlyImage(productsItem)
@@ -86,7 +88,6 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
                 setOnBasketDelete?.onClick(productsItem)
             }
             product.setOnClickListener {
-                generalIconProductImageView.transitionName = productsItem.generalIconProductSting
                 productsItem.images?.set(0,productsItem.generalIconProductSting!!)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }

@@ -13,10 +13,8 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
-import com.facebook.shimmer.ShimmerFrameLayout
 
 data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
-
 
     var setOnBannerClickListener: BannerListener? = null
 
@@ -33,17 +31,28 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val bannerViewHolder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
-        bannerViewHolder.bind(bannerAdapter)
+        val holder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
+        holder.bind(bannerAdapter)
 
-        setupIndicator(bannerViewHolder.bannerIndicatorsContainer!!,bannerAdapter.itemCount,viewHolder.itemView.context)
-        setIndicatorsContainer(0, bannerViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
+        setupIndicator(holder.bannerIndicatorsContainer,bannerAdapter.itemCount,viewHolder.itemView.context)
+        setIndicatorsContainer(0, holder.bannerIndicatorsContainer,viewHolder.itemView.context)
 
-        bannerViewHolder.bannekerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        holder.viewPager.adapter = bannerAdapter
+
+        bannerAdapter.setBannerClickListener = BannerListener { imageUrl, view ->
+            setOnBannerClickListener?.onClickBanner(imageUrl, view)
+        }
+
+        bannerAdapter.setCompleteListener = CompleteListener {
+            holder.shimmer.stopShimmer()
+            holder.shimmer.setShimmer(null)
+        }
+
+        holder.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setIndicatorsContainer(position, bannerViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
-                viewHolder.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
+                setIndicatorsContainer(position, holder.bannerIndicatorsContainer, viewHolder.itemView.context)
+                bannerAdapter.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
                     setOnBannerClickListener?.onClickBanner(
                         bannerAdapter.onBoardingItems[position].onBoardingImageUrl!!,
                         imageOnBoarding
@@ -52,7 +61,6 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
             }
         })
     }
-
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
         if (indicatorsContainer.children.count() >0) return

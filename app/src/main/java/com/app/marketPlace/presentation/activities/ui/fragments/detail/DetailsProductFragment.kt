@@ -25,16 +25,17 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.domain.mappers.MapperToDb
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
 import com.app.marketPlace.presentation.adapters.BorderAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
-import com.app.marketPlace.presentation.adapters.SimpleAdapter
+import com.app.marketPlace.presentation.adapters.SimpleCategoriesAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.BannerRowType
+import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -84,7 +85,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         viewModel.getListEquivalentProducts(searchWord)
         viewModel.getListSimilarCategory(detailProduct.categoryPath)
 
-        initView(Mapper.reMapProduct(detailProduct))
+        initView(MapperToDb.reMapProduct(detailProduct))
 
         val bundle = bundleOf(
             "longDescription" to detailProduct.longDescription,
@@ -143,7 +144,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun initView(detailProduct: ProductItem){
-        val navController =findNavController()
+        val navController = findNavController()
         val mAuth = FirebaseAuth.getInstance()
 
         val basket = activity?.findViewById<MaterialButton>(R.id.in_basket_button)
@@ -296,14 +297,18 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setupSimpleAdapter(detailProduct: ProductItem){
-        val simpleAdapter = SimpleAdapter()
-        simpleAdapter.setOnClickCategoryListener = SimpleAdapter.OnClickCategoryListener { path ->
+        val simpleAdapter = SimpleCategoriesAdapter()
+        simpleAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener2 { category,view ->
             val bundle = Bundle()
-            bundle.putString("category", path)
+            bundle.putString("category", category.id)
             navController.navigate(R.id.productsListFragment, bundle)
         }
 
-        simpleAdapter.setData(detailProduct.categoryPath?.toMutableList())
+        detailProduct.categoryPath?.let {categories->
+            categories.forEach { it.image = resources.getString(R.string.linkMockImagePhone) }
+            simpleAdapter.setData(categories)
+
+        }
         similarCategory.layoutManager = LinearLayoutManager(context)
         similarCategory.adapter = simpleAdapter
     }

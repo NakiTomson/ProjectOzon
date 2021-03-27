@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.presentation.rowType.BannerRowType
 
 
@@ -16,11 +17,11 @@ class CombinationAdapter : RecyclerView.Adapter<CombinationAdapter.OnBoardingIte
     lateinit var setCompleteListener: BannerRowType.CompleteListener
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
-    private val onBoardingItems: MutableList<MutableList<Banner>> = mutableListOf(mutableListOf())
+    private val onBoardingItems: MutableList<List<Categories>> = mutableListOf(mutableListOf())
 
-    fun setData(items: MutableList<MutableList<Banner>>) {
+    fun setData(vararg items: List<Categories>) {
         onBoardingItems.clear()
-        onBoardingItems.addAll(items)
+        onBoardingItems.addAll(items.toMutableList())
         notifyDataSetChanged()
     }
 
@@ -44,9 +45,9 @@ class CombinationAdapter : RecyclerView.Adapter<CombinationAdapter.OnBoardingIte
 
         private val onCategoryProductsRecyclerView = view.findViewById<RecyclerView>(R.id.onCategoryProductsRecyclerView)
 
-        fun bind(onBoardingItem: List<Banner>) {
+        fun bind(onBoardingItem: List<Categories>) {
             val categoryItemAdapter = CategoryAdapter()
-            categoryItemAdapter.setData(onBoardingItem.toMutableList())
+            categoryItemAdapter.setData(onBoardingItem)
             onCategoryProductsRecyclerView.adapter = categoryItemAdapter
             onCategoryProductsRecyclerView.layoutManager = GridLayoutManager(itemView.context,5)
 

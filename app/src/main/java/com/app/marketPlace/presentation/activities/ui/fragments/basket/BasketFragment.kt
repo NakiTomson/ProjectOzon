@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.data.utils.ConstantsApp.PLAYSTATION
-import com.app.marketPlace.domain.mappers.Mapper
+import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.adapters.BasketAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
@@ -20,8 +20,8 @@ import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_basket.*
+import kotlinx.android.synthetic.main.fragment_basket.startShopping
 import java.text.DecimalFormat
-import javax.inject.Inject
 
 
 class BasketFragment : Fragment(R.layout.fragment_basket) {
@@ -31,6 +31,8 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
     lateinit var navController: NavController
 
     private val mainViewModel: MainViewModel by activityViewModels()
+
+    val mapperFrom = MapperFromDb()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,13 +56,24 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     private fun setupBasketAdapter(basketAdapter: BasketAdapter) {
         basketAdapter.setHasStableIds(true)
+
         basketAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
             val action = BasketFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             findNavController().navigate(action, extras)
         }
         basketsRecyclerView.layoutManager = LinearLayoutManager(context)
-        basketsRecyclerView.adapter = basketAdapter
+
+        basketsRecyclerView.apply {
+            adapter = basketAdapter
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+        }
+
         basketsRecyclerView.setHasFixedSize(true)
 
         basketAdapter.setClickHeartProduct = ProductRowType.ClickListener { product ->
@@ -74,8 +87,17 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
     }
 
     private fun setupListRecommendAdapter(recommendAdapter: ProductAdapter, basketAdapter: BasketAdapter) {
-        listRecommendProduct.adapter = recommendAdapter
         listRecommendProduct.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+
+        listRecommendProduct.apply {
+            adapter = recommendAdapter
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+        }
 
         recommendAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
             val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
@@ -107,7 +129,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         var priceWithDiscount = 0f
 
         mainViewModel.baskets.observe(viewLifecycleOwner, {
-            val baskets = Mapper.MapperToUi.mapListBasketDb(it)
+            val baskets = mapperFrom.mapListBasketDb(it)
             var priceWithDiscountLocal = 0f
             var priceOldLocal = 0f
 

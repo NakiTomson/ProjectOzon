@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.interfaces
 
 import android.widget.ImageView
 import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.presentation.rowType.BannerRowType
 
 interface ProductRowType :RowType {
 
@@ -10,6 +11,7 @@ interface ProductRowType :RowType {
     var setOnHeartProductClickListener: ClickListener?
 
     var setOnBasketProductClickListener: ClickListener?
+
 
     fun interface ProductClickListener{
         fun clickProduct(product: ProductItem, view: ImageView)

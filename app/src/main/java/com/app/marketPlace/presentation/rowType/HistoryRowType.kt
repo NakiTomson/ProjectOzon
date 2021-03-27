@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.rowType
 
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,6 +13,7 @@ import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
@@ -44,12 +46,11 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
             historyViewHolder.historyButton.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_back)
             it.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_next)
             Toast.makeText(viewHolder.itemView.context,"Финансы", Toast.LENGTH_SHORT).show()
+
         }
 
-        historyViewHolder.setHistoryClickListener = object :HistoryListener{
-            override fun onClick(listOf: List<String>, position: Int, imageView: ImageView) {
-                setOnStoriesClickListener.onClick(listOf, position, imageView)
-            }
+        historyViewHolder.setHistoryClickListener = HistoryListener { listOf, position, imageView ->
+            setOnStoriesClickListener.onClick(listOf, position, imageView)
         }
         setUpImages(historyModel?.arrayImages!!,container,historyViewHolder.shimmer)
     }
@@ -57,16 +58,17 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
 
     private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout,shimmer: ShimmerFrameLayout){
         if (container.children.count() >0) return
-        val images = arrayOfNulls<ImageView>(listImagesUrl.size)
+        val images = arrayOfNulls<RoundedImageView>(listImagesUrl.size)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                500
+                250,
+                375
             )
-        layoutParams.setMargins(8,8,8,8)
+        layoutParams.setMargins(8,8,16,8)
         for ( i in images.indices){
-            images[i] = ImageView(container.context)
-            images[i]?.let {image:ImageView->
+            images[i] = RoundedImageView(container.context)
+            images[i]?.transitionName = listImagesUrl[i]+i
+            images[i]?.let {image:RoundedImageView->
                 Picasso.with(container.context)
                     .load(listImagesUrl[i])
                     .placeholder(R.drawable.one_history)
@@ -84,10 +86,12 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
 
                 image.layoutParams = layoutParams
                 image.adjustViewBounds = true
+                image.scaleType = ImageView.ScaleType.CENTER_CROP
+                image.cornerRadius = 30f
+                image.borderColor = container.context.resources.getColor(R.color.custom_color_primary_light)
+                image.borderWidth = 7f
                 container.addView(image)
-
                 image.setOnClickListener {
-                    image.transitionName = listImagesUrl[i]
                     setOnStoriesClickListener.onClick(listImagesUrl,i,image)
                 }
             }

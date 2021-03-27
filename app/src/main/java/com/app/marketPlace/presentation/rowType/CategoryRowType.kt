@@ -17,7 +17,6 @@ import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
 data class CategoryRowType(val combinationProductsAdapter: CombinationAdapter):RowType {
 
-
     var setOnCategoryItemClickListener:ClickCategoryListener? = null
 
     fun interface ClickCategoryListener{

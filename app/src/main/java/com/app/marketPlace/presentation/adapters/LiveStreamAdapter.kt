@@ -8,7 +8,6 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.LiveRowType
 import com.app.marketPlace.domain.models.ListResultLiveItems
 import com.app.marketPlace.domain.models.LiveStreamItem
-import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_live.view.*
@@ -42,7 +41,7 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
     }
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
-        private val imageOnBoarding = view.imageOnBoarding
+        private val imageLive = view.imageLiveStreams
         private val iconOfCompany = view.iconOfCompany
         private val statusLive = view.statusLive
         private val countUserLive = view.countUserLive
@@ -51,9 +50,15 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
         private val shimmer = itemView.shimmerLayout
         fun bind(liveItem: ListResultLiveItems){
 
+            imageLive.transitionName = liveItem.onIconCompanyUrl
+
             Picasso.with(itemView.context)
                 .load(liveItem.onIconCompanyUrl)
-                .into(iconOfCompany,object:Callback{
+                .into(iconOfCompany)
+
+            Picasso.with(itemView.context)
+                .load(liveItem.onBoardingImageUrl)
+                .into(imageLive,object:Callback{
                     override fun onSuccess() {
                         shimmer.stopShimmer()
                         shimmer.setShimmer(null)
@@ -63,16 +68,14 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
                         shimmer.setShimmer(null)
                     }
                 })
-
             statusLive.text = liveItem.statusLiveStream
             countUserLive?.text = liveItem.countUser
 
             nameOfCompanyTitle?.text = liveItem.nameOfCompany
             textDescription?.text = liveItem.description
 
-            imageOnBoarding.setOnClickListener {
-                imageOnBoarding.transitionName = liveItem.onIconCompanyUrl
-                liveItem.onIconCompanyUrl?.let { urlImage -> setOnLiveClickListener?.onClick(urlImage,imageOnBoarding) }
+            imageLive.setOnClickListener {
+                liveItem.onIconCompanyUrl?.let { urlImage -> setOnLiveClickListener?.onClick(urlImage,imageLive) }
             }
         }
     }

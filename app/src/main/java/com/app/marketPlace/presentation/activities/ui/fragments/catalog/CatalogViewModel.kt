@@ -11,37 +11,21 @@ import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
+import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class CatalogViewModel: ViewModel(), CoroutineScope {
-
-    private val job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-
+class CatalogViewModel: BaseViewModel(), CoroutineScope {
 
     val categoryProductLiveData: MutableLiveData<Resource<List<Categories>>> = MutableLiveData()
-
-
-    init {
-        MarketPlaceApp.appComponent.inject(catalogViewModel = this)
-    }
-
-    @Inject
-    lateinit var repository: AppRepository
-
-//    https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey=zXSRzd1MQNKNebKntBATTcQj&format=json
 
     fun getCatalogProducts() {
         if (categoryProductLiveData.value?.data != null) return
         launch(Dispatchers.IO) {
             val categories =  async {
-                repository.loadCategories2(
+                repository.loadCategories(
                     Params.CategoriesProductParams(pageSize = "40", apiKey = APIKEY, page = "1",pathId = BEST_PATH))
             }
             withContext(Dispatchers.Main){

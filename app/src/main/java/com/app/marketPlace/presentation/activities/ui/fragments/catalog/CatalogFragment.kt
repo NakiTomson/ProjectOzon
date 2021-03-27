@@ -2,9 +2,9 @@ package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.SharedElementCallback
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.*
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Categories
-import com.app.marketPlace.presentation.adapters.CategoryAdapter2
+import com.app.marketPlace.presentation.adapters.SimpleCategoriesAdapter
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.android.synthetic.main.fragment_catalog.*
@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.item_simple.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 
 class CatalogFragment : Fragment(R.layout.fragment_catalog) {
@@ -34,7 +33,6 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     private val viewModel: CatalogViewModel by viewModels()
 
     lateinit var navController: NavController
-
 
     private val args: CatalogFragmentArgs by navArgs()
 
@@ -53,7 +51,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
 
         navController = findNavController()
 
-        val categoryAdapter = CategoryAdapter2()
+        val categoryAdapter = SimpleCategoriesAdapter()
         setupCategoriesAdapter(categoryAdapter, subCategories)
         setupCategories(categoryAdapter)
 
@@ -64,49 +62,27 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
             view.performClick()
             view.onTouchEvent(event)
         }
-
     }
 
-    private fun setupCategoriesAdapter(
-        categoryAdapter: CategoryAdapter2,
-        subCategories: Array<Categories>?
-    ) {
+    private fun setupCategoriesAdapter(categoryAdapter: SimpleCategoriesAdapter, subCategories: Array<Categories>?) {
 
         val layoutManager = GridLayoutManager(context, 1)
         categoryProductsAdapter.layoutManager =  layoutManager
         categoryProductsAdapter.adapter = categoryAdapter
-        categoryProductsAdapter.setHasFixedSize(false)
+        categoryProductsAdapter.setHasFixedSize(true)
 
         subCategories?.let { sub->
-
-            val listCategories = mutableListOf<Categories>()
-            listCategories.add(Categories(name = "Back",back = R.drawable.ic_left ))
-            listCategories.addAll(sub.asList())
-            viewModel.categoryProductLiveData.value = Resource(
-                Resource.Status.COMPLETED,
-                listCategories
-            )
-            lifecycleScope.launch {
-                delay(300)
-                shimmerLayoutCatalog.stopShimmer()
-                shimmerLayoutCatalog.setShimmer(null)
-            }
-
+            setSubCategories(sub)
         } ?: run {
-            val dividerItemDecoration = DividerItemDecoration(
-                categoryProductsAdapter.context,
-                layoutManager.orientation
-            )
+            val dividerItemDecoration = DividerItemDecoration(categoryProductsAdapter.context, layoutManager.orientation)
             categoryProductsAdapter.addItemDecoration(dividerItemDecoration);
             viewModel.getCatalogProducts()
-            shimmerLayoutCatalog.stopShimmer()
-            shimmerLayoutCatalog.setShimmer(null)
+            stopShimmer()
         }
 
         (view?.parent as? ViewGroup)?.doOnPreDraw {
             startPostponedEnterTransition()
         }
-
 
         categoryAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener2 { category, view ->
 
@@ -114,13 +90,14 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
                 navController.popBackStack()
                 return@ClickCategoryListener2
             }
+
             when(category.subCategories.isNullOrEmpty()){
                 true -> {
                     val bundle = Bundle()
                     bundle.putString("category", category.id)
                     navController.navigate(R.id.productsListFragment, bundle)
                 }
-                false -> {
+                else -> {
                     val extras = FragmentNavigatorExtras(view to category.name!!)
                     val array = ArrayList(category.subCategories).toTypedArray()
                     array[0] = Categories(
@@ -128,18 +105,35 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
                         id = category.id,
                         backgroundColorSelected = R.color.colorShimmer
                     )
-                    val action = CatalogFragmentDirections.actionGlobalCatalogFragment(
-                        array
-                    )
+                    val action = CatalogFragmentDirections.actionGlobalCatalogFragment(array)
                     navController.navigate(action, extras)
                 }
             }
         }
     }
 
-    private fun setupCategories(categoryAdapter: CategoryAdapter2) {
+    private fun setupCategories(categoryAdapter: SimpleCategoriesAdapter) {
         viewModel.categoryProductLiveData.observe(viewLifecycleOwner, { resource ->
             categoryAdapter.setData(resource.data!!)
         })
+    }
+
+    private fun setSubCategories(sub: Array<Categories>) {
+        val listCategories = mutableListOf<Categories>()
+        listCategories.add(Categories(name = getString(R.string.back),back = R.drawable.ic_left ))
+        listCategories.addAll(sub.asList())
+        viewModel.categoryProductLiveData.value = Resource(
+            Resource.Status.COMPLETED,
+            listCategories
+        )
+        lifecycleScope.launch {
+            delay(300)
+            stopShimmer()
+        }
+    }
+    private fun stopShimmer(){
+        shimmerLayoutCatalog.stopShimmer()
+        shimmerLayoutCatalog.setShimmer(null)
+        shimmerLayoutCatalog.setBackgroundResource(0)
     }
 }

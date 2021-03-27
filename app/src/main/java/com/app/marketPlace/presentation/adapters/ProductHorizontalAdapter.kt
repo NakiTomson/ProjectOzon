@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.mappers.Mapper.reMapProduct
+import com.app.marketPlace.domain.mappers.MapperToDb.Companion.reMapProduct
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.squareup.picasso.Callback

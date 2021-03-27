@@ -1,6 +1,11 @@
 package com.app.marketPlace.presentation.rowType
 
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.app.marketPlace.R
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
@@ -25,20 +30,23 @@ data class ProductsRowType(
         return RowType.PRODUCTS_ROW_TYPE
     }
 
+
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val productionViewHolder = viewHolder as ViewHolderFactory.ProductViewHolder
 
-        productionViewHolder.bind(listProducts, spain, productItemAdapter)
+        val holder = viewHolder as ViewHolderFactory.ProductViewHolder
+        holder.bind(listProducts, spain, productItemAdapter)
+        holder.productsRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, spain)
+        holder.productsRecyclerView.adapter =productItemAdapter
 
-        productionViewHolder.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
+        productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             setOnProductClickListener?.clickProduct(product, imageView)
         }
 
-        productionViewHolder.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
+        productItemAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             setOnHeartProductClickListener?.onClick(productsItem)
         }
 
-        productionViewHolder.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
+        productItemAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             setOnBasketProductClickListener?.onClick(productsItem)
         }
     }

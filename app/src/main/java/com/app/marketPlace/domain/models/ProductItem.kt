@@ -1,5 +1,6 @@
 package com.app.marketPlace.domain.models
 
+import com.app.marketPlace.data.remote.models.Categories
 import java.io.Serializable
 
 data class ProductItem (
@@ -39,7 +40,7 @@ data class ProductItem (
 
     val color:String? = null,
 
-    val categoryPath:List<CategoryPath>? = null,
+    val categoryPath:List<Categories>? = null,
 
     ):Serializable{
 
@@ -51,8 +52,3 @@ data class ProductItem (
         object ProductHorizontal : Type(), Serializable
     }
 }
-
-data class CategoryPath(
-    val id:String? = null,
-    val name:String? = null,
-):Serializable

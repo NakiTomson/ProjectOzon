@@ -1,20 +1,20 @@
 package com.app.marketPlace.domain.repositories
 
 
+import androidx.room.Index
 import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.data.remote.services.*
 import com.app.marketPlace.data.utils.ConstantsApp
-import com.app.marketPlace.domain.mappers.Mapper
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.data.remote.models.Categories
-import com.app.marketPlace.domain.mappers.MapperCategory
-import com.app.marketPlace.domain.mappers.MapperToUi
+import com.app.marketPlace.domain.mappers.*
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
+import javax.inject.Inject
 
-class AppRepository(private val marketPlaceApi: MarketPlaceService) {
+class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceService) {
 
     suspend fun getBannerStart(params: Params): Results.ResultBanner {
         return try {
@@ -22,9 +22,9 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
                 Resource(
                     status = Resource.Status.COMPLETED,
                     data = mutableListOf(
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/l5t0828ivc6eb79/oneAdsBanner.jpg?dl=1"),
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/scqgvaj8vk7omti/twoAdsBanner.jpg?dl=1"),
-                        Banner(onBoardingImageUrl = "https://www.dropbox.com/s/n0bb1qr1n4caci4/threeAdsBanner.jpg?dl=1")
+                        Banner(onBoardingImageUrl = "https://ic.wampi.ru/2021/03/27/oneAdsBanner.jpg"),
+                        Banner(onBoardingImageUrl = "https://ic.wampi.ru/2021/03/27/twoAdsBanner.jpg"),
+                        Banner(onBoardingImageUrl = "https://ic.wampi.ru/2021/03/27/threeAdsBanner.jpg")
                     ),
                     type = params.resourceType
                 )
@@ -35,31 +35,16 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
     }
 
 
-
     suspend fun loadCategories(params: Params): Results.ResultCategoryProduct {
         return try {
             val listGeneralCategory = marketPlaceApi
                 .getCategoryProductsAsync(path = params.pathId,pageSize = params.pageSize, page = params.page, apiKey = params.apiKey)
                 .await()
-
             Results.ResultCategoryProduct(
-                Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory, params)
+                params.mapper.map(listGeneralCategory, params) as Resource<List<Categories>>
             )
         } catch (e: Exception) {
             Results.ResultCategoryProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
-        }
-    }
-    suspend fun loadCategories2(params: Params): Results.ResultCategoryProduct2 {
-        return try {
-            val listGeneralCategory = marketPlaceApi
-                .getCategoryProductsAsync(path = params.pathId,pageSize = params.pageSize, page = params.page, apiKey = params.apiKey)
-                .await()
-//            Mapper.MapperToUi.mapCategoriesFromServer(listGeneralCategory, params)
-            Results.ResultCategoryProduct2(
-                params.mapper.map(listGeneralCategory, params)
-            )
-        } catch (e: Exception) {
-            Results.ResultCategoryProduct2(Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
     }
 
@@ -70,7 +55,7 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
                 .getProductsBySearchAsync(params.pathId, params.pageSize, params.page, params.apiKey).await()
 
             Results.ResultProduct(
-                Mapper.MapperToUi.mapProductsFromServer(listProducts, params)
+                params.mapper.map(listProducts, params) as Resource<CombineProductsItem>
             )
 
         } catch (e: Exception) {
@@ -87,10 +72,7 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
                 .await()
 
             Results.ResultProduct(
-                Mapper.MapperToUi.mapProductsFromServer(
-                    listProducts,
-                    params = params
-                )
+                params.mapper.map(listProducts, params) as Resource<CombineProductsItem>
             )
 
         } catch (e: Exception) {
@@ -133,7 +115,7 @@ class AppRepository(private val marketPlaceApi: MarketPlaceService) {
             Results.ResultBanner(
                 Resource(
                     status = Resource.Status.COMPLETED,
-                    data = mutableListOf(Banner(onBoardingImageUrl = "https://www.dropbox.com/s/zkgiislgopkjjrh/exzample_banner.jpg?dl=1")),
+                    data = mutableListOf(Banner(onBoardingImageUrl = "https://ic.wampi.ru/2021/03/27/exzample_banner.jpg")),
                     type = params.resourceType
                 )
             )
@@ -155,7 +137,7 @@ sealed class Params(
     open var typeProduct: ProductItem.Type = ProductItem.Type.OnlyImage,
     open var resourceType: Resource.Type = Resource.Type.UNDEFINED,
     open var spain: Int = 3,
-    open var mapper: MapperToUi = MapperCategory()
+    open var mapper: IMapper = MapperDef()
 ){
 
     class CategoriesProductParams(
@@ -163,7 +145,7 @@ sealed class Params(
         override var apiKey: String = ConstantsApp.APIKEY,
         override var page: String = "1",
         override var resourceType: Resource.Type = Resource.Type.CATEGORIES,
-        override var mapper: MapperToUi = MapperCategory(),
+        override var mapper: IMapper = MapperCategory(),
         override var pathId: String = ""
     ) : Params()
 
@@ -178,6 +160,7 @@ sealed class Params(
         override var requestName: String = "",
         override var typeProduct: ProductItem.Type,
         override var resourceType: Resource.Type = Resource.Type.PRODUCT,
+        override var mapper: IMapper = MapperProducts(),
         override var spain: Int = 3
     ) : Params()
 
@@ -194,8 +177,7 @@ sealed class Params(
 
 
 sealed class Results(open val result:Resource<*>) {
-    data class ResultCategoryProduct(override val result: Resource<MutableList<MutableList<Banner>>>):Results(result)
-    data class ResultCategoryProduct2(override val result: Resource<List<Categories>>):Results(result)
+    data class ResultCategoryProduct(override val result: Resource<List<Categories>>):Results(result)
     data class ResultBanner(override val result : Resource<MutableList<Banner>>):Results(result)
     data class ResultHistory(override val result : Resource<Stories>):Results(result)
     data class ResultLive(override val result : Resource<LiveStreamItem>):Results(result)

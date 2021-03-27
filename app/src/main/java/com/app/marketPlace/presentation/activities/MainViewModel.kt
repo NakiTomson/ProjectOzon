@@ -125,24 +125,7 @@ class MainViewModel : ViewModel(), CoroutineScope {
         job.cancel()
         super.onCleared()
     }
-
-//    private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 }
-
-
-
-//class MainViewModelFactory(private val repository: DataBaseRepository) : ViewModelProvider.Factory {
-//
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-//            @Suppress("UNCHECKED_CAST")
-//            return MainViewModel(repository) as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}
-
-
 
 fun <T> gettingErrors(resource: Resource<T>): Boolean {
     return (resource.status == Resource.Status.COMPLETED && resource.data != null && resource.exception == null)
@@ -160,6 +143,7 @@ suspend fun checkingForErrors(data: Resource<*>): Resource<*> {
 fun <T> errorHandling(name: String, resource: Resource<T>) {
     if (resource.status == Resource.Status.LOADING) return
     Log.v(name, "${resource.exception?.message}")
+    Log.v(name, "${resource.exception?.stackTrace}")
     Log.v(name, "${resource.exception}")
     Log.v(name, "${resource.status}")
 }

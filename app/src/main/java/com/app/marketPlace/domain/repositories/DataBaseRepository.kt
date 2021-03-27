@@ -9,16 +9,19 @@ import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
-import com.app.marketPlace.domain.mappers.Mapper
+import com.app.marketPlace.domain.mappers.MapperFromDb
+import com.app.marketPlace.domain.mappers.MapperToDb
+
 import com.app.marketPlace.domain.models.ProductItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-public class DataBaseRepository constructor(
+public class DataBaseRepository @Inject constructor(
     private val favoriteProductDao: InFavoriteProductDao,
     private val basketDao: InBasketDao,
     private val userDao: UserDao,
-    private val hintDao: HintProductDao
+    private val hintDao: HintProductDao,
+    private val mapperTo: MapperToDb
 ) {
 
     val productsInFavoriteIds: Flow<List<Int>?> = favoriteProductDao.getAllIds()
@@ -34,37 +37,37 @@ public class DataBaseRepository constructor(
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun insertHint(request: String){
-        hintDao.insert(Mapper.MapperToDb.mapHintUi(request))
+        hintDao.insert(mapperTo.mapHintUi(request))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun deleteHint(request: String){
-        hintDao.delete(Mapper.MapperToDb.mapHintUi(request))
+        hintDao.delete(mapperTo.mapHintUi(request))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun insertProductInFavorite(product: ProductItem) {
-        favoriteProductDao.insert(Mapper.MapperToDb.mapFavoriteUi(product))
+        favoriteProductDao.insert(mapperTo.mapFavoriteUi(product))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun deleteProductFromFavorite(product: ProductItem) {
-        favoriteProductDao.delete(Mapper.MapperToDb.mapFavoriteUi(product))
+        favoriteProductDao.delete(mapperTo.mapFavoriteUi(product))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteBasket(basket: ProductItem){
-        basketDao.delete(Mapper.MapperToDb.mapBasketUi(basket))
+        basketDao.delete(mapperTo.mapBasketUi(basket))
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun insertBasket(basket: ProductItem) {
-        basketDao.insert(Mapper.MapperToDb.mapBasketUi(basket))
+        basketDao.insert(mapperTo.mapBasketUi(basket))
     }
 
 
@@ -80,6 +83,4 @@ public class DataBaseRepository constructor(
     suspend fun getUser(login: String): UserDb {
         return userDao.getUser(login)
     }
-
-
 }

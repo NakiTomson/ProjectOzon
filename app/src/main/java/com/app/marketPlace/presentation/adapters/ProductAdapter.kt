@@ -1,7 +1,6 @@
 package com.app.marketPlace.presentation.adapters
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.mappers.Mapper.reMapProduct
+import com.app.marketPlace.domain.mappers.MapperToDb.Companion.reMapProduct
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.squareup.picasso.Callback
@@ -29,6 +28,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.CategoryOfferItemProd
     var setClickHeartProduct: ProductRowType.ClickListener? = null
 
     var setClickBasketProduct: ProductRowType.ClickListener? = null
+
 
 
     fun setData(list: List<ProductItem>) {
@@ -69,14 +69,12 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.CategoryOfferItemProd
 
         fun bind(productsItem: ProductItem) {
             generalIconProductImageView.transitionName = productsItem.generalIconProductSting
-
             if (productsItem.productInBasket){
                 buttonAddToBasket.text = "В корзине"
                 buttonAddToBasket.setBackgroundResource(R.drawable.button_added)
             }
 
             buttonAddToBasket.setOnClickListener {
-                Log.v("BINFS","REEE 2")
                 if (!productsItem.productInBasket){
                     productsItem.productInBasket = true
                     Toast.makeText(itemView.context,"Добавлено в корзину",Toast.LENGTH_SHORT).show()
@@ -121,7 +119,6 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.CategoryOfferItemProd
             }
 
             product.setOnClickListener {
-                generalIconProductImageView.transitionName = productsItem.generalIconProductSting
                 productsItem.images?.set(0,productsItem.generalIconProductSting!!)
                 setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
             }

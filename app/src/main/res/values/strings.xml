@@ -17,9 +17,11 @@
     <string name="priceWithDiscount">%1$s $</string>
 
     <string name="inBasket">В корзину          %1$s</string>
+    <string name="back">Back</string>
     <string name="totalCost">Общая стоймость</string>
     <string name="allPrice">9 460 $</string>
     <string name="goToTheDesign">Перейти к оформлению</string>
+    <string name="close">close</string>
     <string name="basketIsEmpty">Корзина пуста</string>
     <string name="useTheSearch">Воспользуйтесь поиском, что бы найти все что нужно</string>
     <string name="startShopping">Начать покупки</string>
@@ -48,6 +50,8 @@
     <string name="name">Имя Получателя *</string>
     <string name="next">Даллее</string>
     <string name="marketPlaceLive">MarketPlace Live - успей купить со скидкой!</string>
+
+    <string name="linkMockImagePhone">https://ic.wampi.ru/2021/03/27/ic_phone.png</string>
 
 
 </resources>

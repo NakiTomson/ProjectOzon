@@ -15,10 +15,10 @@
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/oneHistoryItem"
             android:adjustViewBounds="true"
-            android:layout_gravity="start"
             android:src="@drawable/one_history"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:scaleType="centerCrop"
             app:riv_corner_radius="8sp"
             app:riv_border_color="@color/custom_color_primary_light"
             app:riv_border_width="3dip"

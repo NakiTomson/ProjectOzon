@@ -10,24 +10,14 @@ import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
+import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class BasketViewModel:ViewModel(), CoroutineScope {
+class BasketViewModel:BaseViewModel(), CoroutineScope {
 
-    init {
-        MarketPlaceApp.appComponent.inject(basketViewModel = this)
-    }
-
-    private val job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
-    @Inject
-    lateinit var repository: AppRepository
 
     val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
@@ -53,11 +43,5 @@ class BasketViewModel:ViewModel(), CoroutineScope {
                 }
             }
         }
-    }
-
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
     }
 }

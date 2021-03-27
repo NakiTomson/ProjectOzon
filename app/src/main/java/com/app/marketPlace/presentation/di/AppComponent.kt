@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.di
 
 import com.app.marketPlace.presentation.activities.MainActivity
 import com.app.marketPlace.presentation.activities.MainViewModel
+import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.activities.ui.fragments.authorization.SignUpFragment
 import com.app.marketPlace.presentation.activities.ui.fragments.basket.BasketFragment
 import com.app.marketPlace.presentation.activities.ui.fragments.basket.BasketViewModel
@@ -21,15 +22,9 @@ import dagger.Component
 import javax.inject.Singleton
 
 
-@Component(modules = [AppModule::class, RepositoryModule::class, RestApiModule::class,DataBaseModule::class])
+@Component(modules = [AppModule::class, RestApiModule::class,DataBaseModule::class])
 @Singleton
 interface AppComponent {
-
-    fun inject(listProductsHome: HomeViewModel)
-    fun inject(catalogViewModel: CatalogViewModel)
-    fun inject(detailsProductViewModel: DetailsProductViewModel)
-    fun inject(basketViewModel: BasketViewModel)
-    fun inject(productsListViewModel: ProductsListViewModel)
+    fun inject(listProductsHome: BaseViewModel)
     fun inject(mainViewModel: MainViewModel)
-
 }

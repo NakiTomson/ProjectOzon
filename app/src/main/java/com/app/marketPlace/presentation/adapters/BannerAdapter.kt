@@ -37,7 +37,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnBoardingItemViewHolder {
-        return  OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_banner_container, parent, false))
+        return OnBoardingItemViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_banner_container, parent, false))
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
@@ -50,7 +50,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
 
-        private val imageOnBoarding = view.imageOnBoarding
+        private val imageOnBoarding = view.imageLiveStreams
         private val textTitle = view.textTitle
         private val textDescription = view.textDescription
 
@@ -79,7 +79,6 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
             }
 
             imageOnBoarding.setOnClickListener {
-                imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
                 setBannerClickListener?.onClickBanner(onBoardingItem.onBoardingImageUrl!!, imageOnBoarding)
             }
         }

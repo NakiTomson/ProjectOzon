@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_border_container.view.*
-import kotlinx.android.synthetic.main.row_type_banner.view.*
 import java.util.*
 
 
@@ -43,11 +43,11 @@ class BorderAdapter() : RecyclerView.Adapter<BorderAdapter.OnBoardingItemViewHol
     }
 
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val onBoarding = view.imageOnBoarding
+        private val onBoarding = view.imageLiveStreams
 
         fun bind(onBoardingItem: Banner) {
 
-            onBoarding.transitionName = onBoardingItem.transitionName
+            onBoarding.transitionName = onBoardingItem.onBoardingImageUrl
 
             Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
                 .centerInside()

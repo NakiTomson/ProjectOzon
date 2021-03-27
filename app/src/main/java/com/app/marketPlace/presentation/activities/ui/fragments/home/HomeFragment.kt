@@ -1,6 +1,7 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
 import android.os.Bundle
+import android.transition.*
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.domain.models.CombineProductsItem
@@ -30,7 +32,6 @@ import com.app.marketPlace.presentation.rowType.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import java.util.*
 
@@ -46,6 +47,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         navController = findNavController()
         val adapterMultiple = MultipleAdapter()
 
@@ -75,7 +77,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
         }.launchWhenStarted(lifecycleScope)
 
-
         mainViewModel.networkConnection.observe(viewLifecycleOwner, {
             viewModel.netConnectionState = it
         })
@@ -104,7 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     setBanners(multipleAdapter, resource as Resource<MutableList<Banner>>)
                 }
                 is Type.CATEGORIES -> {
-                    setCategories(multipleAdapter, resource as Resource<MutableList<MutableList<Banner>>>)
+                    setCategories(multipleAdapter, resource as Resource<List<Categories>>)
                 }
                 is Type.STORIES -> {
                     setStories(multipleAdapter, resource as Resource<Stories>)
@@ -144,9 +145,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setCategories(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<MutableList<Banner>>>) {
+    private fun setCategories(multipleAdapter: MultipleAdapter, resource: Resource<List<Categories>>) {
         val combinationAdapter = CombinationAdapter()
-        combinationAdapter.setData(resource.data!!)
+
+        combinationAdapter.setData(resource.data!!.take(10), resource.data.takeLast(10))
+
         val categoryRowType = CategoryRowType(combinationAdapter)
         multipleAdapter.setData(categoryRowType)
         categoryRowType.setOnCategoryItemClickListener = CategoryRowType.ClickCategoryListener { data ->
@@ -161,28 +164,27 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         multipleAdapter.setData(stories)
         stories.setOnStoriesClickListener = HistoryRowType.HistoryListener { listOf, position, imageView ->
             val extras = FragmentNavigatorExtras(
-                imageView to listOf[position]
+                imageView to (listOf[position]+position)
             )
             navigateToMock(listOf = listOf, position = position, extras = extras)
         }
     }
 
     private fun setLiveStreams(multipleAdapter: MultipleAdapter, resource: Resource<LiveStreamItem>) {
+        multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
         val liveStreamAdapter = LiveStreamAdapter()
         liveStreamAdapter.setData(resource.data!!)
-        liveStreamAdapter.setData(resource.data)
-        multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
         val rowTypeLive = LiveRowType(liveStreamAdapter)
         multipleAdapter.setData(rowTypeLive)
+
+        val videoDialog =  LiveVideoDialog()
         rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
-            val extras = FragmentNavigatorExtras(view to liveUrl)
-            navigateToMock(liveStream = liveUrl, extras = extras)
+            videoDialog.show(childFragmentManager, LiveVideoDialog.TAG)
         }
     }
 
 
     private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>, rowProduct: ProductRowType) {
-
         resource.data!!.topOffer?.let {
             multipleAdapter.setData(TopSloganRowType(it))
         }
@@ -200,12 +202,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val extras = FragmentNavigatorExtras(
                 view to product.generalIconProductSting!!
             )
+
             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                 product = product
-
             )
             navController.navigate(action, extras)
         }
+
         resource.data.bottomOffer?.let {
             multipleAdapter.setData(BottomSloganRowType(it))
         }

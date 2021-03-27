@@ -9,26 +9,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.app.marketPlace.R
-import com.google.android.youtube.player.YouTubeInitializationResult
-import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_mock.*
 import kotlinx.coroutines.*
 
 
-class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializedListener {
+class MockFragment : Fragment(R.layout.fragment_mock) {
 
-    var API_YOUTUBE_KEY = "AIzaSyCkso3lU92eEjOHnhn6alaowRkD6i3gGXU"
 
-    private var youtube: YouTubePlayerSupportFragment? = null
 
     private var urlStream = ""
 
     private val args: MockFragmentArgs by navArgs()
 
-    private var youtubePlayer: YouTubePlayer? = null
 
     var position = 0
 
@@ -36,7 +30,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        youtube = childFragmentManager.findFragmentById(R.id.youtube_fragment) as YouTubePlayerSupportFragment
         activity?.bottomNavigationView?.visibility = View.GONE
 
         val imageUrl =  args.imageUrl
@@ -69,8 +62,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
                 imageMock.visibility = View.GONE
                 frameMock.visibility = View.VISIBLE
                 urlStream = videoUrl
-                
-                youtube?.initialize(API_YOUTUBE_KEY, this)
             }
         }
 
@@ -92,7 +83,7 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
 
     private fun insertHistory(strings: Array<String>, position: Int) {
         imageMock.apply {
-            strings[position].also { transitionName = it }
+            strings[position].also { transitionName = it+position }
             Picasso.with(context)
                 .load(strings[this@MockFragment.position])
                 .noFade()
@@ -126,16 +117,6 @@ class MockFragment : Fragment(R.layout.fragment_mock), YouTubePlayer.OnInitializ
         }else{
             findNavController().popBackStack()
         }
-    }
-
-    override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, p1: YouTubePlayer?, p2: Boolean) {
-        youtubePlayer = p1
-        if (!p2) {
-            p1?.cueVideo(urlStream)
-        }
-    }
-
-    override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
     }
 
     override fun onDestroyView() {

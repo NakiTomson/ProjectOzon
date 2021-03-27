@@ -1,7 +1,7 @@
 package com.app.marketPlace.data.remote.services
 
 import com.app.marketPlace.data.remote.models.Stories
-import com.app.marketPlace.data.remote.models.Products
+import com.app.marketPlace.data.remote.models.ProductsList
 import com.app.marketPlace.data.remote.models.CategoriesProduct
 import com.app.marketPlace.domain.models.LiveStreamItem
 import kotlinx.coroutines.Deferred
@@ -21,7 +21,6 @@ interface MarketPlaceService {
         @Query("apiKey") apiKey: String,
     ): Deferred<CategoriesProduct?>
 
-//    https://api.bestbuy.com/v1/categories(id=abcat*)?apiKey=zXSRzd1MQNKNebKntBATTcQj&format=json
 
     @GET("/v1/products((categoryPath.id={pathId}))?format=json")
     fun getProductsByCategoryAsync(
@@ -29,7 +28,7 @@ interface MarketPlaceService {
         @Query("pageSize") pageSize: String,
         @Query("page") page: String,
         @Query("apiKey") apiKey: String
-    ): Deferred<Products>
+    ): Deferred<ProductsList>
 
 
     @GET("/v1/products((search={keyword}))?format=json")
@@ -38,7 +37,7 @@ interface MarketPlaceService {
         @Query("pageSize") pageSize: String,
         @Query("page") page: String,
         @Query("apiKey") apiKey: String
-    ): Deferred<Products>
+    ): Deferred<ProductsList>
 
 
     @GET("https://www.dropbox.com/s/0w71n1rc6v85s0r/historyData.json?dl=1")

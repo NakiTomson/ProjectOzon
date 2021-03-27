@@ -45,5 +45,4 @@ class DataBaseModule {
     fun provideBasketProductDao(db: MarketPlaceDataBase): InBasketDao {
         return db.productsBasketDao()
     }
-
 }

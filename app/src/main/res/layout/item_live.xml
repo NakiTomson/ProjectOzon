@@ -13,8 +13,8 @@
         android:padding="10dp"
         >
 
-        <ImageView
-            android:id="@+id/imageOnBoarding"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageLiveStreams"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:adjustViewBounds="true"
@@ -23,9 +23,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_corner_radius="10dp"
+            >
 
-        </ImageView>
+        </com.makeramen.roundedimageview.RoundedImageView>
 
         <TextView
             android:id="@+id/statusLive"
@@ -86,8 +88,8 @@
             android:layout_marginStart="15dp"
             android:text="Natures Miracle впервые в прямом эфире MarketPlace Live!"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageOnBoarding"
-            app:layout_constraintTop_toBottomOf="@+id/imageOnBoarding" />
+            app:layout_constraintStart_toStartOf="@+id/imageLiveStreams"
+            app:layout_constraintTop_toBottomOf="@+id/imageLiveStreams" />
 
 
         <View

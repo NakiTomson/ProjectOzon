@@ -11,28 +11,16 @@ import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
+import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class ProductsListViewModel :ViewModel(), CoroutineScope {
-
-
-    init {
-        MarketPlaceApp.appComponent.inject(this)
-    }
-    @Inject
-    lateinit var repository: AppRepository
-
-    private val job: Job = Job()
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+class ProductsListViewModel :BaseViewModel(), CoroutineScope {
 
     val searchProductsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
     val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
-
 
     fun loadProductsByWord(keyWordOne: String) {
         if (searchProductsResultList.value?.data == null) {

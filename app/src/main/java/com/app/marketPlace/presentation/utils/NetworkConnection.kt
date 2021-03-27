@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.lifecycle.LiveData
 import javax.inject.Inject
 
-class NetworkConnection(private val context: Context) : LiveData<Boolean>() {
+class NetworkConnection @Inject constructor(private val context: Context) : LiveData<Boolean>() {
 
     private var connectivityManager:ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
