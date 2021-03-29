@@ -10,7 +10,6 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
-
     init {
         MarketPlaceApp.appComponent.inject(this)
     }

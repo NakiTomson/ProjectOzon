@@ -14,8 +14,8 @@
         android:id="@+id/searchToolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:visibility="visible"
         android:background="@color/custom_color_background_night"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,28 +26,26 @@
     </androidx.appcompat.widget.Toolbar>
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/multipleHomeRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/white_Light"
+        android:nestedScrollingEnabled="true">
 
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:id="@+id/nestedScroll"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="?attr/actionBarSize"-->
-<!--        >-->
+    </androidx.recyclerview.widget.RecyclerView>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/multipleHomeRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
-            android:background="@color/white_Light">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-
-
-<!--    </androidx.core.widget.NestedScrollView>-->
-
-
+    <TextView
+        android:id="@+id/homeMockIsEmpty"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:text="Nothing found"
+        android:visibility="gone"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:padding="20sp"
+        android:layout_height="wrap_content">
+    </TextView>
 </FrameLayout>

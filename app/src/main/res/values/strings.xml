@@ -53,5 +53,10 @@
 
     <string name="linkMockImagePhone">https://ic.wampi.ru/2021/03/27/ic_phone.png</string>
 
+    <string name="regTitle">Вы не зарегестрировались</string>
+    <string name="regMessage">Чтобы купить товар необходимо зарегистрироваться</string>
+    <string name="regYes">Да</string>
+    <string name="regNo">Нет</string>
+
 
 </resources>

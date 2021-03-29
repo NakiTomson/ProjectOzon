@@ -4,8 +4,6 @@ package com.app.marketPlace.data.utils
 
 object ConstantsApp {
 
-
-
     const val APIKEY ="zXSRzd1MQNKNebKntBATTcQj"
 
     const val COFFEE_MAKER = "abcat0912005"
@@ -18,7 +16,10 @@ object ConstantsApp {
     const val MONITORS = "abcat0509000"
     const val COMPUTER_KEYBOARDS = "abcat0513004"
     const val PHONES = "abcat0800000"
-    const val BEST_PATH = "(id=abcat*)"
+    const val bestPath = "(id=abcat*)"
+
+    const val attrSearch = "search"
+    const val attrCategoryPathId = "categoryPath.id"
 
 
     fun getImage(index: Int): String {

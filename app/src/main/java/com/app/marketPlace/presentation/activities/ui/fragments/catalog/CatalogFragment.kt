@@ -2,7 +2,6 @@ package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
@@ -19,12 +18,18 @@ import androidx.transition.*
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.presentation.adapters.SimpleCategoriesAdapter
+import com.app.marketPlace.presentation.extensions.launchWhenCreated
+import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.android.synthetic.main.fragment_catalog.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_simple.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -72,7 +77,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
         categoryProductsAdapter.setHasFixedSize(true)
 
         subCategories?.let { sub->
-            setSubCategories(sub)
+            setSubCategories(sub,categoryAdapter)
         } ?: run {
             val dividerItemDecoration = DividerItemDecoration(categoryProductsAdapter.context, layoutManager.orientation)
             categoryProductsAdapter.addItemDecoration(dividerItemDecoration);
@@ -113,19 +118,22 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     }
 
     private fun setupCategories(categoryAdapter: SimpleCategoriesAdapter) {
-        viewModel.categoryProductLiveData.observe(viewLifecycleOwner, { resource ->
-            categoryAdapter.setData(resource.data!!)
-        })
+        viewModel.categoryProduct.onEach {resource->
+            if (resource.data == null)return@onEach
+            if (resource.status != Resource.Status.COMPLETED){
+                showError()
+                return@onEach
+            }
+            showSuccess()
+            categoryAdapter.setData(resource.data)
+        }.launchWhenCreated(lifecycleScope)
     }
 
-    private fun setSubCategories(sub: Array<Categories>) {
-        val listCategories = mutableListOf<Categories>()
-        listCategories.add(Categories(name = getString(R.string.back),back = R.drawable.ic_left ))
-        listCategories.addAll(sub.asList())
-        viewModel.categoryProductLiveData.value = Resource(
-            Resource.Status.COMPLETED,
-            listCategories
-        )
+    private fun setSubCategories(sub: Array<Categories>,categoryAdapter: SimpleCategoriesAdapter) {
+        val data = ArrayList<Categories>()
+        data.add(Categories(name = getString(R.string.back),back = R.drawable.ic_left ))
+        data.addAll(sub.asList())
+        categoryAdapter.setData(data)
         lifecycleScope.launch {
             delay(300)
             stopShimmer()
@@ -136,4 +144,13 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
         shimmerLayoutCatalog.setShimmer(null)
         shimmerLayoutCatalog.setBackgroundResource(0)
     }
+
+    private fun showError() {
+        catalogMockIsEmpty.visibility = View.VISIBLE
+    }
+
+    private fun showSuccess() {
+        catalogMockIsEmpty.visibility = View.GONE
+    }
+
 }

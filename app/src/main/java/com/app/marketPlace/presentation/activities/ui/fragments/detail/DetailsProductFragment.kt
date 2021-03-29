@@ -14,7 +14,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.fragment.app.*
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -33,9 +35,11 @@ import com.app.marketPlace.presentation.activities.ui.fragments.description.Desc
 import com.app.marketPlace.presentation.adapters.BorderAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.adapters.SimpleCategoriesAdapter
+import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.app.marketPlace.presentation.rowType.CategoryRowType
+import com.app.marketPlace.presentation.rowType.Resource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -45,11 +49,11 @@ import kotlinx.android.synthetic.main.fragment_details_product.*
 import kotlinx.android.synthetic.main.product_details_bottom.*
 import kotlinx.android.synthetic.main.product_details_center.*
 import kotlinx.android.synthetic.main.product_details_top.*
+import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
 
 
 class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
-
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -82,10 +86,18 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
             .substring(0, nameProduct.indexOf(' ', nameProduct.indexOf(' ') + 7))
             .trim()
 
+        val pathId = detailProduct.categoryPath?.get(detailProduct.categoryPath.size -1)?.id ?: null
+
         viewModel.getListEquivalentProducts(searchWord)
-        viewModel.getListSimilarCategory(detailProduct.categoryPath)
+        pathId?.let {
+            viewModel.getListSimilarCategory(pathId)
+        }
+
+        detailProduct.categoryPath?.get(detailProduct.categoryPath.size -1)?.id ?: "null"
+
 
         initView(MapperToDb.reMapProduct(detailProduct))
+
 
         val bundle = bundleOf(
             "longDescription" to detailProduct.longDescription,
@@ -107,37 +119,25 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         val tab: TabLayout.Tab? = tabsLayout.getTabAt(indexTab)
         tab?.select()
 
-
         tabsLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
                         childFragmentManager.commit {
-                            setCustomAnimations(
-                                R.anim.slide_in,
-                                R.anim.fade_out,
-                                R.anim.fade_in,
-                                R.anim.slide_out
-                            )
+                            setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
                             replace<DescriptionFragment>(R.id.frameDescriptionContainer, args = bundle, tag = "LONG")
                             indexTab = 0
                         }
                     }
                     1 -> {
                         childFragmentManager.commit {
-                            setCustomAnimations(
-                                R.anim.slide_in,
-                                R.anim.fade_out,
-                                R.anim.fade_in,
-                                R.anim.slide_out
-                            )
+                            setCustomAnimations(R.anim.slide_in, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out)
                             replace<DescriptionFragment>(R.id.frameDescriptionContainer, args = bundle, tag = "SHORT")
                             indexTab  = 1
                         }
                     }
                 }
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
@@ -150,15 +150,12 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         val basket = activity?.findViewById<MaterialButton>(R.id.in_basket_button)
 
         basket?.visibility = View.VISIBLE
-
         basket?.text = String.format(
             resources.getString(R.string.inBasket),
             detailProduct.priceWithDiscount
         )
-
         sellerName.text = detailProduct.company
         priceWithDiscountTextView.text = detailProduct.priceWithDiscount
-
         if (detailProduct.priceOlD != detailProduct.priceWithDiscount){
             priceOlDTextView.visibility = View.VISIBLE
             priceOlDTextView.text = detailProduct.priceOlD
@@ -183,7 +180,6 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
             }
             mainViewModel.insertOrDeleteBasket(detailProduct)
         }
-
 
         offerOne.setOnClickListener {
             val action = DetailsProductFragmentDirections.actionDetailsProductFragmentToMockFragment(
@@ -217,8 +213,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
         setupBannerAdapter(detailProduct)
         setupSimpleAdapter(detailProduct)
-        setupSimilarAdapter()
-        setupEquivalentAdapter()
+        setupProducts()
     }
 
 
@@ -237,15 +232,14 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
             navController.navigate(R.id.makingOrderFragment, bundle)
         }else {
             val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Вы не зарегестрировались")
-            builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
+            builder.setTitle(getString(R.string.regTitle))
+            builder.setMessage(getString(R.string.regMessage))
                 .setCancelable(false)
-                .setPositiveButton("Да") { dialog, id ->
+                .setPositiveButton(getString(R.string.regYes)) { dialog, id ->
                     navController.navigate(R.id.signInFragment)
                 }
-                .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
+                .setNegativeButton(getString(R.string.regNo)) { dialog, id -> dialog.cancel()
                 }
-
             val alertDialog: AlertDialog = builder.create()
             alertDialog.show()
         }
@@ -256,12 +250,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         val adapterImages = BorderAdapter()
 
         detailProduct.images?.forEach {
-            adapterImages.setItem(
-                Banner(
-                    onBoardingImageUrl = it,
-                    transitionName = detailProduct.generalIconProductSting!!
-                )
-            )
+            adapterImages.setItem(Banner(onBoardingImageUrl = it))
         }
 
         postponeEnterTransition()
@@ -307,89 +296,53 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         detailProduct.categoryPath?.let {categories->
             categories.forEach { it.image = resources.getString(R.string.linkMockImagePhone) }
             simpleAdapter.setData(categories)
-
         }
         similarCategory.layoutManager = LinearLayoutManager(context)
         similarCategory.adapter = simpleAdapter
     }
 
-    private fun setupSimilarAdapter(){
-        val adapterSimilar  = ProductAdapter()
-        listProductsSimilar.adapter = adapterSimilar
-        listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+    private fun setupProducts(){
+        viewModel.data.onEach {resource->
+            if (resource.status != Resource.Status.COMPLETED)return@onEach
+            if (resource.data == null) return@onEach
 
-        adapterSimilar.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
-            val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
-            navController.navigate(action, extras)
-        }
-
-        adapterSimilar.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
-            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-        }
-
-        adapterSimilar.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
-            mainViewModel.insertOrDeleteBasket(productsItem)
-        }
-
-        val animation: Animation = AnimationUtils.loadAnimation(
-            context,
-            R.anim.appearances_out
-        )
-
-        val controller = LayoutAnimationController(animation)
-        listProductsSimilar.layoutAnimation = controller
-
-        setupSimilarProducts(adapterSimilar)
-    }
-
-    private fun setupEquivalentAdapter(){
-        val adapterEquivalent  = ProductAdapter()
-        listProductsEquivalent.adapter = adapterEquivalent
-        listProductsEquivalent.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
-        adapterEquivalent.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
-            val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
-            navController.navigate(action, extras)
-        }
-
-        adapterEquivalent.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
-            mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
-        }
-
-        adapterEquivalent.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
-            mainViewModel.insertOrDeleteBasket(productsItem)
-        }
-
-        val animation: Animation = AnimationUtils.loadAnimation(
-            context,
-            R.anim.appearances_out
-        )
-
-        val controller = LayoutAnimationController(animation)
-        listProductsEquivalent.layoutAnimation = controller
-
-        setupEquivalentProducts(adapterEquivalent)
-    }
-
-    private fun setupEquivalentProducts(adapterEquivalent: ProductAdapter){
-        viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
-            if (resource.data!!.list.isNotEmpty()) {
-                adapterEquivalent.setData(resource.data.list)
-                groupEquivalent.visibility = View.VISIBLE
+            val adapter = ProductAdapter()
+            adapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
+                val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+                val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
+                navController.navigate(action, extras)
             }
-        })
-    }
 
-    private fun setupSimilarProducts(adapterSimilar: ProductAdapter){
-        viewModel.productsResultList.observe(viewLifecycleOwner, { resource ->
-            if (resource.data!!.list.isNotEmpty()) {
-                adapterSimilar.setData(resource.data.list)
+            adapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
+                mainViewModel.insertOrDeleteFavoriteProduct(productsItem)
+            }
+
+            adapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
+                mainViewModel.insertOrDeleteBasket(productsItem)
+            }
+
+            val animation: Animation = AnimationUtils.loadAnimation(
+                context,
+                R.anim.appearances_out
+            )
+            val controller = LayoutAnimationController(animation)
+
+            if(resource.data.requestName.isNullOrEmpty()){
+                adapter.setData(resource.data.list)
+                listProductsEquivalent.adapter = adapter
+                listProductsEquivalent.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                listProductsEquivalent.layoutAnimation = controller
+                groupEquivalent.visibility = View.VISIBLE
+            }else{
+                adapter.setData(resource.data.list)
+                listProductsSimilar.adapter = adapter
+                listProductsSimilar.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+                listProductsEquivalent.layoutAnimation = controller
                 groupSimilar.visibility = View.VISIBLE
             }
-        })
+        }.launchWhenStarted(lifecycleScope)
     }
+
 
     private fun setCurrentIndicator(position: Int) {
         val childCount  = indicators_container.childCount
@@ -414,6 +367,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
     private fun setupIndicator(itemCount: Int) {
+        if (indicators_container.children.count() >0) return
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(

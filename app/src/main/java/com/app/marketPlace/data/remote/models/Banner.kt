@@ -6,6 +6,5 @@ data class Banner(
   val onBoardingImageUrl:String?,
   val title:String? =null,
   val description:String? =null,
-  val category:String? =null,
-  val transitionName:String = ""
+  val category:String? =null
 )

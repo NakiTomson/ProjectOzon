@@ -8,10 +8,13 @@ import com.app.marketPlace.data.utils.ConstantsApp
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.data.remote.models.Categories
+import com.app.marketPlace.data.utils.ConstantsApp.attrCategoryPathId
+import com.app.marketPlace.data.utils.ConstantsApp.attrSearch
 import com.app.marketPlace.domain.mappers.*
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
+import java.util.jar.Attributes
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceService) {
@@ -34,7 +37,6 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
         }
     }
 
-
     suspend fun loadCategories(params: Params): Results.ResultCategoryProduct {
         return try {
             val listGeneralCategory = marketPlaceApi
@@ -48,33 +50,13 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
         }
     }
 
-    suspend fun loadSearchProducts(params: Params): Results.ResultProduct {
-        return try {
-
-            val listProducts = marketPlaceApi
-                .getProductsBySearchAsync(params.pathId, params.pageSize, params.page, params.apiKey).await()
-
-            Results.ResultProduct(
-                params.mapper.map(listProducts, params) as Resource<CombineProductsItem>
-            )
-
-        } catch (e: Exception) {
-            Results.ResultProduct(Resource(status = Resource.Status.ERROR, data = null, exception = e))
-        }
-    }
-
 
     suspend fun loadProducts(params: Params):Results.ResultProduct {
         return try {
-
             val listProducts = marketPlaceApi
-                .getProductsByCategoryAsync(params.pathId, params.pageSize, params.page, params.apiKey)
+                .getProductsAsync(params.attributes,params.pathId, params.pageSize, params.page, params.apiKey)
                 .await()
-
-            Results.ResultProduct(
-                params.mapper.map(listProducts, params) as Resource<CombineProductsItem>
-            )
-
+            Results.ResultProduct(params.mapper.map(listProducts, params) as Resource<CombineProductsItem>)
         } catch (e: Exception) {
             Results.ResultProduct( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
@@ -127,6 +109,7 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
 
 
 sealed class Params(
+    open var attributes: String = attrSearch,
     open var pathId: String = ConstantsApp.COFFEE_MAKER,
     open var pageSize: String = "3",
     open var apiKey: String = ConstantsApp.APIKEY,
@@ -151,6 +134,7 @@ sealed class Params(
 
 
     class ProductsParams(
+        override var attributes: String = attrCategoryPathId,
         override var pathId: String = ConstantsApp.COFFEE_MAKER,
         override var pageSize: String = "3",
         override var apiKey: String = ConstantsApp.APIKEY,

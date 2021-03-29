@@ -8,20 +8,20 @@ import android.view.animation.LayoutAnimationController
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.*
 import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmentDirections
 import com.app.marketPlace.presentation.adapters.ProductAdapter
+import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
+import com.app.marketPlace.presentation.rowType.Resource
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
-import javax.inject.Inject
+import kotlinx.coroutines.flow.onEach
 
 
 class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
@@ -38,7 +38,16 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         foundProductsRecyclerView.layoutManager = GridLayoutManager(activity,3)
         val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
-        foundProductsRecyclerView.adapter =  productsAdapter
+
+        foundProductsRecyclerView.apply {
+            adapter = productsAdapter
+            postponeEnterTransition()
+            viewTreeObserver
+                .addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+        }
 
         val anim: Animation = AnimationUtils.loadAnimation(
             this.context,
@@ -64,29 +73,31 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         val searchWord = requireArguments().getString("arg1")
         val category = requireArguments().getString("category")
 
-        searchWord?.let {
-            viewModel.loadProductsByWord(it)
-            searchTextInput.setText(it.replace("&search="," "))
+        if (!searchWord.isNullOrEmpty()){
+            viewModel.loadProductsByWord(searchWord)
+            searchTextInput.setText(searchWord.replace("&search="," "))
         }
 
         category?.let {
             viewModel.loadProductsByCategory(it)
         }
 
-        viewModel.searchProductsResultList.observe(viewLifecycleOwner, { resource ->
-            productsAdapter.setData(resource.data!!.list)
+        viewModel.productsList.onEach {resource->
+            if (resource.status == Resource.Status.LOADING){
+                return@onEach
+            }
+            stopProgressBar()
+            if (resource.data == null ){
+                showError()
+                return@onEach
+            }
             resource.data.requestName?.let {
                 searchTextInput.setText(it.replace("&search="," "))
             }
-            stopProgressBar()
+            productsAdapter.setData(resource.data.list)
             setAnim(controller)
-        })
-
-        viewModel.productsResultList.observe(viewLifecycleOwner, { resource->
-            productsAdapter.setData(resource.data!!.list)
-            stopProgressBar()
-            setAnim(controller)
-        })
+            showSuccess()
+        }.launchWhenStarted(lifecycleScope)
 
         searchTextInput?.setOnTouchListener { view, event ->
             if (navController.currentDestination?.id != R.id.searchHintProductHomeFragment){
@@ -112,4 +123,11 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         progressBar.visibility = View.GONE
     }
 
+    private fun showError() {
+        productListMockIsEmpty.visibility = View.VISIBLE
+    }
+
+    private fun showSuccess() {
+        productListMockIsEmpty.visibility = View.GONE
+    }
 }

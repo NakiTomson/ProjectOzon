@@ -131,7 +131,8 @@ fun <T> gettingErrors(resource: Resource<T>): Boolean {
     return (resource.status == Resource.Status.COMPLETED && resource.data != null && resource.exception == null)
 }
 
-suspend fun checkingForErrors(data: Resource<*>): Resource<*> {
+
+suspend fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
     return if (gettingErrors(data)){
         data
     }else{
@@ -139,7 +140,6 @@ suspend fun checkingForErrors(data: Resource<*>): Resource<*> {
         data.copy(data = null)
     }
 }
-
 fun <T> errorHandling(name: String, resource: Resource<T>) {
     if (resource.status == Resource.Status.LOADING) return
     Log.v(name, "${resource.exception?.message}")

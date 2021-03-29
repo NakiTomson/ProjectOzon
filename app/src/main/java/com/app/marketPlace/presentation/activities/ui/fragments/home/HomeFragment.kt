@@ -69,17 +69,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val controller = LayoutAnimationController(anim)
 
-        viewModel.completed.onEach {
-            if (it == null)return@onEach
+        viewModel.completed.onEach { completed ->
+            if (completed == null)return@onEach
+
+            if (viewModel.data.replayCache.all { it.data == null }){
+                showError()
+                return@onEach
+            }
+            showSuccess()
             multipleHomeRecyclerView.layoutAnimation = controller
-            adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener {
-                viewModel.loadAdditionalData()
+            adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener { page ->
+                if (viewModel.data.replayCache.size <= 10){
+                    viewModel.loadAdditionalData(page)
+                }
             }
         }.launchWhenStarted(lifecycleScope)
 
         mainViewModel.networkConnection.observe(viewLifecycleOwner, {
             viewModel.netConnectionState = it
         })
+    }
+
+    private fun showError() {
+        homeMockIsEmpty.visibility = View.VISIBLE
+    }
+
+    private fun showSuccess() {
+        homeMockIsEmpty.visibility = View.GONE
     }
 
     private fun setupAdapter(multipleAdapter: MultipleAdapter) {

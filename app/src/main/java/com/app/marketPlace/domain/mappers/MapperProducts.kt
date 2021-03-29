@@ -17,10 +17,17 @@ class MapperProducts : IMapper {
                 exception = NotMappedException(data),
                 type = params.resourceType)
         }
+
+        if (data == null || data.products.isNullOrEmpty()){
+            return Resource(status = Resource.Status.EMPTY, data = null ,
+                exception = null,
+                type = params.resourceType)
+        }
+
         val item = CombineProductsItem(
             topOffer = params.topOffer,
             bottomOffer = params.bottomOffer,
-            list = getUiProducts(data!!.products, params.typeProduct),
+            list = getUiProducts(data.products, params.typeProduct),
             requestName = params.requestName,
             spain = params.spain
         )

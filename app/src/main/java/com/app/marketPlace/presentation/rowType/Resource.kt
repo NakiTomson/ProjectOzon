@@ -1,7 +1,7 @@
 package com.app.marketPlace.presentation.rowType
 
 data class Resource<T>(
-    val status: Status = Status.LOADING,
+    var status: Status = Status.LOADING,
     val data: T?,
     val exception: Exception? = null,
     val type: Type = Type.UNDEFINED
@@ -21,4 +21,11 @@ data class Resource<T>(
         object HORIZONTAL_PRODUCT:Type()
         object UNDEFINED:Type()
     }
+
+    companion object{
+        fun<N> getDefSateResource():Resource<N>{
+            return Resource(data = null)
+        }
+    }
+
 }

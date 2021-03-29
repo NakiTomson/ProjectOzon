@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.data.utils.ConstantsApp.CAMERA
@@ -12,9 +11,7 @@ import com.app.marketPlace.data.utils.ConstantsApp.LAPTOPS
 import com.app.marketPlace.data.utils.ConstantsApp.MONITORS
 import com.app.marketPlace.data.utils.ConstantsApp.PHONES
 import com.app.marketPlace.data.utils.ConstantsApp.TVS
-import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params.ProductsParams
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.models.*
@@ -26,7 +23,6 @@ import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import javax.inject.Inject
 
 class HomeViewModel() : BaseViewModel() {
 
@@ -130,7 +126,7 @@ class HomeViewModel() : BaseViewModel() {
         )
     }
 
-    fun loadAdditionalData() {
+    fun loadAdditionalData(page: Int) {
         loadData(Dispatchers.IO){
             delayUntilInternetResumeConnection()
             val productsCamera = async {

@@ -22,7 +22,7 @@ public class MultipleAdapter extends RecyclerView.Adapter {
     public OnNextDataListener setNextDataListener;
 
     public interface OnNextDataListener {
-        public void onNextData();
+        public void onNextData(int size);
     }
 
     private volatile int countPosition = -1;
@@ -48,8 +48,8 @@ public class MultipleAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NotNull final RecyclerView.ViewHolder holder, int position) {
         dataSet.get(position).onBindViewHolder(holder);
-        if ((position > dataSet.size() - 2) &&  setNextDataListener != null &&  countPosition <=11) {
-            setNextDataListener.onNextData();
+        if ((position > dataSet.size() - 2) &&  setNextDataListener != null) {
+            setNextDataListener.onNextData(dataSet.size());
         }
     }
 

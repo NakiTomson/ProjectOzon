@@ -40,6 +40,16 @@ interface MarketPlaceService {
     ): Deferred<ProductsList>
 
 
+    @GET("/v1/products(({attributes}={pathIdOrWord}))?format=json")
+    fun getProductsAsync(
+        @Path("attributes") attributes: String,
+        @Path("pathIdOrWord") pathIdOrWord: String,
+        @Query("pageSize") pageSize: String,
+        @Query("page") page: String,
+        @Query("apiKey") apiKey: String
+    ): Deferred<ProductsList>
+
+
     @GET("https://www.dropbox.com/s/0w71n1rc6v85s0r/historyData.json?dl=1")
     fun getHistoryAsync(): Deferred<Stories>
 

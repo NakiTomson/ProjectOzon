@@ -55,7 +55,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
         private val textDescription = view.textDescription
 
         fun bind(onBoardingItem: Banner){
-            imageOnBoarding.transitionName = onBoardingItem.transitionName
+            imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
             Picasso.with(itemView.context)
                 .load(onBoardingItem.onBoardingImageUrl)
                 .noFade()

@@ -38,4 +38,18 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+
+    <TextView
+        android:id="@+id/catalogMockIsEmpty"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:text="Nothing found"
+        android:visibility="gone"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:padding="20sp"
+        android:layout_height="wrap_content">
+    </TextView>
+
 </com.facebook.shimmer.ShimmerFrameLayout>

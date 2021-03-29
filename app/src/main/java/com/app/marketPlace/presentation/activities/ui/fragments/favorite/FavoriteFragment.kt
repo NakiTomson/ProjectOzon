@@ -31,7 +31,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         favoriteList.layoutManager = GridLayoutManager(activity,2)
         val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
-
+        favoriteList.setHasFixedSize(true)
         favoriteList.apply {
             adapter = productsAdapter
             postponeEnterTransition()

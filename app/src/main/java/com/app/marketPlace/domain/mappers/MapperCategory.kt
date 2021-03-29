@@ -16,8 +16,15 @@ class MapperCategory : IMapper {
                 type = params.resourceType)
         }
 
-        val listCategories = if (data!!.categories.size <= 20) {
-            for ((index, i) in (0 until data?.categories!!.size).withIndex()) {
+        if (data == null || data.categories.isNullOrEmpty()){
+            return Resource(status = Resource.Status.EMPTY, data = null ,
+                exception = null,
+                type = params.resourceType)
+        }
+
+
+        val listCategories = if (data.categories.size <= 20) {
+            for ((index, i) in (0 until data.categories!!.size).withIndex()) {
                 data.categories[i].image = ConstantsApp.getImage(index)
             }
 
