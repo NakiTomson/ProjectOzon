@@ -18,7 +18,6 @@ import kotlin.coroutines.CoroutineContext
 
 class BasketViewModel:BaseViewModel(), CoroutineScope {
 
-
     val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 
     fun getListSimilarCategory(recommendedPath: String){

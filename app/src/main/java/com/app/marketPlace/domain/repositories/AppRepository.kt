@@ -62,8 +62,6 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
         }
     }
 
-
-
     suspend fun getHistoryItems(storiesParams: Params): Results.ResultHistory {
         return try {
             Results.ResultHistory(Resource(status = Resource.Status.COMPLETED,
@@ -86,8 +84,6 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
         }
     }
 
-
-
     suspend fun getBannerCenter(params: Params): Results.ResultBanner {
         return getBannerStart(params)
     }
@@ -106,7 +102,6 @@ class AppRepository @Inject constructor(private val marketPlaceApi: MarketPlaceS
         }
     }
 }
-
 
 sealed class Params(
     open var attributes: String = attrSearch,

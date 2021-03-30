@@ -9,8 +9,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.mappers.MapperFromDb
-import com.app.marketPlace.domain.mappers.MapperToDb
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
@@ -22,8 +20,6 @@ import kotlinx.android.synthetic.main.fragment_favorite.startShopping
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private val mainViewModel: MainViewModel by activityViewModels ()
-
-    private val mapperFrom:MapperFromDb = MapperFromDb()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,7 +60,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         mainViewModel.favorite.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNullOrEmpty()) frameFavorite.visibility = View.VISIBLE else frameFavorite.visibility = View.GONE
             if (list == null) return@Observer
-            productsAdapter.setData(mapperFrom.mapListFavoriteDB(list)!!)
+            productsAdapter.setData(mainViewModel.mapperFromDb?.mapListFavoriteDB(list)!!)
         })
     }
 }

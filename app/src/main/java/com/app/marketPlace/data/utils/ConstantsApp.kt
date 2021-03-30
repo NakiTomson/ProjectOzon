@@ -21,6 +21,8 @@ object ConstantsApp {
     const val attrSearch = "search"
     const val attrCategoryPathId = "categoryPath.id"
 
+    const val baseUrlBestBye = "https://api.bestbuy.com"
+
 
     fun getImage(index: Int): String {
         return if (index < listImagesByCategory.size){

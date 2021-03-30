@@ -9,5 +9,4 @@ data class HintProductDb(
     val nameRequest: String,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-
     )

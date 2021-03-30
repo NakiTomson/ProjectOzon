@@ -9,8 +9,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-
-
 interface MarketPlaceService {
 
     @GET("/v1/categories{path}?format=json")
@@ -57,4 +55,3 @@ interface MarketPlaceService {
     @GET("https://www.dropbox.com/s/xgal8vjau426dka/liveData.json?dl=1")
     fun getLivesAsync(): Deferred<LiveStreamItem>
 }
-

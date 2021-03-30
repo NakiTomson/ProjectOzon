@@ -9,7 +9,6 @@ import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
-import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.mappers.MapperToDb
 
 import com.app.marketPlace.domain.models.ProductItem

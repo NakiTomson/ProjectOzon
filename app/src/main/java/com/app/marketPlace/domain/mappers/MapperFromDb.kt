@@ -4,8 +4,9 @@ import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.domain.mappers.MapperToDb.Companion.checkInFavorite
 import com.app.marketPlace.domain.models.ProductItem
+import javax.inject.Inject
 
-class MapperFromDb {
+class MapperFromDb @Inject constructor() {
 
     fun mapListBasketDb(basketsList: List<BasketProductDb>?): List<ProductItem>? {
 

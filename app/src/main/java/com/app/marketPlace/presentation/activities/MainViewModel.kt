@@ -7,6 +7,7 @@ import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
+import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.DataBaseRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
@@ -37,6 +38,9 @@ class MainViewModel : ViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
+    var mapperFromDb: MapperFromDb? = null
+        @Inject set
+
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
 
     val allIdsInBaskets: LiveData<List<Int>?> = repository.productsInBasketIds.asLiveData()
@@ -48,7 +52,6 @@ class MainViewModel : ViewModel(), CoroutineScope {
     val favorite: LiveData<List<FavoriteProductDb>?> = repository.favorite.asLiveData()
 
     val hintProducts: LiveData<List<HintProductDb>>? = repository.hintProducts?.asLiveData()
-
 
     fun insertOrDeleteHintsProduct(request: String) {
         insertHint(request)

@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.di
 
 import android.content.Context
 import com.app.marketPlace.data.remote.services.MarketPlaceService
+import com.app.marketPlace.data.utils.ConstantsApp.baseUrlBestBye
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
@@ -44,13 +45,12 @@ class RestApiModule {
     fun provideRetrofitBestBy(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
                 .Builder()
-                .baseUrl("https://api.bestbuy.com")
+                .baseUrl(baseUrlBestBye)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .client(okHttpClient)
                 .build()
     }
-
 
     @Provides
     @Singleton

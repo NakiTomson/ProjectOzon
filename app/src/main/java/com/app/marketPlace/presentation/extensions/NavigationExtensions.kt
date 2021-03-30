@@ -1,5 +1,5 @@
 
-package com.app.marketPlace.presentation.activities.ui
+package com.app.marketPlace.presentation.extensions
 
 import android.content.Intent
 import android.util.SparseArray
@@ -12,7 +12,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.app.marketPlace.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 
 fun BottomNavigationView.setupWithNavController(
     navGraphIds: List<Int>,

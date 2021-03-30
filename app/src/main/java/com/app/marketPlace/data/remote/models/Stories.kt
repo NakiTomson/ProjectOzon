@@ -10,5 +10,4 @@ class Stories {
     @SerializedName("array")
     @Expose
     var arrayImages: List<String>? = null
-
 }

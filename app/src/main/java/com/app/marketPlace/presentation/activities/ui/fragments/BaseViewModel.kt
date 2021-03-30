@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments
 
 import androidx.lifecycle.ViewModel
 import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
 import kotlinx.coroutines.*
@@ -22,6 +23,10 @@ abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
     @Inject
     lateinit var repository: AppRepository
+
+
+    var mapperFromDb: MapperFromDb? = null
+        @Inject set
 
     fun <P> loadData(coroutineContexts: CoroutineContext = coroutineContext,doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)

@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.data.utils.ConstantsApp.PLAYSTATION
-import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.adapters.BasketAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
@@ -32,7 +31,6 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    val mapperFrom = MapperFromDb()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -129,7 +127,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         var priceWithDiscount = 0f
 
         mainViewModel.baskets.observe(viewLifecycleOwner, {
-            val baskets = mapperFrom.mapListBasketDb(it)
+            val baskets = viewModel.mapperFromDb?.mapListBasketDb(it)
             var priceWithDiscountLocal = 0f
             var priceOldLocal = 0f
 
@@ -180,13 +178,13 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
             navController.navigate(R.id.makingOrderFragment, bundle)
         }else {
             val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Вы не зарегестрировались")
-            builder.setMessage("Чтобы купить товар необходимо зарегистрироваться")
+            builder.setTitle(getString(R.string.regTitle))
+            builder.setMessage(getString(R.string.regMessage))
                 .setCancelable(false)
-                .setPositiveButton("Да") { dialog, id ->
+                .setPositiveButton(getString(R.string.regYes)) { dialog, id ->
                     requireActivity().bottomNavigationView.selectedItemId = R.id.home
                 }
-                .setNegativeButton("Нет") { dialog, id -> dialog.cancel()
+                .setNegativeButton(getString(R.string.regNo)) { dialog, id -> dialog.cancel()
                 }
 
             val alertDialog: AlertDialog = builder.create()

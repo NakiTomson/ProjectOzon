@@ -12,31 +12,6 @@ import kotlinx.coroutines.flow.collect
 import java.util.*
 
 
-
-public fun String.uploadPicture(context: Context, imageOnBoarding: RoundedImageView) {
-
-
-    if (this.contains("drop".toUpperCase(Locale.ROOT))){
-        Picasso.with(context)
-            .load(this)
-            .placeholder(R.drawable.example_ads_banner)
-            .noFade()
-            .into(imageOnBoarding)
-    }else{
-        Picasso.with(context).load(this)
-            .centerInside()
-            .resize(500,500)
-            .into(imageOnBoarding,object : Callback {
-                override fun onSuccess() {
-//                    setCompleteListener?.onComplete()
-                }
-                override fun onError() {
-//                    setCompleteListener?.onComplete()
-                }
-            })
-    }
-}
-
 fun <T> Flow<T>.launchWhenCreated(lifecycleScope: LifecycleCoroutineScope){
     lifecycleScope.launchWhenCreated {
         this@launchWhenCreated.collect()
