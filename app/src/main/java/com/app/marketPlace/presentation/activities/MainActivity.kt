@@ -10,9 +10,10 @@ import androidx.navigation.NavController
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.extensions.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var currentNavController: LiveData<NavController>? = null

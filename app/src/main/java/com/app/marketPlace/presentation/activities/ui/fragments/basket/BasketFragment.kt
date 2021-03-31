@@ -17,12 +17,13 @@ import com.app.marketPlace.presentation.adapters.BasketAdapter
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_basket.startShopping
 import java.text.DecimalFormat
 
-
+@AndroidEntryPoint
 class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     private val viewModel: BasketViewModel by viewModels()
@@ -127,7 +128,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         var priceWithDiscount = 0f
 
         mainViewModel.baskets.observe(viewLifecycleOwner, {
-            val baskets = viewModel.mapperFromDb?.mapListBasketDb(it)
+            val baskets = viewModel.mapperFromDb.mapListBasketDb(it)
             var priceWithDiscountLocal = 0f
             var priceOldLocal = 0f
 

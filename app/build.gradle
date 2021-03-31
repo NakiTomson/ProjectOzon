@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
+    id 'dagger.hilt.android.plugin'
 }
 
 
@@ -87,11 +88,14 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
 
-    // Dagger
-    def daggerVersion = '2.14.1'
-    implementation "com.google.dagger:dagger:$daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+//    // Dagger
+//    def daggerVersion = '2.14.1'
+//    implementation "com.google.dagger:dagger:$daggerVersion"
+//    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0-beta01'
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.4.0'

@@ -22,6 +22,7 @@ import com.app.marketPlace.presentation.extensions.launchWhenCreated
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.rowType.CategoryRowType
 import com.app.marketPlace.presentation.rowType.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_catalog.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_simple.*
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class CatalogFragment : Fragment(R.layout.fragment_catalog) {
 
     private val viewModel: CatalogViewModel by viewModels()

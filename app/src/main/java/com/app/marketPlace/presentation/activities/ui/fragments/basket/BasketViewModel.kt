@@ -3,6 +3,7 @@ package com.app.marketPlace.presentation.activities.ui.fragments.basket
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
+import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.domain.repositories.AppRepository
@@ -12,11 +13,16 @@ import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class BasketViewModel:BaseViewModel(), CoroutineScope {
+@HiltViewModel
+class BasketViewModel @Inject constructor(
+    private val repository: AppRepository,
+    var mapperFromDb: MapperFromDb
+) : BaseViewModel(), CoroutineScope {
 
     val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
 

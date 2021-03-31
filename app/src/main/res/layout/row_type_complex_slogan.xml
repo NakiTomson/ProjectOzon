@@ -28,7 +28,7 @@
         android:id="@+id/generalText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:textStyle="bold"
         android:text="35 900"
         android:gravity="center"

@@ -16,10 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.adapters.HintSearchAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search_hint_history_product.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 
-
+@AndroidEntryPoint
 class SearchHintHistoryProductFragment : Fragment(R.layout.fragment_search_hint_history_product) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

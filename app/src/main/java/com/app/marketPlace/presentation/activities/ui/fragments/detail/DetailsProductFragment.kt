@@ -44,6 +44,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_details_product.*
 import kotlinx.android.synthetic.main.product_details_bottom.*
@@ -52,7 +53,7 @@ import kotlinx.android.synthetic.main.product_details_top.*
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
 
-
+@AndroidEntryPoint
 class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

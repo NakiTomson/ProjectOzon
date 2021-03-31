@@ -9,17 +9,22 @@ import com.app.marketPlace.data.utils.ConstantsApp.attrCategoryPathId
 import com.app.marketPlace.data.utils.ConstantsApp.attrSearch
 import com.app.marketPlace.domain.models.CombineProductsItem
 import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-
-class DetailsProductViewModel : BaseViewModel(), CoroutineScope {
+@HiltViewModel
+class DetailsProductViewModel @Inject constructor(
+    private val repository: AppRepository
+) : BaseViewModel(), CoroutineScope {
 
 
     private val _data: MutableSharedFlow<Resource<CombineProductsItem>> =

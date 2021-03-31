@@ -7,10 +7,12 @@ import androidx.fragment.app.activityViewModels
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_personal_account.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class PersonalAccount : Fragment(R.layout.fragment_personal_account) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

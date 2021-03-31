@@ -29,12 +29,14 @@ import com.app.marketPlace.presentation.extensions.launchWhenCreated
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
 import java.util.*
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

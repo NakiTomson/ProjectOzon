@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.rowType
 
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.domain.models.ProductItem
 import com.app.marketPlace.presentation.adapters.ProductHorizontalAdapter
@@ -26,19 +27,21 @@ data class ProductsHorizontalRowType(
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val productionViewHolder = viewHolder as ViewHolderFactory.ProductHorizontalViewHolder
+        val holder = viewHolder as ViewHolderFactory.ProductHorizontalViewHolder
+        holder.productsRecyclerView.adapter = productItemAdapter
+        holder.productsRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, spain)
+        holder.bind(listProducts, productItemAdapter)
 
-        productionViewHolder.bind(listProducts, spain, productItemAdapter)
 
-        productionViewHolder.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
+        productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             setOnProductClickListener?.clickProduct(product, imageView)
         }
 
-        productionViewHolder.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
+        productItemAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             setOnHeartProductClickListener?.onClick(productsItem)
         }
 
-        productionViewHolder.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
+        productItemAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             setOnBasketProductClickListener?.onClick(productsItem)
         }
     }

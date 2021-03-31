@@ -57,6 +57,7 @@
     <string name="regMessage">Чтобы купить товар необходимо зарегистрироваться</string>
     <string name="regYes">Да</string>
     <string name="regNo">Нет</string>
+    <string name="bestseller">Бестселлер</string>
 
 
 </resources>

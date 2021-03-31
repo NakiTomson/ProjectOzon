@@ -14,32 +14,29 @@ import com.app.marketPlace.presentation.MarketPlaceApp
 
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.presentation.utils.NetworkConnection
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MainViewModel : ViewModel(), CoroutineScope {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    var repository:DataBaseRepository,
+    var networkConnection:NetworkConnection
+) : ViewModel(), CoroutineScope {
 
     companion object {
         var listIdsBasket: MutableList<Int> = mutableListOf()
         var listIdsFavorite: MutableList<Int> = mutableListOf()
     }
 
-    init {
-        MarketPlaceApp.appComponent.inject(mainViewModel = this)
-    }
-
-    @Inject lateinit var repository:DataBaseRepository
-
-    @Inject lateinit var networkConnection:NetworkConnection
-
     private val job: Job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    var mapperFromDb: MapperFromDb? = null
-        @Inject set
+    var mapperFromDb: MapperFromDb? = MapperFromDb()
+
 
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
 

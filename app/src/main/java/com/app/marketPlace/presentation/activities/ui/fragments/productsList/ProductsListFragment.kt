@@ -19,11 +19,12 @@ import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
 
-
+@AndroidEntryPoint
 class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

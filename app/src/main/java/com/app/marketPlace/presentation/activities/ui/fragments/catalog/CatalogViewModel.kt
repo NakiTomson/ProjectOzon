@@ -3,15 +3,22 @@ package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
 import com.app.marketPlace.data.utils.ConstantsApp.bestPath
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-class CatalogViewModel: BaseViewModel(), CoroutineScope {
+import javax.inject.Inject
+
+@HiltViewModel
+class CatalogViewModel @Inject constructor(
+    private val repository: AppRepository
+) : BaseViewModel(), CoroutineScope {
 
     private val _categoryProduct: MutableStateFlow<Resource<List<Categories>>> = MutableStateFlow(
         Resource.getDefSateResource()

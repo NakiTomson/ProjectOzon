@@ -1,26 +1,23 @@
 package com.app.marketPlace.presentation.di
 
-import android.content.Context
 import com.app.marketPlace.data.remote.services.MarketPlaceService
 import com.app.marketPlace.data.utils.ConstantsApp.baseUrlBestBye
-import com.app.marketPlace.presentation.utils.NetworkConnection
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
-import javax.inject.Singleton
 
 
 @Module
+@InstallIn(SingletonComponent::class)
 class RestApiModule {
-
     @Provides
-    @Singleton
     fun provideOkHttpClientFactory(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor(object : Interceptor {
@@ -41,7 +38,6 @@ class RestApiModule {
     }
 
     @Provides
-    @Singleton
     fun provideRetrofitBestBy(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
                 .Builder()
@@ -53,11 +49,9 @@ class RestApiModule {
     }
 
     @Provides
-    @Singleton
     fun provideMarketPlaceServiceApiDropBox(retrofit: Retrofit): MarketPlaceService {
         return retrofit.create(MarketPlaceService::class.java)
     }
-
 }
 
 

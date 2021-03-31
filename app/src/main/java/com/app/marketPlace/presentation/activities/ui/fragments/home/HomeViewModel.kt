@@ -15,16 +15,22 @@ import com.app.marketPlace.domain.repositories.Params.ProductsParams
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.rowType.Resource
 import com.app.marketPlace.domain.models.*
+import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params.BannerParams
 import com.app.marketPlace.domain.repositories.Params.CategoriesProductParams
 import com.app.marketPlace.domain.repositories.Params.StoriesParams
 import com.app.marketPlace.domain.repositories.Params.LiveParams
 import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.activities.checkingForErrors
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class HomeViewModel() : BaseViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: AppRepository
+) : BaseViewModel() {
 
     private val _data =
         MutableSharedFlow<Resource<*>>()

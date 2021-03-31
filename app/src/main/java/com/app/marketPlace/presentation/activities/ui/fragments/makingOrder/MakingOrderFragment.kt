@@ -13,10 +13,12 @@ import com.app.marketPlace.presentation.activities.MainViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_making_order.*
 import java.util.ArrayList
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
 
     private val mainViewModel: MainViewModel by activityViewModels()

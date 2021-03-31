@@ -12,11 +12,13 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.interfaces.ProductRowType
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_basket.*
 import kotlinx.android.synthetic.main.fragment_favorite.*
 import kotlinx.android.synthetic.main.fragment_favorite.startShopping
 
+@AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
     private val mainViewModel: MainViewModel by activityViewModels ()

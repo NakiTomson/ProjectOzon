@@ -34,9 +34,9 @@ data class ProductsRowType(
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
 
         val holder = viewHolder as ViewHolderFactory.ProductViewHolder
-        holder.bind(listProducts, spain, productItemAdapter)
-        holder.productsRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, spain)
         holder.productsRecyclerView.adapter =productItemAdapter
+        holder.productsRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, spain)
+        holder.bind(listProducts, productItemAdapter)
 
         productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             setOnProductClickListener?.clickProduct(product, imageView)

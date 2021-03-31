@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Stories
+import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.domain.models.ProductItem
@@ -100,12 +101,9 @@ object ViewHolderFactory {
     }
 
     class RegistrationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val financeButton: Button = itemView.buttonGoRegistration
 
-        fun bind() {
-
-        }
+        fun bind() {}
     }
 
 
@@ -137,46 +135,13 @@ object ViewHolderFactory {
 
     class ComplexSloganOfferProduct(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val topText = itemView.topTextMaybeBestseller
-        private val generalText = itemView.generalText
-        private val childTextView = itemView.childGeneralTextView
-        private val iconGeneral = itemView.iconGeneralText
-        private val imageNext = itemView.imageNextMoxyData
+        val topText = itemView.topTextMaybeBestseller
+        val generalText = itemView.generalText
+        val childTextView = itemView.childGeneralTextView
+        val iconGeneral = itemView.iconGeneralText
+        val imageNext = itemView.imageNextMoxyData
 
         fun bind(item: ComplexSloganRowType.Item) {
-
-            when (item) {
-                is ComplexSloganRowType.Item.SetBestseller -> {
-                    topText.visibility = View.VISIBLE
-                    topText.text = "Бестселлер"
-                    generalText.text = item.company
-                    generalText.visibility = View.VISIBLE
-                }
-
-                is ComplexSloganRowType.Item.SetPrice -> {
-                    generalText.text = item.actualPrice
-                    generalText.visibility = View.VISIBLE
-
-                    childTextView.text = item.oldPrice
-                    childTextView.visibility = View.VISIBLE
-
-                    imageNext.visibility = View.VISIBLE
-                    imageNext.setOnClickListener {
-                        Toast.makeText(itemView.context, "Next", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                is ComplexSloganRowType.Item.SetSimpleOffer -> {
-                    generalText.text = item.offer
-                    generalText.visibility = View.VISIBLE
-                    generalText.setPadding(0, 0, 0, 20)
-                    generalText.textSize = 16f
-                    generalText.setTypeface(generalText.typeface, Typeface.NORMAL)
-                    imageNext.visibility = View.VISIBLE
-                    imageNext.setOnClickListener {
-                        Toast.makeText(itemView.context, "Next", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
 
         }
     }
@@ -190,7 +155,7 @@ object ViewHolderFactory {
 
         private val controller = LayoutAnimationController(animation)
 
-        fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductAdapter) {
+        fun bind(listProducts: List<ProductItem>, productItemAdapter: ProductAdapter) {
             productItemAdapter.setData(listProducts)
             productsRecyclerView.layoutAnimation = controller
         }
@@ -199,48 +164,16 @@ object ViewHolderFactory {
 
     class ProductHorizontalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
+        internal val productsRecyclerView: RecyclerView = itemView.productsByOfferItemRecyclerView
 
-        var setClickListenerProduct: ProductRowType.ProductClickListener? = null
-
-        var setClickHeartProduct: ProductRowType.ClickListener? = null
-
-        var setClickBasketProduct: ProductRowType.ClickListener? = null
-
-        private val animation: Animation = AnimationUtils.loadAnimation(
-            itemView.context,
-            R.anim.appearances_out
-        )
+        private val animation: Animation =
+            AnimationUtils.loadAnimation(itemView.context, R.anim.appearances_out)
 
         private val controller = LayoutAnimationController(animation)
 
-        fun bind(listProducts: List<ProductItem>, spain: Int, productItemAdapter: ProductHorizontalAdapter) {
-            productsRecyclerView.layoutManager = GridLayoutManager(itemView.context, spain)
+        fun bind(listProducts: List<ProductItem>,productItemAdapter: ProductHorizontalAdapter) {
             productItemAdapter.setData(listProducts)
-
-            productsRecyclerView.apply {
-                adapter = productItemAdapter
-                postponeEnterTransition(itemView.context as Activity)
-                viewTreeObserver
-                    .addOnPreDrawListener {
-                        startPostponedEnterTransition(itemView.context as Activity)
-                        productsRecyclerView.layoutAnimation.start()
-                        true
-                    }
-            }
-
             productsRecyclerView.layoutAnimation = controller
-            productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-                setClickListenerProduct?.clickProduct(product, imageView)
-            }
-
-            productItemAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
-                setClickHeartProduct?.onClick(productsItem)
-            }
-
-            productItemAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
-                setClickBasketProduct?.onClick(productsItem)
-            }
         }
     }
 
@@ -290,7 +223,7 @@ object ViewHolderFactory {
                 ComplexSloganOfferProduct(sloganViewType)
             }
             else -> {
-                throw UnknownFormatFlagsException("Not Found Row Type")
+                throw NotFoundRealizationException("Not Found Row Type")
             }
         }
     }

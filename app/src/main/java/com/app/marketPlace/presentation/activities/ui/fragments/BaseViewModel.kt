@@ -5,28 +5,20 @@ import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.presentation.MarketPlaceApp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel:ViewModel(), CoroutineScope {
 
-    init {
-        MarketPlaceApp.appComponent.inject(this)
-    }
+abstract class BaseViewModel constructor():ViewModel(), CoroutineScope {
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
     private val job: Job = Job()
 
     private val viewModelScope = CoroutineScope(Dispatchers.Main + job)
-
-    @Inject
-    lateinit var repository: AppRepository
-
-
-    var mapperFromDb: MapperFromDb? = null
-        @Inject set
 
     fun <P> loadData(coroutineContexts: CoroutineContext = coroutineContext,doOnAsyncBlock: suspend CoroutineScope.() -> P) {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)
