@@ -2,26 +2,25 @@ package com.app.marketPlace.data.utils
 
 
 
-object ConstantsApp {
+object Constants {
 
-    const val APIKEY ="zXSRzd1MQNKNebKntBATTcQj"
+    const val ApiToken ="zXSRzd1MQNKNebKntBATTcQj"
 
-    const val COFFEE_MAKER = "abcat0912005"
-    const val CELL_PHONES = "pcmcat209400050001"
-    const val LAPTOPS = "abcat0502000"
+    const val CoffeeMaker = "abcat0912005"
+    const val CellPhone = "pcmcat209400050001"
+    const val Laptop = "abcat0502000"
     const val TVS = "abcat0101000"
-    const val PLAYSTATION = "pcmcat295700050012"
-    const val CAMERA = "abcat0401000"
-    const val HEADPHONES = "abcat0204000"
-    const val MONITORS = "abcat0509000"
-    const val COMPUTER_KEYBOARDS = "abcat0513004"
-    const val PHONES = "abcat0800000"
+    const val Playstation = "pcmcat295700050012"
+    const val Camera = "abcat0401000"
+    const val Headphones = "abcat0204000"
+    const val Monitor = "abcat0509000"
+    const val ComputerKeyboard = "abcat0513004"
+    const val Phone = "abcat0800000"
+    
     const val bestPath = "(id=abcat*)"
-
     const val attrSearch = "search"
     const val attrCategoryPathId = "categoryPath.id"
-
-    const val baseUrlBestBye = "https://api.bestbuy.com"
+    const val baseUrl = "https://api.bestbuy.com"
 
 
     fun getImage(index: Int): String {
@@ -31,7 +30,8 @@ object ConstantsApp {
             listImagesByCategory[index - listImagesByCategory.size]
         }
     }
-    val listImagesByCategory = listOf(
+    
+    private val listImagesByCategory = listOf(
         "https://ic.wampi.ru/2021/03/27/one.png",
         "https://ic.wampi.ru/2021/03/27/two.png",
         "https://ic.wampi.ru/2021/03/27/three.png",

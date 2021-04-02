@@ -26,11 +26,12 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        favoriteList.layoutManager = GridLayoutManager(activity,2)
         val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
-        favoriteList.setHasFixedSize(true)
+
         favoriteList.apply {
+            layoutManager = GridLayoutManager(activity,2)
+            setHasFixedSize(true)
             adapter = productsAdapter
             postponeEnterTransition()
             viewTreeObserver
@@ -50,7 +51,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         }
 
         productsAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, view ->
-            val extras = FragmentNavigatorExtras(view to product.generalIconProductSting!!)
+            val extras = FragmentNavigatorExtras(view to product.icon!!)
             val action = FavoriteFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             findNavController().navigate(action, extras)
         }
@@ -62,7 +63,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         mainViewModel.favorite.observe(viewLifecycleOwner, Observer { list ->
             if (list.isNullOrEmpty()) frameFavorite.visibility = View.VISIBLE else frameFavorite.visibility = View.GONE
             if (list == null) return@Observer
-            productsAdapter.setData(mainViewModel.mapperFromDb?.mapListFavoriteDB(list)!!)
+            productsAdapter.setData(mainViewModel.mapperFromDb.mapFavoriteListDb(list)!!)
         })
     }
 }

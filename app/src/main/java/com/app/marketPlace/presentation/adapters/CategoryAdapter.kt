@@ -3,7 +3,6 @@ package com.app.marketPlace.presentation.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
@@ -14,14 +13,15 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_category_product.view.*
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewHolder>() {
+
     var setCompleteListener: BannerRowType.CompleteListener? = null
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
-    private val onBoardingItems: MutableList<Categories> = mutableListOf()
+    private val categoriesList: MutableList<Categories> = mutableListOf()
 
     fun setData(items: List<Categories>) {
-        onBoardingItems.clear()
-        onBoardingItems.addAll(items)
+        categoriesList.clear()
+        categoriesList.addAll(items)
         notifyDataSetChanged()
     }
 
@@ -32,28 +32,28 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
-        holder.bind(onBoardingItems[position])
+        holder.bind(categoriesList[position])
     }
 
     override fun getItemCount(): Int {
-        return onBoardingItems.size
+        return categoriesList.size
     }
 
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val imageOnBoarding = view.imageLiveStreams
-        private val textTitle = view.textTitle
+        private val iconCategory = view.imageLiveStreams
+        private val titleCategory = view.textTitle
 
-        private val categoryItem = view.findViewById<LinearLayout>(R.id.categoryItem)
+        private val rootLayout = view.categoryItem
 
         fun bind(category: Categories) {
-            textTitle?.text = category.name
+            titleCategory.text = category.name
 
             Picasso.with(itemView.context)
                 .load(category.image)
                 .fit()
                 .placeholder(R.drawable.icon_market_place_app)
-                .into(imageOnBoarding,object :Callback{
+                .into(iconCategory,object :Callback{
                     override fun onSuccess() {
                         setCompleteListener?.onComplete()
                     }
@@ -61,7 +61,7 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.OnBoardingItemViewH
                         setCompleteListener?.onComplete()
                     }
                 })
-            categoryItem.setOnClickListener {
+            rootLayout.setOnClickListener {
                 category.id?.let {
                     setOnCategoryClickListener?.onClickItem(it)
                 }

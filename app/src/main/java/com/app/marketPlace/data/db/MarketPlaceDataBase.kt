@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.app.marketPlace.data.db.dao.HintProductDao
 import com.app.marketPlace.data.db.dao.InBasketDao
-import com.app.marketPlace.data.db.dao.InFavoriteProductDao
+import com.app.marketPlace.data.db.dao.InFavoriteDao
 import com.app.marketPlace.data.db.dao.UserDao
 import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
@@ -17,7 +17,7 @@ abstract class MarketPlaceDataBase : RoomDatabase() {
 
     abstract fun hintProductsDao(): HintProductDao
     abstract fun userDao(): UserDao
-    abstract fun productsDao(): InFavoriteProductDao
-    abstract fun productsBasketDao(): InBasketDao
+    abstract fun inFavoriteDao(): InFavoriteDao
+    abstract fun inBasketDao(): InBasketDao
 }
 

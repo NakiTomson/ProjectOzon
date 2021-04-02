@@ -1,13 +1,15 @@
 package com.app.marketPlace.domain.mappers
 
-import com.app.marketPlace.domain.exception.NotMappedException
+import com.app.marketPlace.domain.exception.NotFoundMappedException
 import com.app.marketPlace.domain.repositories.Params
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 
-class MapperDef:IMapper {
+class MapperDefault:Mapper {
+
+    //It will throws NotFoundMappedException
     override fun <T> map(data: T?, params: Params): Resource<*> {
         return Resource(status = Resource.Status.COMPLETED, data = null ,
-            exception = NotMappedException(data),
+            exception = NotFoundMappedException(data),
             type = params.resourceType)
     }
 }

@@ -2,17 +2,17 @@ package com.app.marketPlace.presentation.rowType
 
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.marketPlace.domain.models.ProductItem
-import com.app.marketPlace.presentation.adapters.ProductHorizontalAdapter
+import com.app.marketPlace.domain.models.Product
+import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.interfaces.RowType
 
 
-data class ProductsHorizontalRowType(
-    val listProducts: List<ProductItem>,
+data class ProductRowType(
+    val listProducts: List<Product>,
     val spain: Int,
-    val productItemAdapter: ProductHorizontalAdapter
+    val adapter: ProductAdapter
 ) : ProductRowType {
 
     override var setOnProductClickListener: ProductRowType.ProductClickListener? = null
@@ -23,25 +23,26 @@ data class ProductsHorizontalRowType(
 
 
     override fun getItemViewType(): Int {
-        return RowType.PRODUCTS_HORIZONTAL_ROW_TYPE
+        return RowType.PRODUCTS_ROW_TYPE
     }
 
+
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val holder = viewHolder as ViewHolderFactory.ProductHorizontalViewHolder
-        holder.productsRecyclerView.adapter = productItemAdapter
+
+        val holder = viewHolder as ViewHolderFactory.ProductViewHolder
+        holder.productsRecyclerView.adapter =adapter
         holder.productsRecyclerView.layoutManager = GridLayoutManager(holder.itemView.context, spain)
-        holder.bind(listProducts, productItemAdapter)
+        holder.bind(listProducts, adapter)
 
-
-        productItemAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
+        adapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
             setOnProductClickListener?.clickProduct(product, imageView)
         }
 
-        productItemAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
+        adapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
             setOnHeartProductClickListener?.onClick(productsItem)
         }
 
-        productItemAdapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
+        adapter.setClickBasketProduct = ProductRowType.ClickListener { productsItem ->
             setOnBasketProductClickListener?.onClick(productsItem)
         }
     }

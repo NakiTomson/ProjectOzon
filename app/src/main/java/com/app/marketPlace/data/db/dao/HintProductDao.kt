@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface HintProductDao {
 
-    @Query("SELECT * FROM hintProductDb")
+    @Query("SELECT * FROM hintProduct")
     fun getAll(): List<HintProductDb>?
 
-    @Query("SELECT * FROM hintProductDb")
+    @Query("SELECT * FROM hintProduct")
     fun getAllFlow(): Flow<List<HintProductDb>>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -29,7 +29,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.domain.mappers.MapperToDb
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.ui.fragments.description.DescriptionFragment
 import com.app.marketPlace.presentation.adapters.BorderAdapter
@@ -39,7 +39,7 @@ import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.BannerRowType
 import com.app.marketPlace.presentation.rowType.CategoryRowType
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -78,10 +78,10 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
         navController = findNavController()
 
-        val detailProduct:ProductItem? = args.product
+        val detailProduct:Product? = args.product
 
         val nameProduct:String =
-            detailProduct?.nameOfProduct?.replace("-", "")!!.replace("  ", " ")
+            detailProduct?.name?.replace("-", "")!!.replace("  ", " ")
 
         val searchWord = nameProduct
             .substring(0, nameProduct.indexOf(' ', nameProduct.indexOf(' ') + 7))
@@ -144,7 +144,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         })
     }
 
-    private fun initView(detailProduct: ProductItem){
+    private fun initView(detailProduct: Product){
         val navController = findNavController()
         val mAuth = FirebaseAuth.getInstance()
 
@@ -153,30 +153,30 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         basket?.visibility = View.VISIBLE
         basket?.text = String.format(
             resources.getString(R.string.inBasket),
-            detailProduct.priceWithDiscount
+            detailProduct.priceMinusDiscount
         )
         sellerName.text = detailProduct.company
-        priceWithDiscountTextView.text = detailProduct.priceWithDiscount
-        if (detailProduct.priceOlD != detailProduct.priceWithDiscount){
+        priceWithDiscountTextView.text = detailProduct.priceMinusDiscount
+        if (detailProduct.price != detailProduct.priceMinusDiscount){
             priceOlDTextView.visibility = View.VISIBLE
-            priceOlDTextView.text = detailProduct.priceOlD
+            priceOlDTextView.text = detailProduct.price
             priceWithDiscountTextView.setTextColor(Color.RED)
         }
-        nameOfProduct.text = detailProduct.nameOfProduct
+        nameOfProduct.text = detailProduct.name
         currentColor.text = detailProduct.color
 
-        if (detailProduct.productInBasket){
+        if (detailProduct.isBasket){
             activity?.in_basket_button?.setBackgroundResource(R.drawable.button_added)
         }else{
             activity?.in_basket_button?.setBackgroundResource(R.drawable.button_next)
         }
 
         activity?.in_basket_button?.setOnClickListener {
-            if (detailProduct.productInBasket){
-                detailProduct.productInBasket = false
+            if (detailProduct.isBasket){
+                detailProduct.isBasket = false
                 it.setBackgroundResource(R.drawable.button_next)
             }else{
-                detailProduct.productInBasket = true
+                detailProduct.isBasket = true
                 it.setBackgroundResource(R.drawable.button_added)
             }
             mainViewModel.insertOrDeleteBasket(detailProduct)
@@ -218,18 +218,18 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
 
-    private fun handleByeOneClick(mAuth:FirebaseAuth,detailProduct: ProductItem){
+    private fun handleByeOneClick(mAuth:FirebaseAuth,detailProduct: Product){
         if (mAuth.currentUser != null){
             val bundle = Bundle()
-            bundle.putStringArrayList("images", arrayListOf(detailProduct.generalIconProductSting))
-            bundle.putString("oldPrice", detailProduct.priceOlD)
+            bundle.putStringArrayList("images", arrayListOf(detailProduct.icon))
+            bundle.putString("oldPrice", detailProduct.price)
             bundle.putString(
-                "discount", ((detailProduct.priceOlD?.replace("$", "")?.trim())?.toFloat()
+                "discount", ((detailProduct.price?.replace("$", "")?.trim())?.toFloat()
                     ?.minus(
-                        (detailProduct.priceWithDiscount?.replace("$", "")?.trim())!!.toFloat()
+                        (detailProduct.priceMinusDiscount?.replace("$", "")?.trim())!!.toFloat()
                     )).toString()
             )
-            bundle.putString("finalPrice", detailProduct.priceWithDiscount)
+            bundle.putString("finalPrice", detailProduct.priceMinusDiscount)
             navController.navigate(R.id.makingOrderFragment, bundle)
         }else {
             val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
@@ -247,11 +247,11 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
     }
 
 
-    private fun setupBannerAdapter(detailProduct: ProductItem){
+    private fun setupBannerAdapter(detailProduct: Product){
         val adapterImages = BorderAdapter()
 
         detailProduct.images?.forEach {
-            adapterImages.setItem(Banner(onBoardingImageUrl = it))
+            adapterImages.setItem(Banner(imageUrl = it))
         }
 
         postponeEnterTransition()
@@ -286,7 +286,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         imageDetailViewPager.setPageTransformer(compositePageTransformer)
     }
 
-    private fun setupSimpleAdapter(detailProduct: ProductItem){
+    private fun setupSimpleAdapter(detailProduct: Product){
         val simpleAdapter = SimpleCategoriesAdapter()
         simpleAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener2 { category,view ->
             val bundle = Bundle()
@@ -309,7 +309,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
             val adapter = ProductAdapter()
             adapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-                val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+                val extras = FragmentNavigatorExtras(imageView to product.icon!!)
                 val action = DetailsProductFragmentDirections.actionGlobalDetailsProductFragment(product = product)
                 navController.navigate(action, extras)
             }

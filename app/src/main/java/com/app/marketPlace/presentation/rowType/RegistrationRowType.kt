@@ -16,9 +16,9 @@ data class RegistrationRowType(val randomId: Double = Math.random() *123) :RowTy
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val registrationViewHolder = viewHolder as ViewHolderFactory.RegistrationViewHolder
-        registrationViewHolder.bind()
-        registrationViewHolder.financeButton.setOnClickListener {
+        val holder = viewHolder as ViewHolderFactory.RegistrationViewHolder
+        holder.bind()
+        holder.financeButton.setOnClickListener {
             setOnAuthorizationClickListener?.onClick()
         }
     }

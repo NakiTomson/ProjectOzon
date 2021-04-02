@@ -8,8 +8,7 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-data class ComplexSloganRowType(val item: Item) :RowType{
-
+data class ComplexSloganRowType(val item: Slogan) : RowType {
 
     override fun getItemViewType(): Int {
         return RowType.PRODUCTS_SLOGAN_COMPLEX_TYPE
@@ -20,45 +19,40 @@ data class ComplexSloganRowType(val item: Item) :RowType{
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
 
-        val holder: ViewHolderFactory.ComplexSloganOfferProduct = viewHolder as  ViewHolderFactory.ComplexSloganOfferProduct
+        val holder: ViewHolderFactory.ComplexSloganOfferProduct = viewHolder as ViewHolderFactory.ComplexSloganOfferProduct
         holder.bind(item)
-
-
         when (item) {
-            is Item.SetBestseller -> {
+            is Slogan.SetBestseller -> {
                 holder.topText.visibility = visible
                 holder.topText.text = holder.itemView.context.getString(R.string.bestseller)
                 holder.generalText.text = item.company
             }
 
-            is Item.SetPrice -> {
+            is Slogan.SetPrice -> {
                 holder.generalText.text = item.actualPrice
-
                 holder.childTextView.text = item.oldPrice
                 holder.childTextView.visibility = visible
                 holder.imageNext.visibility = visible
                 holder.imageNext.setOnClickListener {
-                    Toast.makeText(holder.itemView.context,
-                        holder.itemView.context.getString(R.string.next), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(holder.itemView.context, holder.itemView.context.getString(R.string.next), Toast.LENGTH_SHORT).show()
                 }
             }
-            is Item.SetSimpleOffer -> {
+            is Slogan.SetSimpleOffer -> {
                 holder.generalText.text = item.offer
                 holder.generalText.setPadding(0, 0, 0, 20)
                 holder.generalText.textSize = 16f
                 holder.generalText.setTypeface(holder.generalText.typeface, Typeface.NORMAL)
                 holder.imageNext.visibility = visible
                 holder.imageNext.setOnClickListener {
-                    Toast.makeText(holder.itemView.context,
-                        holder.itemView.context.getString(R.string.next), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(holder.itemView.context, holder.itemView.context.getString(R.string.next), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    sealed class Item {
-        class SetBestseller(val company: String):Item()
-        class SetPrice(val actualPrice: String, val oldPrice:String):Item()
-        class SetSimpleOffer(val offer: String):Item()
+    sealed class Slogan {
+        class SetBestseller(val company: String) : Slogan()
+        class SetPrice(val actualPrice: String, val oldPrice: String) : Slogan()
+        class SetSimpleOffer(val offer: String) : Slogan()
     }
 }

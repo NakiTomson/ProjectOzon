@@ -59,5 +59,19 @@
     <string name="regNo">Нет</string>
     <string name="bestseller">Бестселлер</string>
 
+    <string name="noteEnoughCharacters">Пороль 6 символов или Не полный адресс или Телефон</string>
+    <string name="diffPasswords">Разные Пороли</string>
+    <string name="errorSignUp">"Error SignUp"</string>
+    <string name="error">Error</string>
+    <string name="epmtyFilds">Заполните поля</string>
+    <string name="nice">Nice</string>
+    <string name="to_see_you">To see you</string>
+    <string name="again">Again</string>
+    <string name="your_email">Your Email</string>
+    <string name="your_password">Your Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="discount">Скидка</string>
+
 
 </resources>

@@ -1,7 +1,5 @@
 package com.app.marketPlace.presentation.factory
 
-import android.app.Activity
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +8,6 @@ import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.app.ActivityCompat.postponeEnterTransition
-import androidx.core.app.ActivityCompat.startPostponedEnterTransition
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.app.marketPlace.R
@@ -21,8 +15,7 @@ import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.*
-import com.app.marketPlace.domain.models.ProductItem
-import com.app.marketPlace.presentation.interfaces.ProductRowType
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.presentation.rowType.*
 import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.android.synthetic.main.row_type_banner.view.*
@@ -34,7 +27,6 @@ import kotlinx.android.synthetic.main.row_type_live.view.*
 import kotlinx.android.synthetic.main.row_type_products.view.*
 import kotlinx.android.synthetic.main.row_type_registration.view.*
 import kotlinx.android.synthetic.main.row_type_top_slogan.view.*
-import java.util.*
 
 
 object ViewHolderFactory {
@@ -51,29 +43,17 @@ object ViewHolderFactory {
     }
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var clickOnCategoryItem: CategoryRowType.ClickCategoryListener? = null
-        val bannekerViewPager: ViewPager2 = itemView.onAdsViewPager
-        var bannerIndicatorsContainer: LinearLayout? = null
+        val banner: ViewPager2 = itemView.onAdsViewPager
+        var bannerIndicatorsContainer: LinearLayout = itemView.indicatorsContainerAds
         val shimmer: ShimmerFrameLayout = itemView.shimmerLayout
 
         fun bind(combinationProductsAdapter: CombinationAdapter) {
-            bannerIndicatorsContainer = itemView.indicatorsContainerAds
-            bannekerViewPager.adapter = combinationProductsAdapter
-
-            combinationProductsAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
-                clickOnCategoryItem?.onClickItem(data)
-            }
-            combinationProductsAdapter.setCompleteListener = BannerRowType.CompleteListener {
-                shimmer.stopShimmer()
-                shimmer.setShimmer(null)
-            }
+            banner.adapter = combinationProductsAdapter
         }
     }
 
     class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        lateinit var setHistoryClickListener: HistoryRowType.HistoryListener
         val historyButton: Button = itemView.historyItemButton
         val financeButton: Button = itemView.financeItemButton
         val container: LinearLayout = itemView.containerImages
@@ -87,22 +67,15 @@ object ViewHolderFactory {
     }
 
     class LiveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var serLiveClickListener: LiveRowType.LiveListener? = null
         val liveStreamPager: ViewPager2 = itemView.onLiveStreamViewPager
-
 
         fun bind(liveItemAdapter: LiveStreamAdapter) {
             liveStreamPager.adapter = liveItemAdapter
-            liveItemAdapter.setOnLiveClickListener = LiveRowType.LiveListener { liveUrl, view ->
-                serLiveClickListener?.onClick(liveUrl, view)
-            }
         }
     }
 
     class RegistrationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val financeButton: Button = itemView.buttonGoRegistration
-
         fun bind() {}
     }
 
@@ -141,7 +114,7 @@ object ViewHolderFactory {
         val iconGeneral = itemView.iconGeneralText
         val imageNext = itemView.imageNextMoxyData
 
-        fun bind(item: ComplexSloganRowType.Item) {
+        fun bind(item: ComplexSloganRowType.Slogan) {
 
         }
     }
@@ -155,7 +128,7 @@ object ViewHolderFactory {
 
         private val controller = LayoutAnimationController(animation)
 
-        fun bind(listProducts: List<ProductItem>, productItemAdapter: ProductAdapter) {
+        fun bind(listProducts: List<Product>, productItemAdapter: ProductAdapter) {
             productItemAdapter.setData(listProducts)
             productsRecyclerView.layoutAnimation = controller
         }
@@ -171,7 +144,7 @@ object ViewHolderFactory {
 
         private val controller = LayoutAnimationController(animation)
 
-        fun bind(listProducts: List<ProductItem>,productItemAdapter: ProductHorizontalAdapter) {
+        fun bind(listProducts: List<Product>, productItemAdapter: ProductHorizontalAdapter) {
             productItemAdapter.setData(listProducts)
             productsRecyclerView.layoutAnimation = controller
         }

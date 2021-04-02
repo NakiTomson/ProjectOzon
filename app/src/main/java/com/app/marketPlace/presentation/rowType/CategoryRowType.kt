@@ -15,9 +15,9 @@ import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.CombinationAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-data class CategoryRowType(val combinationProductsAdapter: CombinationAdapter):RowType {
+data class CategoryRowType(val adapter: CombinationAdapter):RowType {
 
-    var setOnCategoryItemClickListener:ClickCategoryListener? = null
+    var setOnCategoryClickListener:ClickCategoryListener? = null
 
     fun interface ClickCategoryListener{
         fun onClickItem(data: String)
@@ -31,22 +31,28 @@ data class CategoryRowType(val combinationProductsAdapter: CombinationAdapter):R
         return RowType.CATEGORY_ROW_TYPE
     }
 
+
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val categoryViewHolder = viewHolder as  ViewHolderFactory.CategoryViewHolder
-        categoryViewHolder.bind(combinationProductsAdapter)
+        val holder = viewHolder as  ViewHolderFactory.CategoryViewHolder
+        holder.bind(adapter)
 
-        setupIndicator(categoryViewHolder.bannerIndicatorsContainer!!,combinationProductsAdapter.itemCount,viewHolder.itemView.context)
-        setIndicatorsContainer(0,categoryViewHolder.bannerIndicatorsContainer!!,viewHolder.itemView.context)
+        setupIndicator(holder.bannerIndicatorsContainer,adapter.itemCount,viewHolder.itemView.context)
+        setIndicatorsContainer(0,holder.bannerIndicatorsContainer,viewHolder.itemView.context)
 
-        categoryViewHolder.bannekerViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+        holder.banner.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setIndicatorsContainer(position, categoryViewHolder.bannerIndicatorsContainer!!, viewHolder.itemView.context)
-                viewHolder.clickOnCategoryItem = ClickCategoryListener { data ->
-                    setOnCategoryItemClickListener?.onClickItem(data)
+                setIndicatorsContainer(position, holder.bannerIndicatorsContainer, viewHolder.itemView.context)
+                adapter.setOnCategoryClickListener = ClickCategoryListener { data ->
+                    setOnCategoryClickListener?.onClickItem(data)
                 }
             }
         })
+
+        adapter.setCompleteListener = BannerRowType.CompleteListener {
+            holder.shimmer.stopShimmer()
+            holder.shimmer.setShimmer(null)
+        }
     }
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {

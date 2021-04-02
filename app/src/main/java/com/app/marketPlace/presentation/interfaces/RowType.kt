@@ -1,21 +1,23 @@
-package com.app.marketPlace.presentation.interfaces;
+package com.app.marketPlace.presentation.interfaces
 
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView
 
-public interface RowType {
+interface RowType {
 
-    int BANNER_ROW_TYPE = 0;
-    int CATEGORY_ROW_TYPE = 1;
-    int HISTORY_ROW_TYPE = 2;
-    int LIVE_ROW_TYPE = 3;
-    int REGISTRATION_ROW_TYPE = 4;
-    int PRODUCTS_ROW_TYPE = 5;
-    int PRODUCTS_SLOGAN_TOP_TYPE = 6;
-    int PRODUCTS_SLOGAN_BOTTOM_TYPE = 7;
-    int PRODUCTS_SLOGAN_COMPLEX_TYPE = 8;
-    int PRODUCTS_HORIZONTAL_ROW_TYPE = 9;
+    fun getItemViewType(): Int
 
-    int getItemViewType();
+    fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?)
 
-    void onBindViewHolder(RecyclerView.ViewHolder viewHolder);
+    companion object{
+        var BANNER_ROW_TYPE = 0
+        var CATEGORY_ROW_TYPE = 1
+        var HISTORY_ROW_TYPE = 2
+        var LIVE_ROW_TYPE = 3
+        var REGISTRATION_ROW_TYPE = 4
+        var PRODUCTS_ROW_TYPE = 5
+        var PRODUCTS_SLOGAN_TOP_TYPE = 6
+        var PRODUCTS_SLOGAN_BOTTOM_TYPE = 7
+        var PRODUCTS_SLOGAN_COMPLEX_TYPE = 8
+        var PRODUCTS_HORIZONTAL_ROW_TYPE = 9
+    }
 }

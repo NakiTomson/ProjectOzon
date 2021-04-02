@@ -20,13 +20,14 @@ import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.remote.models.Stories
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
-import com.app.marketPlace.domain.models.CombineProductsItem
+import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.rowType.Resource.Type
+import com.app.marketPlace.presentation.factory.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
+import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +52,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
+
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
@@ -64,24 +66,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             view.onTouchEvent(event)
         }
 
-        val anim: Animation = AnimationUtils.loadAnimation(
-            this.context,
-            R.anim.lunge_from_bottom
-        )
-
+        val anim: Animation = AnimationUtils.loadAnimation(this.context, R.anim.lunge_from_bottom)
         val controller = LayoutAnimationController(anim)
 
         viewModel.completed.onEach { completed ->
             if (completed == null)return@onEach
 
-            if (viewModel.data.replayCache.all { it.data == null }){
+            if (viewModel.resDataFlow.replayCache.all { it.data == null }){
                 showError()
                 return@onEach
             }
             showSuccess()
-            multipleHomeRecyclerView.layoutAnimation = controller
+            multipleRowTypeRecyclerView.layoutAnimation = controller
             adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener { page ->
-                if (viewModel.data.replayCache.size <= 10){
+                if (viewModel.resDataFlow.replayCache.size <= 10){
                     viewModel.loadAdditionalData(page)
                 }
             }
@@ -92,19 +90,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
     }
 
-    private fun showError() {
-        homeMockIsEmpty.visibility = View.VISIBLE
-    }
-
-    private fun showSuccess() {
-        homeMockIsEmpty.visibility = View.GONE
-    }
-
     private fun setupAdapter(multipleAdapter: MultipleAdapter) {
         multipleAdapter.setHasStableIds(true)
-        multipleHomeRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        multipleHomeRecyclerView.apply {
+        multipleRowTypeRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
             adapter = multipleAdapter
             postponeEnterTransition()
             viewTreeObserver
@@ -116,7 +105,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupData(multipleAdapter: MultipleAdapter){
-        viewModel.data.onEach { resource->
+        viewModel.resDataFlow.onEach { resource->
             if (resource.data == null)return@onEach
             when(resource.type){
                 is Type.BANNER -> {
@@ -132,16 +121,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     setLiveStreams(multipleAdapter, resource as Resource<LiveStreamItem>)
                 }
                 is Type.PRODUCT -> {
-                    resource as Resource<CombineProductsItem>
+                    resource as Resource<CombineProducts>
                     val productAdapter = ProductAdapter()
-                    val rowProduct = ProductsRowType(resource.data!!.list, resource.data.spain, productAdapter)
+                    val rowProduct = ProductRowType(resource.data!!.list, resource.data.spain, productAdapter)
                     setProducts(multipleAdapter, resource,rowProduct)
                 }
                 is Type.HORIZONTAL_PRODUCT->{
-                    resource as Resource<CombineProductsItem>
+                    resource as Resource<CombineProducts>
                     val productAdapter = ProductHorizontalAdapter()
-                    val rowProduct = ProductsHorizontalRowType(resource.data!!.list, resource.data.spain, productAdapter)
+                    val rowProduct = ProductHorizontalRowType(resource.data!!.list, resource.data.spain, productAdapter)
                     setProducts(multipleAdapter, resource,rowProduct)
+                }
+                is Type.REGISTRATION -> {
+                    setRegistration(multipleAdapter)
                 }
                 is Type.UNDEFINED -> {
                     throw NotFoundRealizationException("type non found ${resource.data} ${resource.type}")
@@ -151,9 +143,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setBanners(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<Banner>>) {
-        val bannerAdapter  = BannerAdapter()
-        resource.data!!.forEach { bannerAdapter.setItem(it) }
+        val bannerAdapter = BannerAdapter()
         val banner = BannerRowType(bannerAdapter)
+
+        resource.data?.let { bannerAdapter.setData(it) }
         multipleAdapter.setData(banner)
         banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl: String, view: View ->
             val extras = FragmentNavigatorExtras(
@@ -170,7 +163,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val categoryRowType = CategoryRowType(combinationAdapter)
         multipleAdapter.setData(categoryRowType)
-        categoryRowType.setOnCategoryItemClickListener = CategoryRowType.ClickCategoryListener { data ->
+        categoryRowType.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
             val bundle = Bundle()
             bundle.putString("category", data)
             navController.navigate(R.id.productsListFragment, bundle)
@@ -178,9 +171,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setStories(multipleAdapter: MultipleAdapter,resource: Resource<Stories>) {
-        val stories = HistoryRowType(resource.data)
+        val stories = StoryRowType(resource.data)
         multipleAdapter.setData(stories)
-        stories.setOnStoriesClickListener = HistoryRowType.HistoryListener { listOf, position, imageView ->
+        stories.setOnStoriesClickListener = StoryRowType.HistoryListener { listOf, position, imageView ->
             val extras = FragmentNavigatorExtras(
                 imageView to (listOf[position]+position)
             )
@@ -189,20 +182,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setLiveStreams(multipleAdapter: MultipleAdapter, resource: Resource<LiveStreamItem>) {
-        multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
         val liveStreamAdapter = LiveStreamAdapter()
-        liveStreamAdapter.setData(resource.data!!)
         val rowTypeLive = LiveRowType(liveStreamAdapter)
+        val videoDialog = LiveVideoDialog()
+
+        multipleAdapter.setData(TopSloganRowType(getString(R.string.marketPlaceLive)))
+        liveStreamAdapter.setData(resource.data!!)
         multipleAdapter.setData(rowTypeLive)
 
-        val videoDialog =  LiveVideoDialog()
-        rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { liveUrl, view ->
+        rowTypeLive.setOnLiveStreamClickListener = LiveRowType.LiveListener { _, _ ->
             videoDialog.show(childFragmentManager, LiveVideoDialog.TAG)
         }
     }
 
+    private fun setRegistration(multipleAdapter: MultipleAdapter) {
+        val rowType = RegistrationRowType()
+        rowType.setOnAuthorizationClickListener = RegistrationRowType.AuthorizationClickListener {
+            navController.navigate(R.id.signInFragment)
+        }
+        multipleAdapter.setData(rowType)
+    }
 
-    private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProductsItem>, rowProduct: ProductRowType) {
+    private fun setProducts(multipleAdapter: MultipleAdapter, resource: Resource<CombineProducts>, rowProduct: ProductRowType) {
         resource.data!!.topOffer?.let {
             multipleAdapter.setData(TopSloganRowType(it))
         }
@@ -216,27 +217,34 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             mainViewModel.insertOrDeleteBasket(product)
         }
         rowProduct.setOnProductClickListener = ProductRowType.ProductClickListener { product, view ->
-
             val extras = FragmentNavigatorExtras(
-                view to product.generalIconProductSting!!
+                view to product.icon!!
             )
-
             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(
                 product = product
             )
             navController.navigate(action, extras)
         }
-
         resource.data.bottomOffer?.let {
             multipleAdapter.setData(BottomSloganRowType(it))
         }
     }
 
-    private fun navigateToMock(mockImage: String = "", liveStream: String = "", extras: FragmentNavigator.Extras, listOf: List<String>? = null, position: Int? = null) {
+    private fun navigateToMock(mockImage: String = "", liveStream: String = "",
+        extras: FragmentNavigator.Extras, listOf: List<String>? = null, position: Int? = null) {
         val bundle = Bundle()
         bundle.putString("arg1", mockImage)
         bundle.putString("arg2", liveStream)
         val action = HomeFragmentDirections.actionHomeFragmentToMockFragment(imageUrl = mockImage, videoUrl = liveStream, arrayHistory = listOf?.toTypedArray(), position = position ?: 0)
         navController.navigate(action, extras)
     }
+
+    private fun showError() {
+        homeMockIsEmpty.visibility = View.VISIBLE
+    }
+
+    private fun showSuccess() {
+        homeMockIsEmpty.visibility = View.GONE
+    }
+
 }

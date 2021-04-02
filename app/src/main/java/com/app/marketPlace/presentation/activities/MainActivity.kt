@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity() {
                 MainViewModel.listIdsFavorite.addAll(it)
             }
         })
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {

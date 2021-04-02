@@ -8,10 +8,10 @@ import com.google.gson.annotations.SerializedName
 class LiveStreamItem {
     @SerializedName("resultLiveData")
     @Expose
-    var resultLiveData: MutableList<ListResultLiveItems>? = null
+    var liveItemsList: MutableList<LiveItems>? = null
 }
 
-data class ListResultLiveItems(
+data class LiveItems(
         @SerializedName("onBoardingImageUrl")
         @Expose
         val onBoardingImageUrl: String? = null,

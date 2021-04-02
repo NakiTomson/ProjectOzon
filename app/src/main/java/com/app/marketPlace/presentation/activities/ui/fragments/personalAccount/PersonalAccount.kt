@@ -34,8 +34,6 @@ class PersonalAccount : Fragment(R.layout.fragment_personal_account) {
                 mailUser.setText(it?.mail ?: "null")
                 addressUser.setText(it?.address ?: "null")
             })
-
         }
     }
-
 }

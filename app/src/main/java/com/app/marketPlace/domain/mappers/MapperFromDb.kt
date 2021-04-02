@@ -3,25 +3,25 @@ package com.app.marketPlace.domain.mappers
 import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.domain.mappers.MapperToDb.Companion.checkInFavorite
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.models.Product
 import javax.inject.Inject
 
 class MapperFromDb @Inject constructor() {
 
-    fun mapListBasketDb(basketsList: List<BasketProductDb>?): List<ProductItem>? {
+    fun mapBasketListDb(basketsList: List<BasketProductDb>?): List<Product>? {
 
         return basketsList?.map {
 
-            ProductItem(
-                type = ProductItem.Type.ProductWithName,
-                generalIconProductSting = it.iconProduct,
-                favoriteIconProduct = checkInFavorite(it.id),
-                productDiscount = it.productDiscount,
+            Product(
+                type = Product.Type.ProductWithName,
+                icon = it.icon,
+                isFavorite = checkInFavorite(it.id),
+                discount = it.discount,
                 isBestseller = it.isBestseller,
-                priceWithDiscount = it.priceWithDiscount,
-                priceOlD = it.priceOlD,
-                goToBasket = it.goToBasket,
-                nameOfProduct = it.nameOfProduct,
+                priceMinusDiscount = it.priceMinusDiscount,
+                price = it.price,
+                isCanGoToBasket = it.isCanGoToBasket,
+                name = it.name,
                 shortDescription = it.shortDescription,
                 longDescription = it.longDescription,
                 images = it.images,
@@ -33,20 +33,20 @@ class MapperFromDb @Inject constructor() {
     }
 
 
-    fun mapListFavoriteDB(basketsList: List<FavoriteProductDb>?): List<ProductItem>? {
+    fun mapFavoriteListDb(basketsList: List<FavoriteProductDb>?): List<Product>? {
 
         return basketsList?.map {
 
-            ProductItem(
-                type = ProductItem.Type.ProductWithName,
-                generalIconProductSting = it.iconProduct,
-                favoriteIconProduct = checkInFavorite(it.id),
-                productDiscount = it.productDiscount,
+            Product(
+                type = Product.Type.ProductWithName,
+                icon = it.icon,
+                isFavorite = checkInFavorite(it.id),
+                discount = it.discount,
                 isBestseller = it.isBestseller,
-                priceWithDiscount = it.priceWithDiscount,
-                priceOlD = it.priceOlD,
-                goToBasket = it.goToBasket,
-                nameOfProduct = it.nameOfProduct,
+                priceMinusDiscount = it.priceMinusDiscount,
+                price = it.price,
+                isCanGoToBasket = it.isCanGoToBasket,
+                name = it.name,
                 shortDescription = it.shortDescription,
                 longDescription = it.longDescription,
                 images = it.images,

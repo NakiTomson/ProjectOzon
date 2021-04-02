@@ -2,19 +2,19 @@ package com.app.marketPlace.domain.mappers
 
 import com.app.marketPlace.data.remote.models.*
 import com.app.marketPlace.domain.exception.NotFoundRealizationException
-import com.app.marketPlace.domain.exception.NotMappedException
-import com.app.marketPlace.domain.models.CombineProductsItem
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.exception.NotFoundMappedException
+import com.app.marketPlace.domain.models.CombineProducts
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.Params
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import java.text.DecimalFormat
 
-class MapperProducts : IMapper {
+class MapperProducts : Mapper {
 
     override fun <T> map(data: T?, params: Params): Resource<*> {
         if (data !is ProductsList?){
             return Resource(status = Resource.Status.COMPLETED, data = null ,
-                exception = NotMappedException(data),
+                exception = NotFoundMappedException(data),
                 type = params.resourceType)
         }
 
@@ -24,7 +24,7 @@ class MapperProducts : IMapper {
                 type = params.resourceType)
         }
 
-        val item = CombineProductsItem(
+        val item = CombineProducts(
             topOffer = params.topOffer,
             bottomOffer = params.bottomOffer,
             list = getUiProducts(data.products, params.typeProduct),
@@ -41,23 +41,23 @@ class MapperProducts : IMapper {
     }
 
 
-    private fun getUiProducts(products: List<Product>?, type: ProductItem.Type) : List<ProductItem>{
+    private fun getUiProducts(products: List<ProductOfServer>?, type: Product.Type) : List<Product>{
 
-        val newProductsList: MutableList<ProductItem> = ArrayList()
+        val newProductsList: MutableList<Product> = ArrayList()
 
         products?.forEach {
 
             newProductsList.add(
-                ProductItem(
+                Product(
                     type = type,
-                    generalIconProductSting = it.image,
-                    favoriteIconProduct = false,
-                    productInBasket = false,
-                    productDiscount = checkDiscountOnProduct(it.salePrice, it.regularPrice),
-                    priceWithDiscount = it.salePrice.toString() + " $",
-                    priceOlD = it.regularPrice.toString() + " $",
-                    goToBasket = true,
-                    nameOfProduct = it.name,
+                    icon = it.image,
+                    isFavorite = false,
+                    isBasket = false,
+                    discount = checkDiscountOnProduct(it.salePrice, it.regularPrice),
+                    priceMinusDiscount = it.salePrice.toString() + " $",
+                    price = it.regularPrice.toString() + " $",
+                    isCanGoToBasket = true,
+                    name = it.name,
                     startData = it.startDate,
                     productNew = it.new,
                     activeForSale = it.active,
@@ -92,7 +92,7 @@ class MapperProducts : IMapper {
         }
     }
 
-    private fun getListImages(products: Product):MutableList<String>{
+    private fun getListImages(products: ProductOfServer):MutableList<String>{
         val imagesList:MutableList<String> = ArrayList()
 
         products.largeFrontImage?.let {

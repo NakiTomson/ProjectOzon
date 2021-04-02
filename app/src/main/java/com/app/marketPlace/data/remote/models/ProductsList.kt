@@ -12,5 +12,5 @@ data class ProductsList(
         val totalPages: Int? = null,
 
         @SerializedName("products")
-        @Expose val products: List<Product>? = null
+        @Expose val products: List<ProductOfServer>? = null
 )

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Animation.AnimationListener
@@ -12,11 +11,6 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.app.marketPlace.R
 import kotlinx.android.synthetic.main.activity_splash.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 
 
 class SplashActivity : AppCompatActivity() {
@@ -26,28 +20,9 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         val sharedPreferences = getSharedPreferences("MARKET",Context.MODE_PRIVATE)
-//        startMainAnimation(sharedPreferences)
-//        startGlobalService()
-//        private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
-
-        simple().onEach {
-            Log.v("WORKD","re $it")
-        }
-        simple().catch {
-            Log.v("WORKD","re $it")
-        }
+        startMainAnimation(sharedPreferences)
+        startGlobalService()
     }
-
-
-    private fun simple(): Flow<Int> = flow {
-        for ( i in 1..3){
-            delay(3)
-            emit(i)
-        }
-        Log.v("WORKD","WOrk")
-    }
-
-    var state:Boolean = false
 
 
 
@@ -89,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun startOnBoardingActivity(){
-        startActivity(Intent(this, OnBoardingFirstStartActivity::class.java))
+        startActivity(Intent(this, FirstStartActivity::class.java))
         finish()
     }
 

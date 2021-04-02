@@ -1,7 +1,5 @@
 package com.app.marketPlace.presentation.rowType
 
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -18,9 +16,9 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 
-data class HistoryRowType(val historyModel: Stories?) :RowType {
+data class StoryRowType(val stories: Stories?) :RowType {
 
-    lateinit var setOnStoriesClickListener: HistoryListener
+    var setOnStoriesClickListener: HistoryListener? = null
 
 
     fun interface HistoryListener {
@@ -32,47 +30,44 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val historyViewHolder = viewHolder as ViewHolderFactory.HistoryViewHolder
-        val container = historyViewHolder.container
-        historyModel?.let { historyViewHolder.bind(it) }
+        val holder = viewHolder as ViewHolderFactory.HistoryViewHolder
 
-        historyViewHolder.historyButton.setOnClickListener {
+        stories?.let { holder.bind(it) }
+
+        holder.historyButton.setOnClickListener {
             it.background =  ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_next)
-            historyViewHolder.financeButton.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_back)
+            holder.financeButton.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_back)
             Toast.makeText(viewHolder.itemView.context,"Истории", Toast.LENGTH_SHORT).show()
         }
 
-        historyViewHolder.financeButton.setOnClickListener {
-            historyViewHolder.historyButton.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_back)
+        holder.financeButton.setOnClickListener {
+            holder.historyButton.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_back)
             it.background = ContextCompat.getDrawable(viewHolder.itemView.context,R.drawable.button_next)
             Toast.makeText(viewHolder.itemView.context,"Финансы", Toast.LENGTH_SHORT).show()
 
         }
 
-        historyViewHolder.setHistoryClickListener = HistoryListener { listOf, position, imageView ->
-            setOnStoriesClickListener.onClick(listOf, position, imageView)
-        }
-        setUpImages(historyModel?.arrayImages!!,container,historyViewHolder.shimmer)
+        setUpImages(stories?.arrayImages!!,holder.container,holder.shimmer)
     }
 
 
-    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout,shimmer: ShimmerFrameLayout){
-        if (container.children.count() >0) return
+    private fun setUpImages(listImagesUrl: List<String>, container: LinearLayout, shimmer: ShimmerFrameLayout){
+        if (container.children.count() > 0) return
         val images = arrayOfNulls<RoundedImageView>(listImagesUrl.size)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
                 250,
                 375
             )
-        layoutParams.setMargins(8,8,16,8)
-        for ( i in images.indices){
+        layoutParams.setMargins(8, 8, 16, 8)
+        for (i in images.indices) {
             images[i] = RoundedImageView(container.context)
-            images[i]?.transitionName = listImagesUrl[i]+i
-            images[i]?.let {image:RoundedImageView->
+            images[i]?.transitionName = listImagesUrl[i] + i
+            images[i]?.let { image: RoundedImageView ->
                 Picasso.with(container.context)
                     .load(listImagesUrl[i])
                     .placeholder(R.drawable.one_history)
-                    .into(image,object :Callback{
+                    .into(image, object : Callback {
                         override fun onSuccess() {
                             shimmer.stopShimmer()
                             shimmer.setShimmer(null)
@@ -92,7 +87,7 @@ data class HistoryRowType(val historyModel: Stories?) :RowType {
                 image.borderWidth = 7f
                 container.addView(image)
                 image.setOnClickListener {
-                    setOnStoriesClickListener.onClick(listImagesUrl,i,image)
+                    setOnStoriesClickListener?.onClick(listImagesUrl, i, image)
                 }
             }
         }

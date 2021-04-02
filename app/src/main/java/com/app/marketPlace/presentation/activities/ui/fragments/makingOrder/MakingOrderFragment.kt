@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_making_order.*
 import java.util.ArrayList
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
@@ -35,8 +34,7 @@ class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
             nameAndNumberOfUser.text = user.name+", "+user.phone
         })
 
-
-        val imagesUrls = arguments?.getStringArrayList("images")
+        val imageUrls = arguments?.getStringArrayList("images")
 
         val oldPrice = arguments?.getString("oldPrice")
         val discount = arguments?.getString("discount")
@@ -56,7 +54,7 @@ class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
             Toast.makeText(context,"Успешно купили",Toast.LENGTH_SHORT).show()
         }
 
-        setUpImages(imagesUrls)
+        setUpImages(imageUrls)
     }
 
 

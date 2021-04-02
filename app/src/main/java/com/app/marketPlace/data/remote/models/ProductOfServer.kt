@@ -3,7 +3,7 @@ package com.app.marketPlace.data.remote.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Product(
+data class ProductOfServer(
     @SerializedName("sku")
     @Expose
     var sku: Int? = null,
@@ -38,7 +38,7 @@ data class Product(
 
     @SerializedName("categoryPath")
     @Expose
-    var categoryPath: List<CategoryPath>? = null,
+    var categoryPath: List<CategoriesPath>? = null,
 
     @SerializedName("shortDescription")
     @Expose

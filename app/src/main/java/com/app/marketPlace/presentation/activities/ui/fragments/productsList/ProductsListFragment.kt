@@ -18,7 +18,7 @@ import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmen
 import com.app.marketPlace.presentation.adapters.ProductAdapter
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.interfaces.ProductRowType
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_products_list.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
@@ -36,11 +36,10 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
 
         val navController = findNavController()
 
-        foundProductsRecyclerView.layoutManager = GridLayoutManager(activity,3)
         val productsAdapter = ProductAdapter()
         productsAdapter.setHasStableIds(true)
-
         foundProductsRecyclerView.apply {
+            layoutManager = GridLayoutManager(activity,3)
             adapter = productsAdapter
             postponeEnterTransition()
             viewTreeObserver
@@ -50,11 +49,7 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
                 }
         }
 
-        val anim: Animation = AnimationUtils.loadAnimation(
-            this.context,
-            R.anim.lunge_from_bottom
-        )
-
+        val anim: Animation = AnimationUtils.loadAnimation(this.context, R.anim.lunge_from_bottom)
         val controller = LayoutAnimationController(anim)
 
         productsAdapter.setClickHeartProduct = ProductRowType.ClickListener { productsItem ->
@@ -66,7 +61,7 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         }
 
         productsAdapter.setClickListenerProduct = ProductRowType.ProductClickListener { product, imageView ->
-            val extras = FragmentNavigatorExtras(imageView to product.generalIconProductSting!!)
+            val extras = FragmentNavigatorExtras(imageView to product.icon!!)
             val action = HomeFragmentDirections.actionGlobalDetailsProductFragment(product = product)
             navController.navigate(action, extras)
         }

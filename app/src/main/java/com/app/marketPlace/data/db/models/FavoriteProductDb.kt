@@ -7,29 +7,22 @@ import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
 
-@Entity(tableName = "products")
+@Entity(tableName = "product")
 @TypeConverters(ProductConverter::class)
 data class FavoriteProductDb(
 
-    val nameOfProduct: String? = null,
-    val iconProduct: String? = null,
+    val name: String? = null,
+    val icon: String? = null,
     val isFavorite: Boolean = false,
-    val productDiscount: String? = null,
+    val discount: String? = null,
     val isBestseller: Boolean = false,
-    val priceWithDiscount: String? = null,
-    val priceOlD: String? = null,
-    val goToBasket: Boolean = false,
-
-
+    val priceMinusDiscount: String? = null,
+    val price: String? = null,
+    val isCanGoToBasket: Boolean = false,
     val shortDescription: String? = null,
-
     val longDescription: String? = null,
-
     val images: MutableList<String>? = null,
-
     val company: String? = null,
-
-
     val color: String? = null,
 
     @PrimaryKey

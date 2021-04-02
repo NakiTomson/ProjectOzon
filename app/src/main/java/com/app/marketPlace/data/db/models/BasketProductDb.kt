@@ -7,28 +7,19 @@ import com.app.marketPlace.data.db.converters.ProductConverter
 @Entity(tableName = "basket")
 @TypeConverters(ProductConverter::class)
 data class BasketProductDb(
-
     var type: Int? = null,
-
-    val nameOfProduct: String? = null,
-    val iconProduct: String? = null,
+    val name: String? = null,
+    val icon: String? = null,
     val isFavorite: Boolean = false,
-    val productDiscount: String? = null,
+    val discount: String? = null,  // Discount price
     val isBestseller: Boolean = false,
-    val priceWithDiscount: String? = null,
-    val priceOlD: String? = null,
-    val goToBasket: Boolean = false,
-
-
+    val priceMinusDiscount: String? = null, // Result price Minus Discount
+    val price: String? = null, // Def price
+    val isCanGoToBasket: Boolean = false,
     val shortDescription: String? = null,
-
     val longDescription: String? = null,
-
     val images: MutableList<String>? = null,
-
     val company: String? = null,
-
-
     var color: String? = null,
 
     @PrimaryKey

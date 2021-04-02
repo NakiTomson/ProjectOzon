@@ -53,7 +53,6 @@ class SearchHintHistoryProductFragment : Fragment(R.layout.fragment_search_hint_
             searchTextInput.setSelection(searchTextInput.text.length)
         }
 
-
         mainViewModel.hintProducts?.observe(viewLifecycleOwner, { data ->
             if(data.isEmpty()){
                 adapterHints.setHints(mutableListOf("Tv's","iPhone 12 Pro Max", "Samsung"))

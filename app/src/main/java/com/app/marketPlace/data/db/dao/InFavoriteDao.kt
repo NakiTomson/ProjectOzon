@@ -7,15 +7,15 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Dao
-interface InFavoriteProductDao {
+interface InFavoriteDao {
 
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM product")
     fun getAll(): List<FavoriteProductDb>?
 
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM product")
     fun getAllFlow(): Flow<List<FavoriteProductDb>?>
 
-    @Query("SELECT id FROM products")
+    @Query("SELECT id FROM product")
     fun getAllIds(): Flow<List<Int>?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -26,6 +26,4 @@ interface InFavoriteProductDao {
 
     @Delete
     fun delete(product: FavoriteProductDb?)
-
-
 }

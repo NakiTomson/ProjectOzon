@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.LiveRowType
-import com.app.marketPlace.domain.models.ListResultLiveItems
+import com.app.marketPlace.domain.models.LiveItems
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -16,14 +16,13 @@ import kotlin.collections.ArrayList
 
 class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemViewHolder>(){
 
-    private val onBoardingItems:MutableList<ListResultLiveItems> = ArrayList()
+    private val liveList:MutableList<LiveItems> = ArrayList()
 
     var setOnLiveClickListener: LiveRowType.LiveListener? = null
 
     fun setData(items:LiveStreamItem) {
-        val newList = items.resultLiveData
-        newList?.let {
-            onBoardingItems.addAll(newList)
+        items.liveItemsList?.let {
+            liveList.addAll(it)
             notifyDataSetChanged()
         }
     }
@@ -33,28 +32,30 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
-        holder.bind(onBoardingItems[position])
+        holder.bind(liveList[position])
     }
 
     override fun getItemCount(): Int {
-        return onBoardingItems.size
+        return liveList.size
     }
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
+
         private val imageLive = view.imageLiveStreams
-        private val iconOfCompany = view.iconOfCompany
+        private val iconCompany = view.iconOfCompany
         private val statusLive = view.statusLive
         private val countUserLive = view.countUserLive
         private val textDescription = view.textDescription
         private val nameOfCompanyTitle = view.nameOfCompanyTitle
         private val shimmer = itemView.shimmerLayout
-        fun bind(liveItem: ListResultLiveItems){
+
+        fun bind(liveItem: LiveItems){
 
             imageLive.transitionName = liveItem.onIconCompanyUrl
 
             Picasso.with(itemView.context)
                 .load(liveItem.onIconCompanyUrl)
-                .into(iconOfCompany)
+                .into(iconCompany)
 
             Picasso.with(itemView.context)
                 .load(liveItem.onBoardingImageUrl)
@@ -68,14 +69,17 @@ class LiveStreamAdapter : RecyclerView.Adapter<LiveStreamAdapter.OnBoardingItemV
                         shimmer.setShimmer(null)
                     }
                 })
+
             statusLive.text = liveItem.statusLiveStream
             countUserLive?.text = liveItem.countUser
 
-            nameOfCompanyTitle?.text = liveItem.nameOfCompany
-            textDescription?.text = liveItem.description
+            nameOfCompanyTitle.text = liveItem.nameOfCompany
+            textDescription.text = liveItem.description
 
             imageLive.setOnClickListener {
-                liveItem.onIconCompanyUrl?.let { urlImage -> setOnLiveClickListener?.onClick(urlImage,imageLive) }
+                liveItem.onIconCompanyUrl?.let { urlImage ->
+                    setOnLiveClickListener?.onClick(urlImage,imageLive)
+                }
             }
         }
     }

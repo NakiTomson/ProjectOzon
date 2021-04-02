@@ -93,5 +93,4 @@ class NetworkConnection @Inject constructor( @ApplicationContext private val con
         val activeNetwork:NetworkInfo? = connectivityManager.activeNetworkInfo
         postValue(activeNetwork?.isConnected == true)
     }
-
 }

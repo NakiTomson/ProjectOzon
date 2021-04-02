@@ -14,12 +14,12 @@ import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.adapters.BannerAdapter
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
 
-data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
+data class BannerRowType(val adapter: BannerAdapter) : RowType{
 
     var setOnBannerClickListener: BannerListener? = null
 
     fun interface BannerListener {
-        fun onClickBanner(imageUrl: String, imageOnBoarding: View)
+        fun onClickBanner(imageUrl: String, imageView: View)
     }
 
     fun interface CompleteListener {
@@ -32,18 +32,18 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
         val holder: ViewHolderFactory.BannerViewHolder = viewHolder as  ViewHolderFactory.BannerViewHolder
-        holder.bind(bannerAdapter)
+        holder.bind(adapter)
 
-        setupIndicator(holder.bannerIndicatorsContainer,bannerAdapter.itemCount,viewHolder.itemView.context)
+        setupIndicator(holder.bannerIndicatorsContainer,adapter.itemCount,viewHolder.itemView.context)
         setIndicatorsContainer(0, holder.bannerIndicatorsContainer,viewHolder.itemView.context)
 
-        holder.viewPager.adapter = bannerAdapter
+        holder.viewPager.adapter = adapter
 
-        bannerAdapter.setBannerClickListener = BannerListener { imageUrl, view ->
+        adapter.setBannerClickListener = BannerListener { imageUrl, view ->
             setOnBannerClickListener?.onClickBanner(imageUrl, view)
         }
 
-        bannerAdapter.setCompleteListener = CompleteListener {
+        adapter.setCompleteListener = CompleteListener {
             holder.shimmer.stopShimmer()
             holder.shimmer.setShimmer(null)
         }
@@ -52,26 +52,24 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setIndicatorsContainer(position, holder.bannerIndicatorsContainer, viewHolder.itemView.context)
-                bannerAdapter.setBannerClickListener = BannerListener { imageUrl, imageOnBoarding ->
+                adapter.setBannerClickListener = BannerListener { _, imageOnBoarding ->
                     setOnBannerClickListener?.onClickBanner(
-                        bannerAdapter.onBoardingItems[position].onBoardingImageUrl!!,
-                        imageOnBoarding
-                    )
+                        adapter.bannerList[position].imageUrl!!, imageOnBoarding)
                 }
             }
         })
     }
 
     private fun setupIndicator(indicatorsContainer: LinearLayout, itemCount: Int, context: Context) {
-        if (indicatorsContainer.children.count() >0) return
+        if (indicatorsContainer.children.count() > 0) return
         val indicators = arrayOfNulls<ImageView>(itemCount)
         val layoutParams: LinearLayout.LayoutParams =
             LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
-        layoutParams.setMargins(8,0,8,0)
-        for ( i in indicators.indices){
+        layoutParams.setMargins(8, 0, 8, 0)
+        for (i in indicators.indices) {
             indicators[i] = ImageView(context)
             indicators[i]?.let {
                 it.setImageDrawable(
@@ -86,18 +84,18 @@ data class BannerRowType(val bannerAdapter: BannerAdapter) :RowType{
         }
     }
     fun setIndicatorsContainer(position: Int, indicatorsContainers: LinearLayout, context: Context){
-        val childCount  = indicatorsContainers.childCount
+        val childCount = indicatorsContainers.childCount
 
-        for (i in 0 until  childCount){
+        for (i in 0 until childCount) {
             val imageView = indicatorsContainers.getChildAt(i) as ImageView
-            if (i == position){
+            if (i == position) {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
-                    context.applicationContext,
-                    R.drawable.indicator_active_background
+                        context.applicationContext,
+                        R.drawable.indicator_active_background
                     )
                 )
-            }else{
+            } else {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
                         context.applicationContext,

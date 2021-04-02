@@ -166,7 +166,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listRecommendProduct"
+            android:id="@+id/recommendProduct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

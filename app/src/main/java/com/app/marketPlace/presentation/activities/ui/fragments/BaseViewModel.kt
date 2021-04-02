@@ -1,17 +1,11 @@
 package com.app.marketPlace.presentation.activities.ui.fragments
 
 import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.remote.models.Banner
-import com.app.marketPlace.domain.mappers.MapperFromDb
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 
-abstract class BaseViewModel constructor():ViewModel(), CoroutineScope {
+abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job

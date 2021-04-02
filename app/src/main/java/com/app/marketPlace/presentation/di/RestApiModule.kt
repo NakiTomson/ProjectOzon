@@ -1,7 +1,7 @@
 package com.app.marketPlace.presentation.di
 
-import com.app.marketPlace.data.remote.services.MarketPlaceService
-import com.app.marketPlace.data.utils.ConstantsApp.baseUrlBestBye
+import com.app.marketPlace.data.remote.services.BestBuyService
+import com.app.marketPlace.data.utils.Constants.baseUrl
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 class RestApiModule {
+
     @Provides
     fun provideOkHttpClientFactory(): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
@@ -41,7 +42,7 @@ class RestApiModule {
     fun provideRetrofitBestBy(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit
                 .Builder()
-                .baseUrl(baseUrlBestBye)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .client(okHttpClient)
@@ -49,13 +50,7 @@ class RestApiModule {
     }
 
     @Provides
-    fun provideMarketPlaceServiceApiDropBox(retrofit: Retrofit): MarketPlaceService {
-        return retrofit.create(MarketPlaceService::class.java)
+    fun provideMarketPlaceServiceApiDropBox(retrofit: Retrofit): BestBuyService {
+        return retrofit.create(BestBuyService::class.java)
     }
 }
-
-
-
-
-
-

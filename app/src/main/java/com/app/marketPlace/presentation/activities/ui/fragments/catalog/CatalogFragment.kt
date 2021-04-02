@@ -19,17 +19,14 @@ import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.presentation.adapters.SimpleCategoriesAdapter
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
-import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.rowType.CategoryRowType
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_catalog.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_simple.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -73,7 +70,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     private fun setupCategoriesAdapter(categoryAdapter: SimpleCategoriesAdapter, subCategories: Array<Categories>?) {
 
         val layoutManager = GridLayoutManager(context, 1)
-        categoryProductsAdapter.layoutManager =  layoutManager
+        categoryProductsAdapter.layoutManager = layoutManager
         categoryProductsAdapter.adapter = categoryAdapter
         categoryProductsAdapter.setHasFixedSize(true)
 
@@ -153,5 +150,4 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     private fun showSuccess() {
         catalogMockIsEmpty.visibility = View.GONE
     }
-
 }

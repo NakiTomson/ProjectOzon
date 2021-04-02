@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.app.marketPlace.data.db.models.BasketProductDb
@@ -8,11 +7,10 @@ import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.UserDb
 import com.app.marketPlace.domain.mappers.MapperFromDb
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-import com.app.marketPlace.presentation.MarketPlaceApp
 
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -22,7 +20,8 @@ import kotlin.coroutines.CoroutineContext
 @HiltViewModel
 class MainViewModel @Inject constructor(
     var repository:DataBaseRepository,
-    var networkConnection:NetworkConnection
+    var networkConnection:NetworkConnection,
+    var mapperFromDb:MapperFromDb,
 ) : ViewModel(), CoroutineScope {
 
     companion object {
@@ -35,8 +34,6 @@ class MainViewModel @Inject constructor(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
-    var mapperFromDb: MapperFromDb? = MapperFromDb()
-
 
     val allIdsInFavorite: LiveData<List<Int>?> = repository.productsInFavoriteIds.asLiveData()
 
@@ -46,9 +43,9 @@ class MainViewModel @Inject constructor(
 
     val baskets: LiveData<List<BasketProductDb>?> = repository.baskets.asLiveData()
 
-    val favorite: LiveData<List<FavoriteProductDb>?> = repository.favorite.asLiveData()
+    val favorite: LiveData<List<FavoriteProductDb>?> = repository.favorites.asLiveData()
 
-    val hintProducts: LiveData<List<HintProductDb>>? = repository.hintProducts?.asLiveData()
+    val hintProducts: LiveData<List<HintProductDb>>? = repository.hintsProduct?.asLiveData()
 
     fun insertOrDeleteHintsProduct(request: String) {
         insertHint(request)
@@ -66,42 +63,42 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun insertOrDeleteFavoriteProduct(productsItem: ProductItem) {
-        if (productsItem.favoriteIconProduct) {
+    fun insertOrDeleteFavoriteProduct(productsItem: Product) {
+        if (productsItem.isFavorite) {
             insertProduct(productsItem)
         } else {
             deleteProduct(productsItem)
         }
     }
 
-    private fun insertProduct(product: ProductItem) {
+    private fun insertProduct(product: Product) {
         launch(Dispatchers.IO) {
-            repository.insertProductInFavorite(product)
+            repository.insertFavorite(product)
         }
     }
 
-    internal fun deleteProduct(basket: ProductItem) {
+    internal fun deleteProduct(basket: Product) {
         launch(Dispatchers.IO) {
-            repository.deleteProductFromFavorite(basket)
+            repository.deleteFavorite(basket)
         }
     }
 
 
-    fun insertOrDeleteBasket(productsItem: ProductItem) {
-        if (productsItem.productInBasket) {
+    fun insertOrDeleteBasket(productsItem: Product) {
+        if (productsItem.isBasket) {
             insertBasket(productsItem)
         } else {
             deleteBasket(productsItem)
         }
     }
 
-    private fun insertBasket(basket: ProductItem) {
+    private fun insertBasket(basket: Product) {
         launch(Dispatchers.IO) {
             repository.insertBasket(basket)
         }
     }
 
-    private fun deleteBasket(basket: ProductItem) {
+    private fun deleteBasket(basket: Product) {
         launch(Dispatchers.IO) {
             repository.deleteBasket(basket)
         }

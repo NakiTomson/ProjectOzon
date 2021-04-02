@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.rowType
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.presentation.interfaces.RowType
 import com.app.marketPlace.presentation.factory.ViewHolderFactory
@@ -12,7 +11,7 @@ data class TopSloganRowType(val sloganOffer: String,val randomId: Double = Math.
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder?) {
-        val bannerViewHolder: ViewHolderFactory.TopSloganOfferProduct = viewHolder as  ViewHolderFactory.TopSloganOfferProduct
-        bannerViewHolder.bind(sloganOffer)
+        val holder: ViewHolderFactory.TopSloganOfferProduct = viewHolder as  ViewHolderFactory.TopSloganOfferProduct
+        holder.bind(sloganOffer)
     }
 }

@@ -9,7 +9,7 @@ data class UserDb(
     val name:String,
     val phone:String,
     val mail:String,
-    val password:String,
+    val password:String, // Пороль лучше здесь не хранить
     val address:String,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

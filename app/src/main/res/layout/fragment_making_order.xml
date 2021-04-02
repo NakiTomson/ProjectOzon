@@ -245,7 +245,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Скидка"
+            android:text="@string/discount"
             android:textColor="@color/black"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/textView23"

@@ -1,18 +1,18 @@
 package com.app.marketPlace.domain.mappers
 
 import com.app.marketPlace.data.remote.models.*
-import com.app.marketPlace.data.utils.ConstantsApp
-import com.app.marketPlace.domain.exception.NotMappedException
+import com.app.marketPlace.data.utils.Constants
+import com.app.marketPlace.domain.exception.NotFoundMappedException
 import com.app.marketPlace.domain.repositories.Params
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 
-class MapperCategory : IMapper {
+class MapperCategories : Mapper {
 
     override fun <T> map(data: T?, params: Params): Resource<*> {
 
         if (data !is CategoriesProduct?){
             return Resource(status = Resource.Status.COMPLETED, data = null ,
-                exception = NotMappedException(data),
+                exception = NotFoundMappedException(data),
                 type = params.resourceType)
         }
 
@@ -25,7 +25,7 @@ class MapperCategory : IMapper {
 
         val listCategories = if (data.categories.size <= 20) {
             for ((index, i) in (0 until data.categories!!.size).withIndex()) {
-                data.categories[i].image = ConstantsApp.getImage(index)
+                data.categories[i].image = Constants.getImage(index)
             }
 
             data.categories

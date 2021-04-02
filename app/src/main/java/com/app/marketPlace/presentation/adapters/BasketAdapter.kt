@@ -10,7 +10,8 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.exception.NotFoundRealizationException
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_horizontal_product.view.*
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.item_horizontal_product.view.*
 
 class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProductViewHolder>() {
 
-    private var listOnProductsByOfferItems: MutableList<ProductItem>? = arrayListOf()
+    private var productsList: MutableList<Product>? = arrayListOf()
 
     var setClickListenerProduct: ProductRowType.ProductClickListener? = null
 
@@ -27,19 +28,19 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
     var setOnBasketDelete: ProductRowType.ClickListener? = null
 
 
-    fun setData(list: List<ProductItem>) {
-        listOnProductsByOfferItems?.clear()
-        listOnProductsByOfferItems?.addAll(list)
+    fun setData(list: List<Product>) {
+        productsList?.clear()
+        productsList?.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun setData(item: ProductItem) {
-        listOnProductsByOfferItems?.add(item)
+    fun setData(item: Product) {
+        productsList?.add(item)
         notifyDataSetChanged()
     }
 
-    fun deleteProduct(productsItem: ProductItem) {
-        listOnProductsByOfferItems?.remove(productsItem)
+    fun deleteProduct(productsItem: Product) {
+        productsList?.remove(productsItem)
         notifyDataSetChanged()
     }
 
@@ -48,60 +49,61 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        listOnProductsByOfferItems?.get(position)?.let { holder.bind(it) }
+        productsList?.get(position)?.let { holder.bind(it) }
     }
 
-    override fun getItemCount() = listOnProductsByOfferItems?.size ?: 0
+    override fun getItemCount() = productsList?.size ?: 0
 
     inner class CategoryOfferItemProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
-        private val generalIconProductImageView: ImageView = itemView.generalIconProductImageView
-        private val favoriteIconProductImageView:TextView = itemView.favoriteIconProductImageView
-        private val priceWithDiscountTextView: TextView = itemView.priceWithDiscountTextView
-        private val priceOlDTextView: TextView = itemView.priceOlDTextView
-        private val productItemTextView: TextView = itemView.nameOfProduct
+        private val imageIcon: ImageView = itemView.generalIconProductImageView
+        private val isFavorite:TextView = itemView.favoriteIconProductImageView
+        private val priceMinusDiscount: TextView = itemView.priceWithDiscountTextView
+        private val price: TextView = itemView.priceOlDTextView
+        private val name: TextView = itemView.nameOfProduct
         private val product: ConstraintLayout = itemView.product
-        private val textViewDelete: TextView = itemView.textViewDelete
+        private val delete: TextView = itemView.textViewDelete
 
         val visible = View.VISIBLE
 
-        fun bind(productsItem: ProductItem) {
+        fun bind(productsItem: Product) {
 
-            generalIconProductImageView.transitionName = productsItem.generalIconProductSting
+            imageIcon.transitionName = productsItem.icon
 
             when(productsItem.type){
-                ProductItem.Type.OnlyImage ->{
+                Product.Type.OnlyImage ->{
                     setOnlyImage(productsItem)
                 }
-                ProductItem.Type.ProductNonName ->{
+                Product.Type.ProductNonName ->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                 }
-                ProductItem.Type.ProductWithName->{
+                Product.Type.ProductWithName->{
                     setOnlyImage(productsItem)
                     setNonName(productsItem)
                     setWithName(productsItem)
                 }
+                else -> {throw NotFoundRealizationException(productsItem.type)}
             }
-            textViewDelete.setOnClickListener {
+
+            delete.setOnClickListener {
                 setOnBasketDelete?.onClick(productsItem)
             }
             product.setOnClickListener {
-                productsItem.images?.set(0,productsItem.generalIconProductSting!!)
-                setClickListenerProduct?.clickProduct(productsItem,generalIconProductImageView)
+                productsItem.images?.set(0,productsItem.icon!!)
+                setClickListenerProduct?.clickProduct(productsItem,imageIcon)
             }
-            favoriteIconProductImageView.setOnClickListener {
+            isFavorite.setOnClickListener {
 
-                if(!productsItem.favoriteIconProduct){
-                    productsItem.favoriteIconProduct = true
+                if(!productsItem.isFavorite){
+                    productsItem.isFavorite = true
 
-                    favoriteIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0)
+                    isFavorite.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0)
                     setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Добавлено в избранное",Toast.LENGTH_SHORT).show()
                 }else{
-                    productsItem.favoriteIconProduct = false
-                    favoriteIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike_favorite_products_icon_heart, 0, 0, 0)
+                    productsItem.isFavorite = false
+                    isFavorite.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_unlike_favorite_products_icon_heart, 0, 0, 0)
 
                     setClickHeartProduct?.onClick(productsItem)
                     Toast.makeText(itemView.context,"Удалено из избранного",Toast.LENGTH_SHORT).show()
@@ -109,44 +111,44 @@ class BasketAdapter : RecyclerView.Adapter<BasketAdapter.CategoryOfferItemProduc
             }
         }
 
-        private fun setOnlyImage(productsItem: ProductItem) {
-            productsItem.generalIconProductSting?.let {
+        private fun setOnlyImage(productsItem: Product) {
+            productsItem.icon?.let {
                 Picasso.with(itemView.context)
-                    .load(productsItem.generalIconProductSting)
-                    .into(generalIconProductImageView)
+                    .load(productsItem.icon)
+                    .into(imageIcon)
             }
         }
 
-        private fun setNonName(productsItem: ProductItem) {
-            favoriteIconProductImageView.visibility = visible
+        private fun setNonName(productsItem: Product) {
+            isFavorite.visibility = visible
 
-            if (productsItem.favoriteIconProduct) {
-                favoriteIconProductImageView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0)
+            if (productsItem.isFavorite) {
+                isFavorite.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_favorite_products_icon_heart, 0, 0, 0)
             }
 
-            productsItem.productDiscount?.let {
-                priceWithDiscountTextView.visibility = visible
-                priceOlDTextView.visibility = visible
-                priceWithDiscountTextView.text = productsItem.priceWithDiscount
-                priceOlDTextView.text = productsItem.priceOlD
+            productsItem.discount?.let {
+                priceMinusDiscount.visibility = visible
+                price.visibility = visible
+                priceMinusDiscount.text = productsItem.priceMinusDiscount
+                price.text = productsItem.price
             } ?: run {
-                productsItem.priceWithDiscount?.let {
-                    priceWithDiscountTextView.visibility = visible
-                    priceWithDiscountTextView.text = productsItem.priceWithDiscount
-                    priceWithDiscountTextView.setTextColor(Color.GRAY)
+                productsItem.priceMinusDiscount?.let {
+                    priceMinusDiscount.visibility = visible
+                    priceMinusDiscount.text = productsItem.priceMinusDiscount
+                    priceMinusDiscount.setTextColor(Color.GRAY)
                 }
             }
         }
 
-        private fun setWithName(productsItem: ProductItem) {
-            productsItem.nameOfProduct?.let {
-                productItemTextView.visibility = visible
-                productItemTextView.text = it
+        private fun setWithName(productsItem: Product) {
+            productsItem.name?.let {
+                name.visibility = visible
+                name.text = it
             }
         }
     }
 
     override fun getItemId(position: Int): Long {
-        return listOnProductsByOfferItems?.get(position)?.hashCode()?.toLong() ?: 0
+        return productsList?.get(position)?.hashCode()?.toLong() ?: 0
     }
 }

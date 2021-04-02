@@ -1,30 +1,27 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.basket
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
+import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.domain.mappers.MapperFromDb
-import com.app.marketPlace.domain.models.CombineProductsItem
-import com.app.marketPlace.domain.models.ProductItem
+import com.app.marketPlace.domain.models.CombineProducts
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
-import com.app.marketPlace.presentation.MarketPlaceApp
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class BasketViewModel @Inject constructor(
     private val repository: AppRepository,
-    var mapperFromDb: MapperFromDb
+    val mapperFromDb: MapperFromDb
 ) : BaseViewModel(), CoroutineScope {
 
-    val productsResultList: MutableLiveData<Resource<CombineProductsItem>> = MutableLiveData()
+    val productsResultList: MutableLiveData<Resource<CombineProducts>> = MutableLiveData()
 
     fun getListSimilarCategory(recommendedPath: String){
         if(productsResultList.value?.data != null) return
@@ -34,9 +31,9 @@ class BasketViewModel @Inject constructor(
                     Params.ProductsParams(
                         pathId = recommendedPath,
                         pageSize = "20",
-                        apiKey = APIKEY,
+                        apiKey = ApiToken,
                         page = "1",
-                        typeProduct = ProductItem.Type.ProductWithName
+                        typeProduct = Product.Type.ProductWithName
                     )
                 )
             }

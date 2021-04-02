@@ -21,11 +21,11 @@ class SimpleCategoriesAdapter : RecyclerView.Adapter<SimpleCategoriesAdapter.OnB
 
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener2? = null
 
-    private val onBoardingItems: MutableList<Categories> = mutableListOf()
+    private val categoriesList: MutableList<Categories> = mutableListOf()
 
     fun setData(items: List<Categories>) {
-        onBoardingItems.clear()
-        onBoardingItems.addAll(items)
+        categoriesList.clear()
+        categoriesList.addAll(items)
         notifyDataSetChanged()
     }
 
@@ -36,31 +36,29 @@ class SimpleCategoriesAdapter : RecyclerView.Adapter<SimpleCategoriesAdapter.OnB
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
-        holder.bind(onBoardingItems[position])
+        holder.bind(categoriesList[position])
     }
 
     override fun getItemCount(): Int {
-        return onBoardingItems.size
+        return categoriesList.size
     }
 
 
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-
-        private val imageCategories = view.imageCategory
-        private val textTitle = view.namePath
+        private val imageCategory = view.imageCategory
+        private val nameCategory = view.namePath
         private val titleCategory = view.titleCategory
         private val imageNext = view.imageNextCategories
         private val rootItem = view.rootSimpleItem
 
-        val visible =View.VISIBLE
-        val gone =View.GONE
-
+        val visible = View.VISIBLE
+        val gone = View.GONE
 
         fun bind(category: Categories) {
 
-            textTitle?.text = category.name
-            textTitle.transitionName = category.name
+            nameCategory?.text = category.name
+            nameCategory.transitionName = category.name
 
             category.image?.let {
                 setCategoriesWithImage(category)
@@ -70,7 +68,7 @@ class SimpleCategoriesAdapter : RecyclerView.Adapter<SimpleCategoriesAdapter.OnB
 
             rootItem.setOnClickListener {
                 category.name?.let {
-                    setOnCategoryClickListener?.onClickItem(category, textTitle)
+                    setOnCategoryClickListener?.onClickItem(category, nameCategory)
                 }
             }
         }
@@ -81,7 +79,7 @@ class SimpleCategoriesAdapter : RecyclerView.Adapter<SimpleCategoriesAdapter.OnB
                 .load(category.image)
                 .fit()
                 .placeholder(R.drawable.icon_market_place_app)
-                .into(imageCategories,object : Callback {
+                .into(imageCategory,object : Callback {
                     override fun onSuccess() {
 
                         setCompleteListener?.onComplete()
@@ -93,20 +91,21 @@ class SimpleCategoriesAdapter : RecyclerView.Adapter<SimpleCategoriesAdapter.OnB
         }
 
         private fun setSimpleCategories(category: Categories) {
-            imageCategories.visibility = gone
+            imageCategory.visibility = gone
             titleCategory.visibility = gone
             imageNext.visibility = if (category.subCategories.isNullOrEmpty()) gone else visible
 
             category.back?.let {
-                imageCategories.visibility = visible
-                imageCategories.setImageResource(it)
-                imageCategories.layoutParams = ConstraintLayout.LayoutParams(
+                imageCategory.visibility = visible
+                imageCategory.setImageResource(it)
+
+                imageCategory.layoutParams = ConstraintLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
                 val outValue = TypedValue()
                 itemView.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                imageCategories.setBackgroundResource(outValue.resourceId)
+                imageCategory.setBackgroundResource(outValue.resourceId)
             }
 
             category.backgroundColorSelected?.let { color->

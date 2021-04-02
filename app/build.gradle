@@ -135,4 +135,12 @@ dependencies {
     //YoutubeExtractor
     implementation 'com.github.HaarigerHarald:android-youtubeExtractor:v2.1.0'
 
+
+    def paging_version = "2.1.2"
+
+    implementation "androidx.paging:paging-runtime:$paging_version" // For Kotlin use paging-runtime-ktx
+
+    testImplementation "androidx.paging:paging-common:$paging_version" // For Kotlin use paging-common-ktx
+
+
 }

@@ -18,7 +18,6 @@ import java.util.*
 @AndroidEntryPoint
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
-
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,34 +29,26 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
 
             val login = emailLogin.text.toString().trim().toLowerCase(Locale.ROOT)
             val password = password.text.toString().trim()
-            val passwordRepeat = password2.text.toString().trim()
+            val passwordRepeat = passwordRepeat.text.toString().trim()
             val nameUser = name.text.toString().trim()
             val addressDelivery = addressDelivery.text.toString().trim()
             val phone = phone.text.toString().trim()
 
-            val result = checkInput(
-                email = login,
-                password,
-                passwordRepeat,
-                nameUser,
-                addressDelivery,
-                phone
-            )
+            val result = checkInput(login, password, passwordRepeat, nameUser, addressDelivery, phone)
 
             if (!result) return@setOnClickListener
-            mAuth.createUserWithEmailAndPassword(login, password)
-                .addOnCompleteListener{ task->
-                    when{
-                        task.isSuccessful ->{
-                            mainViewModel.setUser(UserDb(nameUser,phone,login,password,addressDelivery))
-                            findNavController().popBackStack()
-                            requireActivity().bottomNavigationView.selectedItemId = R.id.account
-                        }
-                        else ->{
-                            Toast.makeText(activity, "Error SignUp", Toast.LENGTH_SHORT).show()
-                        }
+            mAuth.createUserWithEmailAndPassword(login, password).addOnCompleteListener { task ->
+                when {
+                    task.isSuccessful -> {
+                        mainViewModel.setUser(UserDb(nameUser, phone, login, password, addressDelivery))
+                        findNavController().popBackStack()
+                        requireActivity().bottomNavigationView.selectedItemId = R.id.account
+                    }
+                    else -> {
+                        Toast.makeText(activity, getString(R.string.errorSignUp), Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
         }
     }
 
@@ -71,14 +62,10 @@ class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
         phone: String
     ): Boolean {
         return if (email.length <= 3 || password.length < 6 || password_repeat.length < 6 || name.length <= 1 ||adoresDelivery.length <=5 ||phone.length<8) {
-          Toast.makeText(
-              activity,
-              "Пороль 6 символов или Не полный адресс или Телефон",
-              Toast.LENGTH_SHORT
-          ).show()
+          Toast.makeText(activity, getString(R.string.noteEnoughCharacters), Toast.LENGTH_SHORT).show()
             false
         } else if (password != password_repeat) {
-            Toast.makeText(activity, "Разные Пороли", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.diffPasswords), Toast.LENGTH_SHORT).show()
             false
         } else {
             true

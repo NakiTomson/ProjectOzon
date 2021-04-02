@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,9 +46,9 @@ class BorderAdapter() : RecyclerView.Adapter<BorderAdapter.OnBoardingItemViewHol
 
         fun bind(onBoardingItem: Banner) {
 
-            onBoarding.transitionName = onBoardingItem.onBoardingImageUrl
+            onBoarding.transitionName = onBoardingItem.imageUrl
 
-            Picasso.with(itemView.context).load(onBoardingItem.onBoardingImageUrl)
+            Picasso.with(itemView.context).load(onBoardingItem.imageUrl)
                 .centerInside()
                 .resize(500, 500)
                 .into(onBoarding, object : Callback {

@@ -7,21 +7,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.presentation.rowType.CategoryRowType
-import com.app.marketPlace.data.remote.models.Banner
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.presentation.rowType.BannerRowType
 
 
 class CombinationAdapter : RecyclerView.Adapter<CombinationAdapter.OnBoardingItemViewHolder>() {
 
-    lateinit var setCompleteListener: BannerRowType.CompleteListener
+    var setCompleteListener: BannerRowType.CompleteListener? = null
+
     var setOnCategoryClickListener: CategoryRowType.ClickCategoryListener? = null
 
     private val onBoardingItems: MutableList<List<Categories>> = mutableListOf(mutableListOf())
 
     fun setData(vararg items: List<Categories>) {
         onBoardingItems.clear()
-        onBoardingItems.addAll(items.toMutableList())
+        onBoardingItems.addAll(items)
         notifyDataSetChanged()
     }
 
@@ -37,26 +37,22 @@ class CombinationAdapter : RecyclerView.Adapter<CombinationAdapter.OnBoardingIte
         return onBoardingItems.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
-    }
-
     inner class OnBoardingItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val onCategoryProductsRecyclerView = view.findViewById<RecyclerView>(R.id.onCategoryProductsRecyclerView)
+        private val recyclerView = view.findViewById<RecyclerView>(R.id.onCategoryProductsRecyclerView)
 
         fun bind(onBoardingItem: List<Categories>) {
-            val categoryItemAdapter = CategoryAdapter()
-            categoryItemAdapter.setData(onBoardingItem)
-            onCategoryProductsRecyclerView.adapter = categoryItemAdapter
-            onCategoryProductsRecyclerView.layoutManager = GridLayoutManager(itemView.context,5)
+            val adapter = CategoryAdapter()
+            adapter.setData(onBoardingItem)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = GridLayoutManager(itemView.context,5)
 
-            categoryItemAdapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
+            adapter.setOnCategoryClickListener = CategoryRowType.ClickCategoryListener { data ->
                 setOnCategoryClickListener?.onClickItem(data)
             }
 
-            categoryItemAdapter.setCompleteListener = BannerRowType.CompleteListener {
-                setCompleteListener.onComplete()
+            adapter.setCompleteListener = BannerRowType.CompleteListener {
+                setCompleteListener?.onComplete()
             }
         }
     }

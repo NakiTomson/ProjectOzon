@@ -19,7 +19,7 @@
 
         <argument
             android:name="product"
-            app:argType="com.app.marketPlace.domain.models.ProductItem"
+            app:argType="com.app.marketPlace.domain.models.Product"
             app:nullable="true"
             android:defaultValue="@null" />
 

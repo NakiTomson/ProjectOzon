@@ -13,8 +13,6 @@ import kotlinx.android.synthetic.main.item_banner_container.view.*
 import java.util.*
 
 
-
-
 class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
 
     @Volatile private var countPosition = -1
@@ -22,17 +20,17 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
     var setBannerClickListener: BannerRowType.BannerListener? = null
     var setCompleteListener: BannerRowType.CompleteListener? = null
 
-    val onBoardingItems:MutableList<Banner> = LinkedList()
+    val bannerList:MutableList<Banner> = LinkedList()
 
     fun setData(items: MutableList<Banner>) {
-        onBoardingItems.clear()
-        onBoardingItems.addAll(items)
+        bannerList.clear()
+        bannerList.addAll(items)
         notifyDataSetChanged()
     }
 
     fun setItem(items: Banner) {
         ++countPosition
-        onBoardingItems.add(items)
+        bannerList.add(items)
         notifyItemChanged(countPosition)
     }
 
@@ -41,25 +39,25 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
     }
 
     override fun onBindViewHolder(holder: OnBoardingItemViewHolder, position: Int) {
-        holder.bind(onBoardingItems[position])
+        holder.bind(bannerList[position])
     }
 
     override fun getItemCount(): Int {
-        return onBoardingItems.size
+        return bannerList.size
     }
 
     inner class OnBoardingItemViewHolder(view: View):RecyclerView.ViewHolder(view){
 
-        private val imageOnBoarding = view.imageLiveStreams
+        private val imageView = view.imageLiveStreams
         private val textTitle = view.textTitle
         private val textDescription = view.textDescription
 
-        fun bind(onBoardingItem: Banner){
-            imageOnBoarding.transitionName = onBoardingItem.onBoardingImageUrl
+        fun bind(banner: Banner){
+            imageView.transitionName = banner.imageUrl
             Picasso.with(itemView.context)
-                .load(onBoardingItem.onBoardingImageUrl)
+                .load(banner.imageUrl)
                 .noFade()
-                .into(imageOnBoarding,object :Callback{
+                .into(imageView,object :Callback{
                     override fun onSuccess() {
                         setCompleteListener?.onComplete()
                     }
@@ -68,18 +66,18 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
                     }
                 })
 
-            onBoardingItem.title?.let{
+            banner.title?.let{
                 textTitle.visibility = View.VISIBLE
                 textTitle?.text = it
             }
 
-            onBoardingItem.description?.let {
+            banner.description?.let {
                 textDescription.visibility = View.VISIBLE
                 textDescription?.text = it
             }
 
-            imageOnBoarding.setOnClickListener {
-                setBannerClickListener?.onClickBanner(onBoardingItem.onBoardingImageUrl!!, imageOnBoarding)
+            imageView.setOnClickListener {
+                setBannerClickListener?.onClickBanner(banner.imageUrl!!, imageView)
             }
         }
     }

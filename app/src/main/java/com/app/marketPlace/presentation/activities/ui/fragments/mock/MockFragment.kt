@@ -17,15 +17,10 @@ import kotlinx.coroutines.*
 
 class MockFragment : Fragment(R.layout.fragment_mock) {
 
-
-
     private var urlStream = ""
-
     private val args: MockFragmentArgs by navArgs()
 
-
     var position = 0
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

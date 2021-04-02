@@ -1,13 +1,13 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 
 import com.app.marketPlace.data.remote.models.Categories
-import com.app.marketPlace.data.utils.ConstantsApp.APIKEY
-import com.app.marketPlace.data.utils.ConstantsApp.bestPath
+import com.app.marketPlace.data.utils.Constants.ApiToken
+import com.app.marketPlace.data.utils.Constants.bestPath
 import com.app.marketPlace.domain.repositories.AppRepository
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
-import com.app.marketPlace.presentation.rowType.Resource
+import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ class CatalogViewModel @Inject constructor(
             if (categoryProduct.value.data != null) return@loadData
             val categories =  async {
                 repository.loadCategories(
-                    Params.CategoriesProductParams(pageSize = "40", apiKey = APIKEY, page = "1",
+                    Params.CategoriesProductParams(pageSize = "40", apiKey = ApiToken, page = "1",
                         pathId = bestPath
                     ))
             }
