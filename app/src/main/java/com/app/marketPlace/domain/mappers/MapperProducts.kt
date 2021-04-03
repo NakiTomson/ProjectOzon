@@ -41,6 +41,34 @@ class MapperProducts : Mapper {
     }
 
 
+    fun mapProduct(data: List<ProductOfServer>?, params: Params): Resource<CombineProducts> {
+
+        if (data.isNullOrEmpty()){
+            return Resource(
+                status = Resource.Status.COMPLETED,
+                data = null,
+                exception = null,
+                type = params.resourceType
+            )
+        }
+
+        val item = CombineProducts(
+            topOffer = params.topOffer,
+            bottomOffer = params.bottomOffer,
+            list = getUiProducts(data, params.typeProduct),
+            requestName = params.requestName,
+            spain = params.spain
+        )
+
+
+        return Resource(
+            status = Resource.Status.COMPLETED,
+            data = item,
+            exception = null,
+            type = params.resourceType
+        )
+    }
+
     private fun getUiProducts(products: List<ProductOfServer>?, type: Product.Type) : List<Product>{
 
         val newProductsList: MutableList<Product> = ArrayList()

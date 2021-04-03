@@ -1,18 +1,25 @@
 package com.app.marketPlace.domain.repositories
 
 
-import com.app.marketPlace.data.remote.models.Stories
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.app.marketPlace.data.remote.models.*
 import com.app.marketPlace.data.remote.services.*
 import com.app.marketPlace.data.utils.Constants
 import com.app.marketPlace.presentation.factory.Resource
-import com.app.marketPlace.data.remote.models.Banner
-import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.utils.Constants.attrCategoryPathId
 import com.app.marketPlace.data.utils.Constants.attrSearch
 import com.app.marketPlace.domain.mappers.*
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.Product
+import com.app.marketPlace.presentation.paging.ProductPagingSource
+import com.app.marketPlace.presentation.paging.ProductPagingSource.Companion.DEFAULT_PAGE_SIZE
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(private val marketPlaceApi: BestBuyService) {
@@ -104,6 +111,19 @@ class AppRepository @Inject constructor(private val marketPlaceApi: BestBuyServi
             Results.ProductsResult( Resource(status = Resource.Status.ERROR, data = null, exception = e))
         }
     }
+
+
+
+    fun loadProductsPager(params: Params,pagingConfig: PagingConfig = getDefaultPageConfig()): LiveData<PagingData<Product>> {
+        return Pager(
+            config = pagingConfig,
+            pagingSourceFactory = { ProductPagingSource(marketPlaceApi,params) }
+        ).liveData
+    }
+
+    private fun getDefaultPageConfig(): PagingConfig {
+        return PagingConfig(pageSize = DEFAULT_PAGE_SIZE, enablePlaceholders = true)
+    }
 }
 
 sealed class Params(
@@ -133,7 +153,7 @@ sealed class Params(
 
     class ProductsParams(
         override var attributes: String = attrCategoryPathId,
-        override var pathId: String = Constants.CoffeeMaker,
+        override var pathId: String = Constants.CellPhone,
         override var pageSize: String = "3",
         override var apiKey: String = Constants.ApiToken,
         override var page: String = "1",

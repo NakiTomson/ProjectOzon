@@ -1,5 +1,8 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
+import androidx.lifecycle.*
+import androidx.paging.*
+import com.app.marketPlace.data.utils.Constants
 import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.data.utils.Constants.attrCategoryPathId
 import com.app.marketPlace.data.utils.Constants.attrSearch
@@ -12,9 +15,7 @@ import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,36 +23,20 @@ class ProductsListViewModel @Inject constructor(
     private val repository: AppRepository
 ) : BaseViewModel(), CoroutineScope {
 
-    private val _productsList: MutableStateFlow<Resource<CombineProducts>> = MutableStateFlow(
-        Resource.getDefSateResource()
-    )
 
-    val productsList: StateFlow<Resource<CombineProducts>> = _productsList.asStateFlow()
+    private var defaultQuery = Params.ProductsParams(typeProduct = Product.Type.ProductWithName,)
 
-
-    fun loadProductsByWord(keyWord: String) {
-        loadProducts(keyWord, attrSearch, keyWord)
+    fun setDefault(params:Params.ProductsParams){
+        defaultQuery = params
     }
 
-    fun loadProductsByCategory(category: String) {
-        loadProducts(category, attrCategoryPathId)
+    private val currentQuery by lazy {
+        MutableLiveData(defaultQuery)
     }
 
-    private fun loadProducts(category: String, attr: String, requestName: String = "") {
-        if (productsList.value.data != null) return
-        loadData {
-            val products = async {
-                repository.loadProducts(
-                    Params.ProductsParams(
-                        attributes = attr, pathId = category, pageSize = "100",
-                        apiKey = ApiToken,
-                        page = "1",
-                        typeProduct = Product.Type.ProductWithName,
-                        requestName = requestName
-                    )
-                )
-            }
-            _productsList.value = checkingForErrors(products.await().result)
+    val productsList by lazy {
+        currentQuery.switchMap { queryString ->
+            repository.loadProductsPager(queryString).cachedIn(viewModelScope)
         }
     }
 }

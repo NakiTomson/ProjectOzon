@@ -1,5 +1,8 @@
 package com.app.marketPlace.presentation.factory
 
+import androidx.paging.PagingData
+import com.app.marketPlace.domain.models.CombineProducts
+
 data class Resource<T>(
     var status: Status = Status.LOADING,
     val data: T?,
@@ -27,6 +30,10 @@ data class Resource<T>(
     companion object{
         fun<N> getDefSateResource(): Resource<N> {
             return Resource(data = null)
+        }
+        fun getDefSateResource2(): PagingData<CombineProducts> {
+
+            return PagingData.from(listOf(CombineProducts(null, listOf(),null,null)))
         }
     }
 

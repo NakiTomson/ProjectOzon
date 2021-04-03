@@ -71,13 +71,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkInternetConnection() {
         mainViewModel.networkConnection.observe(this,{isConnected->
-            if (isConnected) {
-                connection_frame.visibility = View.GONE
-                bottomNavigationView.visibility = View.VISIBLE
-            } else {
-                connection_frame.visibility = View.VISIBLE
-                bottomNavigationView.visibility = View.GONE
-            }
+//            if (isConnected) {
+//                connection_frame.visibility = View.GONE
+//                bottomNavigationView.visibility = View.VISIBLE
+//            } else {
+//                connection_frame.visibility = View.VISIBLE
+//                bottomNavigationView.visibility = View.GONE
+//            }
         })
     }
 }

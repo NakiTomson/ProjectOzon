@@ -53,7 +53,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
     val resDataFlow: SharedFlow<Resource<*>> =
         _resDataFlow.shareIn(viewModelScope,started = SharingStarted.Lazily,replay = 20)
 

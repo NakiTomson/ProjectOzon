@@ -144,10 +144,10 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
     }
 
     private fun showError() {
-        catalogMockIsEmpty.visibility = View.VISIBLE
+        catalogMockIsEmpty?.visibility = View.VISIBLE
     }
 
     private fun showSuccess() {
-        catalogMockIsEmpty.visibility = View.GONE
+        catalogMockIsEmpty?.visibility = View.GONE
     }
 }

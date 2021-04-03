@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.activities
 
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.paging.PagingData
 import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
@@ -14,6 +15,7 @@ import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -137,6 +139,8 @@ suspend fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
         data.copy(data = null)
     }
 }
+
+
 fun <T> errorHandling(name: String, resource: Resource<T>) {
     if (resource.status == Resource.Status.LOADING) return
     Log.v(name, "${resource.exception?.message}")
