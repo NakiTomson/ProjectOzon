@@ -42,7 +42,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
-    val TAG = HomeFragment::class.java.simpleName
+//    val TAG = HomeFragment::class.java.simpleName
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -79,7 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             showSuccess()
             multipleRowTypeRecyclerView.layoutAnimation = controller
             adapterMultiple.setNextDataListener = MultipleAdapter.OnNextDataListener { page ->
-                if (viewModel.resDataFlow.replayCache.size <= 10){
+                if (viewModel.resDataFlow.replayCache.size <= 11){
                     viewModel.loadAdditionalData(page)
                 }
             }
@@ -146,7 +146,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val bannerAdapter = BannerAdapter()
         val banner = BannerRowType(bannerAdapter)
 
-        resource.data?.let { bannerAdapter.setData(it) }
+        resource.data?.let { bannerAdapter.setItems(it) }
         multipleAdapter.setData(banner)
         banner.setOnBannerClickListener = BannerRowType.BannerListener { imageUrl: String, view: View ->
             val extras = FragmentNavigatorExtras(

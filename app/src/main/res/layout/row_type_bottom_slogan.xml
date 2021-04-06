@@ -20,7 +20,7 @@
         android:gravity="bottom"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="Скидки до  80 % здесь!"
+        android:text="@string/hint_80_discount"
         android:textColor="@color/custom_color_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imageNextAllFilms"

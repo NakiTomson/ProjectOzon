@@ -35,7 +35,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
 
     private val viewModel: CatalogViewModel by viewModels()
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     private val args: CatalogFragmentArgs by navArgs()
 
@@ -78,7 +78,7 @@ class CatalogFragment : Fragment(R.layout.fragment_catalog) {
             setSubCategories(sub,categoryAdapter)
         } ?: run {
             val dividerItemDecoration = DividerItemDecoration(categoryProductsAdapter.context, layoutManager.orientation)
-            categoryProductsAdapter.addItemDecoration(dividerItemDecoration);
+            categoryProductsAdapter.addItemDecoration(dividerItemDecoration)
             viewModel.getCatalogProducts()
             stopShimmer()
         }

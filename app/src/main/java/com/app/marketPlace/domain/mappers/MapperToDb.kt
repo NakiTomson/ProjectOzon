@@ -1,5 +1,6 @@
 package com.app.marketPlace.domain.mappers
 
+import android.util.Log
 import com.app.marketPlace.data.db.models.BasketProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
 import com.app.marketPlace.data.db.models.HintProductDb
@@ -68,7 +69,8 @@ class MapperToDb @Inject constructor() {
             return false
         }
 
-        fun reMapProduct(products: Product):Product {
+        fun reMapProduct(products: Product?):Product? {
+            if (products == null) return null
             products.isFavorite = checkInFavorite(products.skuId)
             products.isBasket = checkInBasket(products.skuId)
             return products

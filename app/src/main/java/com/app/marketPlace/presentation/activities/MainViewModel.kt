@@ -1,21 +1,24 @@
 package com.app.marketPlace.presentation.activities
 
 import android.util.Log
-import androidx.lifecycle.*
-import androidx.paging.PagingData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.app.marketPlace.data.db.models.BasketProductDb
-import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.FavoriteProductDb
+import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.UserDb
 import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.DataBaseRepository
-
 import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -130,8 +133,7 @@ fun <T> gettingErrors(resource: Resource<T>): Boolean {
     return (resource.status == Resource.Status.COMPLETED && resource.data != null && resource.exception == null)
 }
 
-
-suspend fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
+ fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
     return if (gettingErrors(data)){
         data
     }else{

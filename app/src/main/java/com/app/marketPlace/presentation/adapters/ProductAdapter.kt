@@ -49,7 +49,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.CategoryOfferItemProd
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        holder.bind(reMapProduct(products[position]))
+        reMapProduct(products[position])?.let { holder.bind(it) }
     }
 
     inner class CategoryOfferItemProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

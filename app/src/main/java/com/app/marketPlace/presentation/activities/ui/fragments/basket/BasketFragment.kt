@@ -28,7 +28,7 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
 
     private val viewModel: BasketViewModel by viewModels()
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
@@ -126,8 +126,8 @@ class BasketFragment : Fragment(R.layout.fragment_basket) {
         var oldPrice = 0f
         var priceWithDiscount = 0f
 
-        mainViewModel.baskets.observe(viewLifecycleOwner, {listBasests->
-            val baskets = viewModel.mapperFromDb.mapBasketListDb(listBasests)
+        mainViewModel.baskets.observe(viewLifecycleOwner, {listBasest->
+            val baskets = viewModel.mapperFromDb.mapBasketListDb(listBasest)
             var priceWithDiscountLocal = 0f
             var priceOldLocal = 0f
 

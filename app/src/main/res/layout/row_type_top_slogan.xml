@@ -20,7 +20,7 @@
         android:paddingBottom="15dp"
         android:visibility="gone"
         android:fontFamily="@font/roboto_slab_bold"
-        android:text="Лучшие предложения!"
+        android:text="@string/best_offers"
         android:textSize="16sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"

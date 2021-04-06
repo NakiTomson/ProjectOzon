@@ -223,12 +223,12 @@
             android:padding="5dp"
             android:text="@string/products"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@+id/prodcutsPriceNumber"
+            app:layout_constraintEnd_toStartOf="@+id/productsPriceNumber"
             app:layout_constraintStart_toStartOf="@+id/yourOrder"
             app:layout_constraintTop_toBottomOf="@+id/yourOrder" />
 
         <TextView
-            android:id="@+id/prodcutsPriceNumber"
+            android:id="@+id/productsPriceNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -259,12 +259,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:padding="5dp"
-            android:text="- 1 490 $"
+            android:text="@string/example_1_490"
             android:textColor="@color/red"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/prodcutsPriceNumber" />
+            app:layout_constraintTop_toBottomOf="@+id/productsPriceNumber" />
 
 
         <TextView
@@ -274,7 +274,7 @@
             android:padding="5dp"
             android:text="@string/shippingCost"
             android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@+id/prodcutsPriceNumber"
+            app:layout_constraintEnd_toStartOf="@+id/productsPriceNumber"
             app:layout_constraintStart_toStartOf="@+id/yourOrder"
             app:layout_constraintTop_toBottomOf="@+id/textView22" />
 

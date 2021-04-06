@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_onboarding_first_start.*
 
 class FirstStartActivity : AppCompatActivity() {
 
-    private lateinit var onBoardingAdapter:BannerAdapter
+    private lateinit var onBoardingAdapter: BannerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,35 +28,38 @@ class FirstStartActivity : AppCompatActivity() {
     }
 
 
-    private fun setOnBoardingItems(){
+    private fun setOnBoardingItems() {
         onBoardingAdapter = BannerAdapter()
 
-//        onBoardingAdapter.setData(
-//
-//            mutableListOf(
-//                Banner(
-//                    onBoardingImageUrl = R.drawable.one_card_shopping,
-//                    title = "Best Market Place",
-//                    description = "Best Market Place"
-//                ),
-//                Banner(
-//                    onBoardingImageUrl = R.drawable.two_board_market,
-//                    title = "Best Market Place",
-//                    description = "Best Market Place"
-//                ),
-//                Banner(
-//                    onBoardingImageUrl = R.drawable.three_enjoying_time,
-//                    title = "Best Market Place",
-//                    description = "Best Market Place"
-//                )
-//            )
-//        )
+        onBoardingAdapter.setItems(
+
+            mutableListOf(
+                Banner(
+                    imageUrl = "https://ic.wampi.ru/2021/04/04/one_card_shopping.jpg",
+                    title = "Распродажи и акции, скидки постоянным покупателям",
+                    description = "Ежедневно мы радуем своих покупателей распродажами, акциями и подарками. Мы любим и ценим своих постоянных покупателей",
+                    startOnBoard = true
+                ),
+                Banner(
+                    imageUrl = "https://ic.wampi.ru/2021/04/04/three_enjoying_time.jpg",
+                    title = "Быстрая доставка",
+                    description = "Курьер привезет Ваш заказ домой или на пункт выдачи заказов за максимально короткий срок. Доставка бесплатна во всех регионах",
+                    startOnBoard = true
+                ),
+                Banner(
+                    imageUrl = "https://ic.wampi.ru/2021/04/04/two_board_market.jpg",
+                    title = "Доверие и безопасность",
+                    description = "Мы работаем более 15 лет.\n Каждый день BestBuy посещают более 7 млн. покупателей, и мы делаем все, чтобы они возвращались к нам снова и снова",
+                    startOnBoard = true
+                ),
+            )
+        )
 
 
         boarding_viewPager.adapter = onBoardingAdapter
 
 
-        boarding_viewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+        boarding_viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
@@ -67,9 +70,9 @@ class FirstStartActivity : AppCompatActivity() {
             RecyclerView.OVER_SCROLL_NEVER
 
         imageNextMoxyData.setOnClickListener {
-            if (boarding_viewPager.currentItem + 1 < onBoardingAdapter.itemCount){
+            if (boarding_viewPager.currentItem + 1 < onBoardingAdapter.itemCount) {
                 boarding_viewPager.currentItem += 1
-            }else{
+            } else {
                 navigateToHomeActivity()
             }
         }
@@ -78,14 +81,14 @@ class FirstStartActivity : AppCompatActivity() {
         buttonGetStarted.setOnClickListener { navigateToHomeActivity() }
     }
 
-    private fun setupIndicators(){
+    private fun setupIndicators() {
 
         val indicators = arrayOfNulls<ImageView>(onBoardingAdapter.itemCount)
 
-        val layoutParams:LinearLayout.LayoutParams =
-            LinearLayout.LayoutParams(WRAP_CONTENT,WRAP_CONTENT)
-        layoutParams.setMargins(8,0,8,0)
-        for ( i in indicators.indices){
+        val layoutParams: LinearLayout.LayoutParams =
+            LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+        layoutParams.setMargins(8, 0, 8, 0)
+        for (i in indicators.indices) {
             indicators[i] = ImageView(applicationContext)
             indicators[i]?.let {
                 it.setImageDrawable(
@@ -100,18 +103,18 @@ class FirstStartActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCurrentIndicator(position: Int){
-        val childCount  = indicators_container.childCount
-        for (i in 0 until  childCount){
+    private fun setCurrentIndicator(position: Int) {
+        val childCount = indicators_container.childCount
+        for (i in 0 until childCount) {
             val imageView = indicators_container.getChildAt(i) as ImageView
-            if (i == position){
+            if (i == position) {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         R.drawable.indicator_active_background
                     )
                 )
-            }else{
+            } else {
                 imageView.setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
@@ -122,7 +125,7 @@ class FirstStartActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToHomeActivity(){
+    private fun navigateToHomeActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

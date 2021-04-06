@@ -12,18 +12,15 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
+import com.app.marketPlace.domain.mappers.MapperToDb
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_product.view.*
 
 
-
 class RemoteProductAdapter : PagingDataAdapter<Product,RecyclerView.ViewHolder>(REPO_COMPARATOR) {
-
-
 
     companion object {
 
@@ -37,7 +34,7 @@ class RemoteProductAdapter : PagingDataAdapter<Product,RecyclerView.ViewHolder>(
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? CategoryOfferItemProductViewHolder)?.bind( getItem(position))
+        (holder as? CategoryOfferItemProductViewHolder)?.bind( MapperToDb.reMapProduct(getItem(position)))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -72,72 +69,72 @@ class RemoteProductAdapter : PagingDataAdapter<Product,RecyclerView.ViewHolder>(
 
         private val visible = View.VISIBLE
 
-        fun bind(productsItem:Product?) {
-            if (productsItem== null)return
+        fun bind(product:Product?) {
+            if (product == null)return
 
-            iconProduct.transitionName = productsItem.icon
-            if (productsItem.isBasket){
+            iconProduct.transitionName = product.icon
+            if (product.isBasket){
                 addToBasket.text = "В корзине"
                 addToBasket.setBackgroundResource(R.drawable.button_added)
             }
 
             addToBasket.setOnClickListener {
-                if (!productsItem.isBasket){
-                    productsItem.isBasket = true
+                if (!product.isBasket){
+                    product.isBasket = true
                     Toast.makeText(itemView.context, "Добавлено в корзину", Toast.LENGTH_SHORT).show()
                     addToBasket.setBackgroundResource(R.drawable.button_added)
-                    setClickBasketProduct?.onClick(productsItem)
+                    setClickBasketProduct?.onClick(product)
                 }else{
-                    productsItem.isBasket = false
+                    product.isBasket = false
                     addToBasket.setBackgroundResource(R.drawable.button_next)
                     Toast.makeText(itemView.context, "Удалено из корзины", Toast.LENGTH_SHORT).show()
-                    setClickBasketProduct?.onClick(productsItem)
+                    setClickBasketProduct?.onClick(product)
                 }
             }
 
-            when(productsItem.type){
+            when(product.type){
 
                 Product.Type.OnlyImage -> {
-                    setOnlyImage(productsItem)
+                    setOnlyImage(product)
                 }
                 Product.Type.ProductNoNBasket -> {
-                    productsItem.isCanGoToBasket = false
-                    setOnlyImage(productsItem)
-                    setNonName(productsItem)
-                    setWithName(productsItem)
+                    product.isCanGoToBasket = false
+                    setOnlyImage(product)
+                    setNonName(product)
+                    setWithName(product)
                 }
                 Product.Type.ProductNonName -> {
-                    setOnlyImage(productsItem)
-                    setNonName(productsItem)
+                    setOnlyImage(product)
+                    setNonName(product)
                 }
                 Product.Type.ProductWithName -> {
-                    setOnlyImage(productsItem)
-                    setNonName(productsItem)
-                    setWithName(productsItem)
+                    setOnlyImage(product)
+                    setNonName(product)
+                    setWithName(product)
                 }
 
                 Product.Type.ProductHorizontal -> {
-                    setOnlyImage(productsItem)
-                    setNonName(productsItem)
-                    setWithName(productsItem)
+                    setOnlyImage(product)
+                    setNonName(product)
+                    setWithName(product)
                 }
             }
 
             rootLayout.setOnClickListener {
-                productsItem.images?.set(0, productsItem.icon!!)
-                setClickListenerProduct?.clickProduct(productsItem, iconProduct)
+                product.images?.set(0, product.icon!!)
+                setClickListenerProduct?.clickProduct(product, iconProduct)
             }
 
             addToFavorite.setOnClickListener {
-                if(!productsItem.isFavorite){
-                    productsItem.isFavorite = true
+                if(!product.isFavorite){
+                    product.isFavorite = true
                     addToFavorite.setImageResource(R.drawable.like_favorite_products_icon_heart)
-                    setClickHeartProduct?.onClick(productsItem)
+                    setClickHeartProduct?.onClick(product)
                     Toast.makeText(itemView.context, "Добавлено в избранное", Toast.LENGTH_SHORT).show()
                 }else{
-                    productsItem.isFavorite = false
+                    product.isFavorite = false
                     addToFavorite.setImageResource(R.drawable.unlike_favorite_products_icon_heart)
-                    setClickHeartProduct?.onClick(productsItem)
+                    setClickHeartProduct?.onClick(product)
                     Toast.makeText(itemView.context, "Удалено из избранного", Toast.LENGTH_SHORT).show()
                 }
             }

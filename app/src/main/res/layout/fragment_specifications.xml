@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -13,7 +12,7 @@
         android:padding="10dp"
         android:gravity="start"
         android:textStyle="italic"
-        android:text="Экран:6.78, изогнутый, 3168x1440, 513 ppiПамять:128 ГБ, ОЗУ 8 ГБПроцессор:8 ядер(а), 2.84 ГГцКамера:4 модуляВидео:fullHD 60 к/с, ultraHD 4K, стабилизацияЕмкость батареи:4510 мАчВес:199 г"
+        android:text="@string/example_long_description"
         />
 
 

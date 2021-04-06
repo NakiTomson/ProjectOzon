@@ -64,7 +64,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
 
     private var indexTab = 0
 
-    lateinit var navController: NavController
+    private lateinit var navController: NavController
 
     private val viewModel: DetailsProductViewModel by viewModels()
 
@@ -97,7 +97,7 @@ class DetailsProductFragment : Fragment(R.layout.fragment_details_product) {
         detailProduct.categoryPath?.get(detailProduct.categoryPath.size -1)?.id ?: "null"
 
 
-        initView(MapperToDb.reMapProduct(detailProduct))
+        initView(MapperToDb.reMapProduct(detailProduct)!!)
 
 
         val bundle = bundleOf(

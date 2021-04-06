@@ -2,29 +2,32 @@ package com.app.marketPlace.domain.repositories
 
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.app.marketPlace.data.remote.models.*
-import com.app.marketPlace.data.remote.services.*
+import com.app.marketPlace.data.remote.models.Banner
+import com.app.marketPlace.data.remote.models.Categories
+import com.app.marketPlace.data.remote.models.Stories
+import com.app.marketPlace.data.remote.services.BestBuyService
 import com.app.marketPlace.data.utils.Constants
-import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.data.utils.Constants.attrCategoryPathId
 import com.app.marketPlace.data.utils.Constants.attrSearch
-import com.app.marketPlace.domain.mappers.*
-import com.app.marketPlace.domain.models.LiveStreamItem
+import com.app.marketPlace.domain.mappers.Mapper
+import com.app.marketPlace.domain.mappers.MapperCategories
+import com.app.marketPlace.domain.mappers.MapperDefault
+import com.app.marketPlace.domain.mappers.MapperProducts
 import com.app.marketPlace.domain.models.CombineProducts
+import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.domain.models.Product
+import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.paging.ProductPagingSource
 import com.app.marketPlace.presentation.paging.ProductPagingSource.Companion.DEFAULT_PAGE_SIZE
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(private val marketPlaceApi: BestBuyService) {
 
-    suspend fun loadBannersTop(params: Params): Results.BannersResult {
+    fun loadBannersTop(params: Params): Results.BannersResult {
         return try {
             Results.BannersResult(
                 Resource(

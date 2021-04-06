@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
@@ -27,8 +28,8 @@ class LiveVideoDialog : DialogFragment() {
 
     var player: SimpleExoPlayer? = null
     var playWhenReady: Boolean = true
-    var currentWindow: Int = 0;
-    var playbackPosition: Int = 0;
+    var currentWindow: Int = 0
+    var playbackPosition: Int = 0
 
     private lateinit var exoplayer: PlayerView
 
@@ -56,7 +57,7 @@ class LiveVideoDialog : DialogFragment() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
-
+    @SuppressLint("StaticFieldLeak")
     private fun playYoutubeVideo(url: String) {
 
         object : YouTubeExtractor(requireContext()) {
@@ -99,7 +100,6 @@ class LiveVideoDialog : DialogFragment() {
     private fun releasePlayer() {
         player?.let {
             playWhenReady = it.playWhenReady
-            Log.v("Current","re ${it.currentWindowIndex.toInt()}")
             playbackPosition = it.currentPosition.toInt()
             currentWindow = it.currentWindowIndex
             it.release()

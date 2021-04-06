@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:text="Доставит MarketPlace"
+        android:text="@string/delivery_bestbuy"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -33,7 +33,7 @@
         android:drawablePadding="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Москва"
+        android:text="@string/moscow"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/imageNexData"
@@ -81,7 +81,7 @@
         android:paddingBottom="10dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        android:text="Самовывоз, завтра, 32 февраля бесплатно"
+        android:text="@string/_32_pick_up_service"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,7 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:paddingBottom="10dp"
-        android:text="Самовывоз, завтра, 32 февраля бесплатно"
+        android:text="@string/_32_pick_up_service"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -151,7 +151,7 @@
         <com.google.android.material.tabs.TabItem
             android:id="@+id/descriptionTab"
             android:layout_width="wrap_content"
-            android:text="Описание"
+            android:text="@string/tab_description"
             android:layout_height="wrap_content"
 
             >
@@ -161,7 +161,7 @@
         <com.google.android.material.tabs.TabItem
             android:id="@+id/specificationsTab"
             android:layout_width="wrap_content"
-            android:text="Характеристики"
+            android:text="@string/tab_characteristics"
             android:layout_height="wrap_content"
             >
 

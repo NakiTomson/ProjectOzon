@@ -7,8 +7,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +52,7 @@
             android:gravity="center"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="- 44%"
+            android:text="@string/_44"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:visibility="gone"
@@ -64,7 +63,7 @@
             android:id="@+id/isBestsellerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Бестселлер"
+            android:text="@string/bestseller"
             android:textColor="@color/custom_color_secondary"
             android:textSize="12sp"
             android:visibility="gone"
@@ -77,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="2 590 ₽"
+            android:text="@string/_2_590"
             android:textColor="@color/red"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -91,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="3 749 ₽"
+            android:text="@string/_3_749"
             android:textColor="@color/black"
             android:textSize="13sp"
             android:visibility="gone"
@@ -106,7 +105,7 @@
             android:layout_marginTop="25dp"
             android:gravity="start"
             android:maxLines="4"
-            android:text="Самартфон OnePlus8 T"
+            android:text="@string/oneplus8_t"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:visibility="gone"
@@ -124,7 +123,9 @@
             app:layout_constraintBottom_toBottomOf="@+id/priceOlDTextView"
             app:layout_constraintEnd_toEndOf="@+id/priceOlDTextView"
             app:layout_constraintStart_toStartOf="@+id/priceOlDTextView"
-            app:layout_constraintTop_toTopOf="@+id/priceOlDTextView"></View>
+            app:layout_constraintTop_toTopOf="@+id/priceOlDTextView">
+
+        </View>
 
         <Button
             android:id="@+id/buttonAddToBasket"
@@ -133,7 +134,7 @@
             android:layout_marginTop="23dp"
             android:background="@drawable/button_next"
             android:gravity="center"
-            android:text="В корзину"
+            android:text="@string/in_basket"
             android:textSize="10sp"
             android:textStyle="bold"
             android:visibility="gone"

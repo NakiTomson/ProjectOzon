@@ -3,6 +3,7 @@ package com.app.marketPlace.presentation.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 import com.app.marketPlace.data.remote.models.Banner
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.item_banner_container.view.*
 import java.util.*
 
 
-class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
+class BannerAdapter : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHolder>(){
 
     @Volatile private var countPosition = -1
 
@@ -22,7 +23,7 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
 
     val bannerList:MutableList<Banner> = LinkedList()
 
-    fun setData(items: MutableList<Banner>) {
+    fun setItems(items: MutableList<Banner>) {
         bannerList.clear()
         bannerList.addAll(items)
         notifyDataSetChanged()
@@ -79,7 +80,14 @@ class BannerAdapter() : RecyclerView.Adapter<BannerAdapter.OnBoardingItemViewHol
             imageView.setOnClickListener {
                 setBannerClickListener?.onClickBanner(banner.imageUrl!!, imageView)
             }
+            if (banner.startOnBoard){
+                imageView.layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    700
+                )
+            }
         }
+
     }
 }
 

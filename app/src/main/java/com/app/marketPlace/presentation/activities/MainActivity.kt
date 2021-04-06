@@ -1,8 +1,7 @@
 package com.app.marketPlace.presentation.activities
 
 
-import android.os.*
-import android.view.View
+import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -11,7 +10,6 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.extensions.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

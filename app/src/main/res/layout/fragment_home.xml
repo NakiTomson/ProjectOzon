@@ -40,7 +40,7 @@
         android:id="@+id/homeMockIsEmpty"
         android:layout_width="wrap_content"
         android:layout_gravity="center"
-        android:text="Nothing found"
+        android:text="@string/nothing_found"
         android:visibility="gone"
         android:textSize="30sp"
         android:textColor="@color/black"

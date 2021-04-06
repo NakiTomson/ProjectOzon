@@ -23,7 +23,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@color/black"
-        android:text="Топовые предложения только в вашем аккаунте!"
+        android:text="@string/top_offers_only_in_your_account"
         app:layout_constraintTop_toTopOf="parent"
         >
     </TextView>
@@ -40,7 +40,7 @@
         android:layout_gravity="center"
         app:backgroundTint="@null"
         android:layout_marginTop="10dp"
-        android:text="Войдите или Зарегистрируйтесь"
+        android:text="@string/log_in_or_register"
         app:layout_constraintTop_toBottomOf="@+id/textViewTop"
         >
     </Button>

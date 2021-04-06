@@ -2,13 +2,10 @@ package com.app.marketPlace.presentation.activities
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import com.app.marketPlace.R
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -20,53 +17,27 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         val sharedPreferences = getSharedPreferences("MARKET",Context.MODE_PRIVATE)
-        startMainAnimation(sharedPreferences)
-        startGlobalService()
-    }
 
 
-
-    private fun startMainAnimation(sharedPreferences: SharedPreferences) {
-        val animation: Animation = AnimationUtils.loadAnimation(
-            applicationContext,
-            R.anim.main_scale
-        )
-
-        animation.setAnimationListener(object : AnimationListener {
-            override fun onAnimationStart(animation: Animation) {}
-            override fun onAnimationRepeat(animation: Animation) {}
-            override fun onAnimationEnd(animation: Animation) {
-                when {
-                    sharedPreferences.getBoolean("FirstOpen", true) -> {
-//                        startOnBoardingActivity()
-                        startMainActivity()
-                        sharedPreferences.edit().putBoolean("FirstOpen", false).apply()
-                    }
-                    else -> {
-                        startMainActivity()
-                    }
+        motion_layout?.setTransitionListener(object : MotionLayout.TransitionListener {
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                if(sharedPreferences.getBoolean("keyFirst",true)){
+                    sharedPreferences.edit().putBoolean("keyFirst",false).apply()
+                    startActivity(Intent(this@SplashActivity, FirstStartActivity::class.java))
+                }else{
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                 }
-
+                finish()
             }
+
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) { }
+
+            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) { }
+
+            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) { }
         })
-        label_ImageView.animation = animation
     }
 
-
-    private fun startGlobalService(){
-
-    }
-
-
-    fun startMainActivity(){
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
-    }
-
-    fun startOnBoardingActivity(){
-        startActivity(Intent(this, FirstStartActivity::class.java))
-        finish()
-    }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -82,5 +53,10 @@ class SplashActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        motion_layout?.startLayoutAnimation()
     }
 }

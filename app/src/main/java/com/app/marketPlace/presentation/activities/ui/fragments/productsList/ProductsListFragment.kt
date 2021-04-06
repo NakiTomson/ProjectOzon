@@ -1,7 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.productsList
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -10,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -87,7 +85,7 @@ class ProductsListFragment : Fragment(R.layout.fragment_products_list) {
         val anim: Animation = AnimationUtils.loadAnimation(this.context, R.anim.lunge_from_bottom)
         val controller = LayoutAnimationController(anim)
 
-        viewModel.productsList.observe(viewLifecycleOwner, Observer {sources->
+        viewModel.productsList.observe(viewLifecycleOwner, { sources->
             lifecycleScope.launch {
                 setAnim(controller)
                 productsAdapter.submitData(sources)

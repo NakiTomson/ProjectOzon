@@ -5,5 +5,6 @@ data class Banner(
   val imageUrl:String?,
   val title:String? =null,
   val description:String? =null,
-  val category:String? =null
+  val category:String? =null,
+  val startOnBoard:Boolean = false
 )

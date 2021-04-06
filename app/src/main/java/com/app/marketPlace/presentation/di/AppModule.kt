@@ -15,11 +15,11 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule() {
+class AppModule {
 
     @Provides
     fun provideDataBase( @ApplicationContext context: Context): MarketPlaceDataBase {
-        return Room.databaseBuilder(context, MarketPlaceDataBase::class.java, "ozon.db").build()
+        return Room.databaseBuilder(context, MarketPlaceDataBase::class.java, "bestbuy.db").build()
     }
 
     @Provides

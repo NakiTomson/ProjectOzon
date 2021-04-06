@@ -47,7 +47,7 @@ class ProductHorizontalAdapter : RecyclerView.Adapter<ProductHorizontalAdapter.C
     }
 
     override fun onBindViewHolder(holder: CategoryOfferItemProductViewHolder, position: Int) {
-        products?.get(position)?.let { holder.bind( reMapProduct(it)) }
+        products?.get(position)?.let { holder.bind(reMapProduct(it)!!) }
     }
 
     override fun getItemCount() = products?.size ?: 0
@@ -76,7 +76,6 @@ class ProductHorizontalAdapter : RecyclerView.Adapter<ProductHorizontalAdapter.C
             }
 
             addToBasket.setOnClickListener {
-                Log.v("BINFS","REEE 2")
                 if (!productsItem.isBasket){
                     productsItem.isBasket = true
                     Toast.makeText(itemView.context,"Добавлено в корзину",Toast.LENGTH_SHORT).show()

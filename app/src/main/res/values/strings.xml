@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">MarketPlace</string>
-    <string name="get_started">Get started</string>
+    <string name="app_name">Market Place</string>
+    <string name="get_started">К покупкам</string>
 
 
     <!-- ContentDescription-->
     <string name="descriptionMainImageView">Main Image Icon</string>
     <string name="descriptionNextBoard">Next</string>
-    <string name="skip">Skip</string>
+    <string name="skip">Пропустить</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -57,17 +57,15 @@
     <string name="regMessage">Чтобы купить товар необходимо зарегистрироваться</string>
     <string name="regYes">Да</string>
     <string name="regNo">Нет</string>
-    <string name="bestseller">Бестселлер</string>
 
     <string name="noteEnoughCharacters">Пороль 6 символов или Не полный адресс или Телефон</string>
     <string name="diffPasswords">Разные Пороли</string>
     <string name="errorSignUp">"Error SignUp"</string>
     <string name="error">Error</string>
-    <string name="epmtyFilds">Заполните поля</string>
+    <string name="emptyField">Заполните поля</string>
     <string name="nice">Nice</string>
     <string name="to_see_you">To see you</string>
     <string name="again">Again</string>
-    <string name="your_email">Your Email</string>
     <string name="your_password">Your Password</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
@@ -80,4 +78,75 @@
     <string name="desc_doggo">doggo</string>
     <string name="button_retry">Retry</string>
     <string name="label_error">Something went wrong, please try again</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="example_1_490">- 1 490 $</string>
+    <string name="my_account_data">Мои данные</string>
+    <string name="name_and_surname">Имя,фамилия</string>
+    <string name="example_name">Дмитрий Московский</string>
+    <string name="hint_phone">Телефон</string>
+    <string name="_782862626">+782862626</string>
+    <string name="hint_email">Email</string>
+    <string name="workoyt3200_mial_ru">Best32@gmail.com</string>
+    <string name="gender">Пол</string>
+    <string name="man_gender">Мужской</string>
+    <string name="hint_address_delivery">Адресс доставки</string>
+    <string name="address_user">г.Москва ул Кляча д.8 кор3 кв 123</string>
+    <string name="sign_in_sign_up">Войдите или зарегистрируйтесь</string>
+    <string name="popular">Популярные</string>
+    <string name="your_email">Your Email</string>
+    <string name="password">Password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_7628828225">+7628828225</string>
+    <string name="example_long_description">Экран:6.78, изогнутый, 3168x1440, 513 ppiПамять:128 ГБ, ОЗУ 8 ГБПроцессор:8 ядер(а), 2.84 ГГцКамера:4 модуляВидео:fullHD 60 к/с, ultraHD 4K, стабилизацияЕмкость батареи:4510 мАчВес:199 г</string>
+    <string name="ex_category_title">Товары в рассрочку</string>
+    <string name="best_offers">Лучшие предложения!</string>
+    <string name="hint_80_discount">Скидки до 80 % здесь!</string>
+    <string name="oneplus8_t">Самартфон OnePlus8 T</string>
+    <string name="color_blue">цвет голубой</string>
+    <string name="in_favorite">В избранное</string>
+    <string name="delete">Удалить</string>
+    <string name="_1_wt">1 шт</string>
+    <string name="in_live">В ЭФИРЕ</string>
+    <string name="_222">222</string>
+    <string name="natures_miracle_marketplace_live">Natures Miracle впервые в прямом эфире MarketPlace Live!</string>
+    <string name="citynature">CityNature</string>
+    <string name="bestseller">Бестселлер</string>
+    <string name="_2_590">2 590 ₽</string>
+    <string name="_3_749">3 749 ₽</string>
+    <string name="in_basket">В корзину</string>
+    <string name="_44">- 44%</string>
+    <string name="category">Категория</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_category">Category</string>
+    <string name="menu_basket">Basket</string>
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_account">Account</string>
+    <string name="search_on_request">Ищут по запросам</string>
+    <string name="similar_products">Похожие товары</string>
+    <string name="delivery_bestbuy">Доставит BestBuy</string>
+    <string name="moscow">Москва</string>
+    <string name="_32_pick_up_service">Самовывоз, завтра, 32 февраля бесплатно</string>
+    <string name="tab_description">Описание</string>
+    <string name="tab_characteristics">Характеристики</string>
+    <string name="apple">Apple</string>
+    <string name="_46_700">46 700 ₽</string>
+    <string name="_58_700">58 700 ₽</string>
+    <string name="found_cheaper">Нашли Дешевле?</string>
+    <string name="_8_reviews">8 Отзывов</string>
+    <string name="_3">3</string>
+    <string name="_3_question">3 вопроса</string>
+    <string name="color">Цвет:</string>
+    <string name="blue">Синий</string>
+    <string name="learn_about_price_reduction">Узнать о снижении цены</string>
+    <string name="in_stock">В наличии</string>
+    <string name="give_gift">Подарить</string>
+    <string name="buy_one_click">Купить в 1 клик</string>
+    <string name="_35_900">35 900</string>
+    <string name="_16_442">16 442 ₽</string>
+    <string name="history">Истории</string>
+    <string name="finance">Финансы</string>
+    <string name="top_offers_only_in_your_account">Топовые предложения только в вашем аккаунте!</string>
+    <string name="log_in_or_register">Войдите или Зарегистрируйтесь</string>
+    <string name="search_on_bestbuy">Поиск на bestbuy</string>
 </resources>

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Apple"
+        android:text="@string/apple"
         android:textColor="@color/black_blue"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
         android:fontFamily="@font/roboto_slab_bold"
         android:gravity="start"
         android:paddingBottom="10dp"
-        android:text="46 700 ₽"
+        android:text="@string/_46_700"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -45,7 +45,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:visibility="gone"
-        android:text="58 700 ₽"
+        android:text="@string/_58_700"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/priceWithDiscountTextView"
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Нашли Дешевле?"
+        android:text="@string/found_cheaper"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/imageNextMoxyData"
@@ -130,7 +130,7 @@
         android:gravity="start"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Смартфон OnePlus 8 pro /256GB, Синий"
+        android:text="@string/oneplus8_t"
         android:textColor="@color/black_blue"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -178,7 +178,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:text="8 Отзывов"
+                android:text="@string/_8_reviews"
                 android:padding="5dp"
                 android:textColor="@color/custom_color_primary"
                 >
@@ -211,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="  3"
+                android:text="@string/_3"
                 android:textSize="15sp"
                 android:textColor="@color/black"
                 app:drawableStartCompat="@drawable/question">
@@ -224,7 +224,7 @@
                 android:padding="3dp"
                 android:layout_gravity="bottom"
                 android:gravity="bottom"
-                android:text="3 вопроса"
+                android:text="@string/_3_question"
                 android:textColor="@color/custom_color_primary">
             </TextView>
 
@@ -233,7 +233,7 @@
 
     <TextView
         android:id="@+id/colorTextView"
-        android:text="Цвет:"
+        android:text="@string/color"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
 
     <TextView
         android:id="@+id/currentColor"
-        android:text="Синий"
+        android:text="@string/blue"
         android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -395,7 +395,7 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:drawablePadding="10dp"
-        android:text="Узнать о снижении цены"
+        android:text="@string/learn_about_price_reduction"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/colorsContainer"
         app:drawableStartCompat="@drawable/ic_notifications" />
@@ -409,7 +409,7 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:drawablePadding="10dp"
-        android:text="В наличии"
+        android:text="@string/in_stock"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notifyMeAboutChange"
         app:drawableStartCompat="@drawable/ic_check_mark" />
@@ -433,7 +433,7 @@
         android:id="@+id/addToGift"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Подарить"
+        android:text="@string/give_gift"
         android:background="@drawable/button_wight_light"
         app:backgroundTint="@null"
         android:textColor="@color/custom_color_primary"
@@ -455,7 +455,7 @@
         android:id="@+id/byeOneClick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Купить в 1 клик"
+        android:text="@string/buy_one_click"
         android:background="@drawable/button_wight_light"
         app:backgroundTint="@null"
         android:singleLine="true"

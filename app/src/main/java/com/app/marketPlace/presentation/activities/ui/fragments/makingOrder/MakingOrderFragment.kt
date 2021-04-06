@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.makingOrder
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -22,6 +23,7 @@ class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
 
     private val mainViewModel: MainViewModel by activityViewModels()
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -40,7 +42,7 @@ class MakingOrderFragment : Fragment(R.layout.fragment_making_order) {
         val discount = arguments?.getString("discount")
         val finalCost = arguments?.getString("finalPrice")
 
-        prodcutsPriceNumber.text = "$oldPrice"
+        productsPriceNumber.text = "$oldPrice"
 
         if (discount?.toFloat()!! > 0){
             textView23.visibility = View.VISIBLE

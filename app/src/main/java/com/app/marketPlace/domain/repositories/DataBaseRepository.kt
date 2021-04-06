@@ -15,7 +15,7 @@ import com.app.marketPlace.domain.models.Product
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-public class DataBaseRepository @Inject constructor(
+class DataBaseRepository @Inject constructor(
     private val favoriteProductDao: InFavoriteDao,
     private val basketDao: InBasketDao,
     private val userDao: UserDao,

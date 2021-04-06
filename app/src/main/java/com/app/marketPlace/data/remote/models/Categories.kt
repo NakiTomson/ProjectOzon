@@ -31,8 +31,7 @@ data class Categories(
         parcel.readString(),
         parcel.readString(),
         parcel.createTypedArrayList(CREATOR)
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

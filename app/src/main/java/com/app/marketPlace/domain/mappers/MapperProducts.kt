@@ -60,7 +60,6 @@ class MapperProducts : Mapper {
             spain = params.spain
         )
 
-
         return Resource(
             status = Resource.Status.COMPLETED,
             data = item,
@@ -69,6 +68,7 @@ class MapperProducts : Mapper {
         )
     }
 
+
     private fun getUiProducts(products: List<ProductOfServer>?, type: Product.Type) : List<Product>{
 
         val newProductsList: MutableList<Product> = ArrayList()
@@ -76,6 +76,7 @@ class MapperProducts : Mapper {
         products?.forEach {
 
             newProductsList.add(
+
                 Product(
                     type = type,
                     icon = it.image,

@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +7,6 @@ import android.widget.Button
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.marketPlace.R
 
@@ -30,12 +27,12 @@ class LoaderStateAdapter(private val retry: () -> Unit) :   LoadStateAdapter<Loa
 
             fun getInstance(parent: ViewGroup, retry: () -> Unit): LoaderViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
-                val view = inflater.inflate(R.layout.item_doggo_loader, parent, false)
+                val view = inflater.inflate(R.layout.item_motion_loader, parent, false)
                 return LoaderViewHolder(view, retry)
             }
         }
 
-        val motionLayout: MotionLayout = view.findViewById(R.id.mlLoader)
+        private val motionLayout: MotionLayout = view.findViewById(R.id.mlLoader)
 
         init {
             view.findViewById<Button>(R.id.btnRetry).setOnClickListener {

@@ -1,16 +1,12 @@
 package com.app.marketPlace.presentation.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.app.marketPlace.data.remote.models.ProductOfServer
-import com.app.marketPlace.data.remote.models.ProductsList
 import com.app.marketPlace.data.remote.services.BestBuyService
 import com.app.marketPlace.domain.mappers.MapperProducts
 import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
-import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.factory.Resource
 import retrofit2.HttpException
 import java.io.IOException

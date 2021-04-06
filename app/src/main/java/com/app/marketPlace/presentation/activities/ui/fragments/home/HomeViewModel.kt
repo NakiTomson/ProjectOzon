@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
-import androidx.lifecycle.viewModelScope
 import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.data.utils.Constants.Camera
 import com.app.marketPlace.data.utils.Constants.CellPhone
@@ -11,17 +10,13 @@ import com.app.marketPlace.data.utils.Constants.Laptop
 import com.app.marketPlace.data.utils.Constants.Monitor
 import com.app.marketPlace.data.utils.Constants.Phone
 import com.app.marketPlace.data.utils.Constants.TVS
-import com.app.marketPlace.domain.repositories.Params.ProductsParams
-import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
-import com.app.marketPlace.presentation.factory.Resource
-import com.app.marketPlace.domain.models.*
+import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params.BannerParams
-import com.app.marketPlace.domain.repositories.Params.CategoriesProductParams
-import com.app.marketPlace.domain.repositories.Params.StoriesParams
-import com.app.marketPlace.domain.repositories.Params.LiveParams
+import com.app.marketPlace.domain.repositories.Params.*
 import com.app.marketPlace.domain.repositories.Results
 import com.app.marketPlace.presentation.activities.checkingForErrors
+import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
+import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -136,6 +131,7 @@ class HomeViewModel @Inject constructor(
     fun loadAdditionalData(page: Int) {
         loadData(Dispatchers.IO){
             delayUntilInternetResumeConnection()
+
             val productsCamera = async {
                 repository.loadProducts(
                     ProductsParams(pathId = Camera, pageSize = "8", apiKey = ApiToken, page = "3",
@@ -145,15 +141,18 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             }
+
             val productsHeadPhones = async {
                 repository.loadProducts(
-                    ProductsParams(pathId = Headphones, pageSize = "12", apiKey = ApiToken, page = "1",
+                    ProductsParams(
+                        pathId = Headphones, pageSize = "12", apiKey = ApiToken, page = "1",
                         typeProduct = Product.Type.ProductNoNBasket,
                         topOffer = "Музыка для души ",
                         spain = 4
                     )
                 )
             }
+
             val productsMonitors = async {
                 repository.loadProducts(
                     ProductsParams(pathId = Monitor, pageSize = "6", apiKey = ApiToken, page = "1",

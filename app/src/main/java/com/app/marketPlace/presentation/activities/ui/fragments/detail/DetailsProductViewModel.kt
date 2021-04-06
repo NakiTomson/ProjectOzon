@@ -1,6 +1,5 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.detail
 
-import androidx.lifecycle.viewModelScope
 import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.data.utils.Constants.attrCategoryPathId
 import com.app.marketPlace.data.utils.Constants.attrSearch
@@ -12,7 +11,8 @@ import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.factory.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 

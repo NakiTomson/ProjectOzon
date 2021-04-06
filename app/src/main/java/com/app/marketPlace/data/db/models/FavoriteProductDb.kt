@@ -1,10 +1,9 @@
 package com.app.marketPlace.data.db.models
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.app.marketPlace.data.db.converters.ProductConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 
 @Entity(tableName = "product")

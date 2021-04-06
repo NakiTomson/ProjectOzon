@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_border_container.view.*
 import java.util.*
 
 
-class BorderAdapter() : RecyclerView.Adapter<BorderAdapter.OnBoardingItemViewHolder>() {
+class BorderAdapter : RecyclerView.Adapter<BorderAdapter.OnBoardingItemViewHolder>() {
 
     @Volatile
     private var countPosition = -1
@@ -23,6 +23,11 @@ class BorderAdapter() : RecyclerView.Adapter<BorderAdapter.OnBoardingItemViewHol
     private val onBoardingItems: MutableList<Banner> = LinkedList()
 
 
+    fun setItems(items: List<Banner>) {
+        onBoardingItems.clear()
+        onBoardingItems.addAll(items)
+        notifyDataSetChanged()
+    }
     fun setItem(items: Banner) {
         ++countPosition
         onBoardingItems.add(items)

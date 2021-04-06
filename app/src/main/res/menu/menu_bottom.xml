@@ -5,36 +5,27 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/home_selector"
-        android:title="Home"  />
+        android:title="@string/menu_home"  />
 
     <item
         android:id="@+id/category"
         android:icon="@drawable/express_selector"
-        android:title="Category" />
+        android:title="@string/menu_category" />
 
     <item
         android:id="@+id/basket"
         android:icon="@drawable/basket_selector"
-        android:title="Basket" />
+        android:title="@string/menu_basket" />
 
     <item
         android:id="@+id/favorite"
         android:icon="@drawable/unlike_favorite_products_icon_heart"
-        android:title="Favorite" />
+        android:title="@string/menu_favorite" />
 
 
     <item
         android:id="@+id/account"
         android:icon="@drawable/ic_face"
-        android:title="Account" />
+        android:title="@string/menu_account" />
 
-    <!--    <item-->
-<!--        android:id="@+id/expressItem3"-->
-<!--        android:icon="@drawable/home_selector"-->
-<!--        android:title="Home" />-->
-
-<!--    <item-->
-<!--        android:id="@+id/expressItem4"-->
-<!--        android:icon="@drawable/home_selector"-->
-<!--        android:title="Home" />-->
 </menu>

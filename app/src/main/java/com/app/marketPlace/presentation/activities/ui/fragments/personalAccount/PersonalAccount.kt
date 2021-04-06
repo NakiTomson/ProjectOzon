@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_personal_account.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PersonalAccount : Fragment(R.layout.fragment_personal_account) {

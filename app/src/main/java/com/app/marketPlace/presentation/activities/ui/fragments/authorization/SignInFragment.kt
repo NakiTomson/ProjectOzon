@@ -44,7 +44,7 @@ class SignInFragment : Fragment(R.layout.fragment_sign_in) {
         val passWord: String = password.text.toString()
 
         if (email.length <= 1 && passWord.length <= 3) {
-            Toast.makeText(activity, getString(R.string.epmtyFilds), Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, getString(R.string.emptyField), Toast.LENGTH_SHORT).show()
             return
         }
 
