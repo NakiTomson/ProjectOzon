@@ -5,8 +5,8 @@ import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
+import com.app.marketPlace.domain.useCases.ProductsLoadUseCase
 import com.app.marketPlace.presentation.activities.errorHandling
 import com.app.marketPlace.presentation.activities.gettingErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BasketViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val useCase: ProductsLoadUseCase,
     val mapperFromDb: MapperFromDb
 ) : BaseViewModel(), CoroutineScope {
 
@@ -27,7 +27,7 @@ class BasketViewModel @Inject constructor(
         if(productsResultList.value?.data != null) return
         launch(Dispatchers.IO) {
             val products= async {
-                repository.loadProducts(
+                useCase.loadProducts(
                     Params.ProductsParams(
                         pathId = recommendedPath,
                         pageSize = "20",

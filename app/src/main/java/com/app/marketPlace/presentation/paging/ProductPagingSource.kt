@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.app.marketPlace.data.remote.services.BestBuyService
 import com.app.marketPlace.domain.mappers.MapperProducts
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.factory.Resource
 import retrofit2.HttpException

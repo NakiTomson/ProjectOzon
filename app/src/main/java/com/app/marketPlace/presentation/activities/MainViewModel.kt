@@ -11,7 +11,7 @@ import com.app.marketPlace.data.db.models.HintProductDb
 import com.app.marketPlace.data.db.models.UserDb
 import com.app.marketPlace.domain.mappers.MapperFromDb
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.DataBaseRepository
+import com.app.marketPlace.domain.useCases.DataBaseUseCase
 import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.utils.NetworkConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    var repository:DataBaseRepository,
+    var repository:DataBaseUseCase,
     var networkConnection:NetworkConnection,
     var mapperFromDb:MapperFromDb,
 ) : ViewModel(), CoroutineScope {
@@ -133,7 +133,7 @@ fun <T> gettingErrors(resource: Resource<T>): Boolean {
     return (resource.status == Resource.Status.COMPLETED && resource.data != null && resource.exception == null)
 }
 
- fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
+fun<Type> checkingForErrors(data: Resource<Type>): Resource<Type> {
     return if (gettingErrors(data)){
         data
     }else{

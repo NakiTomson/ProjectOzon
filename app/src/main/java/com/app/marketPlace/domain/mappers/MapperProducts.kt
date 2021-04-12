@@ -5,7 +5,7 @@ import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.domain.exception.NotFoundMappedException
 import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.factory.Resource
 import java.text.DecimalFormat
 

@@ -3,8 +3,8 @@ package com.app.marketPlace.presentation.activities.ui.fragments.catalog
 import com.app.marketPlace.data.remote.models.Categories
 import com.app.marketPlace.data.utils.Constants.ApiToken
 import com.app.marketPlace.data.utils.Constants.bestPath
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.useCases.CategoriesLoadUseCase
+import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.factory.Resource
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
-    private val repository: AppRepository
+    private val useCase: CategoriesLoadUseCase
 ) : BaseViewModel(), CoroutineScope {
 
     private val _categoryProduct: MutableStateFlow<Resource<List<Categories>>> = MutableStateFlow(
@@ -30,7 +30,7 @@ class CatalogViewModel @Inject constructor(
         loadData {
             if (categoryProduct.value.data != null) return@loadData
             val categories =  async {
-                repository.loadCategories(
+                useCase.loadCategories(
                     Params.CategoriesProductParams(pageSize = "40", apiKey = ApiToken, page = "1",
                         pathId = bestPath
                     ))

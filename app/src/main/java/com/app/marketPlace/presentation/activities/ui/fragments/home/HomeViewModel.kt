@@ -11,9 +11,9 @@ import com.app.marketPlace.data.utils.Constants.Monitor
 import com.app.marketPlace.data.utils.Constants.Phone
 import com.app.marketPlace.data.utils.Constants.TVS
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params.*
-import com.app.marketPlace.domain.repositories.Results
+import com.app.marketPlace.domain.useCases.*
+import com.app.marketPlace.domain.models.Params.*
+import com.app.marketPlace.domain.models.Results
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.factory.Resource
@@ -24,7 +24,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: AppRepository
+    private val productsLoadUseCase: ProductsLoadUseCase,
+    private val loadBannersUseCase: BannersLoadUseCase,
+    private val categoriesLoadUseCase: CategoriesLoadUseCase,
+    private val storiesLoadUseCase: StoriesLoadUseCase,
+    private val streamsLoadLiveUseCase: StreamsLoadLiveUseCase,
 ) : BaseViewModel() {
 
     private val _resDataFlow =
@@ -36,39 +40,39 @@ class HomeViewModel @Inject constructor(
     var netConnectionState = false
 
     init {
-        viewModelScope.launch{
+        viewModelScope.launch {
             delayUntilInternetResumeConnection()
             startLoading()
         }
     }
 
     private suspend fun delayUntilInternetResumeConnection() {
-        while (!netConnectionState){
+        while (!netConnectionState) {
             delay(150)
         }
     }
 
     val resDataFlow: SharedFlow<Resource<*>> =
-        _resDataFlow.shareIn(viewModelScope,started = SharingStarted.Lazily,replay = 20)
+        _resDataFlow.shareIn(viewModelScope, started = SharingStarted.Lazily, replay = 20)
 
-    val completed: StateFlow<Boolean?>  = _completed.asStateFlow()
+    val completed: StateFlow<Boolean?> = _completed.asStateFlow()
 
 
     private suspend fun startLoading(){
 
-        val bannerTop: Deferred<Results.BannersResult> = async { repository.loadBannersTop(BannerParams()) }
+        val bannerTop: Deferred<Results.BannersResult> = async { loadBannersUseCase.loadBannersTop(BannerParams()) }
 
         val categories = async {
-            repository.loadCategories(
+            categoriesLoadUseCase.loadCategories(
                 CategoriesProductParams(pageSize = "20", apiKey = ApiToken, page = "1")
             )
         }
 
-        val stories:Deferred<Results.StoriesResult> = async {  repository.loadStories(StoriesParams())}
-        val liveStreamItems:Deferred<Results.LiveStreamsResult> = async {  repository.loadLiveStreams(LiveParams())}
+        val stories:Deferred<Results.StoriesResult> = async {  storiesLoadUseCase.loadStories(StoriesParams())}
+        val liveStreamItems:Deferred<Results.LiveStreamsResult> = async {  streamsLoadLiveUseCase.loadLiveStreams(LiveParams())}
 
         val productsCoffeeMaker = async {
-            repository.loadProducts(
+            productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = CoffeeMaker, pageSize = "3", apiKey = ApiToken, page = "1",
                     typeProduct = Product.Type.OnlyImage
                 )
@@ -80,7 +84,7 @@ class HomeViewModel @Inject constructor(
         }
 
         val productsCellPhone = async {
-            repository.loadProducts(
+            productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = CellPhone, pageSize = "6", apiKey = ApiToken, page = "53",
                     typeProduct = Product.Type.ProductNonName,
                     topOffer = "Это выгодно! Успей купить!",
@@ -89,18 +93,18 @@ class HomeViewModel @Inject constructor(
             )
         }
 
-        val bannersCenter:Deferred<Results.BannersResult> = async {  repository.loadBannersCenter(BannerParams())}
+        val bannersCenter:Deferred<Results.BannersResult> = async {  loadBannersUseCase.loadBannersCenter(BannerParams())}
         val productsLaptop = async {
-            repository.loadProducts(
+            productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = Laptop, pageSize = "3", apiKey = ApiToken, page = "233",
                     typeProduct = Product.Type.ProductNonName,
                     topOffer = "Рекомендуем"
                 )
             )
         }
-        val bannersDown:Deferred<Results.BannersResult> = async{ repository.loadBannersDown(BannerParams()) }
+        val bannersDown:Deferred<Results.BannersResult> = async{ loadBannersUseCase.loadBannersDown(BannerParams()) }
         val productsTvs = async {
-            repository.loadProducts(
+            productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = TVS, pageSize = "4", apiKey = ApiToken, page = "23",
                     typeProduct = Product.Type.ProductNonName,
                     topOffer = "Акции недели !",
@@ -133,7 +137,7 @@ class HomeViewModel @Inject constructor(
             delayUntilInternetResumeConnection()
 
             val productsCamera = async {
-                repository.loadProducts(
+                productsLoadUseCase.loadProducts(
                     ProductsParams(pathId = Camera, pageSize = "8", apiKey = ApiToken, page = "3",
                         typeProduct = Product.Type.ProductWithName,
                         topOffer = "Вас может заинтересовать ",
@@ -143,7 +147,7 @@ class HomeViewModel @Inject constructor(
             }
 
             val productsHeadPhones = async {
-                repository.loadProducts(
+                productsLoadUseCase.loadProducts(
                     ProductsParams(
                         pathId = Headphones, pageSize = "12", apiKey = ApiToken, page = "1",
                         typeProduct = Product.Type.ProductNoNBasket,
@@ -154,7 +158,7 @@ class HomeViewModel @Inject constructor(
             }
 
             val productsMonitors = async {
-                repository.loadProducts(
+                productsLoadUseCase.loadProducts(
                     ProductsParams(pathId = Monitor, pageSize = "6", apiKey = ApiToken, page = "1",
                         typeProduct = Product.Type.ProductHorizontal,
                         topOffer = "Лучшие мониторы 90 % скидка",
@@ -164,7 +168,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
             val productsKeyboard = async {
-                repository.loadProducts(
+                productsLoadUseCase.loadProducts(
                     ProductsParams(pathId = ComputerKeyboard, pageSize = "6", apiKey = ApiToken,
                         page = "1",
                         typeProduct = Product.Type.ProductWithName,
@@ -173,7 +177,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
             val productsPhones = async {
-                repository.loadProducts(
+                productsLoadUseCase.loadProducts(
                     ProductsParams(pathId = Phone, pageSize = "20", apiKey = ApiToken, page = "1",
                         typeProduct = Product.Type.ProductWithName,
                         topOffer = "Пора обновить телефон !",

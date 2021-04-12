@@ -1,4 +1,4 @@
-package com.app.marketPlace.domain.repositories
+package com.app.marketPlace.domain.useCases
 
 import androidx.annotation.WorkerThread
 import com.app.marketPlace.data.db.dao.HintProductDao
@@ -15,7 +15,7 @@ import com.app.marketPlace.domain.models.Product
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class DataBaseRepository @Inject constructor(
+class DataBaseUseCase @Inject constructor(
     private val favoriteProductDao: InFavoriteDao,
     private val basketDao: InBasketDao,
     private val userDao: UserDao,

@@ -28,7 +28,6 @@ data class Resource<T>(
         fun<N> getDefSateResource(): Resource<N> {
             return Resource(data = null)
         }
-
     }
 
 }

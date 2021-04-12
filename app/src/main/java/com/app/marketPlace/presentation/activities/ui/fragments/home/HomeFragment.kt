@@ -1,5 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
+import android.content.Context
 import android.os.Bundle
 import android.transition.*
 import android.view.View
@@ -35,7 +36,9 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
+import java.lang.ref.WeakReference
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -53,6 +56,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         navController = findNavController()
 
+
+        val atomic = AtomicInteger(10)
+        
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
@@ -107,6 +113,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupData(multipleAdapter: MultipleAdapter){
         viewModel.resDataFlow.onEach { resource->
             if (resource.data == null)return@onEach
+
             when(resource.type){
                 is Type.BANNER -> {
                     setBanners(multipleAdapter, resource as Resource<MutableList<Banner>>)
@@ -246,5 +253,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showSuccess() {
         homeMockIsEmpty.visibility = View.GONE
     }
-
 }

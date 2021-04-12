@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.app.marketPlace.R
 import com.app.marketPlace.data.utils.Constants
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.activities.MainViewModel
 import com.app.marketPlace.presentation.activities.ui.fragments.home.HomeFragmentDirections
 import com.app.marketPlace.presentation.adapters.LoaderStateAdapter

@@ -5,8 +5,8 @@ import com.app.marketPlace.data.utils.Constants.attrCategoryPathId
 import com.app.marketPlace.data.utils.Constants.attrSearch
 import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.Product
-import com.app.marketPlace.domain.repositories.AppRepository
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
+import com.app.marketPlace.domain.useCases.ProductsLoadUseCase
 import com.app.marketPlace.presentation.activities.checkingForErrors
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
 import com.app.marketPlace.presentation.factory.Resource
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsProductViewModel @Inject constructor(
-    private val repository: AppRepository
+    private val useCase: ProductsLoadUseCase
 ) : BaseViewModel(), CoroutineScope {
 
 
@@ -43,7 +43,7 @@ class DetailsProductViewModel @Inject constructor(
     private fun loadProducts(category: String, attr: String, requestName: String = ""){
         loadData {
             val products= async {
-                repository.loadProducts(
+                useCase.loadProducts(
                     Params.ProductsParams(
                         attributes = attr,
                         pathId = category,

@@ -1,7 +1,7 @@
 package com.app.marketPlace.domain.mappers
 
 import com.app.marketPlace.domain.exception.NotFoundMappedException
-import com.app.marketPlace.domain.repositories.Params
+import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.factory.Resource
 
 class MapperDefault:Mapper {
