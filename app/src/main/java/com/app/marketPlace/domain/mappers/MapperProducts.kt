@@ -14,14 +14,12 @@ class MapperProducts : Mapper {
     override fun <T> map(data: T?, params: Params): Resource<*> {
         if (data !is ProductsList?){
             return Resource(status = Resource.Status.COMPLETED, data = null ,
-                exception = NotFoundMappedException(data),
-                type = params.resourceType)
+                exception = NotFoundMappedException(data))
         }
 
         if (data == null || data.products.isNullOrEmpty()){
             return Resource(status = Resource.Status.EMPTY, data = null ,
-                exception = null,
-                type = params.resourceType)
+                exception = null)
         }
 
         val item = CombineProducts(
@@ -35,8 +33,7 @@ class MapperProducts : Mapper {
         return Resource(
             status = Resource.Status.COMPLETED,
             data = item,
-            exception = null,
-            type = params.resourceType
+            exception = null
         )
     }
 
@@ -47,8 +44,7 @@ class MapperProducts : Mapper {
             return Resource(
                 status = Resource.Status.COMPLETED,
                 data = null,
-                exception = null,
-                type = params.resourceType
+                exception = null
             )
         }
 
@@ -63,8 +59,7 @@ class MapperProducts : Mapper {
         return Resource(
             status = Resource.Status.COMPLETED,
             data = item,
-            exception = null,
-            type = params.resourceType
+            exception = null
         )
     }
 

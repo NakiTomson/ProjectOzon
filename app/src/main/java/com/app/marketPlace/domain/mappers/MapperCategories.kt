@@ -12,14 +12,12 @@ class MapperCategories : Mapper {
 
         if (data !is CategoriesProduct?){
             return Resource(status = Resource.Status.COMPLETED, data = null ,
-                exception = NotFoundMappedException(data),
-                type = params.resourceType)
+                exception = NotFoundMappedException(data))
         }
 
         if (data == null || data.categories.isNullOrEmpty()){
             return Resource(status = Resource.Status.EMPTY, data = null ,
-                exception = null,
-                type = params.resourceType)
+                exception = null)
         }
 
 
@@ -34,6 +32,6 @@ class MapperCategories : Mapper {
         } else {
             data.categories
         }
-        return Resource(status = Resource.Status.COMPLETED, data = listCategories , exception = null,type = params.resourceType)
+        return Resource(status = Resource.Status.COMPLETED, data = listCategories , exception = null)
     }
 }

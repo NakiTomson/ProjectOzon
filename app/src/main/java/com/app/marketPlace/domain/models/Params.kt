@@ -17,7 +17,6 @@ sealed class Params(
     open var bottomOffer: String = "",
     open var requestName: String = "",
     open var typeProduct: Product.Type = Product.Type.OnlyImage,
-    open var resourceType: Resource.Type = Resource.Type.UNDEFINED,
     open var spain: Int = 3,
     open var mapper: Mapper = MapperDefault()
 ){
@@ -26,7 +25,6 @@ sealed class Params(
         override var pageSize: String = "3",
         override var apiKey: String = Constants.ApiToken,
         override var page: String = "1",
-        override var resourceType: Resource.Type = Resource.Type.CATEGORIES,
         override var mapper: Mapper = MapperCategories(),
         override var pathId: String = ""
     ) : Params()
@@ -42,18 +40,14 @@ sealed class Params(
         override var bottomOffer: String = "",
         override var requestName: String = "",
         override var typeProduct: Product.Type,
-        override var resourceType: Resource.Type = Resource.Type.PRODUCT,
         override var mapper: Mapper = MapperProducts(),
         override var spain: Int = 3
     ) : Params()
 
     class BannerParams(
-        override var resourceType: Resource.Type = Resource.Type.BANNER
     ) : Params()
     class StoriesParams(
-        override var resourceType: Resource.Type = Resource.Type.STORIES
     ) : Params()
     class LiveParams(
-        override var resourceType: Resource.Type = Resource.Type.STREAMS
     ) : Params()
 }

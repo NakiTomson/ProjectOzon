@@ -51,13 +51,12 @@ class FirstStartActivity : AppCompatActivity() {
                     title = "Доверие и безопасность",
                     description = "Мы работаем более 15 лет.\n Каждый день BestBuy посещают более 7 млн. покупателей, и мы делаем все, чтобы они возвращались к нам снова и снова",
                     startOnBoard = true
-                ),
+                )
             )
         )
 
 
         boarding_viewPager.adapter = onBoardingAdapter
-
 
         boarding_viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

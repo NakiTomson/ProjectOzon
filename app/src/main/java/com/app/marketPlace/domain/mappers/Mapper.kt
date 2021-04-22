@@ -7,4 +7,6 @@ interface Mapper {
 
     fun<T> map(data: T?, params: Params): Resource<*>
 
+//    fun<Type,TypeToMap> map2(data: Type?, params: Params): Resource<TypeToMap>
+
 }

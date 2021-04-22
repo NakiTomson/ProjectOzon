@@ -1,6 +1,6 @@
 package com.app.marketPlace.presentation.activities.ui.fragments.home
 
-import android.content.Context
+
 import android.os.Bundle
 import android.transition.*
 import android.view.View
@@ -24,11 +24,11 @@ import com.app.marketPlace.domain.exception.NotFoundRealizationException
 import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.LiveStreamItem
 import com.app.marketPlace.presentation.activities.MainViewModel
-import com.app.marketPlace.presentation.factory.Resource.Type
 import com.app.marketPlace.presentation.adapters.*
 import com.app.marketPlace.presentation.extensions.launchWhenCreated
 import com.app.marketPlace.presentation.extensions.launchWhenStarted
 import com.app.marketPlace.presentation.factory.Resource
+import com.app.marketPlace.presentation.factory.TypeResource
 import com.app.marketPlace.presentation.interfaces.ProductRowType
 import com.app.marketPlace.presentation.rowType.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
-import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -56,8 +55,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         navController = findNavController()
 
-
-        val atomic = AtomicInteger(10)
         
         val adapterMultiple = MultipleAdapter()
 
@@ -78,7 +75,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.completed.onEach { completed ->
             if (completed == null)return@onEach
 
-            if (viewModel.resDataFlow.replayCache.all { it.data == null }){
+            if (viewModel.resDataFlow.replayCache.all { it.result.data == null }){
                 showError()
                 return@onEach
             }
@@ -112,38 +109,36 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupData(multipleAdapter: MultipleAdapter){
         viewModel.resDataFlow.onEach { resource->
-            if (resource.data == null)return@onEach
+            if (resource.result.data == null)return@onEach
 
-            when(resource.type){
-                is Type.BANNER -> {
-                    setBanners(multipleAdapter, resource as Resource<MutableList<Banner>>)
+            when(resource){
+                is TypeResource.Banners -> {
+                    setBanners(multipleAdapter, resource.result)
                 }
-                is Type.CATEGORIES -> {
-                    setCategories(multipleAdapter, resource as Resource<List<Categories>>)
+                is TypeResource.Category -> {
+                    setCategories(multipleAdapter,resource.result)
                 }
-                is Type.STORIES -> {
-                    setStories(multipleAdapter, resource as Resource<Stories>)
+                is TypeResource.Story -> {
+                    setStories(multipleAdapter, resource.result)
                 }
-                is Type.STREAMS -> {
-                    setLiveStreams(multipleAdapter, resource as Resource<LiveStreamItem>)
+                is TypeResource.LiveStreams -> {
+                    setLiveStreams(multipleAdapter, resource.result)
                 }
-                is Type.PRODUCT -> {
-                    resource as Resource<CombineProducts>
+                is TypeResource.Product -> {
                     val productAdapter = ProductAdapter()
-                    val rowProduct = ProductRowType(resource.data!!.list, resource.data.spain, productAdapter)
-                    setProducts(multipleAdapter, resource,rowProduct)
+                    val rowProduct = ProductRowType(resource.result.data!!.list, resource.result.data.spain, productAdapter)
+                    setProducts(multipleAdapter, resource.result,rowProduct)
                 }
-                is Type.HORIZONTAL_PRODUCT->{
-                    resource as Resource<CombineProducts>
+                is TypeResource.HorizontalProduct->{
                     val productAdapter = ProductHorizontalAdapter()
-                    val rowProduct = ProductHorizontalRowType(resource.data!!.list, resource.data.spain, productAdapter)
-                    setProducts(multipleAdapter, resource,rowProduct)
+                    val rowProduct = ProductHorizontalRowType(resource.result.data!!.list, resource.result.data.spain, productAdapter)
+                    setProducts(multipleAdapter, resource.result,rowProduct)
                 }
-                is Type.REGISTRATION -> {
+                is TypeResource.Registration -> {
                     setRegistration(multipleAdapter)
                 }
-                is Type.UNDEFINED -> {
-                    throw NotFoundRealizationException("type non found ${resource.data} ${resource.type}")
+                is TypeResource.Undefined -> {
+                    throw NotFoundRealizationException("type non found ${resource.result.data} ${resource::class.java}")
                 }
             }
         }.launchWhenCreated(lifecycleScope)

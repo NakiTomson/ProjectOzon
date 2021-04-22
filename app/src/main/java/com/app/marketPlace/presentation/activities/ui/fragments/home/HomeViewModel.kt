@@ -13,10 +13,9 @@ import com.app.marketPlace.data.utils.Constants.TVS
 import com.app.marketPlace.domain.models.Product
 import com.app.marketPlace.domain.useCases.*
 import com.app.marketPlace.domain.models.Params.*
-import com.app.marketPlace.domain.models.Results
-import com.app.marketPlace.presentation.activities.checkingForErrors
+import com.app.marketPlace.presentation.activities.checkingErrorsInType
 import com.app.marketPlace.presentation.activities.ui.fragments.BaseViewModel
-import com.app.marketPlace.presentation.factory.Resource
+import com.app.marketPlace.presentation.factory.TypeResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -32,7 +31,7 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val _resDataFlow =
-        MutableSharedFlow<Resource<*>>()
+        MutableSharedFlow<TypeResource>()
 
     private val _completed: MutableStateFlow<Boolean?> =
         MutableStateFlow(null)
@@ -52,7 +51,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    val resDataFlow: SharedFlow<Resource<*>> =
+    val resDataFlow: SharedFlow<TypeResource> =
         _resDataFlow.shareIn(viewModelScope, started = SharingStarted.Lazily, replay = 20)
 
     val completed: StateFlow<Boolean?> = _completed.asStateFlow()
@@ -60,7 +59,7 @@ class HomeViewModel @Inject constructor(
 
     private suspend fun startLoading(){
 
-        val bannerTop: Deferred<Results.BannersResult> = async { loadBannersUseCase.loadBannersTop(BannerParams()) }
+        val bannerTop = async { loadBannersUseCase.loadBannersTop(BannerParams()) }
 
         val categories = async {
             categoriesLoadUseCase.loadCategories(
@@ -68,8 +67,8 @@ class HomeViewModel @Inject constructor(
             )
         }
 
-        val stories:Deferred<Results.StoriesResult> = async {  storiesLoadUseCase.loadStories(StoriesParams())}
-        val liveStreamItems:Deferred<Results.LiveStreamsResult> = async {  streamsLoadLiveUseCase.loadLiveStreams(LiveParams())}
+        val stories = async {  storiesLoadUseCase.loadStories(StoriesParams())}
+        val liveStreamItems = async {  streamsLoadLiveUseCase.loadLiveStreams(LiveParams())}
 
         val productsCoffeeMaker = async {
             productsLoadUseCase.loadProducts(
@@ -80,7 +79,7 @@ class HomeViewModel @Inject constructor(
         }
 
         val regAction = async {
-            Resource(Resource.Status.COMPLETED,"mock",type = Resource.Type.REGISTRATION)
+            TypeResource.Registration()
         }
 
         val productsCellPhone = async {
@@ -93,7 +92,7 @@ class HomeViewModel @Inject constructor(
             )
         }
 
-        val bannersCenter:Deferred<Results.BannersResult> = async {  loadBannersUseCase.loadBannersCenter(BannerParams())}
+        val bannersCenter= async {  loadBannersUseCase.loadBannersCenter(BannerParams())}
         val productsLaptop = async {
             productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = Laptop, pageSize = "3", apiKey = ApiToken, page = "233",
@@ -102,7 +101,7 @@ class HomeViewModel @Inject constructor(
                 )
             )
         }
-        val bannersDown:Deferred<Results.BannersResult> = async{ loadBannersUseCase.loadBannersDown(BannerParams()) }
+        val bannersDown = async{ loadBannersUseCase.loadBannersDown(BannerParams()) }
         val productsTvs = async {
             productsLoadUseCase.loadProducts(
                 ProductsParams(pathId = TVS, pageSize = "4", apiKey = ApiToken, page = "23",
@@ -116,17 +115,17 @@ class HomeViewModel @Inject constructor(
 
         _resDataFlow.emitAll(
             flow {
-                emit(checkingForErrors(bannerTop.await().result))
-                emit(checkingForErrors(categories.await().result))
-                emit(checkingForErrors(stories.await().result))
-                emit(checkingForErrors(liveStreamItems.await().result))
-                emit(checkingForErrors(productsCoffeeMaker.await().result))
-                emit(checkingForErrors(regAction.await()))
-                emit(checkingForErrors(productsCellPhone.await().result))
-                emit(checkingForErrors(bannersCenter.await().result))
-                emit(checkingForErrors(productsLaptop.await().result))
-                emit(checkingForErrors(bannersDown.await().result))
-                emit(checkingForErrors(productsTvs.await().result))
+                emit(checkingErrorsInType(bannerTop.await()))
+                emit(checkingErrorsInType(categories.await()))
+                emit(checkingErrorsInType(stories.await()))
+                emit(checkingErrorsInType(liveStreamItems.await()))
+                emit(checkingErrorsInType(productsCoffeeMaker.await()))
+                emit(checkingErrorsInType(regAction.await()))
+                emit(checkingErrorsInType(productsCellPhone.await()))
+                emit(checkingErrorsInType(bannersCenter.await()))
+                emit(checkingErrorsInType(productsLaptop.await()))
+                emit(checkingErrorsInType(bannersDown.await()))
+                emit(checkingErrorsInType(productsTvs.await()))
                 _completed.value = true
             }
         )
@@ -157,12 +156,11 @@ class HomeViewModel @Inject constructor(
                 )
             }
 
-            val productsMonitors = async {
-                productsLoadUseCase.loadProducts(
+            val productsMonitors:Deferred<TypeResource> = async {
+                productsLoadUseCase.loadHorizontalProducts(
                     ProductsParams(pathId = Monitor, pageSize = "6", apiKey = ApiToken, page = "1",
                         typeProduct = Product.Type.ProductHorizontal,
                         topOffer = "Лучшие мониторы 90 % скидка",
-                        resourceType = Resource.Type.HORIZONTAL_PRODUCT,
                         spain = 1
                     )
                 )
@@ -188,11 +186,11 @@ class HomeViewModel @Inject constructor(
 
             _resDataFlow.emitAll(
                 flow {
-                    emit(checkingForErrors(productsCamera.await().result))
-                    emit(checkingForErrors(productsHeadPhones.await().result))
-                    emit(checkingForErrors(productsMonitors.await().result))
-                    emit(checkingForErrors(productsKeyboard.await().result))
-                    emit(checkingForErrors(productsPhones.await().result))
+                    emit(checkingErrorsInType(productsCamera.await()))
+                    emit(checkingErrorsInType(productsHeadPhones.await()))
+                    emit(checkingErrorsInType(productsMonitors.await()))
+                    emit(checkingErrorsInType(productsKeyboard.await()))
+                    emit(checkingErrorsInType(productsPhones.await()))
                 }
             )
         }

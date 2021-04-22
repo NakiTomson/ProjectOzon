@@ -15,7 +15,8 @@
         android:theme="@style/Theme.ProjectMarketPlace"
        >
 
-        <activity android:name="com.app.marketPlace.presentation.activities.FirstStartActivity">
+        <activity android:name="com.app.marketPlace.presentation.activities.FirstStartActivity"
+            >
 
         </activity>
 

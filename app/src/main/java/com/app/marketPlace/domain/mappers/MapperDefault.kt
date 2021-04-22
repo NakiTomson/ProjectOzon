@@ -9,7 +9,6 @@ class MapperDefault:Mapper {
     //It will throws NotFoundMappedException
     override fun <T> map(data: T?, params: Params): Resource<*> {
         return Resource(status = Resource.Status.COMPLETED, data = null ,
-            exception = NotFoundMappedException(data),
-            type = params.resourceType)
+            exception = NotFoundMappedException(data))
     }
 }

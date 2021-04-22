@@ -2,6 +2,7 @@ package com.app.marketPlace.presentation.activities
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
@@ -10,6 +11,7 @@ import com.app.marketPlace.R
 import com.app.marketPlace.presentation.extensions.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -69,13 +71,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkInternetConnection() {
         mainViewModel.networkConnection.observe(this,{isConnected->
-//            if (isConnected) {
-//                connection_frame.visibility = View.GONE
-//                bottomNavigationView.visibility = View.VISIBLE
-//            } else {
-//                connection_frame.visibility = View.VISIBLE
-//                bottomNavigationView.visibility = View.GONE
-//            }
+            if (isConnected) {
+                connection_frame.visibility = View.GONE
+                bottomNavigationView.visibility = View.VISIBLE
+            } else {
+                connection_frame.visibility = View.VISIBLE
+                bottomNavigationView.visibility = View.GONE
+            }
         })
     }
 }
