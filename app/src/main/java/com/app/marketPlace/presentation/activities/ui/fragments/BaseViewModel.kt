@@ -18,6 +18,7 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
         doCoroutineWork(doOnAsyncBlock, viewModelScope, coroutineContexts)
     }
 
+
     private inline fun <P> doCoroutineWork(
         crossinline doOnAsyncBlock: suspend CoroutineScope.() -> P,
         coroutineScope: CoroutineScope,

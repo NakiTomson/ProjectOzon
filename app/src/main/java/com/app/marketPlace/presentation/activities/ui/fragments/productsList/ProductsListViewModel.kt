@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsListViewModel @Inject constructor(
     private val useCase: ProductsLoadPagerUseCase
-) : BaseViewModel(), CoroutineScope {
+) : BaseViewModel() {
 
 
     private var defaultQuery = Params.ProductsParams(typeProduct = Product.Type.ProductWithName,)

@@ -13,7 +13,6 @@ data class Resource<T>(
         ERROR
     }
 
-
     companion object {
         fun <N> getDefSateResource(): Resource<N> {
             return Resource(data = null)

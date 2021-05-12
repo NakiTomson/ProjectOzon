@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.row_type_banner.*
 import kotlinx.android.synthetic.main.toolbar_custom.*
 import kotlinx.coroutines.flow.onEach
 import java.util.*
-import java.util.concurrent.atomic.AtomicInteger
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -55,7 +54,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         navController = findNavController()
 
-        
         val adapterMultiple = MultipleAdapter()
 
         setupAdapter(adapterMultiple)
@@ -110,7 +108,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupData(multipleAdapter: MultipleAdapter){
         viewModel.resDataFlow.onEach { resource->
             if (resource.result.data == null)return@onEach
-
             when(resource){
                 is TypeResource.Banners -> {
                     setBanners(multipleAdapter, resource.result)
@@ -141,7 +138,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     throw NotFoundRealizationException("type non found ${resource.result.data} ${resource::class.java}")
                 }
             }
+
         }.launchWhenCreated(lifecycleScope)
+
     }
 
     private fun setBanners(multipleAdapter: MultipleAdapter, resource: Resource<MutableList<Banner>>) {

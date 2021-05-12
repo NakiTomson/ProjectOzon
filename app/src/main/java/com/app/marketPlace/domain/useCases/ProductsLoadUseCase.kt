@@ -5,8 +5,11 @@ import com.app.marketPlace.domain.models.CombineProducts
 import com.app.marketPlace.domain.models.Params
 import com.app.marketPlace.presentation.factory.Resource
 import com.app.marketPlace.presentation.factory.TypeResource
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
+
+//@ViewModelScoped
 class ProductsLoadUseCase @Inject constructor(private val marketPlaceApi: BestBuyService) {
 
     suspend fun loadProducts(params: Params): TypeResource.Product {
