@@ -19,5 +19,6 @@ abstract class MarketPlaceDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun inFavoriteDao(): InFavoriteDao
     abstract fun inBasketDao(): InBasketDao
+    //Todo add file
 }
 

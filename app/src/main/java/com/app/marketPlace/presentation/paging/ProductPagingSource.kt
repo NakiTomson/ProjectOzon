@@ -58,6 +58,5 @@ class ProductPagingSource(private val bestBuyApiService: BestBuyService, private
             val anchorPage = state.closestPageToPosition(it)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
-//        return state.anchorPosition
     }
 }

@@ -26,7 +26,7 @@ class RemoteProductAdapter : PagingDataAdapter<Product,RecyclerView.ViewHolder>(
 
         private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<Product>() {
             override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean =
-                oldItem == newItem
+                oldItem.skuId == newItem.skuId
             override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean =
                 oldItem == newItem
         }
